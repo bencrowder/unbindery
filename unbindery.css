@@ -1,0 +1,49 @@
+body									{ margin: 0; padding: 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; font-size: 12px; }
+body.dark								{ background: #111; color: #fff; }
+
+#header_container						{ background: #000; color: #fff; height: 35px; }
+#header									{ width: 850px; margin: 0px auto; }
+
+#logo									{ float: left; }
+#logo h1								{ font-size: 16px; color: #666; line-height: 1em; margin-top: 8px; }
+ul#nav									{ float: right; list-style: none; margin-top: 8px; }
+ul#nav li								{ display: inline; margin-left: 15px; color: #666; }
+ul#nav li a								{ color: #fff; font-weight: bold; text-decoration: none; }
+ul#nav li .username						{ font-weight: bold; }
+
+#controls_container						{ background: #eee; height: 40px; border-bottom: solid 1px #999; margin-bottom: 20px; }
+#controls								{ width: 850px; margin: 0px auto; }
+ul#controls_left						{ float: left; list-style: none; padding: 0; }
+ul#controls_left li						{ display: inline; margin-right: 5px; }
+ul#controls_right						{ float: right; list-style: none; padding: 0; }
+ul#controls_right li					{ display: inline; margin-left: 5px; }
+
+.button									{ padding: 5px 7px; background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; color: #000; font-weight: bold; text-decoration: none; border: solid 1px #999; }
+.button:hover							{ background: #fff; cursor: pointer; }
+.smallbutton							{ padding: 1px 3px; font-size: .9em; }
+
+#main									{ width: 850px; margin: 0px auto; overflow: hidden; clear: both; padding-bottom: 25px; }
+#main h2								{ font-size: 12px; }
+
+#image_container						{ width: 850px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
+
+#text_container							{ width: 600px; height: 200px; margin: 0px auto; }
+textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; padding: 10px; font-size: 1.3em; line-height: 1.4em; }
+
+.bigcol									{ width: 550px; float: left; margin-top: 20px; }
+.sidebar								{ width: 250px; margin-left: 50px; float: left; margin-top: 20px; }
+
+.bigcol h3								{ margin-top: 3em; background: #eee; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; padding: 3px 6px; }
+.bigcol h3:first-child					{ margin-top: 0; }
+.bigcol table							{ width: 100%; }
+.bigcol table td						{ border-bottom: solid 1px #ddd; padding: 4px 0; }
+.bigcol table td a						{ text-decoration: none; }
+.bigcol table td a:hover				{ background: #eee; }
+.bigcol table th						{ text-align: left; border-bottom: solid 2px #ddd; }
+
+.stat									{ font-weight: bold; }
+
+#message								{ width: 830px; margin: 0px auto 15px; background: #ffe; color: #660; border: solid 1px #dda; border-top: none; padding: 10px; }
+#error									{ width: 830px; margin: 0px auto 15px; background: #fee; color: #600; border: solid 1px #daa; border-top: none; padding: 10px; }
+
+#spinner								{ display: none; vertical-align: middle; }
