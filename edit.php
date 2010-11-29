@@ -34,6 +34,7 @@ $item = getItem($db, $item_id, $project_slug, $username);
 	<div id="controls_container">
 		<div id="controls">
 			<ul id="controls_left">
+				<li><a href="<?php echo $SITEROOT; ?>/dashboard" class="button">Back</a></li>
 				<li><span class="button">Project Help</span></li>
 			</ul>
 			<ul id="controls_right">

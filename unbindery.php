@@ -115,7 +115,7 @@ function saveItemText($db, $item_id, $project_slug, $username, $draft, $itemtext
 function getUserAssignments($db, $username) {
 	$db->connect();
 
-	$query = "SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username='" . mysql_real_escape_string($username) . "' AND date_completed IS NULL;";
+	$query = "SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username='" . mysql_real_escape_string($username) . "' AND date_completed IS NULL ORDER BY deadline ASC;";
 	$result = mysql_query($query) or die ("Couldn't run: $query");
 
 	$items = array();
