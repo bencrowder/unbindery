@@ -1,15 +1,18 @@
 <?php
 
 include_once('include/config.php');
+include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
 include_once('Item.class.php');
 include_once('unbindery.php');
 
-$username = "ben";
+Alibaba::forceAuthentication();
 
-$message = $_GET["message"];
-$error = $_GET["error"];
+$username = Alibaba::getUsername();
+
+$message = stripslashes($_GET["message"]);
+$error = stripslashes($_GET["error"]);
 
 ?>
 
@@ -58,18 +61,19 @@ $error = $_GET["error"];
 					<th>Status</th>
 					<th></th>
 				</tr>
+				<?php 
+				$projects = getUserProjects($db, $username);
+				foreach ($projects as $project) {
+					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
+					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
+				?>
 				<tr>
-					<td><a href="projects/hck">The Life of Heber C. Kimball</a></td>
-					<td><a href="#">ben</a></td>
-					<td>160/392 pages</td>
-					<td><a href="#" class="button smallbutton">Get new item</a></td>
+					<td><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></td>
+					<td><?php echo $project["owner"]; ?></td>
+					<td>[coming]</td>
+					<td><a href="<?php echo $getitemlink; ?>" class="button smallbutton">Get new item</a></td>
 				</tr>
-				<tr>
-					<td><a href="projects/aof">The Articles of Faith</a></td>
-					<td><a href="#">ben</a></td>
-					<td>20/144 pages</td>
-					<td><a href="#" class="button smallbutton">Get new item</a></td>
-				</tr>
+				<?php } ?>
 			</table>
 
 			<h3>History</h3>

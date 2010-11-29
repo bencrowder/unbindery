@@ -1,11 +1,14 @@
 <?php
 
 include_once('include/config.php');
+include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
 include_once('Item.class.php');
 include_once('unbindery.php');
 include_once('utils.php');
+
+Alibaba::forceAuthentication();
 
 $item_id = $_GET["item_id"];
 $project_slug = $_GET["project_slug"];
@@ -16,7 +19,12 @@ if (!$item_id || !$project_slug) {
 }
 
 // make sure they're assigned to this item
+$assigned = checkUserAssignment($db, $username, $item_id, $project_slug);
+if (!$assigned) {
+	redirectToDashboard("", "You're not assigned to that item.");
+}
 
+// get the item from the database
 $item = getItem($db, $item_id, $project_slug, $username);
 
 ?>

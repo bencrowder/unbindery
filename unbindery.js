@@ -23,8 +23,9 @@ function save_item_text(is_draft) {
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
 	var itemtext = $("#itemtext").val();
+	var username = $("ul#nav .username").html();
 
-	$.post(siteroot + "/unbindery.php?method=save_item_text", { item_id: item_id, project_slug: project_slug, username: "ben", draft: is_draft, itemtext: itemtext },
+	$.post(siteroot + "/unbindery.php?method=save_item_text", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
 				$("#spinner").hide();

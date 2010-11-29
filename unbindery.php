@@ -127,6 +127,34 @@ function getUserAssignments($db, $username) {
 	return $items;
 }
 
+function getUserProjects($db, $username) {
+	$db->connect();
+
+	$query = "SELECT project_id, projects.title, projects.slug, projects.owner, role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($username) . "';";
+	$result = mysql_query($query) or die ("Couldn't run: $query");
+
+	$projects = array();
+
+	while ($row = mysql_fetch_assoc($result)) {
+		array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "owner" => $row["owner"], "role" => $row["role"]));
+	}
+
+	return $projects;
+}
+
+function checkUserAssignment($db, $username, $item_id, $project_slug) {
+	$db->connect();
+
+	$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = '" . mysql_real_escape_string($username) . "' AND assignments.item_id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+	$result = mysql_query($query) or die ("Couldn't run: $query");
+
+	if (mysql_numrows($result)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -182,6 +210,23 @@ function getUserAssignmentsWS($db) {
 	echo json_encode($items);
 }
 
+function getUserProjectsWS($db) {
+	$username = $_POST['username'];
+
+	$projects = getUserProjects($db, $username);
+
+	echo json_encode($projects);
+}
+
+function checkUserAssignmentWS($db) {
+	$username = $_POST['username'];
+	$item_id = $_POST['item_id'];
+	$project_slug = $_POST['project_slug'];
+
+	$result = checkUserAssignment($db, $username, $item_id, $project_slug);
+
+	echo json_encode($result);
+}
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -194,7 +239,9 @@ switch ($method) {
 	case 'get_item': getItemWS($db); break;
 	case 'get_project': getProjectWS($db); break;
 	case 'save_item_text': saveItemTextWS($db); break;
-	case 'get_assignments': getUserAssignmentsWS($db); break;
+	case 'get_user_assignments': getUserAssignmentsWS($db); break;
+	case 'get_user_projects': getUserProjectsWS($db); break;
+	case 'check_assignment': checkUserAssignmentWS($db); break;
 }
 
 ?>

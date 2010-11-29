@@ -29,8 +29,15 @@ Project slug: <input type="textbox" value="aof" name="slug" id="slug" /><br/>
 <input type="submit" value="Submit" />
 </form>
 
-<h3>Get Assignments</h3>
-<form action="unbindery.php?method=get_assignments" method="POST">
+<h3>Get User Assignments</h3>
+<form action="unbindery.php?method=get_user_assignments" method="POST">
+Username: <input type="textbox" value="" name="username" id="username" /><br/>
+<br/>
+<input type="submit" value="Submit" />
+</form>
+
+<h3>Get User Projects</h3>
+<form action="unbindery.php?method=get_user_projects" method="POST">
 Username: <input type="textbox" value="" name="username" id="username" /><br/>
 <br/>
 <input type="submit" value="Submit" />
