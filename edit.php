@@ -12,7 +12,7 @@ Alibaba::forceAuthentication();
 
 $item_id = $_GET["item_id"];
 $project_slug = $_GET["project_slug"];
-$username = "ben";
+$username = Alibaba::getUsername(); 
 
 if (!$item_id || !$project_slug) {
 	redirectToDashboard("", "Invalid item/project ID");

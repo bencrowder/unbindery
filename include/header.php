@@ -14,14 +14,17 @@
 	<div id="header_container">
 		<div id="header">
 			<div id="logo"><h1>Unbindery</h1></div>
-			<?php if (Alibaba::authenticated()) { ?>
 			<ul id="nav">
+				<?php if (Alibaba::authenticated()) { ?>
 				<li>Logged in as <span class="username"><?php echo Alibaba::getUsername(); ?></span></li>
 				<li><a href="<?php echo $SITEROOT; ?>/dashboard">Dashboard</a></li>
 				<li><a href="<?php echo $SITEROOT; ?>/account">Account</a></li>
 				<li><a href="<?php echo $SITEROOT; ?>/settings">Settings</a></li>
 				<li><a href="<?php echo $SITEROOT; ?>/logout">Logout</a></li>
+				<?php } else { ?>
+				<li><a href="<?php echo $SITEROOT; ?>/signup">Sign Up</a></li>
+				<li><a href="<?php echo $SITEROOT; ?>/login">Login</a></li>
+				<?php } ?>
 			</ul>
-			<?php } ?>
 		</div>
 	</div>
