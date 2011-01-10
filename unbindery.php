@@ -108,6 +108,8 @@ function saveItemText($db, $item_id, $project_slug, $username, $draft, $itemtext
 		// change item status (if # revisions >= # project revisions, change status to closed)
 	}
 
+	$db->close();
+
 	return "success";
 }
 
@@ -124,6 +126,8 @@ function getUserAssignments($db, $username) {
 		array_push($items, array("item_id" => $row["item_id"], "item_title" => $row["item_title"], "project_id" => $row["project_id"], "project_title" => $row["project_title"], "project_slug" => $row["project_slug"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"]));
 	}
 
+	$db->close();
+
 	return $items;
 }
 
@@ -139,6 +143,8 @@ function getUserProjects($db, $username) {
 		array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "owner" => $row["owner"], "role" => $row["role"]));
 	}
 
+	$db->close();
+
 	return $projects;
 }
 
@@ -149,12 +155,95 @@ function checkUserAssignment($db, $username, $item_id, $project_slug) {
 	$result = mysql_query($query) or die ("Couldn't run: $query");
 
 	if (mysql_numrows($result)) {
+		$db->close();
+		return true;
+	} else {
+		$db->close();
+		return false;
+	}
+}
+
+function checkUserMembership($db, $username, $project_slug) {
+	$db->connect();
+
+	$query = "SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($username) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+	$result = mysql_query($query) or die ("Couldn't run: $query");
+
+	if (mysql_numrows($result)) {
+		$db->close();
+		return true;
+	} else {
+		$db->close();
+		return false;
+	}
+}
+
+function assignUserToProject($db, $username, $project_slug) {
+	// make sure they're not already a member
+	if (!checkUserMembership($db, $username, $project_slug)) {
+		$project = getProject($db, $project_slug);
+
+		$db->connect();
+
+		// insert into membership (default = proofer)
+		$query = "INSERT INTO membership (project_id, username, role) VALUES (" . mysql_real_escape_string($project->project_id) . ", '" . mysql_real_escape_string($username) . "', 'proofer')";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		// send email to user w/ project guidelines, link to unsubscribe, and note that first item will come soon (intro email, pull from project settings)
+
+		$db->close();
+
 		return true;
 	} else {
 		return false;
 	}
 }
 
+function assignItemToUser($db, $username, $item_id, $project_slug) {
+	// make sure the item exists
+	$db->connect();
+
+	$query = "SELECT items.id FROM items JOIN projects ON projects.id = items.project_id WHERE items.id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+	$result = mysql_query($query) or die ("Couldn't run: $query");
+
+	if (!mysql_numrows($result)) {
+		$db->close();
+		return "nonexistent";
+	}
+	$db->close();
+
+	// make sure they're not already assigned
+	if (!checkUserAssignment($db, $username, $item_id, $project_slug)) {
+		$project = getProject($db, $project_slug);
+		// get $project->deadlinelength at some point
+		$deadlinelength = 7;
+
+		$db->connect();
+
+		// insert into assignments
+		$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES ('" . mysql_real_escape_string($username) . "', " . $item_id . ", " . mysql_real_escape_string($project->project_id) . ", NOW(), DATE_ADD(NOW(), INTERVAL $deadlinelength DAY))";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		// send email to user w/ edit link, deadline
+
+		$db->close();
+
+		return "success";
+	} else {
+		return "already_assigned";
+	}
+}
+
+function getNextItem($db, $username, $project_slug) {
+	// if project = "", get one of the user's projects
+	// make sure they've finished any existing items for that project (if not, go to next project)
+	// get next item from project where
+	//		status = available
+	//		user hasn't done that item
+	//		number of assigned users is < project proof limit (2 reviews per item, etc.)
+	// if there's nothing, return a message saying so
+	// else assign item to user
+}
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -228,6 +317,34 @@ function checkUserAssignmentWS($db) {
 	echo json_encode($result);
 }
 
+function checkUserMembershipWS($db) {
+	$username = $_POST['username'];
+	$project_slug = $_POST['project_slug'];
+
+	$result = checkUserMembership($db, $username, $project_slug);
+
+	echo json_encode($result);
+}
+
+function assignUserToProjectWS($db) {
+	$username = $_POST['username'];
+	$project_slug = $_POST['project_slug'];
+
+	$result = assignUserToProject($db, $username, $project_slug);
+
+	echo json_encode($result);
+}
+
+function assignItemToUserWS($db) {
+	$username = $_POST['username'];
+	$item_id = $_POST['item_id'];
+	$project_slug = $_POST['project_slug'];
+
+	$result = assignItemToUser($db, $username, $item_id, $project_slug);
+
+	echo json_encode($result);
+}
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Main
@@ -242,6 +359,9 @@ switch ($method) {
 	case 'get_user_assignments': getUserAssignmentsWS($db); break;
 	case 'get_user_projects': getUserProjectsWS($db); break;
 	case 'check_assignment': checkUserAssignmentWS($db); break;
+	case 'check_membership': checkUserMembershipWS($db); break;
+	case 'assign_user_to_project': assignUserToProjectWS($db); break;
+	case 'assign_item_to_user': assignItemToUserWS($db); break;
 }
 
 ?>

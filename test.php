@@ -43,5 +43,22 @@ Username: <input type="textbox" value="" name="username" id="username" /><br/>
 <input type="submit" value="Submit" />
 </form>
 
+<h3>Assign User to Project</h3>
+<form action="unbindery.php?method=assign_user_to_project" method="POST">
+Username: <input type="textbox" value="" name="username" id="username" /><br/>
+Project Slug: <input type="textbox" value="" name="project_slug" id="project_slug" /><br/>
+<br/>
+<input type="submit" value="Submit" />
+</form>
+
+<h3>Assign Item to User</h3>
+<form action="unbindery.php?method=assign_item_to_user" method="POST">
+Username: <input type="textbox" value="" name="username" id="username" /><br/>
+Item ID: <input type="textbox" value="" name="item_id" id="item_id" /><br/>
+Project Slug: <input type="textbox" value="" name="project_slug" id="project_slug" /><br/>
+<br/>
+<input type="submit" value="Submit" />
+</form>
+
 </body>
 </html>
