@@ -14,41 +14,6 @@ include_once('Item.class.php');
 // Library functions
 //
 
-function getItem($db, $item_id, $project_slug, $username = "") {
-	$db->connect();
-
-	$query = "SELECT * FROM items JOIN projects ON items.project_id = projects.id WHERE items.id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	$item = new Item();
-
-	if (mysql_numrows($result)) {
-		$item->item_id = trim(mysql_result($result, 0, "id"));
-		$item->project_id = trim(mysql_result($result, 0, "project_id"));
-		$item->title = trim(mysql_result($result, 0, "title"));
-		$item->itemtext = trim(mysql_result($result, 0, "itemtext"));
-		$item->status = trim(mysql_result($result, 0, "status"));
-		$item->type = trim(mysql_result($result, 0, "type"));
-		$item->href = trim(mysql_result($result, 0, "href"));
-		$item->width = trim(mysql_result($result, 0, "width"));
-		$item->height = trim(mysql_result($result, 0, "height"));
-		$item->length = trim(mysql_result($result, 0, "length"));
-	}
-
-	if ($username != '') {
-		$query = "SELECT itemtext FROM texts WHERE item_id=" . mysql_real_escape_string($item_id) . " AND project_id=" . mysql_real_escape_string($item->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
-		$result = mysql_query($query) or die ("Couldn't run: $query");
-
-		if (mysql_numrows($result)) {
-			$item->itemtext = trim(mysql_result($result, 0, "itemtext"));
-		}
-	}
-
-	$db->close();
-
-	return $item;
-}
-
 function getProject($db, $slug) {
 	$db->connect();
 
@@ -267,9 +232,11 @@ function getItemWS($db) {
 function getProjectWS($db) {
 	$slug = $_POST['slug'];
 
+	// make sure we have the slug
 	if (!$slug) { return ""; }
 
-	$project = getProject($db, $slug);
+	$project = new Project($db);
+	$project->load($slug);
 
 	echo $project->getJSON();
 }
