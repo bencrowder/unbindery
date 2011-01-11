@@ -101,10 +101,28 @@ class Item {
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 		}
 
+		// we're finished with this item
 		if ($draft == false) {
-			// we're finished with this item
-			// update user score
-			// change item status (if # revisions >= # project revisions, change status to closed)
+			// update user score (+1 for finishing a batch)
+			$query = "UPDATE users SET score = score + 1 WHERE username = '" . mysql_real_escape_string($username) . "'";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			// update date_completed for this assignment
+			$query = "UPDATE assignments SET date_completed = NOW() WHERE username = '" . mysql_real_escape_string($username) . "' AND item_id = " . $this->item_id . " AND project_id = " . $this->project_id;
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			// check number of revisions
+			$query = "SELECT COUNT(id) as revisioncount FROM assignments WHERE item_id = " . $this->item_id . " AND project_id = " . $this->project_id . " AND date_completed IS NOT NULL";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			$row = mysql_fetch_assoc($result);
+			$revisioncount = $row["revisioncount"];
+
+			// if this is the last one, set it to completed
+			if (intval($revisioncount) >= 2) { // change to > $project->revcount
+				$query = "UPDATE items SET status = 'completed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
+				$result = mysql_query($query) or die ("Couldn't run: $query");
+			}
 		}
 
 		$this->db->close();
