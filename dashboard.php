@@ -47,7 +47,7 @@ $error = stripslashes($_GET["error"]);
 				?>
 				<tr>
 					<td><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a></td>
-					<td><a href="<?php echo $projectlink; ?>"><?php echo $item["project_title"]; ?></a></td>
+					<td><?php echo $item["project_title"]; ?></td>
 					<td><?php echo $item["deadline"]; ?></td>
 					<td><a href="<?php echo $editlink; ?>" class="button smallbutton">Proof</a></td>
 				</tr>

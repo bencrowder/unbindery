@@ -19,8 +19,8 @@ if (!$item_id || !$project_slug) {
 }
 
 // make sure they're assigned to this item
-$assigned = checkUserAssignment($db, $username, $item_id, $project_slug);
-if (!$assigned) {
+$user = new User($db, $username);
+if (!$user->isAssigned($item_id, $project_slug)) {
 	redirectToDashboard("", "You're not assigned to that item.");
 }
 
@@ -36,7 +36,7 @@ $item->load($item_id, $project_slug, $username);
 		<div id="controls">
 			<ul id="controls_left">
 				<li><a href="<?php echo $SITEROOT; ?>/dashboard" class="button">Back</a></li>
-				<li><span class="button">Project Help</span></li>
+				<li><span class="button">Project Guidelines</span></li>
 			</ul>
 			<ul id="controls_right">
 				<li><img src="<?php echo $SITEROOT; ?>/snake.gif" id="spinner" /></li>
