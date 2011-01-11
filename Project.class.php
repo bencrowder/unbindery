@@ -99,6 +99,23 @@ class Project {
 		return array("completed" => $completed, "total" => $total);
 	}
 
+	public function getItems() {
+		$this->db->connect();
+
+		$query = "SELECT title, status, type, href, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS assignments, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id AND date_completed IS NOT NULL) AS completed FROM items WHERE project_id = " . $this->project_id;
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$items = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($items, array("title" => $row["title"], "status" => $row["status"], "type" => $row["type"], "href" => $row["href"], "assignments" => $row["assignments"], "completed" => $row["completed"]));
+		}
+
+		$this->db->close();
+
+		return $items;
+	}
+
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "slug" => $this->slug, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}

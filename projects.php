@@ -53,7 +53,29 @@ $project = new Project($db, $project_slug);
 			<?php echo $project->intro_email; ?>
 
 			<h3>Project Items</h3>
-			...
+			<?php
+			$items = $project->getItems();
+			?>
+			<table cellpadding="0" cellspacing="0">
+				<tr>
+					<th>Title</th>
+					<th>Status</th>
+					<th>Type</th>
+					<th>URL</th>
+					<th>Currently</th>
+				</tr>
+				<?php 
+				foreach ($items as $item) {
+				?>
+				<tr>
+					<td><?php echo $item["title"]; ?></td>
+					<td><?php echo $item["status"]; ?></td>
+					<td><?php echo $item["type"]; ?></td>
+					<td><?php echo $item["href"]; ?></td>
+					<td><?php echo $item["assignments"]; ?> assigned, <?php echo $item["completed"]; ?> completed</td>
+				</tr>
+				<?php } ?>
+			</table>
 		</div>
 
 		<div class="sidebar">
