@@ -63,6 +63,50 @@ class Item {
 		$this->db->close();
 	}
 
+	public function saveText($username, $draft, $itemtext) {
+		echo "saveText";
+		$this->db->connect();
+
+		// check and see if we already have a draft
+		$query = "SELECT itemtext FROM texts WHERE item_id=" . mysql_real_escape_string($this->item_id) . " AND project_id=" . mysql_real_escape_string($this->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$existing_draft = true;
+		} else {
+			$existing_draft = false;
+		}
+
+		if ($draft) { 
+			$status = "draft";
+		} else {
+			$status = "finished";
+		}
+
+		if ($existing_draft) {
+			// update texts with $draft status
+			$query = "UPDATE texts SET itemtext = '" . mysql_real_escape_string($itemtext) . "', date = NOW(), status = '" . mysql_real_escape_string($status) . "' WHERE item_id=" . mysql_real_escape_string($this->item_id) . " AND project_id=" . mysql_real_escape_string($this->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
+			echo $query;
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+		} else {
+			// insert into texts with $draft status
+			$query = "INSERT INTO texts (project_id, item_id, user, date, itemtext, status) VALUES (" . mysql_real_escape_string($this->project_id) . ", " . mysql_real_escape_string($this->item_id) . ", '" . mysql_real_escape_string($username) . "', NOW(), '" . mysql_real_escape_string($itemtext) . "', '" . mysql_real_escape_string($status) . "')";
+			echo $query;
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+		}
+
+		if ($draft == false) {
+			// we're finished with this item
+			// update user score
+			// change item status (if # revisions >= # project revisions, change status to closed)
+		}
+
+		$this->db->close();
+
+		return "success";
+	}
+
+
 	public function getJSON() {
 		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href, "width" => $this->width, "height" => $this->height, "length" => $this-length));
 	}

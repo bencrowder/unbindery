@@ -14,71 +14,6 @@ include_once('Item.class.php');
 // Library functions
 //
 
-function getProject($db, $slug) {
-	$db->connect();
-
-	$query = "SELECT * FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	$project = new Project();
-
-	if (mysql_numrows($result)) {
-		$project->project_id = trim(mysql_result($result, 0, "id"));
-		$project->title = trim(mysql_result($result, 0, "title"));
-		$project->slug = trim(mysql_result($result, 0, "slug"));
-		$project->owner = trim(mysql_result($result, 0, "owner"));
-		$project->status = trim(mysql_result($result, 0, "status"));
-	}
-
-	$db->close();
-
-	return $project;
-}
-
-function saveItemText($db, $item_id, $project_slug, $username, $draft, $itemtext) {
-	// get the item
-	$item = getItem($db, $item_id, $project_slug);
-
-	$db->connect();
-
-	// check and see if we already have a draft
-	$query = "SELECT itemtext FROM texts WHERE item_id=" . mysql_real_escape_string($item_id) . " AND project_id=" . mysql_real_escape_string($item->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	if (mysql_numrows($result)) {
-		$existing_draft = true;
-	} else {
-		$existing_draft = false;
-	}
-
-	if ($draft) { 
-		$status = "draft";
-	} else {
-		$status = "finished";
-	}
-
-	if ($existing_draft) {
-		// update texts with $draft status
-		$query = "UPDATE texts SET itemtext = '" . mysql_real_escape_string($itemtext) . "', date = NOW(), status = '" . mysql_real_escape_string($status) . "' WHERE item_id=" . mysql_real_escape_string($item_id) . " AND project_id=" . mysql_real_escape_string($item->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
-		$result = mysql_query($query) or die ("Couldn't run: $query");
-	} else {
-		// insert into texts with $draft status
-		$query = "INSERT INTO texts (project_id, item_id, user, date, itemtext, status) VALUES (" . mysql_real_escape_string($item->project_id) . ", " . mysql_real_escape_string($item_id) . ", '" . mysql_real_escape_string($username) . "', NOW(), '" . mysql_real_escape_string($itemtext) . "', '" . mysql_real_escape_string($status) . "')";
-		$result = mysql_query($query) or die ("Couldn't run: $query");
-	}
-
-	if ($draft == false) {
-		// we're finished with this item
-		// update user score
-		// change item status (if # revisions >= # project revisions, change status to closed)
-	}
-
-	$db->close();
-
-	return "success";
-}
-
-
 function getUserAssignments($db, $username) {
 	$db->connect();
 
@@ -247,15 +182,23 @@ function saveItemTextWS($db) {
 	$username = $_POST['username'];
 	$itemtext = $_POST['itemtext'];
 
+	echo "here";
+	// convert to boolean
 	if ($_POST['draft'] == "true") {
 		$draft = true;
 	} else {
 		$draft = false;
 	}
 
+	// make sure we have the required variables
 	if (!$item_id || !$project_slug || !$username) { return ""; }
 
-	$status = saveItemText($db, $item_id, $project_slug, $username, $draft, $itemtext);
+	echo "new Item";
+	$item = new Item($db);
+	echo "load";
+	$item->load($item_id, $project_slug, $username);
+	echo "saveText";
+	$status = $item->saveText($username, $draft, $itemtext);
 
 	echo json_encode(array("statuscode" => $status));
 }

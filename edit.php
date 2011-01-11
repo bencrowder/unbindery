@@ -25,7 +25,8 @@ if (!$assigned) {
 }
 
 // get the item from the database
-$item = getItem($db, $item_id, $project_slug, $username);
+$item = new Item($db);
+$item->load($item_id, $project_slug, $username);
 
 ?>
 

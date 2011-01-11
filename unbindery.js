@@ -17,7 +17,6 @@ function redirect_to_dashboard(message, error) {
 }
 
 function save_item_text(is_draft) {
-	console.log("in save_item_text");
 	$("#spinner").show();
 
 	var item_id = $("#item_id").val();

@@ -5,7 +5,7 @@
 <h3>Save Item</h3>
 <form action="unbindery.php?method=save_item_text" method="POST">
 Item ID: <input type="textbox" value="5" name="item_id" id="item_id" /><br/>
-Project ID: <input type="textbox" value="3" name="project_id" id="project_id" /><br/>
+Project slug: <input type="textbox" value="aof" name="project_slug" id="project_slug" /><br/>
 Username: <input type="textbox" value="" name="username" id="username" /><br/>
 Draft: <input type="checkbox" name="draft" id="draft" /><br/>
 Itemtext: <textarea name="itemtext" id="itemtext"></textarea><br/>
