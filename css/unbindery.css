@@ -31,7 +31,8 @@ ul#controls_right li					{ display: inline; margin-left: 5px; }
 textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; padding: 10px; font-size: 1.3em; line-height: 1.4em; }
 
 .bigcol									{ width: 550px; float: left; margin-top: 20px; }
-.sidebar								{ width: 250px; margin-left: 50px; float: left; margin-top: 20px; }
+.sidebar								{ width: 250px; margin-left: 50px; float: left; margin-top: 20px; background: #eee; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+ }
 
 .bigcol h3								{ margin-top: 3em; background: #eee; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; padding: 3px 6px; }
 .bigcol h3:first-child					{ margin-top: 0; }
@@ -40,6 +41,8 @@ textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; pa
 .bigcol table td a						{ text-decoration: none; }
 .bigcol table td a:hover				{ background: #eee; }
 .bigcol table th						{ text-align: left; border-bottom: solid 2px #ddd; }
+
+.sidebar h3								{ margin: 0; padding: 5px 5px 0 5px; }
 
 .stat									{ font-weight: bold; }
 

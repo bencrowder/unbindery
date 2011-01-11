@@ -97,8 +97,6 @@ $projectlist = array();
 		</div>
 
 		<div class="sidebar">
-			<a href="#" class="button">Give me a new item</a>
-
 			<h3>Stats</h3>
 			<ul>
 				<li>Score: <span class="stat">590</span></li>
