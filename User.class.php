@@ -24,7 +24,6 @@ class User {
 	}
 
 	public function load($username) {
-		echo "load";
 		$this->db->connect();
 		$this->username = $username;
 

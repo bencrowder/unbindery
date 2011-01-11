@@ -39,7 +39,8 @@ $error = stripslashes($_GET["error"]);
 					<th></th>
 				</tr>
 				<?php 
-				$items = getUserAssignments($db, $username);
+				$user = new User($db, $username);
+				$items = $user->getAssignments();
 				foreach ($items as $item) {
 					$editlink = $SITEROOT . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
 					$projectlink = $SITEROOT . '/projects/' . $item["project_slug"];
@@ -62,7 +63,7 @@ $error = stripslashes($_GET["error"]);
 					<th></th>
 				</tr>
 				<?php 
-				$projects = getUserProjects($db, $username);
+				$projects = $user->getProjects();
 				foreach ($projects as $project) {
 					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
 					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
