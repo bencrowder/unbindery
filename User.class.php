@@ -58,13 +58,13 @@ class User {
 	public function getProjects() {
 		$this->db->connect();
 
-		$query = "SELECT project_id, projects.title, projects.slug, projects.owner, role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "';";
+		$query = "SELECT project_id, projects.title, projects.slug, projects.owner, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "';";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "owner" => $row["owner"], "role" => $row["role"]));
+			array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "owner" => $row["owner"], "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"]));
 		}
 
 		$this->db->close();

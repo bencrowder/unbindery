@@ -67,11 +67,12 @@ $error = stripslashes($_GET["error"]);
 				foreach ($projects as $project) {
 					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
 					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
+					$percentage = round($project["completed"] / $project["total"] * 100, 0);
 				?>
 				<tr>
 					<td><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></td>
 					<td><?php echo $project["owner"]; ?></td>
-					<td>[coming]</td>
+					<td><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></td>
 					<td><a href="<?php echo $getitemlink; ?>" class="button smallbutton">Get new item</a></td>
 				</tr>
 				<?php } ?>

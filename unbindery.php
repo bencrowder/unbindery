@@ -138,6 +138,17 @@ switch ($method) {
 			echo json_encode($result);
 		}
 		break;
+
+	case 'get_project_status':
+		$project_slug = $_POST['project_slug'];
+
+		if ($project_slug) {
+			$project = new Project($db, $project_slug);
+			$result = $project->getStatus();
+
+			echo json_encode($result);
+		}
+		break;
 }
 
 ?>

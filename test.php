@@ -68,5 +68,12 @@ Project Slug: <input type="textbox" value="" name="project_slug" id="project_slu
 <input type="submit" value="Submit" />
 </form>
 
+<h3>Get Project Status</h3>
+<form action="unbindery.php?method=get_project_status" method="POST">
+Project Slug: <input type="textbox" value="" name="project_slug" id="project_slug" /><br/>
+<br/>
+<input type="submit" value="Submit" />
+</form>
+
 </body>
 </html>
