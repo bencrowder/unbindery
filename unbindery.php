@@ -182,7 +182,6 @@ function saveItemTextWS($db) {
 	$username = $_POST['username'];
 	$itemtext = $_POST['itemtext'];
 
-	echo "here";
 	// convert to boolean
 	if ($_POST['draft'] == "true") {
 		$draft = true;
@@ -193,11 +192,8 @@ function saveItemTextWS($db) {
 	// make sure we have the required variables
 	if (!$item_id || !$project_slug || !$username) { return ""; }
 
-	echo "new Item";
 	$item = new Item($db);
-	echo "load";
 	$item->load($item_id, $project_slug, $username);
-	echo "saveText";
 	$status = $item->saveText($username, $draft, $itemtext);
 
 	echo json_encode(array("statuscode" => $status));
