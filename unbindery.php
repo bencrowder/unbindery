@@ -1,31 +1,13 @@
 <?php
 
-// Unbindery
-// Ben Crowder <ben.crowder@gmail.com>
+/* Unbindery, a book digitization app
+ * Ben Crowder <ben.crowder@gmail.com> */
 
 include_once('include/config.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
 include_once('Item.class.php');
 include_once('User.class.php');
-
-
-///////////////////////////////////////////////////////////////////////
-//
-// Library functions
-//
-
-function getNextItem($db, $username, $project_slug) {
-	// if project = "", get one of the user's projects
-	// make sure they've finished any existing items for that project (if not, go to next project)
-	// get next item from project where
-	//		status = available
-	//		user hasn't done that item
-	//		number of assigned users is < project proof limit (2 reviews per item, etc.)
-	// if there's nothing, return a message saying so
-	// else assign item to user
-}
-
 
 /* Dispatcher ********************************************************/
 
@@ -140,6 +122,18 @@ switch ($method) {
 		if ($username && $item_id && $project_slug) {
 			$user = new User($db, $username);
 			$result = $user->assignItem($item_id, $project_slug);
+
+			echo json_encode($result);
+		}
+		break;
+
+	case 'get_next_item':
+		$username = $_POST['username'];
+		$project_slug = $_POST['project_slug'];
+
+		if ($username) {
+			$user = new User($db, $username);
+			$result = $user->getNextItem($project_slug);
 
 			echo json_encode($result);
 		}

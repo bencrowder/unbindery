@@ -60,5 +60,13 @@ Project Slug: <input type="textbox" value="" name="project_slug" id="project_slu
 <input type="submit" value="Submit" />
 </form>
 
+<h3>Get Next Item</h3>
+<form action="unbindery.php?method=get_next_item" method="POST">
+Username: <input type="textbox" value="" name="username" id="username" /><br/>
+Project Slug: <input type="textbox" value="" name="project_slug" id="project_slug" /><br/>
+<br/>
+<input type="submit" value="Submit" />
+</form>
+
 </body>
 </html>

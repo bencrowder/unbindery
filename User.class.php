@@ -161,13 +161,54 @@ class User {
 	}
 
 	public function getNextItem($project_slug = "") {
-		// if project = "", get one of the user's projects
+		// if no project specified, get the user's first current project
+		if (!$project_slug || $project_slug == "") {
+			$projects = $this->getProjects(); 
+			$project_slug = $projects[0]["slug"];
+		} else {
+			if (!$this->isMember($project_slug)) {
+				return "not a member";
+			}
+		}
+
 		// make sure they've finished any existing items for that project (if not, go to next project)
+		$this->db->connect();
+
+		$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "' AND assignments.date_completed IS NULL";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$this->db->close();
+			return "already_have_an_item_assigned";
+		}
+
 		// get next item from project where
 		//		status = available
 		//		user hasn't done that item
 		//		number of assigned users is < project proof limit (2 reviews per item, etc.)
-		// if there's nothing, return a message saying so
-		// else assign item to user
+		$query = "SELECT items.id, items.project_id, ";
+		$query .= "(SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS itemcount ";
+		$query .= "FROM items JOIN projects ON projects.id = items.project_id ";
+		$query .= "WHERE items.status = 'available' ";
+		$query .= "AND projects.slug = '$project_slug' ";
+		$query .= "AND items.id NOT IN ";
+		$query .= "(SELECT item_id FROM assignments ";
+		$query .= "WHERE username='{$this->username}' AND project_id = items.project_id) ";
+		$query .= "HAVING itemcount < 2 "; //TODO: replace with $project->itemcount
+		$query .= "LIMIT 1;";
+
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			while ($row = mysql_fetch_assoc($result)) {
+				$item_id = $row["id"];
+				$this->assignItem($item_id, $project_slug);
+				$this->db->close();
+				return "success";
+			}
+		} else {
+			$this->db->close();
+			return "none found";
+		}
 	}
 }
