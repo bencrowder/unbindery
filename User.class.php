@@ -200,12 +200,11 @@ class User {
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
-			while ($row = mysql_fetch_assoc($result)) {
-				$item_id = $row["id"];
-				$this->assignItem($item_id, $project_slug);
-				$this->db->close();
-				return "success";
-			}
+			$row = mysql_fetch_assoc($result);
+			$item_id = $row["id"];
+			$this->assignItem($item_id, $project_slug);
+			$this->db->close();
+			return "success";
 		} else {
 			$this->db->close();
 			return "none found";

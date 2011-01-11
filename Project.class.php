@@ -44,6 +44,34 @@ class Project {
 		$this->db->close();
 	}
 
+	public function getStatus() {
+		$completed = 0;
+		$total = 0;
+
+		// returns array with number of items and how many are completed
+		$this->db->connect();
+
+		$query = "SELECT COUNT(*) AS total FROM items WHERE project_id = " . mysql_real_escape_string($this->project_id);
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$row = mysql_fetch_assoc($result);
+			$total = $row["total"];
+		}
+
+		$query = "SELECT COUNT(*) AS completed FROM items WHERE project_id = " . mysql_real_escape_string($this->project_id) . " AND status = 'completed'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$row = mysql_fetch_assoc($result);
+			$completed = $row["completed"];
+		}
+
+		$this->db->close();
+
+		return array("completed" => $completed, "total" => $total);
+	}
+
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "slug" => $this->slug, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
