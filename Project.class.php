@@ -11,8 +11,12 @@ class Project {
 	private $owner;
 	private $status;
 
-	public function Project($db) {
+	public function Project($db, $slug = "") {
 		$this->db = $db;
+
+		if ($slug != "") {
+			$this->load($slug);
+		}
 	}
 
 	public function __set($key, $val) {

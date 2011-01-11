@@ -103,4 +103,71 @@ class User {
 		$this->db->close();
 		return $retval;
 	}
+
+	public function assignToProject($project_slug) {
+		// make sure they're not already a member
+		if (!$this->isMember($project_slug)) {
+			$project = new Project($this->db, $project_slug);
+
+			$this->db->connect();
+
+			// insert into membership (default = proofer)
+			$query = "INSERT INTO membership (project_id, username, role) VALUES (" . mysql_real_escape_string($project->project_id) . ", '" . mysql_real_escape_string($this->username) . "', 'proofer')";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			// send email to user w/ project guidelines, link to unsubscribe, and note that first item will come soon (intro email, pull from project settings)
+
+			$this->db->close();
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function assignItem($item_id, $project_slug) {
+		$this->db->connect();
+
+		// make sure the item exists
+		$query = "SELECT items.id FROM items JOIN projects ON projects.id = items.project_id WHERE items.id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (!mysql_numrows($result)) {
+			$this->db->close();
+			return "nonexistent";
+		}
+		$this->db->close();
+
+		// make sure they're not already assigned
+		if (!$this->isAssigned($item_id, $project_slug)) {
+			$project = new Project($this->db, $project_slug);
+			// get $project->deadlinelength at some point
+			$deadlinelength = 7;
+
+			$this->db->connect();
+
+			// insert into assignments
+			$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES ('" . mysql_real_escape_string($this->username) . "', " . $item_id . ", " . mysql_real_escape_string($project->project_id) . ", NOW(), DATE_ADD(NOW(), INTERVAL $deadlinelength DAY))";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			// send email to user w/ edit link, deadline
+
+			$this->db->close();
+
+			return "success";
+		} else {
+			return "already_assigned";
+		}
+	}
+
+	public function getNextItem($project_slug = "") {
+		// if project = "", get one of the user's projects
+		// make sure they've finished any existing items for that project (if not, go to next project)
+		// get next item from project where
+		//		status = available
+		//		user hasn't done that item
+		//		number of assigned users is < project proof limit (2 reviews per item, etc.)
+		// if there's nothing, return a message saying so
+		// else assign item to user
+	}
 }

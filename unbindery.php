@@ -15,77 +15,6 @@ include_once('User.class.php');
 // Library functions
 //
 
-function checkUserMembership($db, $username, $project_slug) {
-	$db->connect();
-
-	$query = "SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($username) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	if (mysql_numrows($result)) {
-		$db->close();
-		return true;
-	} else {
-		$db->close();
-		return false;
-	}
-}
-
-function assignUserToProject($db, $username, $project_slug) {
-	// make sure they're not already a member
-	if (!checkUserMembership($db, $username, $project_slug)) {
-		$project = getProject($db, $project_slug);
-
-		$db->connect();
-
-		// insert into membership (default = proofer)
-		$query = "INSERT INTO membership (project_id, username, role) VALUES (" . mysql_real_escape_string($project->project_id) . ", '" . mysql_real_escape_string($username) . "', 'proofer')";
-		$result = mysql_query($query) or die ("Couldn't run: $query");
-
-		// send email to user w/ project guidelines, link to unsubscribe, and note that first item will come soon (intro email, pull from project settings)
-
-		$db->close();
-
-		return true;
-	} else {
-		return false;
-	}
-}
-
-function assignItemToUser($db, $username, $item_id, $project_slug) {
-	// make sure the item exists
-	$db->connect();
-
-	$query = "SELECT items.id FROM items JOIN projects ON projects.id = items.project_id WHERE items.id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	if (!mysql_numrows($result)) {
-		$db->close();
-		return "nonexistent";
-	}
-	$db->close();
-
-	// make sure they're not already assigned
-	if (!checkUserAssignment($db, $username, $item_id, $project_slug)) {
-		$project = getProject($db, $project_slug);
-		// get $project->deadlinelength at some point
-		$deadlinelength = 7;
-
-		$db->connect();
-
-		// insert into assignments
-		$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES ('" . mysql_real_escape_string($username) . "', " . $item_id . ", " . mysql_real_escape_string($project->project_id) . ", NOW(), DATE_ADD(NOW(), INTERVAL $deadlinelength DAY))";
-		$result = mysql_query($query) or die ("Couldn't run: $query");
-
-		// send email to user w/ edit link, deadline
-
-		$db->close();
-
-		return "success";
-	} else {
-		return "already_assigned";
-	}
-}
-
 function getNextItem($db, $username, $project_slug) {
 	// if project = "", get one of the user's projects
 	// make sure they've finished any existing items for that project (if not, go to next project)
@@ -110,8 +39,7 @@ switch ($method) {
 
 		// username is optional
 		if ($item_id && $project_slug) {
-			$item = new Item($db);
-			$item->load($item_id, $project_slug, $username);
+			$item = new Item($db, $item_id, $project_slug, $username);
 
 			echo $item->getJSON();
 		}
@@ -121,8 +49,7 @@ switch ($method) {
 		$slug = $_POST['slug'];
 
 		if ($slug) {
-			$project = new Project($db);
-			$project->load($slug);
+			$project = new Project($db, $slug);
 
 			echo $project->getJSON();
 		}
@@ -198,7 +125,8 @@ switch ($method) {
 		$project_slug = $_POST['project_slug'];
 
 		if ($username && $project_slug) {
-			$result = assignUserToProject($db, $username, $project_slug);
+			$user = new User($db, $username);
+			$result = $user->assignToProject($project_slug);
 
 			echo json_encode($result);
 		}
@@ -210,7 +138,8 @@ switch ($method) {
 		$project_slug = $_POST['project_slug'];
 
 		if ($username && $item_id && $project_slug) {
-			$result = assignItemToUser($db, $username, $item_id, $project_slug);
+			$user = new User($db, $username);
+			$result = $user->assignItem($item_id, $project_slug);
 
 			echo json_encode($result);
 		}

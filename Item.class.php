@@ -19,8 +19,12 @@ class Item {
 	private $height;
 	private $length;
 
-	public function Item($db) {
+	public function Item($db, $item_id = "", $project_slug = "", $username = "") {
 		$this->db = $db;
+
+		if ($item_id && $project_slug) {
+			$this->load($item_id, $project_slug, $username);
+		}
 	}
 
 	public function __set($key, $val) {
