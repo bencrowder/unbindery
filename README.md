@@ -1,3 +1,3 @@
 ## Unbindery
 
-Book digitization app.
+A book digitization app.

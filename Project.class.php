@@ -11,6 +11,11 @@ class Project {
 	private $owner;
 	private $status;
 
+	private $guidelines;
+	private $intro_email;
+	private $deadline_days;
+	private $num_proofs;
+
 	public function Project($db, $slug = "") {
 		$this->db = $db;
 
@@ -39,7 +44,29 @@ class Project {
 			$this->slug = trim(mysql_result($result, 0, "slug"));
 			$this->owner = trim(mysql_result($result, 0, "owner"));
 			$this->status = trim(mysql_result($result, 0, "status"));
+			$this->guidelines = trim(mysql_result($result, 0, "guidelines"));
+			$this->intro_email = trim(mysql_result($result, 0, "intro_email"));
+			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
+			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
 		}
+
+		$this->db->close();
+	}
+
+	public function save() {
+		$this->db->connect();
+
+		$query = "UPDATE projects WHERE id = " . $this->project_id . " ";
+		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
+		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "' ";
+		$query .= "owner = '" . mysql_real_escape_string($this->owner) . "' ";
+		$query .= "status = '" . mysql_real_escape_string($this->status) . "' ";
+		$query .= "guidelines = '" . mysql_real_escape_string($this->guidelines) . "' ";
+		$query .= "intro_email = '" . mysql_real_escape_string($this->intro_email) . "' ";
+		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "' ";
+		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "' ";
+
+		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$this->db->close();
 	}
