@@ -7,8 +7,12 @@ class User {
 	private $name;
 	private $email;
 
-	public function User($db) {
+	public function User($db, $username = "") {
 		$this->db = $db;
+
+		if ($username != "") { 
+			$this->load($username);
+		}
 	}
 
 	public function __set($key, $val) {
@@ -20,6 +24,7 @@ class User {
 	}
 
 	public function load($username) {
+		echo "load";
 		$this->db->connect();
 		$this->username = $username;
 
@@ -32,5 +37,71 @@ class User {
 		}
 
 		$this->db->close();
+	}
+
+	public function getAssignments() {
+		$this->db->connect();
+
+		$query = "SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username='" . mysql_real_escape_string($this->username) . "' AND date_completed IS NULL ORDER BY deadline ASC;";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$items = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($items, array("item_id" => $row["item_id"], "item_title" => $row["item_title"], "project_id" => $row["project_id"], "project_title" => $row["project_title"], "project_slug" => $row["project_slug"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"]));
+		}
+
+		$this->db->close();
+
+		return $items;
+	}
+
+	public function getProjects() {
+		$this->db->connect();
+
+		$query = "SELECT project_id, projects.title, projects.slug, projects.owner, role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "';";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$projects = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "owner" => $row["owner"], "role" => $row["role"]));
+		}
+
+		$this->db->close();
+
+		return $projects;
+	}
+
+	public function isAssigned($item_id, $project_slug) {
+		$this->db->connect();
+
+		$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND assignments.item_id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$retval = true;
+		} else {
+			$retval = false;
+		}
+
+		$this->db->close();
+		return $retval;
+	}
+
+	public function isMember($project_slug) {
+		$this->db->connect();
+
+		$query = "SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$retval = true;
+		} else {
+			$retval = false;
+		}
+
+		$this->db->close();
+		return $retval;
 	}
 }

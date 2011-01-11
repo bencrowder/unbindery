@@ -7,61 +7,13 @@ include_once('include/config.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
 include_once('Item.class.php');
+include_once('User.class.php');
 
 
 ///////////////////////////////////////////////////////////////////////
 //
 // Library functions
 //
-
-function getUserAssignments($db, $username) {
-	$db->connect();
-
-	$query = "SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username='" . mysql_real_escape_string($username) . "' AND date_completed IS NULL ORDER BY deadline ASC;";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	$items = array();
-
-	while ($row = mysql_fetch_assoc($result)) {
-		array_push($items, array("item_id" => $row["item_id"], "item_title" => $row["item_title"], "project_id" => $row["project_id"], "project_title" => $row["project_title"], "project_slug" => $row["project_slug"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"]));
-	}
-
-	$db->close();
-
-	return $items;
-}
-
-function getUserProjects($db, $username) {
-	$db->connect();
-
-	$query = "SELECT project_id, projects.title, projects.slug, projects.owner, role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($username) . "';";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	$projects = array();
-
-	while ($row = mysql_fetch_assoc($result)) {
-		array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "owner" => $row["owner"], "role" => $row["role"]));
-	}
-
-	$db->close();
-
-	return $projects;
-}
-
-function checkUserAssignment($db, $username, $item_id, $project_slug) {
-	$db->connect();
-
-	$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = '" . mysql_real_escape_string($username) . "' AND assignments.item_id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
-	$result = mysql_query($query) or die ("Couldn't run: $query");
-
-	if (mysql_numrows($result)) {
-		$db->close();
-		return true;
-	} else {
-		$db->close();
-		return false;
-	}
-}
 
 function checkUserMembership($db, $username, $project_slug) {
 	$db->connect();
@@ -145,131 +97,124 @@ function getNextItem($db, $username, $project_slug) {
 	// else assign item to user
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Web service functions
-//
 
-function getItemWS($db) {
-	$item_id = $_POST['item_id'];
-	$project_slug = $_POST['project_slug'];
-	$username = $_POST['username'];
-
-	// make sure we have at least the item ID and the project slug (username is optional)
-	if (!$item_id || !$project_slug) { return ""; }
-
-	$item = new Item($db);
-	$item->load($item_id, $project_slug, $username);
-
-	echo $item->getJSON();
-}
-
-function getProjectWS($db) {
-	$slug = $_POST['slug'];
-
-	// make sure we have the slug
-	if (!$slug) { return ""; }
-
-	$project = new Project($db);
-	$project->load($slug);
-
-	echo $project->getJSON();
-}
-
-function saveItemTextWS($db) {
-	$item_id = $_POST['item_id'];
-	$project_slug = $_POST['project_slug'];
-	$username = $_POST['username'];
-	$itemtext = $_POST['itemtext'];
-
-	// convert to boolean
-	if ($_POST['draft'] == "true") {
-		$draft = true;
-	} else {
-		$draft = false;
-	}
-
-	// make sure we have the required variables
-	if (!$item_id || !$project_slug || !$username) { return ""; }
-
-	$item = new Item($db);
-	$item->load($item_id, $project_slug, $username);
-	$status = $item->saveText($username, $draft, $itemtext);
-
-	echo json_encode(array("statuscode" => $status));
-}
-
-function getUserAssignmentsWS($db) {
-	$username = $_POST['username'];
-
-	$items = getUserAssignments($db, $username);
-
-	echo json_encode($items);
-}
-
-function getUserProjectsWS($db) {
-	$username = $_POST['username'];
-
-	$projects = getUserProjects($db, $username);
-
-	echo json_encode($projects);
-}
-
-function checkUserAssignmentWS($db) {
-	$username = $_POST['username'];
-	$item_id = $_POST['item_id'];
-	$project_slug = $_POST['project_slug'];
-
-	$result = checkUserAssignment($db, $username, $item_id, $project_slug);
-
-	echo json_encode($result);
-}
-
-function checkUserMembershipWS($db) {
-	$username = $_POST['username'];
-	$project_slug = $_POST['project_slug'];
-
-	$result = checkUserMembership($db, $username, $project_slug);
-
-	echo json_encode($result);
-}
-
-function assignUserToProjectWS($db) {
-	$username = $_POST['username'];
-	$project_slug = $_POST['project_slug'];
-
-	$result = assignUserToProject($db, $username, $project_slug);
-
-	echo json_encode($result);
-}
-
-function assignItemToUserWS($db) {
-	$username = $_POST['username'];
-	$item_id = $_POST['item_id'];
-	$project_slug = $_POST['project_slug'];
-
-	$result = assignItemToUser($db, $username, $item_id, $project_slug);
-
-	echo json_encode($result);
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-// Main
-//
+/* Dispatcher ********************************************************/
 
 $method = $_GET['method'];
 
 switch ($method) {
-	case 'get_item': getItemWS($db); break;
-	case 'get_project': getProjectWS($db); break;
-	case 'save_item_text': saveItemTextWS($db); break;
-	case 'get_user_assignments': getUserAssignmentsWS($db); break;
-	case 'get_user_projects': getUserProjectsWS($db); break;
-	case 'check_assignment': checkUserAssignmentWS($db); break;
-	case 'check_membership': checkUserMembershipWS($db); break;
-	case 'assign_user_to_project': assignUserToProjectWS($db); break;
-	case 'assign_item_to_user': assignItemToUserWS($db); break;
+	case 'get_item': 
+		$item_id = $_POST['item_id'];
+		$project_slug = $_POST['project_slug'];
+		$username = $_POST['username'];
+
+		// username is optional
+		if ($item_id && $project_slug) {
+			$item = new Item($db);
+			$item->load($item_id, $project_slug, $username);
+
+			echo $item->getJSON();
+		}
+		break;	
+
+	case 'get_project':
+		$slug = $_POST['slug'];
+
+		if ($slug) {
+			$project = new Project($db);
+			$project->load($slug);
+
+			echo $project->getJSON();
+		}
+		break;
+
+	case 'save_item_text':
+		$item_id = $_POST['item_id'];
+		$project_slug = $_POST['project_slug'];
+		$username = $_POST['username'];
+		$itemtext = $_POST['itemtext'];
+
+		// convert to boolean
+		$draft = ($_POST['draft'] == "true") ? true : false;
+
+		if ($item_id && $project_slug && $username) {
+			$item = new Item($db);
+			$item->load($item_id, $project_slug, $username);
+			$status = $item->saveText($username, $draft, $itemtext);
+
+			echo json_encode(array("statuscode" => $status));
+		}
+		break;
+
+	case 'get_user_assignments':
+		$username = $_POST['username'];
+
+		if ($username) {
+			$user = new User($db, $username);
+			$items = $user->getAssignments();
+
+			echo json_encode($items);
+		}
+		break;
+
+	case 'get_user_projects':
+		$username = $_POST['username'];
+
+		if ($username) {
+			$user = new User($db, $username);
+			$projects = $user->getProjects();
+
+			echo json_encode($projects);
+		}
+		break;
+
+	case 'check_assignment':
+		$username = $_POST['username'];
+		$item_id = $_POST['item_id'];
+		$project_slug = $_POST['project_slug'];
+
+		if ($username && $item_id && $project_slug) {
+			$user = new User($db, $username);
+			$result = $user->isAssigned($item_id, $project_slug);
+
+			echo json_encode($result);
+		}
+		break;
+
+	case 'check_membership':
+		$username = $_POST['username'];
+		$project_slug = $_POST['project_slug'];
+
+		if ($username && $project_slug) {
+			$user = new User($db, $username);
+			$result = $user->isMember($project_slug);
+
+			echo json_encode($result);
+		}
+		break;
+
+	case 'assign_user_to_project':
+		$username = $_POST['username'];
+		$project_slug = $_POST['project_slug'];
+
+		if ($username && $project_slug) {
+			$result = assignUserToProject($db, $username, $project_slug);
+
+			echo json_encode($result);
+		}
+		break;
+
+	case 'assign_item_to_user':
+		$username = $_POST['username'];
+		$item_id = $_POST['item_id'];
+		$project_slug = $_POST['project_slug'];
+
+		if ($username && $item_id && $project_slug) {
+			$result = assignItemToUser($db, $username, $item_id, $project_slug);
+
+			echo json_encode($result);
+		}
+		break;
 }
 
 ?>
