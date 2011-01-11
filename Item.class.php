@@ -1,21 +1,67 @@
 <?php
 
 class Item {
-	public $item_id;
-	public $project_id;
+	private $db;
 
-	public $title;
+	private $item_id;
+	private $project_id;
 
-	public $itemtext;
+	private $title;
 
-	public $status;
+	private $itemtext;
 
-	public $type;
-	public $href;
+	private $status;
 
-	public $width;
-	public $height;
-	public $length;
+	private $type;
+	private $href;
+
+	private $width;
+	private $height;
+	private $length;
+
+	public function Item($db) {
+		$this->db = $db;
+	}
+
+	public function __set($key, $val) {
+		$this->$key = $val;
+	}
+
+	public function __get($key) {
+		return $this->$key;
+	}
+
+	public function load($item_id, $project_slug, $username = "") {
+		$this->db->connect();
+
+		$query = "SELECT * FROM items JOIN projects ON items.project_id = projects.id WHERE items.id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$this->item_id = trim(mysql_result($result, 0, "id"));
+			$this->project_id = trim(mysql_result($result, 0, "project_id"));
+			$this->title = trim(mysql_result($result, 0, "title"));
+			$this->itemtext = trim(mysql_result($result, 0, "itemtext"));
+			$this->status = trim(mysql_result($result, 0, "status"));
+			$this->type = trim(mysql_result($result, 0, "type"));
+			$this->href = trim(mysql_result($result, 0, "href"));
+			$this->width = trim(mysql_result($result, 0, "width"));
+			$this->height = trim(mysql_result($result, 0, "height"));
+			$this->length = trim(mysql_result($result, 0, "length"));
+		}
+
+		// Update the item text with the user's revision, if available
+		if ($username != '') {
+			$query = "SELECT itemtext FROM texts WHERE item_id=" . mysql_real_escape_string($item_id) . " AND project_id=" . mysql_real_escape_string($this->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			if (mysql_numrows($result)) {
+				$this->itemtext = trim(mysql_result($result, 0, "itemtext"));
+			}
+		}
+
+		$this->db->close();
+	}
 
 	public function getJSON() {
 		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href, "width" => $this->width, "height" => $this->height, "length" => $this-length));

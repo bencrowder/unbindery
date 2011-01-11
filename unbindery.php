@@ -255,9 +255,11 @@ function getItemWS($db) {
 	$project_slug = $_POST['project_slug'];
 	$username = $_POST['username'];
 
+	// make sure we have at least the item ID and the project slug (username is optional)
 	if (!$item_id || !$project_slug) { return ""; }
 
-	$item = getItem($db, $item_id, $project_slug, $username);
+	$item = new Item($db);
+	$item->load($item_id, $project_slug, $username);
 
 	echo $item->getJSON();
 }
