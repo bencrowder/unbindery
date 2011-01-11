@@ -204,10 +204,11 @@ class User {
 			$item_id = $row["id"];
 			$this->assignItem($item_id, $project_slug);
 			$this->db->close();
-			return "success";
+
+			return array("statuscode" => "success", "item_id" => $item_id);
 		} else {
 			$this->db->close();
-			return "none found";
+			return array("statuscode" => "not_found");
 		}
 	}
 }

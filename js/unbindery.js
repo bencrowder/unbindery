@@ -41,6 +41,20 @@ function save_item_text(is_draft) {
 		}, 'json');
 }
 
+function get_new_item(project_slug) {
+	var username = $("ul#nav .username").html();
+
+	$.post(siteroot + "/unbindery.php?method=get_next_item", { project_slug: project_slug, username: username },
+		function(data) {
+			if (data.statuscode == "success") {
+				var locstr = siteroot + '/edit/' + project_slug + '/' + data.item_id;
+				window.location.href = locstr;
+			} else {
+				redirect_to_dashboard("", "Error getting new item.");
+			}
+		}, 'json');
+}
+
 $(document).ready(function() {
 	$("textarea#transcript").focus();
 
@@ -50,5 +64,10 @@ $(document).ready(function() {
 
 	$("#finished_button").click(function(e) {
 		save_item_text(false);
+	});
+
+	$(".getnewitem").click(function(e) {
+		var project_slug = this.getAttribute('data-project-slug');
+		get_new_item(project_slug);
 	});
 });

@@ -14,6 +14,9 @@ $username = Alibaba::getUsername();
 $message = stripslashes($_GET["message"]);
 $error = stripslashes($_GET["error"]);
 
+// list of projects the user already has assignments for
+$projectlist = array();
+
 ?>
 
 <?php include('include/header.php'); ?>
@@ -44,6 +47,7 @@ $error = stripslashes($_GET["error"]);
 				foreach ($items as $item) {
 					$editlink = $SITEROOT . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
 					$projectlink = $SITEROOT . '/projects/' . $item["project_slug"];
+					$projectlist[] = $item["project_slug"];
 				?>
 				<tr>
 					<td><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a></td>
@@ -73,7 +77,7 @@ $error = stripslashes($_GET["error"]);
 					<td><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></td>
 					<td><?php echo $project["owner"]; ?></td>
 					<td><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></td>
-					<td><a href="<?php echo $getitemlink; ?>" class="button smallbutton">Get new item</a></td>
+					<td><?php if (!in_array($project["slug"], $projectlist)): ?><span class="button smallbutton getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span><?php endif; ?></td>
 				</tr>
 				<?php } ?>
 			</table>
