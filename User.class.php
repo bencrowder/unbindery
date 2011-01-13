@@ -195,6 +195,7 @@ class User {
 		$query .= "(SELECT item_id FROM assignments ";
 		$query .= "WHERE username='{$this->username}' AND project_id = items.project_id) ";
 		$query .= "HAVING itemcount < 2 "; //TODO: replace with $project->itemcount
+		$query .= "ORDER BY items.id ASC ";
 		$query .= "LIMIT 1;";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
