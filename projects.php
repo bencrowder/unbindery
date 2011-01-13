@@ -30,7 +30,12 @@ $project = new Project($db, $project_slug);
 <?php } ?>
 
 	<div id="main">
-		<h2><?php echo $project->title; ?></h2>
+	<?php if ($_GET["guidelines"] == "true") { ?>
+		<h3>Project Guidelines: <?php echo $project->title; ?></h3>
+
+		<?php echo $project->guidelines; ?>
+	<?php } else { ?>
+		<h3><?php echo $project->title; ?></h3>
 
 		<div class="bigcol">
 			<h3>Project Details</h3>
@@ -81,6 +86,7 @@ $project = new Project($db, $project_slug);
 		<div class="sidebar">
 			<a href="edit/">Edit this project</a>
 		</div>
+	<?php } // else (if guidelines != true) ?>
 	</div>
 </body>
 </html>
