@@ -40,13 +40,13 @@ class Project {
 
 		if (mysql_numrows($result)) {
 			$this->project_id = trim(mysql_result($result, 0, "id"));
-			$this->title = trim(mysql_result($result, 0, "title"));
-			$this->slug = trim(mysql_result($result, 0, "slug"));
-			$this->description = trim(mysql_result($result, 0, "description"));
+			$this->title = stripslashes(trim(mysql_result($result, 0, "title")));
+			$this->slug = stripslashes(trim(mysql_result($result, 0, "slug")));
+			$this->description = stripslashes(trim(mysql_result($result, 0, "description")));
 			$this->owner = trim(mysql_result($result, 0, "owner"));
 			$this->status = trim(mysql_result($result, 0, "status"));
-			$this->guidelines = trim(mysql_result($result, 0, "guidelines"));
-			$this->intro_email = trim(mysql_result($result, 0, "intro_email"));
+			$this->guidelines = stripslashes(trim(mysql_result($result, 0, "guidelines")));
+			$this->intro_email = stripslashes(trim(mysql_result($result, 0, "intro_email")));
 			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
 			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
 		}
@@ -183,7 +183,7 @@ class Project {
 		$items = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($items, array("title" => $row["title"], "status" => $row["status"], "type" => $row["type"], "href" => $row["href"], "assignments" => $row["assignments"], "completed" => $row["completed"]));
+			array_push($items, array("title" => stripslashes($row["title"]), "status" => $row["status"], "type" => $row["type"], "href" => $row["href"], "assignments" => $row["assignments"], "completed" => $row["completed"]));
 		}
 
 		$this->db->close();
