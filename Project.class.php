@@ -102,7 +102,7 @@ class Project {
 	public function getItems() {
 		$this->db->connect();
 
-		$query = "SELECT title, status, type, href, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS assignments, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id AND date_completed IS NOT NULL) AS completed FROM items WHERE project_id = " . $this->project_id;
+		$query = "SELECT title, status, type, href, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS assignments, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id AND date_completed IS NOT NULL) AS completed FROM items WHERE project_id = " . $this->project_id . " ORDER BY items.id ASC";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$items = array();

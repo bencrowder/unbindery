@@ -50,3 +50,15 @@ textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; pa
 #error									{ width: 830px; margin: 0px auto 15px; background: #fee; color: #600; border: solid 1px #daa; border-top: none; padding: 10px; }
 
 #spinner								{ display: none; vertical-align: middle; }
+
+#project_form							{ padding-top: 5px; }
+#project_form label						{ display: block; font-weight: bold; margin-top: 18px; margin-bottom: 2px; }
+#project_form input						{ display: block; }
+#project_form input[type="text"]		{ font-size: 1em; }
+#project_form input[type="submit"]		{ margin-top: 2em; }
+#project_form textarea					{ display: block; font-size: 1em; padding: 3px; width: 450px; height: 60px; }
+
+#project_form #project_title			{ width: 300px; }
+#project_form #project_slug				{ width: 50px; }
+#project_form #project_deadline			{ width: 30px; }
+#project_form #project_numproofs		{ width: 30px; }
