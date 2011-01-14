@@ -1,5 +1,3 @@
-var siteroot = "http://bencrowder.net/sandbox/unbindery";
-
 function redirect_to_dashboard(message, error) {
 	var locstr = siteroot + "/dashboard";
 
