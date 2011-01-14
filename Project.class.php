@@ -42,6 +42,7 @@ class Project {
 			$this->project_id = trim(mysql_result($result, 0, "id"));
 			$this->title = trim(mysql_result($result, 0, "title"));
 			$this->slug = trim(mysql_result($result, 0, "slug"));
+			$this->description = trim(mysql_result($result, 0, "description"));
 			$this->owner = trim(mysql_result($result, 0, "owner"));
 			$this->status = trim(mysql_result($result, 0, "status"));
 			$this->guidelines = trim(mysql_result($result, 0, "guidelines"));
@@ -58,17 +59,55 @@ class Project {
 
 		$query = "UPDATE projects WHERE id = " . $this->project_id . " ";
 		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
-		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "' ";
-		$query .= "owner = '" . mysql_real_escape_string($this->owner) . "' ";
-		$query .= "status = '" . mysql_real_escape_string($this->status) . "' ";
-		$query .= "guidelines = '" . mysql_real_escape_string($this->guidelines) . "' ";
-		$query .= "intro_email = '" . mysql_real_escape_string($this->intro_email) . "' ";
-		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "' ";
+		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "', ";
+		$query .= "description = '" . mysql_real_escape_string($this->description) . "', ";
+		$query .= "owner = '" . mysql_real_escape_string($this->owner) . "', ";
+		$query .= "status = '" . mysql_real_escape_string($this->status) . "', ";
+		$query .= "guidelines = '" . mysql_real_escape_string($this->guidelines) . "', ";
+		$query .= "intro_email = '" . mysql_real_escape_string($this->intro_email) . "', ";
+		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
 		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "' ";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$this->db->close();
+	}
+
+	public function create($title, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs) {
+		$this->title = $title;
+		$this->slug = $slug;
+		$this->description = $description;
+		$this->owner = $owner;
+		$this->status = "active";
+		$this->guidelines = $guidelines;
+		$this->intro_email = $intro_email;
+		$this->deadline_days = $deadline_days;
+		$this->num_proofs = $num_proofs;
+
+		if ($title != "" && $slug != "") {
+			$this->db->connect();
+
+			$query = "INSERT INTO projects ";
+			$query .= "(title, slug, description, owner, status, guidelines, intro_email, deadline_days, num_proofs) ";
+			$query .= "VALUES (";
+			$query .= "'" . mysql_real_escape_string($this->title) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->slug) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->description) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->owner) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->status) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->guidelines) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->intro_email) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->deadline_days) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->num_proofs) . "') ";
+
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			$this->db->close();
+
+			return "success";
+		} else {
+			return "missing title/slug";
+		}
 	}
 
 	public function getStatus() {

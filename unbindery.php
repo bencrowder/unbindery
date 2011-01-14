@@ -37,6 +37,22 @@ switch ($method) {
 		}
 		break;
 
+	case 'create_project':
+		$title = $_POST['title'];
+		$slug = $_POST['slug'];
+		$description = $_POST['description'];
+		$owner = $_POST['owner'];
+		$guidelines = $_POST['guidelines'];
+		$intro_email = $_POST['intro_email'];
+		$deadline_days = $_POST['deadline_days'];
+		$num_proofs = $_POST['num_proofs'];
+
+		if ($title) {
+			$project = new Project($db);
+			echo $project->create($title, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
+		}
+		break;
+
 	case 'save_item_text':
 		$item_id = $_POST['item_id'];
 		$project_slug = $_POST['project_slug'];
