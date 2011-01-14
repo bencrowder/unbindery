@@ -65,7 +65,6 @@ function load_items_for_editing(event, data) {
 		var itemname = filename.substr(0, filename.indexOf('.'));
 
 		items.push(itemname);
-
 	});
 
 	// we need to add them to the database here

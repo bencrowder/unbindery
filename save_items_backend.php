@@ -19,7 +19,14 @@ foreach ($_POST as $key => $value) {
 		$slug = $value;
 	} else {
 		$item_id = substr($key, 0, strpos($key, '_')); // key == "189_text" or such
+
+		// we connect to the database so we can use mysql_real_escape_string()
+		$db->connect();
+
 		$item_text = mysql_real_escape_string($value);
+
+		$db->close();
+
 		array_push($items, array($item_id, $item_text));		
 	}
 }
