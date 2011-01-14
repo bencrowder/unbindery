@@ -110,6 +110,42 @@ class Project {
 		}
 	}
 
+	public function createItems($items) {
+		$this->db->connect();
+
+		$item_ids = array();
+
+		foreach ($items as $item) {
+			$query = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES ({$this->project_id}, '" . mysql_real_escape_string($item) . "', NULL, 'available', 'image', '{$this->slug}/" . mysql_real_escape_string($item) . ".jpg'); ";
+
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			// get the insert ID and add it to the array
+			$item_id = mysql_insert_id();
+			array_push($item_ids, $item . "_" . $item_id);
+		}
+
+		$this->db->close();
+
+		return array("statuscode" => "success", "item_ids" => $item_ids);
+	}
+
+	public function saveItems($items) {
+		$this->db->connect();
+
+		foreach ($items as $item) {
+			$item_id = $item[0];
+			$item_text = $item[1];
+
+			$query = "UPDATE items SET itemtext = '$item_text' WHERE id = $item_id; ";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+		}
+
+		$this->db->close();
+
+		return array("statuscode" => "success");
+	}
+
 	public function getStatus() {
 		$completed = 0;
 		$total = 0;

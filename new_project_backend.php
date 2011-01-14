@@ -26,15 +26,19 @@ $retval = $project->create($title, $slug, $description, $owner, $guidelines, $in
 
 if ($retval == "success") {
 	// make project directory for images
-	$rs = @mkdir(dirname(__FILE__) . "/images/$slug");
+	$dir = dirname(__FILE__) . "/images/$slug";
+
+	$rs = @mkdir($dir, 0775, true);
 	if ($rs) {
-		echo "Success!";
+		chmod($dir, 0775);
+		// success!
+		// redirect to upload page
+		header("Location: $SITEROOT/upload_items/$slug");
 	} else {
-		echo "Failure.";
+		// redirect to error page
+		header("Location: $SITEROOT/dashboard/");
 	}
 
-	// redirect to upload page
-	//header("Location: $SITEROOT/upload_items/");	
 } else {
 	// redirect to error page
 	header("Location: $SITEROOT/dashboard/");

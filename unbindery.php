@@ -165,6 +165,20 @@ switch ($method) {
 			echo json_encode($result);
 		}
 		break;
+
+	case 'create_items':
+		$project_slug = $_POST['project_slug'];
+		$items = $_POST['items'];
+
+		if ($project_slug && $items) {
+			$project = new Project($db, $project_slug);
+			$result = $project->createItems($items);
+
+			echo json_encode($result);
+		} else {
+			echo json_encode(array("statuscode" => "error"));
+		}
+		break;
 }
 
 ?>
