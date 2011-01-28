@@ -2,6 +2,11 @@
 
 include_once('include/config.php');
 include_once('include/Alibaba.class.php');
+
+if (Alibaba::authenticated()) {
+	header("Location: dashboard/");
+}
+
 include_once('Database.class.php');
 include_once('unbindery.php');
 
