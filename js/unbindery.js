@@ -74,8 +74,8 @@ function load_items_for_editing(event, data) {
 
 				for (item_index in data.item_ids) {
 					var item = data.item_ids[item_index];
-					itemname = item.substr(0, item.indexOf('_'));
-					itemid = item.substr(item.indexOf('_') + 1, item.length);
+					itemname = item.substr(0, item.lastIndexOf('_'));
+					itemid = item.substr(item.lastIndexOf('_') + 1, item.length);
 
 					content += '<label>' + itemname + '</label>';
 					content += '<textarea class="item_textarea" id="' + itemid + '_text" name="' + itemid + '_text"></textarea>\n';

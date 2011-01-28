@@ -18,7 +18,7 @@ foreach ($_POST as $key => $value) {
 	if ($key == "project_slug") {
 		$slug = $value;
 	} else {
-		$item_id = substr($key, 0, strpos($key, '_')); // key == "189_text" or such
+		$item_id = substr($key, 0, strrpos($key, '_')); // key == "189_text" or such
 
 		// we connect to the database so we can use mysql_real_escape_string()
 		$db->connect();

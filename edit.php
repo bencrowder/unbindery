@@ -40,8 +40,8 @@ $item->load($item_id, $project_slug, $username);
 			</ul>
 			<ul id="controls_right">
 				<li><img src="<?php echo $SITEROOT; ?>/snake.gif" id="spinner" /></li>
-				<li><span id="save_as_draft_button" class="button">Save as Draft</span></li>
 				<li><span id="finished_button" class="button">I'm Finished</span></li>
+				<li><span id="save_as_draft_button" class="button">Save as Draft</span></li>
 			</ul>
 		</div>
 	</div>
