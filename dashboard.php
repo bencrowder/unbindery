@@ -33,67 +33,39 @@ $projectlist = array();
 		<h2>Dashboard</h2>
 
 		<div class="bigcol">
-			<h3>Current Items</h3>
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<th>Item</th>
-					<th>Project</th>
-					<th>Deadline</th>
-					<th></th>
-				</tr>
+			<h3 id="current">Current</h3>
+			<ul id="current_items">
 				<?php 
 				$user = new User($db, $username);
 				$items = $user->getAssignments();
 				foreach ($items as $item) {
 					$editlink = $SITEROOT . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
-					$projectlink = $SITEROOT . '/projects/' . $item["project_slug"];
 					$projectlist[] = $item["project_slug"];
 				?>
-				<tr>
-					<td><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a></td>
-					<td><?php echo $item["project_title"]; ?></td>
-					<td><?php echo $item["deadline"]; ?></td>
-					<td><a href="<?php echo $editlink; ?>" class="button smallbutton">Proof</a></td>
-				</tr>
+				<li>
+					<div class="proof_button"><a href="<?php echo $editlink; ?>" class="button">Proof</a></div>
+					<div class="item_title"><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a> <span class="deadline">Due <?php echo $item["deadline"]; ?></span></div>
+					<div class="project_title">Project: <?php echo $item["project_title"]; ?></div>
+				</li>
 				<?php } ?>
-			</table>
-
-			<h3>Current Projects</h3>
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<th>Project</th>
-					<th>Owner</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
 				<?php 
 				$projects = $user->getProjects();
 				foreach ($projects as $project) {
-					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
-					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
-					$percentage = round($project["completed"] / $project["total"] * 100, 0);
+					if (!in_array($project["slug"], $projectlist)):
+						$projectlink = $SITEROOT . '/projects/' . $project["slug"];
+						$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
+						$percentage = round($project["completed"] / $project["total"] * 100, 0);
 				?>
-				<tr>
-					<td><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></td>
-					<td><?php echo $project["owner"]; ?></td>
-					<td><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></td>
-					<td><?php if (!in_array($project["slug"], $projectlist)): ?><span class="button smallbutton getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span><?php endif; ?></td>
-				</tr>
-				<?php } ?>
-			</table>
+				<li>
+					<div class="proof_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span></div>
 
-			<h3>History</h3>
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<th>Item</th>
-					<th>Project</th>
-					<th>Finished</th>
-				<tr>
-					<td><a href="#">Page 159</a></td>
-					<td><a href="projects/hck">The Life of Heber C. Kimball</a></td>
-					<td>10 Dec 2010</td>
-				</tr>
-			</table>
+					<div class="item_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
+					<div class="project_title">Owner: <?php echo $project["owner"]; ?></div>
+				</li>
+				<?php endif; ?>
+				<?php } ?>
+				<li></li>
+			</ul>
 		</div>
 
 		<div class="sidebar">
@@ -103,6 +75,35 @@ $projectlist = array();
 				<li>Items proofed this week: <span class="stat">3</span></li>
 				<li>Items proofed all time: <span class="stat">742</span></li>
 			</ul>
+
+			<h3>Current Projects</h3>
+			<ul>
+				<?php 
+				$projects = $user->getProjects();
+				foreach ($projects as $project) {
+					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
+					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
+					$percentage = round($project["completed"] / $project["total"] * 100, 0);
+				?>
+				<li>
+					<a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a>
+					<p>Owner: <?php echo $project["owner"]; ?></p>
+					<p><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+					<p><?php if (!in_array($project["slug"], $projectlist)): ?><span class="button smallbutton getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span><?php endif; ?></p>
+				</li>
+				<?php } ?>
+			</ul>
+
+			<h3>History</h3>
+			<ul>
+				<li>
+					<p>Page 159</p>
+					<p><a href="projects/hck">The Life of Heber C. Kimball</a></p>
+					<p>10 Dec 2010</p>
+				</li>
+			</ul>
+		</div>
+
 		</div>
 	</div>
 </body>

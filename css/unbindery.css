@@ -34,13 +34,22 @@ textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; pa
 .sidebar								{ width: 250px; margin-left: 50px; float: left; margin-top: 20px; background: #eee; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
  }
 
-.bigcol h3								{ margin-top: 3em; background: #eee; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; padding: 3px 6px; }
+.bigcol h3								{ margin-top: 3em; padding: 3px 6px; }
 .bigcol h3:first-child					{ margin-top: 0; }
-.bigcol table							{ width: 100%; }
-.bigcol table td						{ border-bottom: solid 1px #ddd; padding: 4px 0; }
-.bigcol table td a						{ text-decoration: none; }
-.bigcol table td a:hover				{ background: #eee; }
-.bigcol table th						{ text-align: left; border-bottom: solid 2px #ddd; }
+
+h3#current								{ background: #333; color: #fff; margin-bottom: 0; border-top-left-radius: 7px; border-top-right-radius: 7px; }
+
+ul#current_items 						{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; }
+ul#current_items li						{ border-bottom: solid 1px #ccc; padding: 6px; clear: both; overflow: hidden; }
+ul#current_items li .item_title			{ font-size: 1.2em; font-weight: bold; }
+ul#current_items li .item_title a		{ color: #000; text-decoration: none; }
+ul#current_items li .deadline			{ font-size: .6em; color: #999; margin-left: 5px; }
+
+ul#current_items li .project_title		{ margin-top: 5px; font-size: .9em; color: #666; }
+ul#current_items li .proof_button		{ float: right; padding-top: 8px; }
+ul#current_items li .button				{ font-size: 1.2em; }
+
+ul#current_items li:last-child			{ background: #333; padding: 0; height: 10px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
 
 .sidebar h3								{ margin: 0; padding: 5px 5px 0 5px; }
 
