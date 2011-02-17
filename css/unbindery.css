@@ -1,4 +1,5 @@
 body									{ margin: 0; padding: 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; font-size: 12px; }
+body#index								{ background: #22435f url(../img/indexbg.jpg) 50% 0; }
 body.dark								{ background: #111; color: #fff; }
 
 #header_container						{ background: url(../img/bannerbg.jpg); color: #fff; height: 63px; overflow: hidden; }
@@ -109,3 +110,15 @@ ul#current_items li:last-child			{ background: #333; padding: 0; height: 8px; bo
 #save_items								{ display: none; }
 #save_items label						{ font-weight: bold; margin-bottom: 5px; display: block; }
 #save_items textarea					{ font-size: 1em; width: 400px; height: 100px; margin-bottom: 2em; }
+
+/* Index page */
+/* --------------------------------------------------- */
+
+.container								{ width: 300px; margin: 100px auto; }
+#logo_box								{ }
+#login_box								{ background: rgba(0, 0, 0, 0.3); padding: 20px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; }
+#login_box h2							{ margin: 0; margin-bottom: 10px; font-size: 14px; color: #7db2d1; }
+#login_box label						{ color: #5d92b1; font-size: 10px; text-transform: uppercase; }
+#login_box input[type="text"]			{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 7px; }
+#login_box input[type="password"]		{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 15px; }
+#login_box input[type="submit"]			{ font-size: 1.2em; }

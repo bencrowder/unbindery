@@ -5,43 +5,34 @@ include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
 include_once('unbindery.php');
 
+if (Alibaba::authenticated()) {
+	header("Location: $SITEROOT/home/");
+}
+
 ?>
 
-<?php include('include/header.php'); ?>
+<?php include('include/header_index.php'); ?>
 
-	<div id="main">
-		<h2>Home</h2>
+<?php if (isset($_GET["message"])) { ?>
+	<div id="message" style="background: #fee; padding: 5px; border: solid 1px #f00;"><?php echo $_GET["message"]; ?></div>
+<?php } ?>
 
-		<div class="bigcol">
-			<h3>What is Unbindery?</h3>
+<div class="container">
+	<div id="logo_box"><img src="<?php echo $SITEROOT; ?>/img/logo_white.png" /></div>
+	<div id="login_box">
+		<h2>Login</h2>
 
-			<p class="desc"></p>
+		<form action="process_login.php" method="post" accept-charset="utf-8">
+			<label>Username:</label>
+			<input type="text" id="username" name="username" />
 
-			<h3>Current Projects</h3>
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<th>Project</th>
-					<th>Owner</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-				<tr>
-					<td><a href="projects/aof">The Articles of Faith</a></td>
-					<td>ben</td>
-					<td>[coming]</td>
-					<td><a href="#" class="button smallbutton">Join this project</a></td>
-				</tr>
-			</table>
-		</div>
+			<label>Password:</label>
+			<input type="password" id="password" name="password" />
 
-		<div class="sidebar">
-			<h3>Stats</h3>
-			<ul>
-				<li>Projects: <span class="stat">3</span></li>
-				<li>Items proofed this week: <span class="stat">33</span></li>
-				<li>Items proofed all time: <span class="stat">1742</span></li>
-			</ul>
-		</div>
+			<input type="submit" value="Log In" class="button" />
+		</form>
 	</div>
+</div>
+
 </body>
 </html>
