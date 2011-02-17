@@ -212,4 +212,19 @@ class User {
 			return array("statuscode" => "not_found");
 		}
 	}
+
+	public function getStats() {
+		$this->db->connect();
+
+		$query = "SELECT score, (SELECT COUNT(*) FROM assignments WHERE username = '" . mysql_real_escape_string($this->username) . "' AND date_completed IS NOT NULL) AS proofed, (SELECT COUNT(*) FROM assignments WHERE username = '" . mysql_real_escape_string($this->username) . "' AND date_completed IS NOT NULL AND DATE_COMPLETED > DATE_SUB(NOW(), INTERVAL 7 DAY)) AS proofed_past_week FROM users WHERE username = '" . mysql_real_escape_string($this->username) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		while ($row = mysql_fetch_assoc($result)) {
+			$this->score = $row["score"];
+			$this->proofed = $row["proofed"];
+			$this->proofed_past_week = $row["proofed_past_week"];
+		}
+
+		$this->db->close();
+	}
 }

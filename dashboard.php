@@ -70,10 +70,11 @@ $projectlist = array();
 			</div>
 
 			<div class="sidebar">
+				<?php $user->getStats(); ?>
 				<ul id="stats">
-					<li><label>Score</label> <span class="stat">890</span></li>
-					<li><label>Proofed</label> <span class="stat">742</span></li>
-					<li><label>Proofed This Month</label> <span class="stat">13</span></li>
+					<li><label>Score</label> <span class="stat"><?php echo $user->score; ?></span></li>
+					<li><label>Proofed</label> <span class="stat"><?php echo $user->proofed; ?></span></li>
+					<li><label>Proofed This Past Week</label> <span class="stat"><?php echo $user->proofed_past_week; ?></span></li>
 				</ul>
 			</div>
 		</div>
