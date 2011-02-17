@@ -5,6 +5,7 @@ class Item {
 
 	private $item_id;
 	private $project_id;
+	private $project_slug;
 
 	private $title;
 
@@ -44,6 +45,7 @@ class Item {
 		if (mysql_numrows($result)) {
 			$this->item_id = trim(mysql_result($result, 0, "id"));
 			$this->project_id = trim(mysql_result($result, 0, "project_id"));
+			$this->project_slug = $project_slug;
 			$this->title = trim(mysql_result($result, 0, "title"));
 			$this->itemtext = trim(mysql_result($result, 0, "itemtext"));
 			$this->status = trim(mysql_result($result, 0, "status"));
@@ -73,6 +75,9 @@ class Item {
 	}
 
 	public function saveText($username, $draft, $itemtext) {
+		// load the project
+		$project = new Project($this->db, $this->project_slug);
+
 		$this->db->connect();
 
 		// check and see if we already have a draft
@@ -102,7 +107,7 @@ class Item {
 		}
 
 		// we're finished with this item
-		if ($draft == false) {
+		if (!$draft) {
 			// update user score (+1 for finishing a batch)
 			$query = "UPDATE users SET score = score + 1 WHERE username = '" . mysql_real_escape_string($username) . "'";
 			$result = mysql_query($query) or die ("Couldn't run: $query");
@@ -118,8 +123,7 @@ class Item {
 			$row = mysql_fetch_assoc($result);
 			$revisioncount = $row["revisioncount"];
 
-			// if this is the last one, set it to completed
-			if (intval($revisioncount) >= 2) { // change to > $project->revcount
+			if (intval($revisioncount) >= intval($project->num_proofs)) {
 				$query = "UPDATE items SET status = 'completed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 			}

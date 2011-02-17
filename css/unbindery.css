@@ -22,15 +22,15 @@ ul#controls_right li					{ display: inline; margin-left: 5px; }
 .button:hover							{ background: #fff; cursor: pointer; }
 .smallbutton							{ padding: 1px 3px; font-size: .9em; }
 
-#main									{ width: 850px; margin: 0px auto; overflow: hidden; clear: both; padding-bottom: 25px; }
+#main									{ width: 850px; margin: 0px auto; overflow: hidden; clear: both; padding-bottom: 25px; margin-bottom: 75px; }
 #main h2								{ font-size: 12px; color: #aaa; text-transform: uppercase; }
 
-#image_container						{ width: 850px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
+#image_container						{ width: 848px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
 
 #text_container							{ width: 600px; height: 200px; margin: 0px auto; }
-textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; padding: 10px; font-size: 1.3em; line-height: 1.4em; }
+textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; padding: 10px; font-size: 1.3em; line-height: 1.4em; font-family: Monaco, Courier, monospace; }
 
-.container								{ overflow: hidden; clear: both; margin-bottom: 1em; }
+.container								{ overflow: hidden; clear: both; margin-bottom: 3em; }
 .bigcol									{ width: 550px; float: left; margin-top: 20px; }
 .sidebar								{ width: 200px; margin-left: 100px; float: left; margin-top: 20px; }
 .half									{ width: 400px; float: left; margin-right: 50px; }
@@ -50,14 +50,21 @@ textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; pa
 .half ul li:last-child					{ border-bottom: none; }
 .half ul.list							{ background: #eee; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin-top: 7px; }
 
-.half ul.list li						{ padding: 6px 5px; font-size: 11px; }
+.half ul.list li						{ padding: 6px 5px; font-size: 11px; overflow: hidden; clear: both; }
+.half ul.list li .project_title			{ width: 270px; }
 .half ul.list li a						{ font-weight: bold; color: #337; text-decoration: none; border-bottom: dotted 1px #333; font-size: 11px; }
-.half ul.list li .percentage			{ margin-top: 4px; font-size: 10px; color: #666; }
+
+.half ul.list li .percentage			{ float: right; margin-left: 15px; font-size: 10px; color: #666; clear: both; }
+.half ul.list li .percentage p			{ text-align: right; padding-top: 4px; }
+.half ul.list li .percentage_container	{ width: 100px; border: solid 1px #666; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; height: 10px; }
+.percentage p							{ margin: 0px 0 0; }
+.half ul.list li .percent				{ background: #000; height: 10px; }
+.half ul.list li .perproject_stats		{ margin-top: 3px; color: #666; }
 
 .bigcol h3								{ margin-top: 3em; padding: 3px 6px; }
 .bigcol h3:first-child					{ margin-top: 0; }
 
-h3#current								{ background: #333; color: #fff; margin-bottom: 0; border-top-left-radius: 7px; border-top-right-radius: 7px; }
+h3#current								{ background: #333; color: #fff; padding-top: 5px; margin-bottom: 0; border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
 ul#current_items 						{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; }
 ul#current_items li						{ border-bottom: solid 1px #ccc; padding: 6px; clear: both; overflow: hidden; }

@@ -34,7 +34,7 @@ $projectlist = array();
 
 		<div class="container">
 			<div class="bigcol">
-				<h3 id="current">Current</h3>
+				<h3 id="current">Current Assignments</h3>
 				<ul id="current_items">
 					<?php 
 					$user = new User($db, $username);
@@ -71,9 +71,9 @@ $projectlist = array();
 
 			<div class="sidebar">
 				<ul id="stats">
-					<li><label>Score</label> <span class="stat">590</span></li>
-					<li><label>Proofed this week</label> <span class="stat">3</span></li>
-					<li><label>Proofed all time</label> <span class="stat">742</span></li>
+					<li><label>Score</label> <span class="stat">890</span></li>
+					<li><label>Proofed</label> <span class="stat">742</span></li>
+					<li><label>Proofed This Month</label> <span class="stat">13</span></li>
 				</ul>
 			</div>
 		</div>
@@ -89,8 +89,14 @@ $projectlist = array();
 					$percentage = round($project["completed"] / $project["total"] * 100, 0);
 				?>
 				<li>
-					<a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a>
-					<div class="percentage"><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></div>
+					<div class="percentage">
+						<div class="percentage_container">
+							<div class="percent" style="width: <?php echo $percentage; ?>px;"></div>
+						</div> 
+						<p><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+					</div>
+
+					<div class="project_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
 				</li>
 				<?php } ?>
 			</ul>
