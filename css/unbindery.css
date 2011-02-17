@@ -23,16 +23,36 @@ ul#controls_right li					{ display: inline; margin-left: 5px; }
 .smallbutton							{ padding: 1px 3px; font-size: .9em; }
 
 #main									{ width: 850px; margin: 0px auto; overflow: hidden; clear: both; padding-bottom: 25px; }
-#main h2								{ font-size: 12px; }
+#main h2								{ font-size: 12px; color: #aaa; text-transform: uppercase; }
 
 #image_container						{ width: 850px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
 
 #text_container							{ width: 600px; height: 200px; margin: 0px auto; }
 textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; padding: 10px; font-size: 1.3em; line-height: 1.4em; }
 
+.container								{ overflow: hidden; clear: both; margin-bottom: 1em; }
 .bigcol									{ width: 550px; float: left; margin-top: 20px; }
-.sidebar								{ width: 250px; margin-left: 50px; float: left; margin-top: 20px; background: #eee; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
- }
+.sidebar								{ width: 200px; margin-left: 100px; float: left; margin-top: 20px; }
+.half									{ width: 400px; float: left; margin-right: 50px; }
+.half + .half							{ margin-right: 0; }
+
+.sidebar ul								{ padding: 0; list-style: none; margin: 0; margin-bottom: 2em; }
+.sidebar ul li							{ padding: 7px 0; border-bottom: solid 1px #999; }
+.sidebar ul li:last-child				{ border-bottom: none; }
+
+.sidebar ul#stats li label				{ font-size: 10px; color: #999; text-transform: uppercase; display: block; }
+.sidebar ul#stats li .stat				{ font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
+
+.half h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
+
+.half ul								{ padding: 0; list-style: none; margin: 0; margin-bottom: 2em; }
+.half ul li								{ padding: 7px 0; border-bottom: solid 1px #999; }
+.half ul li:last-child					{ border-bottom: none; }
+.half ul.list							{ background: #eee; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin-top: 7px; }
+
+.half ul.list li						{ padding: 6px 5px; font-size: 11px; }
+.half ul.list li a						{ font-weight: bold; color: #337; text-decoration: none; border-bottom: dotted 1px #333; font-size: 11px; }
+.half ul.list li .percentage			{ margin-top: 4px; font-size: 10px; color: #666; }
 
 .bigcol h3								{ margin-top: 3em; padding: 3px 6px; }
 .bigcol h3:first-child					{ margin-top: 0; }
@@ -50,10 +70,6 @@ ul#current_items li .proof_button		{ float: right; padding-top: 8px; }
 ul#current_items li .button				{ font-size: 1.2em; }
 
 ul#current_items li:last-child			{ background: #333; padding: 0; height: 8px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
-
-.sidebar h3								{ margin: 0; padding: 5px 5px 0 5px; }
-
-.stat									{ font-weight: bold; }
 
 #message								{ width: 830px; margin: 0px auto 15px; background: #ffe; color: #660; border: solid 1px #dda; border-top: none; padding: 10px; }
 #error									{ width: 830px; margin: 0px auto 15px; background: #fee; color: #600; border: solid 1px #daa; border-top: none; padding: 10px; }

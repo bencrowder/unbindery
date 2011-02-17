@@ -10,7 +10,7 @@ include_once('unbindery.php');
 <?php include('include/header.php'); ?>
 
 	<div id="main">
-		<h2>Welcome to Unbindery</h2>
+		<h2>Home</h2>
 
 		<div class="bigcol">
 			<h3>What is Unbindery?</h3>
