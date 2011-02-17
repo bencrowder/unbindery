@@ -23,7 +23,6 @@
 				<?php if (Alibaba::authenticated()) { ?>
 				<li>Logged in as <span class="username"><?php echo Alibaba::getUsername(); ?></span></li>
 				<li><a href="<?php echo $SITEROOT; ?>/dashboard">Dashboard</a></li>
-				<li><a href="<?php echo $SITEROOT; ?>/account">Account</a></li>
 				<li><a href="<?php echo $SITEROOT; ?>/settings">Settings</a></li>
 				<li><a href="<?php echo $SITEROOT; ?>/logout">Logout</a></li>
 				<?php } else { ?>
