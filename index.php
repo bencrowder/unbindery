@@ -6,7 +6,7 @@ include_once('Database.class.php');
 include_once('unbindery.php');
 
 if (Alibaba::authenticated()) {
-	header("Location: $SITEROOT/home/");
+	header("Location: $SITEROOT/dashboard/");
 }
 
 ?>
@@ -30,6 +30,8 @@ if (Alibaba::authenticated()) {
 			<input type="password" id="password" name="password" />
 
 			<input type="submit" value="Log In" class="button" />
+
+			<a href="signup/">Sign up</a>
 		</form>
 	</div>
 </div>
