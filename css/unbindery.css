@@ -61,6 +61,8 @@ textarea#itemtext						{ width: 600px; height: 200px; border: solid 1px #999; pa
 .half ul.list li .percent				{ background: #000; height: 10px; }
 .half ul.list li .perproject_stats		{ margin-top: 3px; color: #666; }
 
+.half ul.list li .history_projecttitle	{ margin-top: 3px; color: #999; }
+
 .bigcol h3								{ margin-top: 3em; padding: 3px 6px; }
 .bigcol h3:first-child					{ margin-top: 0; }
 

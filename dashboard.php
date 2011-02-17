@@ -106,10 +106,15 @@ $projectlist = array();
 		<div class="half">
 			<h3>Recent History</h3>
 			<ul class="list">
+				<?php 
+				$history = $user->getHistory();
+				foreach ($history as $item) {
+				?>
 				<li>
-					10 Dec 2010: <div class="itemname">Page 159</div>
-					<div class="projectname">The Life of Heber C. Kimball</div>
+					<?php echo $item["date_completed"]; ?>: <?php echo $item["item_title"]; ?>
+					<div class="history_projecttitle">Project: <?php echo $item["project_title"]; ?></div>
 				</li>
+				<?php } ?>
 			</ul>
 		</div>
 	</div>

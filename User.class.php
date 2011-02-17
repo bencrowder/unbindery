@@ -227,4 +227,27 @@ class User {
 
 		$this->db->close();
 	}
+
+	public function getHistory() {
+		$this->db->connect();
+
+		$query = "SELECT items.title AS item_title, projects.title AS project_title, ";
+		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS date_completed ";
+		$query .= "FROM assignments JOIN items ON item_id = items.id ";
+		$query .= "JOIN projects ON assignments.project_id = projects.id ";
+		$query .= "WHERE username = '" . mysql_real_escape_string($this->username) . "' ";
+		$query .= "AND date_completed IS NOT null ";
+		$query .= "ORDER BY date_completed DESC LIMIT 5;";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$history = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($history, array("item_title" => $row["item_title"], "project_title" => $row["project_title"], "date_completed" => $row["date_completed"]));
+		}
+
+		$this->db->close();
+
+		return $history;
+	}
 }
