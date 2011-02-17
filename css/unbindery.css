@@ -1,13 +1,13 @@
 body									{ margin: 0; padding: 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; font-size: 12px; }
 body.dark								{ background: #111; color: #fff; }
 
-#header_container						{ background: #000; color: #fff; height: 35px; }
+#header_container						{ background: url(../img/bannerbg.jpg); color: #fff; height: 63px; }
 #header									{ width: 850px; margin: 0px auto; }
 
 #logo									{ float: left; }
-#logo h1								{ font-size: 16px; color: #666; line-height: 1em; margin-top: 8px; }
-ul#nav									{ float: right; list-style: none; margin-top: 8px; }
-ul#nav li								{ display: inline; margin-left: 15px; color: #666; }
+#logo h1								{ font-size: 16px; color: #666; line-height: 1em; margin-top: 8px; text-indent: -1000em; }
+ul#nav									{ float: right; list-style: none; margin-top: 30px; }
+ul#nav li								{ display: inline; margin-left: 15px; color: #5d92b1; font-size: 11px; }
 ul#nav li a								{ color: #fff; font-weight: bold; text-decoration: none; }
 ul#nav li .username						{ font-weight: bold; }
 

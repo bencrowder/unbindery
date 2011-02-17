@@ -18,7 +18,7 @@
 <body>
 	<div id="header_container">
 		<div id="header">
-			<div id="logo"><h1>Unbindery</h1></div>
+			<div id="logo"><a href="<?php echo $SITEROOT; ?>/"><img src="<?php echo $SITEROOT; ?>/img/logo.jpg" alt="Unbindery" /></a></div>
 			<ul id="nav">
 				<?php if (Alibaba::authenticated()) { ?>
 				<li>Logged in as <span class="username"><?php echo Alibaba::getUsername(); ?></span></li>
