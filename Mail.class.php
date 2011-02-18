@@ -2,6 +2,8 @@
 
 class Mail {
 	static public function sendMessage($to, $subject, $message) {
+		global $ADMINEMAIL;
+
 		$headers = "From: Unbindery <$ADMINEMAIL>" . "\r\n";
 		$headers .= "Reply-To: Unbindery <$ADMINEMAIL>" . "\r\n";
 		$headers .= "X-Mailer: PHP/" . phpversion();

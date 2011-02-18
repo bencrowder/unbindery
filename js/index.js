@@ -21,7 +21,6 @@ $(document).ready(function() {
 		$.post("../process_signup.php", 
 			{ email: email_val, username: username_val, password: password_val },
 			function(data) {
-				console.log(data);
 				if (data.statuscode == "done") {
 					$("#login_box h2").html("Thank You");
 					$("form#signup_form").hide();
