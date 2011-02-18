@@ -81,9 +81,10 @@ ul#current_items li .button				{ font-size: 1.2em; }
 
 ul#current_items li:last-child			{ background: #333; padding: 0; height: 8px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
 
-#message								{ width: 400px; margin: 0px auto; background: rgba(0, 0, 0, 0.3); color: #fff; border: solid 2px #000; border-top: none; padding: 15px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; z-index: 100; }
- }
-#error									{ width: 400px; margin: 0px auto; background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; z-index: 100; }
+#message								{ width: 830px; margin: 0px auto; background: #444; color: #fff;  padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+#error									{ width: 830px; margin: 0px auto; background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+
+body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: #fff; padding: 15px; border: solid 2px #000; border-top: none; }
 
 #spinner								{ display: none; vertical-align: middle; }
 
