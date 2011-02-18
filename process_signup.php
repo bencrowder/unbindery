@@ -33,6 +33,8 @@ if ($status == 1) {
 	$status = "error mailing";
 }
 
+$status = Mail::sendMessage($ADMINEMAIL, "[Unbindery] New signup", "New user signed up: $username <$email>");
+
 // return "done" (so Ajax can replace the div)
 echo json_encode(array("statuscode" => "done", "username" => $user->username));
 
