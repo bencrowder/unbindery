@@ -35,3 +35,5 @@ if ($status == 1) {
 
 // return "done" (so Ajax can replace the div)
 echo json_encode(array("statuscode" => "done", "username" => $user->username));
+
+?>

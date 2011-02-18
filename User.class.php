@@ -267,4 +267,24 @@ class User {
 
 		return $history;
 	}
+
+	public function validateHash($hash) {
+		$this->db->connect();
+
+		$query = "SELECT username FROM users WHERE hash = '" . mysql_real_escape_string($hash) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$username = trim(mysql_result($result, 0, "username"));
+		} else {
+			return false;
+		}
+
+		$query = "UPDATE users SET status = 'training' WHERE username = '$username'";
+		$result = mysql_query($query) or die("Couldn't run: $query");
+
+		$this->db->close();
+
+		return true;
+	}
 }
