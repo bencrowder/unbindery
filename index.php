@@ -9,12 +9,12 @@ if (Alibaba::authenticated()) {
 	header("Location: $SITEROOT/dashboard/");
 }
 
-?>
+$includes = "<script src='$SITEROOT/js/index.js' type='text/javascript'></script>\n";
 
-<?php include('include/header_index.php'); ?>
+include('include/header_index.php');
 
-<?php if (isset($_GET["message"])) { ?>
-	<div id="message" style="background: #fee; padding: 5px; border: solid 1px #f00;"><?php echo $_GET["message"]; ?></div>
+if (isset($_GET["message"])) { ?>
+	<div id="message"><?php echo $_GET["message"]; ?></div>
 <?php } ?>
 
 <div class="container">
@@ -22,7 +22,7 @@ if (Alibaba::authenticated()) {
 	<div id="login_box">
 		<h2>Login</h2>
 
-		<form action="process_login.php" method="post" accept-charset="utf-8">
+		<form id="login_form" action="process_login.php" method="post" accept-charset="utf-8">
 			<label>Username:</label>
 			<input type="text" id="username" name="username" />
 
@@ -31,8 +31,27 @@ if (Alibaba::authenticated()) {
 
 			<input type="submit" value="Log In" class="button" />
 
-			<a href="signup/">Sign up</a>
+			<span id="signup">Sign up</span>
 		</form>
+
+		<form id="signup_form" style="display: none" action="process_signup.php" method="post" accept-charset="utf-8">
+			<label>Email:</label>
+			<input type="text" id="email_signup" name="email_signup" />
+
+			<label>Username:</label>
+			<input type="text" id="username_signup" name="username_signup" />
+
+			<label>Password:</label>
+			<input type="password" id="password_signup" name="password_signup" />
+
+			<input type="submit" value="Sign Up" class="button" />
+
+			<span id="login">Log in</span>
+		</form>
+
+		<div id="thankyou" style="display: none">
+			We just sent you a confirmation link to your email address.
+		</div>
 	</div>
 </div>
 

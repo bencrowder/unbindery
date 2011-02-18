@@ -7,4 +7,6 @@ $PASSWORD = "";
 
 $SITEROOT = "http://mysite.com";
 
+$ADMINEMAIL = "your@email.com";
+
 ?>
