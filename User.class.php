@@ -158,8 +158,7 @@ class User {
 		// make sure they're not already assigned
 		if (!$this->isAssigned($item_id, $project_slug)) {
 			$project = new Project($this->db, $project_slug);
-			// get $project->deadlinelength at some point
-			$deadlinelength = 7;
+			$deadlinelength = $project->deadline_days;
 
 			$this->db->connect();
 
@@ -168,6 +167,23 @@ class User {
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
 			// send email to user w/ edit link, deadline
+			global $SITEROOT;
+			$editlink = "$SITEROOT/edit/$project_slug/$item_id";
+			$deadline = strftime("%e %b %Y", strtotime("+1 week"));
+
+			$message = "New Unbindery assignment for " . $project->title . "\n";
+			$message .= "\n";
+			$message .= "Edit link: $editlink\n";
+			$message .= "Deadline: $deadline\n";
+			$message .= "\n";
+
+			Mail::sendMessage($this->email, "[Unbindery] New assignment", $message);
+
+			$message = "Assigned $project_slug/$item_id to {$this->name} ({$this->username})\n";
+			$message .= "Deadline: $deadline\n";
+
+			global $ADMINEMAIL;
+			Mail::sendMessage($ADMINEMAIL, "[Unbindery] Assigned item to " . $this->username, $message);
 
 			$this->db->close();
 

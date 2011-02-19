@@ -8,6 +8,8 @@ include_once('Database.class.php');
 include_once('Project.class.php');
 include_once('Item.class.php');
 include_once('User.class.php');
+include_once('Mail.class.php');
+
 
 /* Dispatcher ********************************************************/
 
