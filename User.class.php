@@ -248,8 +248,8 @@ class User {
 	public function getHistory() {
 		$this->db->connect();
 
-		$query = "SELECT items.title AS item_title, projects.title AS project_title, ";
-		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS date_completed ";
+		$query = "SELECT items.title AS item_title, projects.title AS project_title, date_completed, ";
+		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS completed ";
 		$query .= "FROM assignments JOIN items ON item_id = items.id ";
 		$query .= "JOIN projects ON assignments.project_id = projects.id ";
 		$query .= "WHERE username = '" . mysql_real_escape_string($this->username) . "' ";
@@ -260,7 +260,7 @@ class User {
 		$history = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($history, array("item_title" => $row["item_title"], "project_title" => $row["project_title"], "date_completed" => $row["date_completed"]));
+			array_push($history, array("item_title" => $row["item_title"], "project_title" => $row["project_title"], "date_completed" => $row["completed"]));
 		}
 
 		$this->db->close();

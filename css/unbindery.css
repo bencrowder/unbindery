@@ -129,3 +129,13 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #login_box span:hover					{ cursor: pointer; }
 
 #login_box #thankyou					{ color: #fff; line-height: 1.4em; }
+
+/* Settings page */
+/* --------------------------------------------------- */
+
+#user_settings label					{ display: block; }
+#user_settings input[type="text"],
+	#user_settings input[type="password"]	{ margin-bottom: 15px; font-size: 1.2em; font-weight: bold; padding: 3px; }
+#user_settings input[type="text"]		{ width: 300px; }
+#user_settings input[type="password"]	{ width: 240px; }
+#user_settings input[type="submit"]		{ display: block; margin-top: 15px; }
