@@ -109,7 +109,7 @@ class Item {
 		// we're finished with this item
 		if (!$draft) {
 			// update user score (+1 for finishing a batch)
-			$query = "UPDATE users SET score = score + 1 WHERE username = '" . mysql_real_escape_string($username) . "'";
+			$query = "UPDATE users SET score = score + 5 WHERE username = '" . mysql_real_escape_string($username) . "'";
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
 			// update date_completed for this assignment

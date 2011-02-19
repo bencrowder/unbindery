@@ -6,6 +6,7 @@ body.dark								{ background: #111; color: #fff; }
 #header									{ width: 850px; margin: 0px auto; }
 
 #logo									{ float: left; }
+#logo img								{ border: none; }
 #logo h1								{ font-size: 16px; color: #666; line-height: 1em; margin-top: 8px; text-indent: -1000em; }
 ul#nav									{ float: right; list-style: none; margin-top: 30px; }
 ul#nav li								{ display: inline; margin-left: 15px; color: #5d92b1; font-size: 11px; }
