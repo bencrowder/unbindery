@@ -16,6 +16,10 @@ $user = new User($db, $username);
 
 <?php include('include/header.php'); ?>
 
+<?php if (isset($_GET["message"])) { ?>
+	<div id="message"><?php echo $_GET["message"]; ?></div>
+<?php } ?>
+
 	<div id="main">
 		<h2>Settings</h2>
 
