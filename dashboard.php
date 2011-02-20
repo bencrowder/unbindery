@@ -109,9 +109,10 @@ $projectlist = array();
 				<?php 
 				$history = $user->getHistory();
 				foreach ($history as $item) {
+					$editlink = "$SITEROOT/edit/" . $item["project_slug"] . "/" . $item["item_id"];
 				?>
 				<li>
-					<?php echo $item["date_completed"]; ?>: <?php echo $item["item_title"]; ?>
+					<?php echo $item["date_completed"]; ?>: <a href='<?php echo $editlink; ?>'><?php echo $item["item_title"]; ?></a>
 					<div class="history_projecttitle">Project: <?php echo $item["project_title"]; ?></div>
 				</li>
 				<?php } ?>

@@ -267,7 +267,8 @@ class User {
 		$this->db->connect();
 
 		$query = "SELECT items.title AS item_title, projects.title AS project_title, date_completed, ";
-		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS completed ";
+		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS completed, ";
+		$query .= "items.id as item_id, projects.slug as project_slug ";
 		$query .= "FROM assignments JOIN items ON item_id = items.id ";
 		$query .= "JOIN projects ON assignments.project_id = projects.id ";
 		$query .= "WHERE username = '" . mysql_real_escape_string($this->username) . "' ";
@@ -278,7 +279,7 @@ class User {
 		$history = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($history, array("item_title" => $row["item_title"], "project_title" => $row["project_title"], "date_completed" => $row["completed"]));
+			array_push($history, array("item_id" => $row["item_id"], "project_slug" => $row["project_slug"], "item_title" => $row["item_title"], "project_title" => $row["project_title"], "date_completed" => $row["completed"]));
 		}
 
 		$this->db->close();
