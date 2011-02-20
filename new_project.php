@@ -18,7 +18,7 @@ $username = Alibaba::getUsername();
 	<div id="main">
 		<h2>Create New Project</h2>
 
-		<form id="project_form" action="new_project_backend/" method="POST">
+		<form id="project_form" action="<?php echo $SITEROOT; ?>/new_project_backend/" method="POST">
 			<div class="bigcol">
 				<label>Title</label>
 				<input type="text" id="project_title" name="project_title" />

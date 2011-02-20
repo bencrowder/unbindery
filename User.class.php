@@ -204,6 +204,8 @@ class User {
 			}
 		}
 
+		$project = new Project($this->db, $project_slug);
+
 		// make sure they've finished any existing items for that project (if not, go to next project)
 		$this->db->connect();
 
@@ -227,7 +229,7 @@ class User {
 		$query .= "AND items.id NOT IN ";
 		$query .= "(SELECT item_id FROM assignments ";
 		$query .= "WHERE username='{$this->username}' AND project_id = items.project_id) ";
-		$query .= "HAVING itemcount < 2 "; //TODO: replace with $project->itemcount
+		$query .= "HAVING itemcount < {$project->num_proofs} "; //TODO: replace with $project->itemcount
 		$query .= "ORDER BY items.id ASC ";
 		$query .= "LIMIT 1;";
 
