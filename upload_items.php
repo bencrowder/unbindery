@@ -10,15 +10,15 @@ Alibaba::forceAuthentication();
 
 $slug = $_GET["slug"];
 
-$includes = "<link href='$SITEROOT/uploadify/uploadify.css' type='text/css' rel='stylesheet' />\n";
-$includes .= "<script type='text/javascript' src='$SITEROOT/uploadify/swfobject.js'></script>\n";
-$includes .= "<script type='text/javascript' src='$SITEROOT/uploadify/jquery.uploadify.v2.1.4.min.js'></script>\n";
+$includes = "<link href='$SITEROOT/lib/uploadify/uploadify.css' type='text/css' rel='stylesheet' />\n";
+$includes .= "<script type='text/javascript' src='$SITEROOT/lib/uploadify/swfobject.js'></script>\n";
+$includes .= "<script type='text/javascript' src='$SITEROOT/lib/uploadify/jquery.uploadify.v2.1.4.min.js'></script>\n";
 $includes .= "<script type='text/javascript'>\n";
 $includes .= "	$(document).ready(function() {\n";
 $includes .= "		$('#file_upload').uploadify({\n";
-$includes .= "			'uploader'  : '$SITEROOT/uploadify/uploadify.swf',\n";
+$includes .= "			'uploader'  : '$SITEROOT/lib/uploadify/uploadify.swf',\n";
 $includes .= "			'script'    : '$SITEROOT/upload_items_backend/',\n";
-$includes .= "			'cancelImg' : '$SITEROOT/uploadify/cancel.png',\n";
+$includes .= "			'cancelImg' : '$SITEROOT/lib/uploadify/cancel.png',\n";
 $includes .= "			'folder'    : '/images/$slug',\n";
 $includes .= "			'fileDataName' : 'items',\n";
 $includes .= "			'removeCompleted' : false,\n";

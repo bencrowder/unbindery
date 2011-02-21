@@ -91,7 +91,7 @@ function load_items_for_editing(event, data) {
 }
 
 $(document).ready(function() {
-	$("textarea#transcript").focus();
+	$("textarea#itemtext").focus();
 
 	$("#save_as_draft_button").click(function() {
 		save_item_text(true);

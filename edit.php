@@ -10,6 +10,11 @@ include_once('utils.php');
 
 Alibaba::forceAuthentication();
 
+/*
+$includes = "<link href='$SITEROOT/lib/jquery-linedtextarea/jquery-linedtextarea.css' type='text/css' rel='stylesheet' />\n";
+$includes .= "<script type='text/javascript' src='$SITEROOT/lib/jquery-linedtextarea/jquery-linedtextarea.js'></script>\n";
+*/
+
 $item_id = $_GET["item_id"];
 $project_slug = $_GET["project_slug"];
 $username = Alibaba::getUsername(); 
