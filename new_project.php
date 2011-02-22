@@ -23,6 +23,9 @@ $username = Alibaba::getUsername();
 				<label>Title</label>
 				<input type="text" id="project_title" name="project_title" />
 
+				<label>Author</label>
+				<input type="text" id="project_author" name="project_author" />
+
 				<label>Slug</label>
 				<input type="text" id="project_slug" name="project_slug" />
 

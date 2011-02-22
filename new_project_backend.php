@@ -12,6 +12,7 @@ Alibaba::forceAuthentication();
 $username = Alibaba::getUsername(); 
 
 $title = $_POST['project_title'];
+$author = $_POST['project_author'];
 $slug = $_POST['project_slug'];
 $description = $_POST['project_desc'];
 $owner = $username;
@@ -22,7 +23,7 @@ $num_proofs = $_POST['project_numproofs'];
 
 $project = new Project($db);
 
-$retval = $project->create($title, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
+$retval = $project->create($title, $author, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
 
 if ($retval == "success") {
 	// make project directory for images

@@ -6,6 +6,7 @@ class Project {
 	private $project_id;
 
 	private $title;
+	private $author;
 	private $slug;
 	private $description;
 	private $owner;
@@ -41,6 +42,7 @@ class Project {
 		if (mysql_numrows($result)) {
 			$this->project_id = trim(mysql_result($result, 0, "id"));
 			$this->title = stripslashes(trim(mysql_result($result, 0, "title")));
+			$this->author = stripslashes(trim(mysql_result($result, 0, "author")));
 			$this->slug = stripslashes(trim(mysql_result($result, 0, "slug")));
 			$this->description = stripslashes(trim(mysql_result($result, 0, "description")));
 			$this->owner = trim(mysql_result($result, 0, "owner"));
@@ -59,6 +61,7 @@ class Project {
 
 		$query = "UPDATE projects WHERE id = " . $this->project_id . " ";
 		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
+		$query .= "author = '" . mysql_real_escape_string($this->author) . "', ";
 		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "', ";
 		$query .= "description = '" . mysql_real_escape_string($this->description) . "', ";
 		$query .= "owner = '" . mysql_real_escape_string($this->owner) . "', ";
@@ -73,8 +76,9 @@ class Project {
 		$this->db->close();
 	}
 
-	public function create($title, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs) {
+	public function create($title, $author, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs) {
 		$this->title = $title;
+		$this->author = $author;
 		$this->slug = $slug;
 		$this->description = $description;
 		$this->owner = $owner;
@@ -88,9 +92,10 @@ class Project {
 			$this->db->connect();
 
 			$query = "INSERT INTO projects ";
-			$query .= "(title, slug, description, owner, status, guidelines, intro_email, deadline_days, num_proofs) ";
+			$query .= "(title, author, slug, description, owner, status, guidelines, intro_email, deadline_days, num_proofs) ";
 			$query .= "VALUES (";
 			$query .= "'" . mysql_real_escape_string($this->title) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->author) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->slug) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->description) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->owner) . "', ";

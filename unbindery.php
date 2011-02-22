@@ -41,6 +41,7 @@ switch ($method) {
 
 	case 'create_project':
 		$title = $_POST['title'];
+		$author = $_POST['author'];
 		$slug = $_POST['slug'];
 		$description = $_POST['description'];
 		$owner = $_POST['owner'];
@@ -51,7 +52,7 @@ switch ($method) {
 
 		if ($title) {
 			$project = new Project($db);
-			echo $project->create($title, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
+			echo $project->create($title, $author, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
 		}
 		break;
 
