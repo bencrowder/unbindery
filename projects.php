@@ -39,9 +39,10 @@ $project = new Project($db, $project_slug);
 	<?php } else { ?>
 		<h2>Project Details</h2>
 
-		<div class="bigcol">
-			<div class="name"><?php echo $project->title; ?></div>
-			<div class="desc"><?php echo $project->description; ?></div>
+		<div class="bigcol proj_details">
+			<div class="project_title"><?php echo $project->title; ?></div>
+			<div class="project_author">By <?php echo $project->author; ?></div>
+			<div class="project_desc"><?php echo $project->description; ?></div>
 
 			<h4>Guidelines</h4>
 
