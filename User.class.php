@@ -133,6 +133,10 @@ class User {
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
 			// send email to user w/ project guidelines, link to unsubscribe, and note that first item will come soon (intro email, pull from project settings)
+			$message = $this->username . " just joined " . $project->title . " ($project_slug)";
+			$message .= "\n";
+
+			Mail::sendMessage($this->email, "[Unbindery] {$this->username} joined {$project_slug}", $message);
 
 			$this->db->close();
 

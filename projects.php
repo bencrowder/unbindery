@@ -9,6 +9,7 @@ include_once('unbindery.php');
 Alibaba::forceAuthentication();
 
 $username = Alibaba::getUsername();
+$user = new User($db, $username);
 
 $message = stripslashes($_GET["message"]);
 $error = stripslashes($_GET["error"]);
@@ -50,7 +51,9 @@ $project = new Project($db, $project_slug);
 		</div>
 
 		<div class="sidebar">
-			<span class="join button">Join this project</span>
+			<?php if (!$user->isMember($project_slug)) { ?>
+			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="join button">Join this project</a>
+			<?php } ?>
 		</div>
 	<?php } // else (if guidelines != true) ?>
 	</div>
