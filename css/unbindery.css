@@ -145,6 +145,6 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 /* Project details page */
 /* --------------------------------------------------- */
 
-.project_title							{ font-size: 1.4em; font-weight: bold; margin-bottom: 3px; }
-.project_author							{ font-size: 1.2em; line-height: 1.5em; color: #999; margin-bottom: 1em; }
-.project_desc							{ font-size: 1.1em; line-height: 1.5em; margin-bottom: 2em; }
+.proj_details .project_title			{ font-size: 1.4em; font-weight: bold; margin-bottom: 3px; }
+.proj_details .project_author			{ font-size: 1.2em; line-height: 1.5em; color: #999; margin-bottom: 1em; }
+.proj_details .project_desc				{ font-size: 1.1em; line-height: 1.5em; margin-bottom: 2em; }
