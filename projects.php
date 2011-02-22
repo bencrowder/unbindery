@@ -31,60 +31,25 @@ $project = new Project($db, $project_slug);
 
 	<div id="main">
 	<?php if ($_GET["guidelines"] == "true") { ?>
-		<h3>Project Guidelines: <?php echo $project->title; ?></h3>
+		<h2>Project Guidelines</h2>
+			
+		<h3><?php echo $project->title; ?></h3>
 
 		<?php echo $project->guidelines; ?>
 	<?php } else { ?>
-		<h3><?php echo $project->title; ?></h3>
+		<h2>Project Details</h2>
 
 		<div class="bigcol">
-			<h3>Project Details</h3>
-			<ul>
-				<li>Title: <?php echo $project->title; ?></li>
-				<li>Slug: <?php echo $project->slug; ?></li>
-				<li>Description: <?php echo $project->description; ?></li>
-				<li>Owner: <?php echo $project->owner; ?></li>
-				<li>Status: <?php echo $project->status; ?></li>
-				<li>Deadline: <?php echo $project->deadline_days; ?> days</li>
-				<li># proofs: <?php echo $project->num_proofs; ?></li>
-			</ul>
+			<div class="name"><?php echo $project->title; ?></div>
+			<div class="desc"><?php echo $project->description; ?></div>
 
-			<h3>Guidelines</h3>
+			<h4>Guidelines</h4>
 
 			<?php echo $project->guidelines; ?>
-
-			<h3>Intro Email</h3>
-
-			<?php echo $project->intro_email; ?>
-
-			<h3>Project Items</h3>
-			<?php
-			$items = $project->getItems();
-			?>
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<th>Title</th>
-					<th>Status</th>
-					<th>Type</th>
-					<th>URL</th>
-					<th>Currently</th>
-				</tr>
-				<?php 
-				foreach ($items as $item) {
-				?>
-				<tr>
-					<td><?php echo $item["title"]; ?></td>
-					<td><?php echo $item["status"]; ?></td>
-					<td><?php echo $item["type"]; ?></td>
-					<td><?php echo $item["href"]; ?></td>
-					<td><?php echo $item["assignments"]; ?> assigned, <?php echo $item["completed"]; ?> completed</td>
-				</tr>
-				<?php } ?>
-			</table>
 		</div>
 
 		<div class="sidebar">
-			<a href="edit/">Edit this project</a>
+			<span class="join button">Join this project</span>
 		</div>
 	<?php } // else (if guidelines != true) ?>
 	</div>
