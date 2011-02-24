@@ -4,58 +4,57 @@ include_once('include/config.php');
 include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
-include_once('unbindery.php');
+include_once('Server.class.php');
+include_once('User.class.php');
 
 Alibaba::forceAuthentication();
 
 $username = Alibaba::getUsername();
 $user = new User($db, $username);
 
-$message = stripslashes($_GET["message"]);
-$error = stripslashes($_GET["error"]);
-
-$project_slug = $_GET["project_slug"];
-
-$project = new Project($db, $project_slug);
-
 ?>
 
 <?php include('include/header.php'); ?>
 
-<?php if ($message) { ?>
-	<div id="message"><?php echo $message; ?></div>
-<?php } ?>
-
-<?php if ($error) { ?>
-	<div id="error"><?php echo $error; ?></div>
-<?php } ?>
-
 	<div id="main">
-	<?php if ($_GET["guidelines"] == "true") { ?>
-		<h2>Project Guidelines</h2>
-			
-		<h3><?php echo $project->title; ?></h3>
+		<h2>Projects</h2>
 
-		<?php echo $project->guidelines; ?>
-	<?php } else { ?>
-		<h2>Project Details</h2>
+		<div class="container">
+			<div class="bigcol">
+				<h3 class="action_header projects">Available Projects</h3>
+				<ul class="action_list projects">
+					<?php 
+					$server = new Server($db);
+					$projects = $server->getProjects();
+					foreach ($projects as $project) {
+						$projectlink = $SITEROOT . '/projects/' . $project["slug"];
+					?>
+					<li>
+						<div class="percentage">
+							<div class="percentage_container">
+								<div class="percent" style="width: <?php echo $project["percentage"]; ?>px;"></div>
+							</div> 
+							<p><?php echo round($project["percentage"], 0) . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+						</div>
+						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
+						<div class="sub">Author: <?php echo $project["author"]; ?></div>
+					</li>
+					<?php } ?>
+					<li></li>
+				</ul>
+			</div>
 
-		<div class="bigcol proj_details">
-			<div class="project_title"><?php echo $project->title; ?></div>
-			<div class="project_author">By <?php echo $project->author; ?></div>
-			<div class="project_desc"><?php echo $project->description; ?></div>
-
-			<h4>Guidelines</h4>
-
-			<?php echo $project->guidelines; ?>
+			<div class="sidebar leaderboard">
+				<h3>Top Proofers</h3>
+				<ol id="stats">
+				<?php
+					$users = $server->getTopUsers();
+					foreach ($users as $user) { ?>
+					<li><label><?php echo $user["username"]; ?></label> <span class="stat"><?php echo $user["score"]; ?></span></li>
+				<?php } ?>
+				</ol>
+			</div>
 		</div>
-
-		<div class="sidebar">
-			<?php if (!$user->isMember($project_slug)) { ?>
-			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="join button">Join this project</a>
-			<?php } ?>
-		</div>
-	<?php } // else (if guidelines != true) ?>
 	</div>
 </body>
 </html>

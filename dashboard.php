@@ -4,12 +4,14 @@ include_once('include/config.php');
 include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
+include_once('Server.class.php');
 include_once('Item.class.php');
 include_once('User.class.php');
 
 Alibaba::forceAuthentication();
 
 $username = Alibaba::getUsername();
+$user = new User($db, $username);
 
 $message = stripslashes($_GET["message"]);
 $error = stripslashes($_GET["error"]);
@@ -37,7 +39,6 @@ $projectlist = array();
 				<h3 class="action_header">Current Assignments</h3>
 				<ul class="action_list">
 					<?php 
-					$user = new User($db, $username);
 					$items = $user->getAssignments();
 					foreach ($items as $item) {
 						$editlink = $SITEROOT . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
