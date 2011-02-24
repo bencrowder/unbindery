@@ -36,6 +36,6 @@ class Server {
 		}
 
 		$this->db->close();
-		return $projects;
+		return $users;
 	}
 }
