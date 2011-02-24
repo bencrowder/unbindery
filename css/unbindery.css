@@ -38,12 +38,21 @@ textarea#itemtext						{ width: 650px; height: 200px; font-size: 16px; line-heig
 .half									{ width: 400px; float: left; margin-right: 50px; }
 .half + .half							{ margin-right: 0; }
 
+/* Sidebar */
+/* --------------------------------------------------- */
+
 .sidebar ul								{ padding: 0; list-style: none; margin: 0; margin-bottom: 2em; }
 .sidebar ul li							{ padding: 7px 0; border-bottom: solid 1px #999; }
 .sidebar ul li:last-child				{ border-bottom: none; }
 
 .sidebar ul#stats li label				{ font-size: 10px; color: #999; text-transform: uppercase; display: block; }
 .sidebar ul#stats li .stat				{ font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
+
+.leaderboard ol							{ padding-left: 35px; }
+.leaderboard ol li						{ margin-bottom: 5px; border-bottom: solid 1px #ddd; padding-bottom: 5px; font-size: 1.2em; font-weight: bold; color: #999; }
+.leaderboard ol li:first-child:after	{ content: ' ★'; }
+.leaderboard ol li label				{ color: #000; }
+.leaderboard ol li .stat				{ float: right; color: #999; }
 
 .percentage								{ float: right; font-size: 10px; color: #666; clear: both; }
 .percentage p							{ text-align: right; padding-top: 4px; }
@@ -86,6 +95,8 @@ ul.action_list li .button				{ font-size: 1.2em; }
 ul.action_list li:last-child			{ background: #333; padding: 0; height: 8px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
 
 ul.action_list.projects li:last-child	{ background: #345; }
+
+ul.action_list.projects .percentage		{ margin-top: 3px; }
 
 #message								{ width: 830px; margin: 0px auto; background: #444; color: #fff;  padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
 #error									{ width: 830px; margin: 0px auto; background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }

@@ -6,7 +6,7 @@ include_once('Database.class.php');
 include_once('unbindery.php');
 
 if (Alibaba::authenticated()) {
-	header("Location: $SITEROOT/dashboard/");
+	header("Location: $SITEROOT/home/");
 }
 
 $includes = "<script src='$SITEROOT/js/index.js' type='text/javascript'></script>\n";
