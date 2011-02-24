@@ -9,6 +9,9 @@ include_once('User.class.php');
 
 Alibaba::forceAuthentication();
 
+$username = Alibaba::getUsername();
+$user = new User($db, $username);
+
 ?>
 
 <?php include('include/header.php'); ?>
@@ -18,18 +21,23 @@ Alibaba::forceAuthentication();
 
 		<div class="container">
 			<div class="bigcol">
-				<h3 id="current">Projects</h3>
-				<ul id="current_items">
+				<h3 class="action_header projects">Projects</h3>
+				<ul class="action_list projects">
 					<?php 
 					$server = new Server($db);
 					$projects = $server->getProjects();
 					foreach ($projects as $project) {
-						$projectlink = $SITEROOT . '/projects/' . $item["project_slug"];
+						$projectlink = $SITEROOT . '/projects/' . $project["slug"];
 					?>
 					<li>
-						<div class="proof_button"><a href="<?php echo $projectlink . '/join'; ?>" class="button">Join Project</a></div>
-						<div class="item_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
-						<div class="project_author">Author: <?php echo $project["author"]; ?></div>
+						<div class="percentage">
+							<div class="percentage_container">
+								<div class="percent" style="width: <?php echo $project["percentage"]; ?>px;"></div>
+							</div> 
+							<p><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+						</div>
+						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
+						<div class="sub">Author: <?php echo $project["author"]; ?></div>
 					</li>
 					<?php } ?>
 					<li></li>

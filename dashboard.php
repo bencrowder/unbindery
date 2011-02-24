@@ -34,8 +34,8 @@ $projectlist = array();
 
 		<div class="container">
 			<div class="bigcol">
-				<h3 id="current">Current Assignments</h3>
-				<ul id="current_items">
+				<h3 class="action_header">Current Assignments</h3>
+				<ul class="action_list">
 					<?php 
 					$user = new User($db, $username);
 					$items = $user->getAssignments();
@@ -44,9 +44,9 @@ $projectlist = array();
 						$projectlist[] = $item["project_slug"];
 					?>
 					<li>
-						<div class="proof_button"><a href="<?php echo $editlink; ?>" class="button">Proof</a></div>
-						<div class="item_title"><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a> <span class="deadline">Due <?php echo $item["deadline"]; ?></span></div>
-						<div class="project_title">Project: <?php echo $item["project_title"]; ?></div>
+						<div class="right_button"><a href="<?php echo $editlink; ?>" class="button">Proof</a></div>
+						<div class="title"><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a> <span class="deadline">Due <?php echo $item["deadline"]; ?></span></div>
+						<div class="sub">Project: <?php echo $item["project_title"]; ?></div>
 					</li>
 					<?php } ?>
 					<?php 
@@ -58,10 +58,10 @@ $projectlist = array();
 							$percentage = round($project["completed"] / $project["total"] * 100, 0);
 					?>
 					<li>
-						<div class="proof_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span></div>
+						<div class="right_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span></div>
 
-						<div class="item_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
-						<div class="project_title">Owner: <?php echo $project["owner"]; ?></div>
+						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
+						<div class="sub">Owner: <?php echo $project["owner"]; ?></div>
 					</li>
 					<?php endif; ?>
 					<?php } ?>
