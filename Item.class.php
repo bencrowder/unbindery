@@ -94,7 +94,7 @@ class Item {
 		if ($draft) { 
 			$status = "draft";
 		} else {
-			$status = "finished";
+			$status = "completed";
 		}
 
 		if ($existing_draft) {
