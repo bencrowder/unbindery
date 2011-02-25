@@ -14,23 +14,28 @@ function redirect_to_dashboard(message, error) {
 	window.location.href = locstr;
 }
 
-function save_item_text(is_draft) {
+function save_item_text(is_draft, is_review) {
 	$("#spinner").show();
 
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
 	var itemtext = $("#itemtext").val();
 	var username = $("ul#nav .username").html();
+	var review_username = $("#review_username").html();
 
-	$.post(siteroot + "/unbindery.php?method=save_item_text", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, itemtext: itemtext },
+	$.post(siteroot + "/unbindery.php?method=save_item_text", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
 				$("#spinner").hide();
 
-				if (is_draft) {
-					var message = "Saved draft.";
+				if (is_review) {
+					var message = "Finished review.";
 				} else {
-					var message = "Finished item.";
+					if (is_draft) {
+						var message = "Saved draft.";
+					} else {
+						var message = "Finished item.";
+					}
 				}
 				redirect_to_dashboard(message, "");
 			} else {
@@ -105,11 +110,15 @@ $(document).ready(function() {
 	$("textarea#itemtext").focus();
 
 	$("#save_as_draft_button").click(function() {
-		save_item_text(true);
+		save_item_text(true, false); // yes draft, no review
 	});
 
 	$("#finished_button").click(function(e) {
-		save_item_text(false);
+		save_item_text(false, false); // no draft, no review
+	});
+
+	$("#finished_review_button").click(function(e) {
+		save_item_text(false, true); // no draft, yes review
 	});
 
 	$(".getnewitem").click(function(e) {
