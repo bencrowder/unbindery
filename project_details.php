@@ -72,10 +72,10 @@ $project->loadStatus();
 			</div>
 
 			<?php if (!$user->isMember($project_slug)) { ?>
-			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="join button">Join this project</a>
+			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="right_button join button">Join this project</a>
 			<?php } ?>
 		</div>
 	<?php } // else (if guidelines != true) ?>
 	</div>
-</body>
-</html>
+
+<?php include('include/footer.php'); ?>

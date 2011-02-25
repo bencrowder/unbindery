@@ -147,5 +147,5 @@ $projectlist = array();
 			</ul>
 		</div>
 	</div>
-</body>
-</html>
+
+<?php include('include/footer.php'); ?>

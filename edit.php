@@ -66,5 +66,6 @@ $item->load($item_id, $project_slug, $username);
 			</form>
 		</div>
 	</div>
+
 </body>
 </html>

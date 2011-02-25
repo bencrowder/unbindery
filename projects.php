@@ -56,5 +56,5 @@ $user = new User($db, $username);
 			</div>
 		</div>
 	</div>
-</body>
-</html>
+
+<?php include('include/footer.php'); ?>

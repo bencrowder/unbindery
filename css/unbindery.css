@@ -60,7 +60,7 @@ textarea#itemtext						{ width: 650px; height: 200px; font-size: 16px; line-heig
 .percentage p							{ margin: 0px 0 0; }
 .percent								{ background: #000; height: 10px; }
 
-.proj_details .percentage				{ font-size: 12px; }
+.proj_details .percentage				{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
 .proj_details .percentage_container		{ width: 200px; height: 20px; }
 .proj_details .percent					{ height: 20px; }
 
@@ -173,9 +173,19 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .proj_details .project_author			{ font-size: 1.2em; line-height: 1.5em; color: #999; margin-bottom: .5em; }
 .proj_details .project_desc				{ font-size: 1.1em; line-height: 1.5em; margin-bottom: 2em; }
 
+.proj_details .join						{ font-size: 1.1em; }
+.proj_details .right_button				{ float: right; }
 
-/* Thumbnails (project details page */
+
+/* Thumbnails (project details page) */
 /* --------------------------------------------------- */
 
 ul.thumbnails							{ list-style: none; padding: 0; }
 ul.thumbnails li						{ border: solid 1px #ddd; display: inline-block; margin-right: 10px; }
+
+
+/* Footer */
+/* --------------------------------------------------- */
+
+#footer									{ width: 850px; margin: 50px auto; border-top: solid 1px #ccc; padding-top: 5px; font-size: 10px; color: #999; }
+#footer a								{ color: #666; text-decoration: none; border-bottom: dotted 1px #666; }

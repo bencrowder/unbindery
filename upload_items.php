@@ -49,5 +49,5 @@ include_once('include/header.php');
 			</form>
 		</div>
 	</div>
-</body>
-</html>
+
+<?php include('include/footer.php'); ?>

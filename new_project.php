@@ -53,5 +53,5 @@ $username = Alibaba::getUsername();
 			</div>
 		</form>
 	</div>
-</body>
-</html>
+
+<?php include('include/footer.php'); ?>

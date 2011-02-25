@@ -48,5 +48,5 @@ $user = new User($db, $username);
 			<input type="hidden" name="username" id="username" value="<?php echo $username; ?>" />
 		</form>
 	</div>
-</body>
-</html>
+
+<?php include('include/footer.php'); ?>
