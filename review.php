@@ -32,6 +32,10 @@ if (!$user->admin && $role != "owner") {
 // get the proofer's user object so we can see their status
 $proofer = new User($db, $proofer_username);
 
+if ($proofer->status == "") {
+	redirectToDashboard("", "That user doesn't exist.");
+}
+
 // get the item from the database
 $item = new Item($db);
 $item->load($item_id, $project_slug, $proofer_username);
