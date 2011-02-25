@@ -44,11 +44,22 @@ function get_new_item(project_slug) {
 
 	$.post(siteroot + "/unbindery.php?method=get_next_item", { project_slug: project_slug, username: username },
 		function(data) {
-			if (data.statuscode == "success") {
-				var locstr = siteroot + '/edit/' + project_slug + '/' + data.item_id;
-				window.location.href = locstr;
-			} else {
-				redirect_to_dashboard("", "Error getting new item.");
+			switch(data.statuscode) {
+				case "success":
+					var locstr = siteroot + '/edit/' + project_slug + '/' + data.item_id;
+					window.location.href = locstr;
+					break;
+				case "waiting_for_clearance":
+					redirect_to_dashboard("", "Your first item has to be approved before you can proof more items. (Just this once, though.)");
+					break;	
+				case "have_item_already":
+					redirect_to_dashboard("", "You already have one item for this project. Finish it and then you'll be able to get a new one.");
+				case "not_a_member":
+					redirect_to_dashboard("", "You're not a member of that project.");
+					break;
+				default:
+					redirect_to_dashboard("", "Error getting new item.");
+					break;
 			}
 		}, 'json');
 }

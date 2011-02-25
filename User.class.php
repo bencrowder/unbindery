@@ -205,21 +205,32 @@ class User {
 			$project_slug = $projects[0]["slug"];
 		} else {
 			if (!$this->isMember($project_slug)) {
-				return "not a member";
+				return array("statuscode" => "not_a_member");
 			}
 		}
 
 		$project = new Project($this->db, $project_slug);
 
-		// make sure they've finished any existing items for that project (if not, go to next project)
 		$this->db->connect();
 
+		// first check to see if they're in training mode. if so, only return an item if they haven't done any yet.
+		if ($this->status == "training") {
+			$query = "SELECT assignments.id FROM assignments WHERE username = '" . mysql_real_escape_string($this->username) . "' AND date_completed IS NOT NULL";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			if (mysql_numrows($result)) {
+				$this->db->close();
+				return array("statuscode" => "waiting_for_clearance");
+			}
+		}
+
+		// make sure they've finished any existing items for that project (if not, go to next project)
 		$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "' AND assignments.date_completed IS NULL";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
 			$this->db->close();
-			return "already_have_an_item_assigned";
+			return array("statuscode" => "have_item_already");
 		}
 
 		// get next item from project where
