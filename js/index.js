@@ -18,7 +18,7 @@ $(document).ready(function() {
 		var username_val = $("#username_signup").val();
 		var password_val = $("#password_signup").val();
 
-		$.post("../process_signup.php", 
+		$.post(siteroot + "/signup/", 
 			{ email: email_val, username: username_val, password: password_val },
 			function(data) {
 				if (data.statuscode == "done") {

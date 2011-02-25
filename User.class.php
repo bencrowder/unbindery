@@ -43,13 +43,14 @@ class User {
 	public function addToDatabase($hash) {
 		$this->db->connect();
 
-		$query = "INSERT INTO users (username, password, email, status, score, hash) VALUES ";
+		$query = "INSERT INTO users (username, password, email, status, score, hash, signup_date) VALUES ";
 		$query .= "('" . mysql_real_escape_string($this->username) . "', ";
 		$query .= "'" . md5(mysql_real_escape_string($this->password)) . "', ";
 		$query .= "'" . mysql_real_escape_string($this->email) . "', ";
 		$query .= "'pending', ";
 		$query .= "0, ";
-		$query .= "'$hash')";
+		$query .= "'$hash', ";
+		$query .= "NOW())";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$this->db->close();
