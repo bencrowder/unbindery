@@ -7,6 +7,7 @@ class User {
 	private $name;
 	private $email;
 	private $status;
+	private $admin;
 
 	public function User($db, $username = "") {
 		$this->db = $db;
@@ -28,13 +29,14 @@ class User {
 		$this->db->connect();
 		$this->username = $username;
 
-		$query = "SELECT name, email, status FROM users WHERE username = '" . mysql_real_escape_string($username) . "'";
+		$query = "SELECT name, email, status, admin FROM users WHERE username = '" . mysql_real_escape_string($username) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
 			$this->name = trim(mysql_result($result, 0, "name"));
 			$this->email = trim(mysql_result($result, 0, "email"));
 			$this->status = trim(mysql_result($result, 0, "status"));
+			$this->admin = mysql_result($result, 0, "admin");
 		}
 
 		$this->db->close();
@@ -43,11 +45,12 @@ class User {
 	public function addToDatabase($hash) {
 		$this->db->connect();
 
-		$query = "INSERT INTO users (username, password, email, status, score, hash, signup_date) VALUES ";
+		$query = "INSERT INTO users (username, password, email, status, admin, score, hash, signup_date) VALUES ";
 		$query .= "('" . mysql_real_escape_string($this->username) . "', ";
 		$query .= "'" . md5(mysql_real_escape_string($this->password)) . "', ";
 		$query .= "'" . mysql_real_escape_string($this->email) . "', ";
 		$query .= "'pending', ";
+		$query .= "0, ";
 		$query .= "0, ";
 		$query .= "'$hash', ";
 		$query .= "NOW())";
@@ -120,6 +123,21 @@ class User {
 
 		$this->db->close();
 		return $retval;
+	}
+
+	public function getRoleForProject($project_slug) {
+		$this->db->connect();
+
+		$query = "SELECT role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		while ($row = mysql_fetch_assoc($result)) {
+			$role = $row["role"];
+		}
+
+		$this->db->close();
+
+		return $role;
 	}
 
 	public function assignToProject($project_slug) {
