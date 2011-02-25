@@ -184,7 +184,8 @@ class User {
 
 			Mail::sendMessage($this->email, "[Unbindery] New assignment (due $deadline)", $message);
 
-			$message = "Assigned $project_slug/$item_id to {$this->name} ({$this->username})\n";
+			$message = "Assigned $project_slug/$item_id to $this->username";
+			if ($this->name) { $message .= " ({$this->name})"; }
 			$message .= "Deadline: $deadline\n";
 
 			global $ADMINEMAIL;
