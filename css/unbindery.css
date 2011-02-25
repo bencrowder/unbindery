@@ -189,3 +189,16 @@ ul.thumbnails li						{ border: solid 1px #ddd; display: inline-block; margin-ri
 
 #footer									{ width: 850px; margin: 50px auto; border-top: solid 1px #ccc; padding-top: 5px; font-size: 10px; color: #999; }
 #footer a								{ color: #666; text-decoration: none; border-bottom: dotted 1px #666; }
+
+
+/* Project Guidelines */
+/* --------------------------------------------------- */
+
+a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decoration: none; font-weight: bold; }
+.proj_guidelines .project_title			{ font-size: 1.4em; font-weight: bold; margin-bottom: 0em; }
+
+.proj_guidelines h2						{ color: #3d7291 !important; margin-top: 3em; text-transform: none !important; font-size: 14px !important; }
+.proj_guidelines h3						{ color: #3d7291; margin: 1.5em 0 0 0; padding: 1.5em 0 0 0; border-top: dotted 1px #999; font-size: 12px; }
+.proj_guidelines pre, .proj_guidelines code		{ background: #eee; padding: 5px; font-family: Monaco, Courier, monospace; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+.proj_guidelines pre					{ margin-left: 35px; }
+.proj_guidelines a						{ color: #000; text-decoration: none; border-bottom: dotted 1px #666; }

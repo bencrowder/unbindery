@@ -19,6 +19,8 @@ $project_slug = $_GET["project_slug"];
 $project = new Project($db, $project_slug);
 $project->loadStatus();
 
+global $SYSTEMGUIDELINES;
+
 ?>
 
 <?php include('include/header.php'); ?>
@@ -34,10 +36,18 @@ $project->loadStatus();
 	<div id="main">
 	<?php if ($_GET["guidelines"] == "true") { ?>
 		<h2>Project Guidelines</h2>
-			
-		<h3><?php echo $project->title; ?></h3>
+		
+		<div class="bigcol proj_guidelines">
+			<div class="project_title"><?php echo $project->title; ?></div>
 
-		<?php echo $project->guidelines; ?>
+			<h2>Project-Specific Guidelines</h2>
+
+			<?php echo $project->guidelines; ?>
+
+			<h2>System-wide Guidelines</h2>
+
+			<?php echo $SYSTEMGUIDELINES; ?>
+		</div>
 	<?php } else { ?>
 		<h2>Project Details</h2>
 
@@ -47,8 +57,7 @@ $project->loadStatus();
 			<div class="project_desc"><?php echo $project->language; ?>. <?php echo $project->description; ?></div>
 
 			<?php if ($project->guidelines): ?>
-				<h4>Guidelines</h4>
-				<?php echo $project->guidelines; ?>
+				<a class="guidelines_link" target="_blank" href="<?php echo $project->slug; ?>/guidelines/">Project Guidelines</a>
 			<?php endif; ?>
 
 			<?php if ($project->thumbnails): 
