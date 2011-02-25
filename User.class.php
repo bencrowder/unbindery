@@ -322,4 +322,13 @@ class User {
 
 		return true;
 	}
+
+	public function updateLogin() {
+		$this->db->connect();
+
+		$query = "UPDATE users SET last_login = NOW() WHERE username = '" . mysql_real_escape_string($this->username) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$this->db->close();
+	}
 }
