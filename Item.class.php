@@ -75,6 +75,8 @@ class Item {
 	}
 
 	public function saveText($username, $draft, $review, $review_username, $itemtext) {
+		global $ADMINEMAIL;
+
 		// load the project
 		$project = new Project($this->db, $this->project_slug);
 		$user = new User($this->db, $username);
@@ -123,10 +125,18 @@ class Item {
 				$query = "UPDATE items SET status = 'reviewed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
+				$subject = "[Unbindery] Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
+				$message = "$username reviewed the item " . $this->project_slug . "/" . $this->item_id . ", proofed by $review_username.";
+				Mail::sendMessage($ADMINEMAIL, $subject, $message);
+
 				// if the user who did the proofing was in training, clear them
 				if ($review_user->status == "training") {
-					$query = "UPDATE users SET status = 'clear' WHERE username = '" . mysql_real_escape_string($review_username) . "' AND project_id = " . $this->project_id . ";";
+					$query = "UPDATE users SET status = 'clear' WHERE username = '" . mysql_real_escape_string($review_username) . "';";
 					$result = mysql_query($query) or die ("Couldn't run: $query");
+
+					$subject = "[Unbindery] Cleared $review_username";
+					$message = "Cleared $review_username for further proofing.";
+					Mail::sendMessage($ADMINEMAIL, $subject, $message);
 				}
 			} else {
 				// update user score (+1 for finishing a batch)
@@ -156,7 +166,8 @@ class Item {
 					$message .= "\n\n$username is in training, so you need to review their work and clear them.";
 				}
 
-				global $ADMINEMAIL;
+				$mesage .= "\n\nReview link: $SITEROOT/review/{$this->project_slug}/{$this->item_id}/{$username}";
+
 				Mail::sendMessage($ADMINEMAIL, $subject, $message);
 			}
 		}
