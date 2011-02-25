@@ -60,15 +60,17 @@ switch ($method) {
 		$item_id = $_POST['item_id'];
 		$project_slug = $_POST['project_slug'];
 		$username = $_POST['username'];
+		$review_username = $_POST['review_username'];
 		$itemtext = $_POST['itemtext'];
-
+	
 		// convert to boolean
 		$draft = ($_POST['draft'] == "true") ? true : false;
+		$review = ($_POST['review'] == "true") ? true : false;
 
 		if ($item_id && $project_slug && $username) {
 			$item = new Item($db);
 			$item->load($item_id, $project_slug, $username);
-			$status = $item->saveText($username, $draft, $itemtext);
+			$status = $item->saveText($username, $draft, $review, $review_username, $itemtext);
 
 			echo json_encode(array("statuscode" => $status));
 		}

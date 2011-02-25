@@ -74,10 +74,13 @@ class Item {
 		// save item to database
 	}
 
-	public function saveText($username, $draft, $itemtext) {
+	public function saveText($username, $draft, $review, $review_username, $itemtext) {
+		global $ADMINEMAIL;
+
 		// load the project
 		$project = new Project($this->db, $this->project_slug);
 		$user = new User($this->db, $username);
+		$review_user = new User($this->db, $review_username);
 
 		$this->db->connect();
 
@@ -91,10 +94,14 @@ class Item {
 			$existing_draft = false;
 		}
 
-		if ($draft) { 
-			$status = "draft";
+		if ($review) {
+			$status = "reviewed";
 		} else {
-			$status = "completed";
+			if ($draft) { 
+				$status = "draft";
+			} else {
+				$status = "completed";
+			}
 		}
 
 		if ($existing_draft) {
@@ -109,35 +116,60 @@ class Item {
 
 		// we're finished with this item
 		if (!$draft) {
-			// update user score (+1 for finishing a batch)
-			$query = "UPDATE users SET score = score + 5 WHERE username = '" . mysql_real_escape_string($username) . "'";
-			$result = mysql_query($query) or die ("Couldn't run: $query");
-
-			// update date_completed for this assignment
-			$query = "UPDATE assignments SET date_completed = NOW() WHERE username = '" . mysql_real_escape_string($username) . "' AND item_id = " . $this->item_id . " AND project_id = " . $this->project_id;
-			$result = mysql_query($query) or die ("Couldn't run: $query");
-
-			// check number of revisions
-			$query = "SELECT COUNT(id) as revisioncount FROM assignments WHERE item_id = " . $this->item_id . " AND project_id = " . $this->project_id . " AND date_completed IS NOT NULL";
-			$result = mysql_query($query) or die ("Couldn't run: $query");
-
-			$row = mysql_fetch_assoc($result);
-			$revisioncount = $row["revisioncount"];
-
-			if (intval($revisioncount) >= intval($project->num_proofs)) {
-				$query = "UPDATE items SET status = 'completed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
+			if ($review) {
+				// update date_reviewed for this assignment
+				$query = "UPDATE assignments SET date_reviewed = NOW() WHERE username = '" . mysql_real_escape_string($review_username) . "' AND item_id = " . $this->item_id . " AND project_id = " . $this->project_id;
 				$result = mysql_query($query) or die ("Couldn't run: $query");
+
+				// and set the status on the item to reviewed
+				$query = "UPDATE items SET status = 'reviewed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
+				$result = mysql_query($query) or die ("Couldn't run: $query");
+
+				$subject = "[Unbindery] Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
+				$message = "$username reviewed the item " . $this->project_slug . "/" . $this->item_id . ", proofed by $review_username.";
+				Mail::sendMessage($ADMINEMAIL, $subject, $message);
+
+				// if the user who did the proofing was in training, clear them
+				if ($review_user->status == "training") {
+					$query = "UPDATE users SET status = 'clear' WHERE username = '" . mysql_real_escape_string($review_username) . "';";
+					$result = mysql_query($query) or die ("Couldn't run: $query");
+
+					$subject = "[Unbindery] Cleared $review_username";
+					$message = "Cleared $review_username for further proofing.";
+					Mail::sendMessage($ADMINEMAIL, $subject, $message);
+				}
+			} else {
+				// update user score (+1 for finishing a batch)
+				$query = "UPDATE users SET score = score + 5 WHERE username = '" . mysql_real_escape_string($username) . "'";
+				$result = mysql_query($query) or die ("Couldn't run: $query");
+
+				// update date_completed for this assignment
+				$query = "UPDATE assignments SET date_completed = NOW() WHERE username = '" . mysql_real_escape_string($username) . "' AND item_id = " . $this->item_id . " AND project_id = " . $this->project_id;
+				$result = mysql_query($query) or die ("Couldn't run: $query");
+
+				// check number of revisions
+				$query = "SELECT COUNT(id) as revisioncount FROM assignments WHERE item_id = " . $this->item_id . " AND project_id = " . $this->project_id . " AND date_completed IS NOT NULL";
+				$result = mysql_query($query) or die ("Couldn't run: $query");
+
+				$row = mysql_fetch_assoc($result);
+				$revisioncount = $row["revisioncount"];
+
+				if (intval($revisioncount) >= intval($project->num_proofs)) {
+					$query = "UPDATE items SET status = 'completed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
+					$result = mysql_query($query) or die ("Couldn't run: $query");
+				}
+
+				$subject = "[Unbindery] $username completed " . $this->project_slug . "/" . $this->item_id;
+				$message = "$username completed the item " . $this->project_slug . "/" . $this->item_id;
+
+				if ($user->status == "training") {
+					$message .= "\n\n$username is in training, so you need to review their work and clear them.";
+				}
+
+				$mesage .= "\n\nReview link: $SITEROOT/review/{$this->project_slug}/{$this->item_id}/{$username}";
+
+				Mail::sendMessage($ADMINEMAIL, $subject, $message);
 			}
-
-			$subject = "[Unbindery] $username completed " . $this->project_slug . "/" . $this->item_id;
-			$message = "$username completed the item " . $this->project_slug . "/" . $this->item_id;
-
-			if ($user->status == "training") {
-				$message .= "\n\n$username is in training, so you need to review their work and clear them.";
-			}
-
-			global $ADMINEMAIL;
-			Mail::sendMessage($ADMINEMAIL, $subject, $message);
 		}
 
 		$this->db->close();
