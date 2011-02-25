@@ -41,7 +41,7 @@ $item->load($item_id, $project_slug, $username);
 		<div id="controls">
 			<ul id="controls_left">
 				<li><a href="<?php echo $SITEROOT; ?>/dashboard" class="button">Back</a></li>
-				<li><a href="<?php echo $SITEROTO; ?>/projects/<?php echo $project_slug; ?>/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+				<li><a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project_slug; ?>/guidelines" class="button" target="_blank">Project Guidelines</a></li>
 			</ul>
 			<ul id="controls_right">
 				<li><img src="<?php echo $SITEROOT; ?>/snake.gif" id="spinner" /></li>
