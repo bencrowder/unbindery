@@ -14,6 +14,7 @@ $username = Alibaba::getUsername();
 $title = $_POST['project_title'];
 $author = $_POST['project_author'];
 $slug = $_POST['project_slug'];
+$language = $_POST['project_language'];
 $description = $_POST['project_desc'];
 $owner = $username;
 $guidelines = $_POST['project_guidelines'];
@@ -23,7 +24,7 @@ $num_proofs = $_POST['project_numproofs'];
 
 $project = new Project($db);
 
-$retval = $project->create($title, $author, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
+$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
 
 if ($retval == "success") {
 	// make project directory for images
@@ -31,8 +32,8 @@ if ($retval == "success") {
 
 	$rs = @mkdir($dir, 0775, true);
 	if ($rs) {
+		// success! now create the images directory
 		chmod($dir, 0775);
-		// success!
 		// redirect to upload page
 		header("Location: $SITEROOT/upload_items/$slug");
 	} else {

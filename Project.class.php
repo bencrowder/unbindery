@@ -8,6 +8,7 @@ class Project {
 	private $title;
 	private $author;
 	private $slug;
+	private $language;
 	private $description;
 	private $owner;
 	private $status;
@@ -16,6 +17,7 @@ class Project {
 	private $intro_email;
 	private $deadline_days;
 	private $num_proofs;
+	private $thumbnails;
 
 	public function Project($db, $slug = "") {
 		$this->db = $db;
@@ -44,6 +46,7 @@ class Project {
 			$this->title = stripslashes(trim(mysql_result($result, 0, "title")));
 			$this->author = stripslashes(trim(mysql_result($result, 0, "author")));
 			$this->slug = stripslashes(trim(mysql_result($result, 0, "slug")));
+			$this->language = stripslashes(trim(mysql_result($result, 0, "language")));
 			$this->description = stripslashes(trim(mysql_result($result, 0, "description")));
 			$this->owner = trim(mysql_result($result, 0, "owner"));
 			$this->status = trim(mysql_result($result, 0, "status"));
@@ -51,6 +54,7 @@ class Project {
 			$this->intro_email = stripslashes(trim(mysql_result($result, 0, "intro_email")));
 			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
 			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
+			$this->thumbnails = trim(mysql_result($result, 0, "thumbnails"));
 		}
 
 		$this->db->close();
@@ -63,6 +67,7 @@ class Project {
 		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
 		$query .= "author = '" . mysql_real_escape_string($this->author) . "', ";
 		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "', ";
+		$query .= "language = '" . mysql_real_escape_string($this->language) . "', ";
 		$query .= "description = '" . mysql_real_escape_string($this->description) . "', ";
 		$query .= "owner = '" . mysql_real_escape_string($this->owner) . "', ";
 		$query .= "status = '" . mysql_real_escape_string($this->status) . "', ";
@@ -70,16 +75,18 @@ class Project {
 		$query .= "intro_email = '" . mysql_real_escape_string($this->intro_email) . "', ";
 		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
 		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "' ";
+		$query .= "thumbnails = '" . mysql_real_escape_string($this->thumbnails) . "' ";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$this->db->close();
 	}
 
-	public function create($title, $author, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs) {
+	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs, $thumbnails) {
 		$this->title = $title;
 		$this->author = $author;
 		$this->slug = $slug;
+		$this->language = $language;
 		$this->description = $description;
 		$this->owner = $owner;
 		$this->status = "active";
@@ -87,16 +94,18 @@ class Project {
 		$this->intro_email = $intro_email;
 		$this->deadline_days = $deadline_days;
 		$this->num_proofs = $num_proofs;
+		$this->thumbnails = $thumbnails;
 
 		if ($title != "" && $slug != "") {
 			$this->db->connect();
 
 			$query = "INSERT INTO projects ";
-			$query .= "(title, author, slug, description, owner, status, guidelines, intro_email, deadline_days, num_proofs) ";
+			$query .= "(title, author, slug, language, description, owner, status, guidelines, intro_email, deadline_days, num_proofs, thumbnails) ";
 			$query .= "VALUES (";
 			$query .= "'" . mysql_real_escape_string($this->title) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->author) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->slug) . "', ";
+			$query .= "'" . mysql_real_escape_string($this->language) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->description) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->owner) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->status) . "', ";
@@ -104,6 +113,7 @@ class Project {
 			$query .= "'" . mysql_real_escape_string($this->intro_email) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->deadline_days) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->num_proofs) . "') ";
+			$query .= "'" . mysql_real_escape_string($this->thumbnails) . "') ";
 
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
@@ -113,6 +123,21 @@ class Project {
 		} else {
 			return "missing title/slug";
 		}
+	}
+
+	public function loadStatus() {
+		$this->db->connect();
+
+		$query = "SELECT (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage FROM projects WHERE slug = '" . mysql_real_escape_string($this->slug) . "'";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$this->completed = trim(mysql_result($result, 0, "completed"));
+			$this->total = stripslashes(trim(mysql_result($result, 0, "total")));
+			$this->percentage = stripslashes(trim(mysql_result($result, 0, "percentage")));
+		}
+
+		$this->db->close();
 	}
 
 	public function createItems($items) {
@@ -197,7 +222,7 @@ class Project {
 	}
 
 	public function getJSON() {
-		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "slug" => $this->slug, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
+		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "author" => $this->author, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
 
 }

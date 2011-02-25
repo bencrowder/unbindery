@@ -29,6 +29,9 @@ $username = Alibaba::getUsername();
 				<label>Slug</label>
 				<input type="text" id="project_slug" name="project_slug" />
 
+				<label>Language</label>
+				<input type="text" id="project_language" name="project_language" />
+
 				<label>Length of Deadline (# days)</label>
 				<input type="text" id="project_deadline" name="project_deadline" value="7" />
 
