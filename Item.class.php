@@ -77,6 +77,7 @@ class Item {
 	public function saveText($username, $draft, $itemtext) {
 		// load the project
 		$project = new Project($this->db, $this->project_slug);
+		$user = new User($this->db, $username);
 
 		$this->db->connect();
 
@@ -127,6 +128,16 @@ class Item {
 				$query = "UPDATE items SET status = 'completed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 			}
+
+			$subject = "[Unbindery] $username completed " . $this->project_slug . "/" . $this->item_id;
+			$message = "$username completed the item " . $this->project_slug . "/" . $this->item_id;
+
+			if ($user->status == "training") {
+				$message .= "\n\n$username is in training, so you need to review their work and clear them.";
+			}
+
+			global $ADMINEMAIL;
+			Mail::sendMessage($ADMINEMAIL, $subject, $message);
 		}
 
 		$this->db->close();
