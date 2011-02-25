@@ -87,6 +87,8 @@ ul.action_list li						{ border-bottom: solid 1px #ccc; padding: 6px; clear: bot
 ul.action_list li .title				{ font-size: 1.2em; font-weight: bold; }
 ul.action_list li .title a				{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; }
 ul.action_list li .deadline				{ font-size: .6em; color: #999; margin-left: 5px; }
+ul.action_list li .impending			{ color: #f99; }
+ul.action_list li .overdue				{ color: #f00; font-weight: bold; font-size: .9em; }
 
 ul.action_list li .sub					{ margin-top: 5px; font-size: .9em; color: #666; }
 ul.action_list li .right_button			{ float: right; padding-top: 8px; }

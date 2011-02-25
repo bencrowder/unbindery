@@ -43,10 +43,23 @@ $projectlist = array();
 					foreach ($items as $item) {
 						$editlink = $SITEROOT . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
 						$projectlist[] = $item["project_slug"];
+
+						$days_left = $item["days_left"];
+						$deadline = $item["deadline"];
+						if ($days_left <= 2 && $days_left >= 0) {
+							$deadlineclass = " impending";
+							$deadline = "in $days_left day";
+							if ($days_left != 1) { $deadline .= "s"; }
+						} else if ($days_left < 0) {
+							$deadlineclass = " overdue";
+							$deadline = ($days_left * -1) . " days ago";
+						} else {
+							$deadlineclass = "";
+						}
 					?>
 					<li>
 						<div class="right_button"><a href="<?php echo $editlink; ?>" class="button">Proof</a></div>
-						<div class="title"><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a> <span class="deadline">Due <?php echo $item["deadline"]; ?></span></div>
+						<div class="title"><a href="<?php echo $editlink; ?>"><?php echo $item["item_title"]; ?></a> <span class="deadline<?php echo $deadlineclass; ?>">Due <?php echo $deadline; ?></span></div>
 						<div class="sub">Project: <?php echo $item["project_title"]; ?></div>
 					</li>
 					<?php } ?>
