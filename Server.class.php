@@ -57,6 +57,7 @@ class Server {
 		}
 
 		if ($query != "") {
+			echo $query;
 			$result = mysql_query($query) or die("Couldn't run: $query");
 		}
 
@@ -72,7 +73,7 @@ class Server {
 		global $SITEROOT;
 
 		while ($row = mysql_fetch_assoc($result)) {
-			$message = "Just a reminder that you have an item due tomorrow:\n";
+			$message = "Just a reminder that you have an item due tomorrow. If you finish it before the deadline, you won't lose any points.\n";
 			$message .= "\n";
 			$message .= "Edit link: " . $SITEROOT . "/edit/" . $row["slug"] . "/" . $row["item_id"] . "\n";
 			$message .= "\n";
@@ -81,6 +82,8 @@ class Server {
 			$subject = "[Unbindery] Assignment '" . $row["title"] . "' due tomorrow (" . $row["deadline"] . ")";
 
 			Mail::sendMessage($row["email"], $subject, $message);
+
+			echo "\n\nSent email to " . $row["email"] . " about " . $row["slug"] . "/" . $row["item_id"];
 		}
 
 		$this->db->close();
