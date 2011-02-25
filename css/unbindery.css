@@ -20,7 +20,7 @@ ul#controls_left li						{ display: inline; margin-right: 5px; }
 ul#controls_right						{ float: right; list-style: none; padding: 0; }
 ul#controls_right li					{ display: inline; margin-left: 5px; }
 
-.button									{ padding: 5px 7px; background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; color: #000; font-weight: bold; text-decoration: none; border: solid 1px #999; }
+.button									{ padding: 5px 7px; background: #ddd; background: -webkit-linear-gradient(white, #ccc); -moz-linear-graident(white, #ccc); -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; color: #000; font-weight: bold; text-decoration: none; border: solid 1px #999; }
 .button:hover							{ background: #fff; cursor: pointer; }
 .smallbutton							{ padding: 1px 3px; font-size: .9em; }
 
