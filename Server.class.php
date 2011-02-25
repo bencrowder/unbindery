@@ -38,4 +38,51 @@ class Server {
 		$this->db->close();
 		return $users;
 	}
+
+	public function decrementTardies() {
+		$this->db->connect();
+
+		$query = "SELECT username, count(username) AS points_lost FROM assignments WHERE date_completed IS NULL AND deadline < NOW() GROUP BY username";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$users = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($users, array("username" => $row["username"], "points_lost" => $row["points_lost"]));
+		}
+
+		$query = "";
+		foreach ($users as $user) {
+			$query .= "UPDATE users SET score = score - " . $user["points_lost"] . " WHERE username = '" . $user["username"] . "'; ";
+		}
+
+		if ($query != "") {
+			$result = mysql_query($query) or die("Couldn't run: $query");
+		}
+
+		$this->db->close();
+	}
+
+	public function emailTardies() {
+		$this->db->connect();
+
+		$query = "SELECT users.email, item_id, items.title, projects.slug, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN users on assignments.username = users.username JOIN items ON item_id = items.id JOIN projects ON projects.id = assignments.project_id WHERE date_completed IS NULL AND DATEDIFF(deadline, NOW()) = 1;";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		global $SITEROOT;
+
+		while ($row = mysql_fetch_assoc($result)) {
+			$message = "Just a reminder that you have an item due tomorrow:\n";
+			$message .= "\n";
+			$message .= "Edit link: " . $SITEROOT . "/edit/" . $row["slug"] . "/" . $row["item_id"] . "\n";
+			$message .= "\n";
+			$message .= "Thanks! We appreciate your help.";
+			
+			$subject = "[Unbindery] Assignment '" . $row["title"] . "' due tomorrow (" . $row["deadline"] . ")";
+
+			Mail::sendMessage($row["email"], $subject, $message);
+		}
+
+		$this->db->close();
+	}
 }
