@@ -6,7 +6,7 @@ include_once('Database.class.php');
 include_once('unbindery.php');
 
 if (Alibaba::authenticated()) {
-	header("Location: $SITEROOT/dashboard/");
+	header("Location: $SITEROOT/dashboard");
 }
 
 $includes = "<script src='$SITEROOT/js/index.js' type='text/javascript'></script>\n";
@@ -22,7 +22,7 @@ if (isset($_GET["message"])) { ?>
 	<div id="login_box">
 		<h2>Login</h2>
 
-		<form id="login_form" action="login/process/" method="post" accept-charset="utf-8">
+		<form id="login_form" action="login/process" method="post" accept-charset="utf-8">
 			<label>Username:</label>
 			<input type="text" id="username" name="username" />
 
@@ -34,7 +34,7 @@ if (isset($_GET["message"])) { ?>
 			<span id="signup">Sign up</span>
 		</form>
 
-		<form id="signup_form" style="display: none" action="signup/" method="post" accept-charset="utf-8">
+		<form id="signup_form" style="display: none" action="signup" method="post" accept-charset="utf-8">
 			<label>Email:</label>
 			<input type="text" id="email_signup" name="email_signup" />
 

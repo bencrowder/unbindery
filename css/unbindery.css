@@ -94,6 +94,8 @@ ul.action_list li .sub					{ margin-top: 5px; font-size: .9em; color: #666; }
 ul.action_list li .right_button			{ float: right; padding-top: 8px; }
 ul.action_list li .button				{ font-size: 1.2em; }
 
+ul.action_list li.blankslate a			{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; font-weight: bold; }
+
 ul.action_list li:last-child			{ background: #333; padding: 0; height: 8px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
 
 ul.action_list.projects li:last-child	{ background: #345; }

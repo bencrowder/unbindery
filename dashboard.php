@@ -40,6 +40,12 @@ $projectlist = array();
 				<ul class="action_list">
 					<?php 
 					$items = $user->getAssignments();
+					$projects = $user->getProjects();
+
+					if (count($items) == 0 && count($projects) == 0) { ?>
+						<li class="blankslate">Welcome. <a href="<?php echo $SITEROOT; ?>/projects">Join a project</a> to get started proofing.</li>
+					<?php }
+
 					foreach ($items as $item) {
 						$editlink = $SITEROOT . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
 						$projectlist[] = $item["project_slug"];
@@ -64,7 +70,6 @@ $projectlist = array();
 					</li>
 					<?php } ?>
 					<?php 
-					$projects = $user->getProjects();
 					foreach ($projects as $project) {
 						if (!in_array($project["slug"], $projectlist)):
 							$projectlink = $SITEROOT . '/projects/' . $project["slug"];
@@ -98,6 +103,11 @@ $projectlist = array();
 			<ul class="list">
 				<?php 
 				$projects = $user->getProjects();
+				if (count($projects) == 0) { ?>
+				<li>No current projects.</li>
+				<?php
+				}
+
 				foreach ($projects as $project) {
 					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
 					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
@@ -122,6 +132,10 @@ $projectlist = array();
 			<ul class="list">
 				<?php 
 				$history = $user->getHistory();
+				if (count($history) == 0) { ?>
+				<li>Nothing so far -- you must be new here. :)</li>
+				<?php }
+
 				foreach ($history as $item) {
 					$editlink = "$SITEROOT/edit/" . $item["project_slug"] . "/" . $item["item_id"];
 				?>
