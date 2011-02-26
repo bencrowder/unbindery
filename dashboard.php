@@ -77,7 +77,7 @@ $projectlist = array();
 							$percentage = round($project["completed"] / $project["total"] * 100, 0);
 					?>
 					<li>
-						<div class="right_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new item</span></div>
+						<div class="right_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new page</span></div>
 
 						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
 						<div class="sub">Owner: <?php echo $project["owner"]; ?></div>

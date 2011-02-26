@@ -95,7 +95,7 @@ global $SYSTEMGUIDELINES;
 
 		<?php if ($admin) { ?>
 		<div class="half">
-			<h3>Items</h3>
+			<h3>Pages</h3>
 			<ul>
 			<?php
 			$items = $project->getItems();
