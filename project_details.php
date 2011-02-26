@@ -94,8 +94,8 @@ global $SYSTEMGUIDELINES;
 		</div>
 
 		<?php if ($admin) { ?>
-		<div class="half">
-			<h3>Items</h3>
+		<div class="group half">
+			<h3>Pages</h3>
 			<ul>
 			<?php
 			$items = $project->getItems();
@@ -105,7 +105,7 @@ global $SYSTEMGUIDELINES;
 			</ul>
 		</div>
 
-		<div class="half">
+		<div class="group half">
 			<h3>Project History</h3>
 		</div>
 		<?php } ?>

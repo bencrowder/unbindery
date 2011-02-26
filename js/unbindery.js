@@ -39,7 +39,7 @@ function save_item_text(is_draft, is_review) {
 				}
 				redirect_to_dashboard(message, "");
 			} else {
-				redirect_to_dashboard("", "Error saving item. Try again.");
+				redirect_to_dashboard("", "Error saving page. Try again.");
 			}
 		}, 'json');
 }
@@ -55,15 +55,15 @@ function get_new_item(project_slug) {
 					window.location.href = locstr;
 					break;
 				case "waiting_for_clearance":
-					redirect_to_dashboard("", "Your first item has to be approved before you can proof more items. (Just this once, though.)");
+					redirect_to_dashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)");
 					break;	
 				case "have_item_already":
-					redirect_to_dashboard("", "You already have one item for this project. Finish it and then you'll be able to get a new one.");
+					redirect_to_dashboard("", "You already have one page for this project. Finish it and then you'll be able to get a new one.");
 				case "not_a_member":
 					redirect_to_dashboard("", "You're not a member of that project.");
 					break;
 				default:
-					redirect_to_dashboard("", "Error getting new item.");
+					redirect_to_dashboard("", "Error getting new page.");
 					break;
 			}
 		}, 'json');

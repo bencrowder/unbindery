@@ -43,17 +43,6 @@ $user = new User($db, $username);
 					<li></li>
 				</ul>
 			</div>
-
-			<div class="sidebar leaderboard">
-				<h3>Top Proofers</h3>
-				<ol id="stats">
-				<?php
-					$users = $server->getTopUsers();
-					foreach ($users as $user) { ?>
-					<li><label><?php echo $user["username"]; ?></label> <span class="stat"><?php echo $user["score"]; ?></span></li>
-				<?php } ?>
-				</ol>
-			</div>
 		</div>
 	</div>
 

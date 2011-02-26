@@ -37,8 +37,6 @@ textarea#itemtext						{ width: 650px; height: 200px; font-size: 16px; line-heig
 .container								{ overflow: hidden; clear: both; margin-bottom: 3em; }
 .bigcol									{ width: 550px; float: left; margin-top: 20px; }
 .sidebar								{ width: 200px; margin-left: 100px; float: left; margin-top: 20px; }
-.half									{ width: 400px; float: left; margin-right: 50px; }
-.half + .half							{ margin-right: 0; }
 
 /* Sidebar */
 /* --------------------------------------------------- */
@@ -50,11 +48,6 @@ textarea#itemtext						{ width: 650px; height: 200px; font-size: 16px; line-heig
 .sidebar ul#stats li label				{ font-size: 10px; color: #999; text-transform: uppercase; display: block; }
 .sidebar ul#stats li .stat				{ font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
 
-.leaderboard ol							{ padding-left: 35px; }
-.leaderboard ol li						{ margin-bottom: 5px; border-bottom: solid 1px #ddd; padding-bottom: 5px; font-size: 1.2em; font-weight: bold; color: #999; }
-.leaderboard ol li:first-child:after	{ content: ' ★'; }
-.leaderboard ol li label				{ color: #000; }
-.leaderboard ol li .stat				{ float: right; color: #999; }
 
 .percentage								{ float: right; font-size: 10px; color: #666; clear: both; }
 .percentage p							{ text-align: right; padding-top: 4px; }
@@ -66,21 +59,42 @@ textarea#itemtext						{ width: 650px; height: 200px; font-size: 16px; line-heig
 .proj_details .percentage_container		{ width: 200px; height: 20px; }
 .proj_details .percent					{ height: 20px; }
 
-.half h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
+.group									{ width: 250px; float: left; margin-right: 50px; }
+.group:last-child						{ margin-right: 0; }
+.group h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
 
-.half ul								{ padding: 0; list-style: none; margin: 0; margin-bottom: 2em; }
-.half ul li								{ padding: 7px 0; border-bottom: solid 1px #999; }
-.half ul li:last-child					{ border-bottom: none; }
-.half ul.list							{ background: #eee; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin-top: 7px; }
+.group ul								{ padding: 0; list-style: none; margin: 0; margin-bottom: 2em; }
+.group ul li								{ padding: 7px 0; border-bottom: solid 1px #999; }
+.group ul li:last-child					{ border-bottom: none; }
+.group ul.list							{ background: #eee; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin-top: 7px; }
 
-.half ul.list li						{ padding: 6px 5px; font-size: 11px; overflow: hidden; clear: both; }
-.half ul.list li .project_title			{ width: 270px; }
-.half ul.list li a						{ font-weight: bold; color: #337; text-decoration: none; border-bottom: dotted 1px #333; font-size: 11px; }
+.group ul.list li						{ padding: 6px 5px; font-size: 11px; overflow: hidden; clear: both; }
+.group ul.list li .project_title		{ width: 270px; line-height: 1.4em; }
+.group ul.list li a						{ font-weight: bold; color: #337; text-decoration: none; border-bottom: dotted 1px #333; font-size: 11px; }
 
-.half ul.list li .percentage			{ float: right; margin-left: 15px; }
-.half ul.list li .perproject_stats		{ margin-top: 3px; color: #666; }
+.group ul.list li .percentage			{ float: right; margin-left: 15px; }
+.group ul.list li .perproject_stats		{ margin-top: 3px; color: #666; }
 
-.half ul.list li .history_projecttitle	{ margin-top: 3px; color: #999; }
+.group ul.list li .history_projecttitle	{ margin-top: 3px; color: #999; }
+
+.group.half								{ width: 400px; float: left; margin-right: 25px; }
+
+
+/* Leaderboard */
+/* --------------------------------------------------- */
+
+.leaderboard ol							{ padding-left: 35px; }
+.leaderboard ol li						{ margin-bottom: 5px; border-bottom: solid 1px #ddd; padding-bottom: 5px; font-size: 1.2em; font-weight: bold; color: #999; }
+.leaderboard ol li:first-child:after	{ content: ' ★'; }
+.leaderboard ol li label				{ color: #000; }
+.leaderboard ol li .stat				{ float: right; color: #999; }
+
+
+/* Dashboard */
+/* --------------------------------------------------- */
+
+.dashboard .sidebar						{ width: 250px; margin-left: 50px; }
+
 
 .bigcol h3								{ margin-top: 3em; padding: 3px 6px; }
 .bigcol h3:first-child					{ margin-top: 0; }
