@@ -13,6 +13,8 @@ Alibaba::forceAuthentication();
 $username = Alibaba::getUsername();
 $user = new User($db, $username);
 
+$server = new Server($db);
+
 $message = stripslashes($_GET["message"]);
 $error = stripslashes($_GET["error"]);
 
@@ -31,7 +33,7 @@ $projectlist = array();
 	<div id="error"><?php echo $error; ?></div>
 <?php } ?>
 
-	<div id="main">
+	<div id="main" class="dashboard">
 		<h2>Dashboard</h2>
 
 		<div class="container">
@@ -98,53 +100,66 @@ $projectlist = array();
 			</div>
 		</div>
 
-		<div class="half">
-			<h3>Current Projects</h3>
-			<ul class="list">
-				<?php 
-				$projects = $user->getProjects();
-				if (count($projects) == 0) { ?>
-				<li>No current projects.</li>
+		<div id="lower_dash">
+			<div class="group">
+				<h3>Recent History</h3>
+				<ul class="list">
+					<?php 
+					$history = $user->getHistory();
+					if (count($history) == 0) { ?>
+					<li>Nothing so far -- you must be new here. :)</li>
+					<?php }
+
+					foreach ($history as $item) {
+						$editlink = "$SITEROOT/edit/" . $item["project_slug"] . "/" . $item["item_id"];
+					?>
+					<li>
+						<?php echo $item["date_completed"]; ?>: <a href='<?php echo $editlink; ?>'><?php echo $item["item_title"]; ?></a>
+						<div class="history_projecttitle">Project: <?php echo $item["project_title"]; ?></div>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+
+			<div class="group">
+				<h3>Current Projects</h3>
+				<ul class="list">
+					<?php 
+					$projects = $user->getProjects();
+					if (count($projects) == 0) { ?>
+					<li>No current projects.</li>
+					<?php
+					}
+
+					foreach ($projects as $project) {
+						$projectlink = $SITEROOT . '/projects/' . $project["slug"];
+						$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
+						$percentage = round($project["completed"] / $project["total"] * 100, 0);
+					?>
+					<li>
+						<div class="percentage">
+							<div class="percentage_container">
+								<div class="percent" style="width: <?php echo $percentage; ?>px;"></div>
+							</div> 
+							<p><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+						</div>
+
+						<div class="project_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+
+			<div class="group leaderboard">
+				<h3>Top Proofers</h3>
+				<ol id="stats">
 				<?php
-				}
-
-				foreach ($projects as $project) {
-					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
-					$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
-					$percentage = round($project["completed"] / $project["total"] * 100, 0);
-				?>
-				<li>
-					<div class="percentage">
-						<div class="percentage_container">
-							<div class="percent" style="width: <?php echo $percentage; ?>px;"></div>
-						</div> 
-						<p><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
-					</div>
-
-					<div class="project_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
-				</li>
+					$users = $server->getTopUsers();
+					foreach ($users as $user) { ?>
+					<li><label><?php echo $user["username"]; ?></label> <span class="stat"><?php echo $user["score"]; ?></span></li>
 				<?php } ?>
-			</ul>
-		</div>
-
-		<div class="half">
-			<h3>Recent History</h3>
-			<ul class="list">
-				<?php 
-				$history = $user->getHistory();
-				if (count($history) == 0) { ?>
-				<li>Nothing so far -- you must be new here. :)</li>
-				<?php }
-
-				foreach ($history as $item) {
-					$editlink = "$SITEROOT/edit/" . $item["project_slug"] . "/" . $item["item_id"];
-				?>
-				<li>
-					<?php echo $item["date_completed"]; ?>: <a href='<?php echo $editlink; ?>'><?php echo $item["item_title"]; ?></a>
-					<div class="history_projecttitle">Project: <?php echo $item["project_title"]; ?></div>
-				</li>
-				<?php } ?>
-			</ul>
+				</ol>
+			</div>
 		</div>
 	</div>
 

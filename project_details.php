@@ -94,7 +94,7 @@ global $SYSTEMGUIDELINES;
 		</div>
 
 		<?php if ($admin) { ?>
-		<div class="half">
+		<div class="group half">
 			<h3>Pages</h3>
 			<ul>
 			<?php
@@ -105,7 +105,7 @@ global $SYSTEMGUIDELINES;
 			</ul>
 		</div>
 
-		<div class="half">
+		<div class="group half">
 			<h3>Project History</h3>
 		</div>
 		<?php } ?>
