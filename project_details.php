@@ -19,6 +19,14 @@ $project_slug = $_GET["project_slug"];
 $project = new Project($db, $project_slug);
 $project->loadStatus();
 
+// find out if the user is admin or project owner so they can see the rest of the details
+$role = $user->getRoleForProject($project_slug);
+if ($role == "owner" || $user->admin) {
+	$admin = true;
+} else {
+	$admin = false;
+}
+
 global $SYSTEMGUIDELINES;
 
 ?>
@@ -84,6 +92,23 @@ global $SYSTEMGUIDELINES;
 			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="right_button join button">Join this project</a>
 			<?php } ?>
 		</div>
+
+		<?php if ($admin) { ?>
+		<div class="half">
+			<h3>Items</h3>
+			<ul>
+			<?php
+			$items = $project->getItems();
+			foreach ($items as $item) { ?>
+			<li><?php echo $item["title"] . ", " . $item["status"]; ?></li>
+			<?php } ?>
+			</ul>
+		</div>
+
+		<div class="half">
+			<h3>Project History</h3>
+		</div>
+		<?php } ?>
 	<?php } // else (if guidelines != true) ?>
 	</div>
 

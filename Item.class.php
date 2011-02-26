@@ -76,6 +76,7 @@ class Item {
 
 	public function saveText($username, $draft, $review, $review_username, $itemtext) {
 		global $ADMINEMAIL;
+		global $SITEROOT;
 
 		// load the project
 		$project = new Project($this->db, $this->project_slug);

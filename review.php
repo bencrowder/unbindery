@@ -26,7 +26,7 @@ $user = new User($db, $username);
 $role = $user->getRoleForProject($project_slug);
 
 if (!$user->admin && $role != "owner") {
-	redirectToDashboard("", "You don't have rights to review this item.");
+	redirectToDashboard("", "You don't have rights to review that item.");
 }
 
 // get the proofer's user object so we can see their status
