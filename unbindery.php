@@ -46,13 +46,12 @@ switch ($method) {
 		$description = $_POST['description'];
 		$owner = $_POST['owner'];
 		$guidelines = $_POST['guidelines'];
-		$intro_email = $_POST['intro_email'];
 		$deadline_days = $_POST['deadline_days'];
 		$num_proofs = $_POST['num_proofs'];
 
 		if ($title) {
 			$project = new Project($db);
-			echo $project->create($title, $author, $slug, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
+			echo $project->create($title, $author, $slug, $description, $owner, $guidelines, $deadline_days, $num_proofs);
 		}
 		break;
 

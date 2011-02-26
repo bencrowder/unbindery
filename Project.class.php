@@ -14,7 +14,6 @@ class Project {
 	private $status;
 
 	private $guidelines;
-	private $intro_email;
 	private $deadline_days;
 	private $num_proofs;
 	private $thumbnails;
@@ -51,7 +50,6 @@ class Project {
 			$this->owner = trim(mysql_result($result, 0, "owner"));
 			$this->status = trim(mysql_result($result, 0, "status"));
 			$this->guidelines = stripslashes(trim(mysql_result($result, 0, "guidelines")));
-			$this->intro_email = stripslashes(trim(mysql_result($result, 0, "intro_email")));
 			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
 			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
 			$this->thumbnails = trim(mysql_result($result, 0, "thumbnails"));
@@ -72,9 +70,8 @@ class Project {
 		$query .= "owner = '" . mysql_real_escape_string($this->owner) . "', ";
 		$query .= "status = '" . mysql_real_escape_string($this->status) . "', ";
 		$query .= "guidelines = '" . mysql_real_escape_string($this->guidelines) . "', ";
-		$query .= "intro_email = '" . mysql_real_escape_string($this->intro_email) . "', ";
 		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
-		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "' ";
+		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "', ";
 		$query .= "thumbnails = '" . mysql_real_escape_string($this->thumbnails) . "' ";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
@@ -82,16 +79,15 @@ class Project {
 		$this->db->close();
 	}
 
-	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs, $thumbnails) {
+	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {
 		$this->title = $title;
 		$this->author = $author;
 		$this->slug = $slug;
 		$this->language = $language;
 		$this->description = $description;
 		$this->owner = $owner;
-		$this->status = "active";
+		$this->status = "pending";
 		$this->guidelines = $guidelines;
-		$this->intro_email = $intro_email;
 		$this->deadline_days = $deadline_days;
 		$this->num_proofs = $num_proofs;
 		$this->thumbnails = $thumbnails;
@@ -100,7 +96,7 @@ class Project {
 			$this->db->connect();
 
 			$query = "INSERT INTO projects ";
-			$query .= "(title, author, slug, language, description, owner, status, guidelines, intro_email, deadline_days, num_proofs, thumbnails) ";
+			$query .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails) ";
 			$query .= "VALUES (";
 			$query .= "'" . mysql_real_escape_string($this->title) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->author) . "', ";
@@ -110,9 +106,8 @@ class Project {
 			$query .= "'" . mysql_real_escape_string($this->owner) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->status) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->guidelines) . "', ";
-			$query .= "'" . mysql_real_escape_string($this->intro_email) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->deadline_days) . "', ";
-			$query .= "'" . mysql_real_escape_string($this->num_proofs) . "') ";
+			$query .= "'" . mysql_real_escape_string($this->num_proofs) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->thumbnails) . "') ";
 
 			$result = mysql_query($query) or die ("Couldn't run: $query");
