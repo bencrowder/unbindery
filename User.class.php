@@ -151,12 +151,6 @@ class User {
 			$query = "INSERT INTO membership (project_id, username, role) VALUES (" . mysql_real_escape_string($project->project_id) . ", '" . mysql_real_escape_string($this->username) . "', 'proofer')";
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
-			// send email to user w/ project guidelines, link to unsubscribe, and note that first item will come soon (intro email, pull from project settings)
-			$message = $this->username . " just joined " . $project->title . " ($project_slug)";
-			$message .= "\n";
-
-			Mail::sendMessage($this->email, "[Unbindery] {$this->username} joined {$project_slug}", $message);
-
 			$this->db->close();
 
 			return true;
@@ -201,13 +195,6 @@ class User {
 			$message .= "\n";
 
 			Mail::sendMessage($this->email, "[Unbindery] New assignment (due $deadline)", $message);
-
-			$message = "Assigned $project_slug/$item_id to $this->username";
-			if ($this->name) { $message .= " ({$this->name})"; }
-			$message .= "\n\nDeadline: " . trim($deadline) . "\n";
-
-			global $ADMINEMAIL;
-			Mail::sendMessage($ADMINEMAIL, "[Unbindery] Assigned item to " . $this->username, $message);
 
 			$this->db->close();
 
