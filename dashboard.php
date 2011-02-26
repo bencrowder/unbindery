@@ -82,7 +82,7 @@ $projectlist = array();
 						<div class="right_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new page</span></div>
 
 						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
-						<div class="sub">Owner: <?php echo $project["owner"]; ?></div>
+						<div class="sub">By <?php echo $project["author"]; ?></div>
 					</li>
 					<?php endif; ?>
 					<?php } ?>
