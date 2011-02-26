@@ -43,9 +43,6 @@ $username = Alibaba::getUsername();
 
 				<label>Guidelines</label>
 				<textarea id="project_guidelines" name="project_guidelines"></textarea>
-
-				<label>Intro Email</label>
-				<textarea id="project_email" name="project_email">[This will get sent to volunteers when they join the project.]</textarea>
 			</div>
 
 			<div class="sidebar">

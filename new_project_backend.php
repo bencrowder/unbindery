@@ -18,13 +18,12 @@ $language = $_POST['project_language'];
 $description = $_POST['project_desc'];
 $owner = $username;
 $guidelines = $_POST['project_guidelines'];
-$intro_email = $_POST['project_email'];
 $deadline_days = $_POST['project_deadline'];
 $num_proofs = $_POST['project_numproofs'];
 
 $project = new Project($db);
 
-$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $intro_email, $deadline_days, $num_proofs);
+$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs);
 
 if ($retval == "success") {
 	// make project directory for images
