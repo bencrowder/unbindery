@@ -45,7 +45,7 @@ $user = new User($db, $username);
 			</div>
 
 			<div class="sidebar">
-				<h3>Past Projects</h3>
+				<h3>Completed Projects</h3>
 				<ul class="projects">
 				<?php
 				$projects = $server->getCompletedProjects();
