@@ -170,17 +170,17 @@ switch ($method) {
 		}
 		break;
 
-	case 'create_items':
+	case 'add_pages':
 		$project_slug = $_POST['project_slug'];
-		$items = $_POST['items'];
+		$pages = $_POST['pages'];
 
-		if ($project_slug && $items) {
+		if ($project_slug && $pages) {
 			$project = new Project($db, $project_slug);
-			$result = $project->createItems($items);
+			$result = $project->addPages($pages);
 
 			echo json_encode($result);
 		} else {
-			echo json_encode(array("statuscode" => "error"));
+			echo json_encode(array("statuscode" => "error", "slug" => $project_slug, "pages" => $pages));
 		}
 		break;
 }

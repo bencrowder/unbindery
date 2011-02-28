@@ -69,36 +69,58 @@ function get_new_item(project_slug) {
 		}, 'json');
 }
 
+function save_page() {
+	$("#spinner").show();
+
+	var item_id = $("#item_id").val();
+	var project_slug = $("#project_slug").val();
+	var pagetext = $("#pagetext").val();
+	var username = $("ul#nav .username").html();
+	var review_username = $("#review_username").html();
+
+	$.post(siteroot + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+		function(data) {
+			if (data.statuscode == "success") {
+				$("#spinner").hide();
+
+				if (is_review) {
+					var message = "Finished review.";
+				} else {
+					if (is_draft) {
+						var message = "Saved draft.";
+					} else {
+						var message = "Finished item.";
+					}
+				}
+				redirect_to_dashboard(message, "");
+			} else {
+				redirect_to_dashboard("", "Error saving page. Try again.");
+			}
+		}, 'json');
+}
+
 function load_items_for_editing(event, data) {
-	var items = [];
+	var pages = [];
 	var project_slug = $("#project_slug").val();
 
 	$("#file_uploadQueue .fileName").each(function() {
 		var filename = $(this).html();
 		// strip up to the first dot
-		var itemname = filename.substr(0, filename.indexOf('.'));
+		var pagename = filename.substr(0, filename.indexOf('.'));
 
-		items.push(itemname);
+		pages.push(pagename);
 	});
 
-	// we need to add them to the database here
-	$.post(siteroot + "/unbindery.php?method=create_items", { project_slug: project_slug, items: items },
+	console.log(project_slug);
+
+	// add them to the database
+	$.post(siteroot + "/unbindery.php?method=add_pages", { project_slug: project_slug, pages: pages },
 		function(data) {
+			console.log(data);
 			if (data.statuscode == "success") {
-				// data.items = list of IDs
-				var content = '';
-
-				for (item_index in data.item_ids) {
-					var item = data.item_ids[item_index];
-					itemname = item.substr(0, item.lastIndexOf('_'));
-					itemid = item.substr(item.lastIndexOf('_') + 1, item.length);
-
-					content += '<label>' + itemname + '</label>';
-					content += '<textarea class="item_textarea" id="' + itemid + '_text" name="' + itemid + '_text"></textarea>\n';
-				}
-
-				$("#save_items #itemlist").html(content);
-				$("#save_items").show();
+				// load the first page into edit mode
+				var firstpage = data.page_ids[0];
+				window.location.href = siteroot + '/admin/new_page/' + project_slug + '/' + firstpage;
 			} else {
 				console.log("error!");
 			}
@@ -107,7 +129,7 @@ function load_items_for_editing(event, data) {
 }
 
 $(document).ready(function() {
-	$("textarea#itemtext").focus();
+	$("textarea#page_text").focus();
 
 	$("#save_as_draft_button").click(function() {
 		save_item_text(true, false); // yes draft, no review
@@ -119,6 +141,10 @@ $(document).ready(function() {
 
 	$("#finished_review_button").click(function(e) {
 		save_item_text(false, true); // no draft, yes review
+	});
+
+	$("#save_page_button").click(function(e) {
+		save_page();
 	});
 
 	$(".getnewitem").click(function(e) {

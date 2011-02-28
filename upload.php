@@ -3,6 +3,7 @@
 include_once('include/config.php');
 include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
+include_once('User.class.php');
 
 Alibaba::forceAuthentication();
 
@@ -17,7 +18,7 @@ $includes .= "<script type='text/javascript'>\n";
 $includes .= "	$(document).ready(function() {\n";
 $includes .= "		$('#file_upload').uploadify({\n";
 $includes .= "			'uploader'  : '$SITEROOT/lib/uploadify/uploadify.swf',\n";
-$includes .= "			'script'    : '$SITEROOT/upload_items_backend/',\n";
+$includes .= "			'script'    : '$SITEROOT/admin/upload_backend/',\n";
 $includes .= "			'cancelImg' : '$SITEROOT/lib/uploadify/cancel.png',\n";
 $includes .= "			'folder'    : '/images/$slug',\n";
 $includes .= "			'fileDataName' : 'items',\n";
@@ -39,14 +40,7 @@ include_once('include/header.php');
 
 		<div id="uploadcol">
 			<input id="file_upload" name="file_upload" type="file" />
-		</div>
-
-		<div id="items">
-			<form id="save_items" action="<?php echo $SITEROOT; ?>/save_items_backend/" method="post">
-				<div id="itemlist"></div>
-				<input type="submit" class="button" value="Save Changes" />
-				<input type="hidden" id="project_slug" name="project_slug" value="<?php echo $slug; ?>" />
-			</form>
+			<input type="hidden" name="project_slug" id="project_slug" value="<?php echo $slug; ?>" />
 		</div>
 	</div>
 

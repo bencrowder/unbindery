@@ -32,7 +32,7 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 #image_container						{ width: 848px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
 
 #text_container							{ width: 684px; height: 200px; margin: 0px auto; }
-textarea#itemtext						{ width: 650px; height: 200px; font-size: 16px; line-height: 1.4em; font-family: Monaco, Courier, monospace; padding: 10px; padding-left: 32px; background: url(../img/textarea_bg.png) repeat-y; border: solid 1px #999; }
+textarea#page_text						{ width: 650px; height: 200px; font-size: 16px; line-height: 1.4em; font-family: Monaco, Courier, monospace; padding: 10px; padding-left: 32px; background: url(../img/textarea_bg.png) repeat-y; border: solid 1px #999; }
 
 .container								{ overflow: hidden; clear: both; margin-bottom: 3em; }
 .bigcol									{ width: 550px; float: left; margin-top: 20px; }
@@ -218,3 +218,18 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 .proj_guidelines pre, .proj_guidelines code		{ background: #eee; padding: 5px; font-family: Monaco, Courier, monospace; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 .proj_guidelines pre					{ margin-left: 35px; }
 .proj_guidelines a						{ color: #000; text-decoration: none; border-bottom: dotted 1px #666; }
+
+
+/* Admin */
+/* --------------------------------------------------- */
+
+#main.edit #metadata					{ overflow: hidden; clear: both; margin-bottom: 1.5em; }
+#main.edit label						{ font-weight: bold; }
+#main.edit input[type="text"]			{ width: 250px; border: solid 1px #999; padding: 3px; font-weight: bold; font-size: 1.2em; margin-left: 5px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+
+#main.edit #image_container				{ width: 400px; height: 500px; overflow: scroll; border: solid 1px #999; float: left; margin-right: 50px; }
+#main.edit #text_container				{ width: 398px; height: 500px; margin: 0; float: left; }
+
+#main.edit textarea#page_text			{ width: 354px; height: 480px; }
+
+#controls input.button					{ font-size: 1em; margin-top: -6px; display: inline !important; }

@@ -4,14 +4,19 @@ AddDefaultCharset UTF-8
 # directories we want to leave alone
 RewriteRule ^js/(.*) js/$1 [L]
 RewriteRule ^lib/(.*) lib/$1 [L]
-RewriteRule ^uploadify/(.*) uploadify/$1 [L]
 RewriteRule ^include/(.*) include/$1 [L]
 RewriteRule ^images/(.*) images/$1 [L]
 RewriteRule ^img/(.*) img/$1 [L]
+
+## Login
+
 RewriteRule ^login/process process_login.php [L]
 RewriteRule ^signup process_signup.php [L]
 RewriteRule ^logout/ logout.php [L]
 RewriteRule ^logout logout.php [L]
+
+## Main pages 
+
 RewriteRule ^settings/ settings.php [L]
 RewriteRule ^settings settings.php [L]
 RewriteRule ^projects/(.*)/guidelines project_details.php?project_slug=$1&guidelines=true [L]
@@ -21,15 +26,27 @@ RewriteRule ^projects/ projects.php [L]
 RewriteRule ^projects projects.php [L]
 RewriteRule ^dashboard/ dashboard.php [QSA]
 RewriteRule ^dashboard dashboard.php [QSA]
-RewriteRule ^new_project_backend/ new_project_backend.php [L]
-RewriteRule ^new_project_backend new_project_backend.php [L]
-RewriteRule ^new_project/ new_project.php [L]
-RewriteRule ^new_project new_project.php [L]
-RewriteRule ^upload_items_backend/ upload_items_backend.php [L]
-RewriteRule ^upload_items_backend upload_items_backend.php [L]
-RewriteRule ^upload_items/(.*) upload_items.php?slug=$1 [L]
-RewriteRule ^save_items_backend/ save_items_backend.php [L]
-RewriteRule ^save_items_backend save_items_backend.php [L]
+
+## Admin stuff
+
+RewriteRule ^admin/$ admin.php [L]
+RewriteRule ^admin$ admin.php [L]
+RewriteRule ^admin/projects/(.*)/ admin_project.php?slug=$1 [L]
+RewriteRule ^admin/projects/(.*) admin_project.php?slug=$1 [L]
+RewriteRule ^admin/new_project/ admin_project.php?mode=new [L]
+RewriteRule ^admin/new_project admin_project.php?mode=new [L]
+RewriteRule ^admin/save_project/ save_project.php [L]
+RewriteRule ^admin/save_project save_project.php [L]
+RewriteRule ^admin/upload/(.*) upload.php?slug=$1 [L]
+RewriteRule ^admin/upload_backend/ upload_backend.php [L]
+RewriteRule ^admin/upload_backend upload_backend.php [L]
+RewriteRule ^admin/save_page/ save_page.php [L]
+RewriteRule ^admin/save_page save_page.php [L]
+RewriteRule ^admin/review/(.*)/(.*)/(.*) review.php?project_slug=$1&item_id=$2&user=$3 [L]
+RewriteRule ^admin/edit/(.*)/(.*) admin_edit.php?project_slug=$1&page_id=$2 [L]
+RewriteRule ^admin/new_page/(.*)/(.*) admin_edit.php?project_slug=$1&page_id=$2&next=true [L]
+
+## Editing
+
 RewriteRule ^edit/(.*)/(.*) edit.php?project_slug=$1&item_id=$2 [L]
-RewriteRule ^review/(.*)/(.*)/(.*) review.php?project_slug=$1&item_id=$2&user=$3 [L]
 RewriteRule ^activate/(.*) activate.php?hash=$1 [L]

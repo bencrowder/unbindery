@@ -61,7 +61,7 @@ class Project {
 	public function save() {
 		$this->db->connect();
 
-		$query = "UPDATE projects WHERE id = " . $this->project_id . " ";
+		$query = "UPDATE projects ";
 		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
 		$query .= "author = '" . mysql_real_escape_string($this->author) . "', ";
 		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "', ";
@@ -73,6 +73,7 @@ class Project {
 		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
 		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "', ";
 		$query .= "thumbnails = '" . mysql_real_escape_string($this->thumbnails) . "' ";
+		$query .= "WHERE id = " . $this->project_id . " ";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
@@ -135,24 +136,24 @@ class Project {
 		$this->db->close();
 	}
 
-	public function createItems($items) {
+	public function addPages($pages) {
 		$this->db->connect();
 
-		$item_ids = array();
+		$page_ids = array();
 
-		foreach ($items as $item) {
-			$query = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES ({$this->project_id}, '" . mysql_real_escape_string($item) . "', NULL, 'available', 'image', '{$this->slug}/" . mysql_real_escape_string($item) . ".jpg'); ";
+		foreach ($pages as $page) {
+			$query = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES ({$this->project_id}, '" . mysql_real_escape_string($page) . "', NULL, 'available', 'image', '{$this->slug}/" . mysql_real_escape_string($page) . ".jpg'); ";
 
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
 			// get the insert ID and add it to the array
-			$item_id = mysql_insert_id();
-			array_push($item_ids, $item . "_" . $item_id);
+			$page_id = mysql_insert_id();
+			array_push($page_ids, $page_id);
 		}
 
 		$this->db->close();
 
-		return array("statuscode" => "success", "item_ids" => $item_ids);
+		return array("statuscode" => "success", "page_ids" => $page_ids);
 	}
 
 	public function saveItems($items) {
