@@ -40,6 +40,7 @@ include_once('include/header.php');
 
 		<div id="uploadcol">
 			<input id="file_upload" name="file_upload" type="file" />
+			<input type="hidden" name="project_slug" id="project_slug" value="<?php echo $slug; ?>" />
 		</div>
 	</div>
 

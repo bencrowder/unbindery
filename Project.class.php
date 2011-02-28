@@ -136,7 +136,7 @@ class Project {
 		$this->db->close();
 	}
 
-	public function createPages($pages) {
+	public function addPages($pages) {
 		$this->db->connect();
 
 		$page_ids = array();
@@ -148,7 +148,7 @@ class Project {
 
 			// get the insert ID and add it to the array
 			$page_id = mysql_insert_id();
-			array_push($page_ids, $page . "_" . $page_id);
+			array_push($page_ids, $page_id);
 		}
 
 		$this->db->close();

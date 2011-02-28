@@ -180,7 +180,7 @@ switch ($method) {
 
 			echo json_encode($result);
 		} else {
-			echo json_encode(array("statuscode" => "error"));
+			echo json_encode(array("statuscode" => "error", "slug" => $project_slug, "pages" => $pages));
 		}
 		break;
 }

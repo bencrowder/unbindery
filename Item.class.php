@@ -31,7 +31,7 @@ class Item {
 	public function load($item_id, $project_slug, $username = "") {
 		$this->db->connect();
 
-		$query = "SELECT * FROM items JOIN projects ON items.project_id = projects.id WHERE items.id = " . mysql_real_escape_string($item_id) . " AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$query = "SELECT * FROM items JOIN projects ON items.project_id = projects.id WHERE items.id = '" . mysql_real_escape_string($item_id) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
