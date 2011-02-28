@@ -160,6 +160,13 @@ class Item {
 					$query .= "WHERE username = '" . mysql_real_escape_string($review_username) . "';";
 					$result = mysql_query($query) or die ("Couldn't run: $query");
 
+					// email the user to let them know
+					$subject = "[Unbindery] Clearance granted";
+					$message = "You've been cleared for further proofing!\n\n";
+					$message .= $SITEROOT;
+					Mail::sendMessage($user->email, $subject, $message);
+
+					// email admin to let them know
 					$subject = "[Unbindery] Cleared $review_username";
 					$message = "Cleared $review_username for further proofing.";
 					Mail::sendMessage($ADMINEMAIL, $subject, $message);
