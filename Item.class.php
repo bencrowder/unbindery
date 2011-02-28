@@ -6,19 +6,11 @@ class Item {
 	private $item_id;
 	private $project_id;
 	private $project_slug;
-
 	private $title;
-
 	private $itemtext;
-
 	private $status;
-
 	private $type;
 	private $href;
-
-	private $width;
-	private $height;
-	private $length;
 
 	public function Item($db, $item_id = "", $project_slug = "", $username = "") {
 		$this->db = $db;
@@ -51,9 +43,6 @@ class Item {
 			$this->status = trim(mysql_result($result, 0, "status"));
 			$this->type = trim(mysql_result($result, 0, "type"));
 			$this->href = trim(mysql_result($result, 0, "href"));
-			$this->width = trim(mysql_result($result, 0, "width"));
-			$this->height = trim(mysql_result($result, 0, "height"));
-			$this->length = trim(mysql_result($result, 0, "length"));
 		}
 
 		// Update the item text with the user's revision, if available
@@ -70,8 +59,22 @@ class Item {
 	}
 
 	public function save() {
-		// make sure user is authorized (or do this somewhere else?)
-		// save item to database
+		$this->db->connect();
+
+		$query = "UPDATE items ";
+		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
+		$query .= "project_id = '" . mysql_real_escape_string($this->project_id) . "', ";
+		$query .= "itemtext = '" . mysql_real_escape_string($this->itemtext) . "', ";
+		$query .= "status = '" . mysql_real_escape_string($this->status) . "', ";
+		$query .= "type = '" . mysql_real_escape_string($this->type) . "', ";
+		$query .= "href = '" . mysql_real_escape_string($this->href) . "', ";
+		$query .= "WHERE id = " . $this->item_id . " ";
+
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$this->db->close();
+
+		return true;
 	}
 
 	public function saveText($username, $draft, $review, $review_username, $itemtext) {
@@ -179,6 +182,6 @@ class Item {
 	}
 
 	public function getJSON() {
-		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href, "width" => $this->width, "height" => $this->height, "length" => $this-length));
+		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href));
 	}
 }
