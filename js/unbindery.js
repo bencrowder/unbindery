@@ -129,7 +129,7 @@ function load_items_for_editing(event, data) {
 }
 
 $(document).ready(function() {
-	$("textarea#itemtext").focus();
+	$("textarea#page_text").focus();
 
 	$("#save_as_draft_button").click(function() {
 		save_item_text(true, false); // yes draft, no review
