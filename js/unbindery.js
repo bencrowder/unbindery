@@ -69,6 +69,36 @@ function get_new_item(project_slug) {
 		}, 'json');
 }
 
+function save_page() {
+	$("#spinner").show();
+
+	var item_id = $("#item_id").val();
+	var project_slug = $("#project_slug").val();
+	var pagetext = $("#pagetext").val();
+	var username = $("ul#nav .username").html();
+	var review_username = $("#review_username").html();
+
+	$.post(siteroot + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+		function(data) {
+			if (data.statuscode == "success") {
+				$("#spinner").hide();
+
+				if (is_review) {
+					var message = "Finished review.";
+				} else {
+					if (is_draft) {
+						var message = "Saved draft.";
+					} else {
+						var message = "Finished item.";
+					}
+				}
+				redirect_to_dashboard(message, "");
+			} else {
+				redirect_to_dashboard("", "Error saving page. Try again.");
+			}
+		}, 'json');
+}
+
 function load_items_for_editing(event, data) {
 	var pages = [];
 	var project_slug = $("#project_slug").val();
@@ -121,6 +151,10 @@ $(document).ready(function() {
 
 	$("#finished_review_button").click(function(e) {
 		save_item_text(false, true); // no draft, yes review
+	});
+
+	$("#save_page_button").click(function(e) {
+		save_page();
 	});
 
 	$(".getnewitem").click(function(e) {

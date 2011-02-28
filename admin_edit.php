@@ -28,6 +28,11 @@ if (!$user->admin) {
 $page = new Item($db);
 $page->load($page_id, $project_slug);
 
+// see if we're adding a new page or not
+$next = $_GET["next"];
+if ($next == "true") { $next = true; }
+else { $next = false; }
+
 ?>
 
 <?php include('include/header.php'); ?>
@@ -39,7 +44,7 @@ $page->load($page_id, $project_slug);
 			</ul>
 			<ul id="controls_right">
 				<li><img src="<?php echo $SITEROOT; ?>/snake.gif" id="spinner" /></li>
-				<li><span id="save_page_button" class="button">Save Page</span></li>
+				<li><a href="<?php echo $SITEROOT; ?>/admin/save_page" class="button">Save Page</a></li>
 			</ul>
 		</div>
 	</div>
@@ -59,6 +64,7 @@ $page->load($page_id, $project_slug);
 				<textarea id="itemtext"><?php echo stripslashes($page->itemtext); ?></textarea>
 				<input type="hidden" name="item_id" id="item_id" value="<?php echo $page_id; ?>" />
 				<input type="hidden" name="project_slug" id="project_slug" value="<?php echo $project_slug; ?>" />
+				<input type="hidden" name="next" id="next" value="<?php echo $next; ?>" />
 			</form>
 		</div>
 	</div>
