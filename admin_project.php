@@ -46,7 +46,7 @@ if ($mode == "new") {
 	<div id="main">
 		<h2><?php echo $title; ?></h2>
 
-		<form id="project_form" action="<?php echo $SITEROOT; ?>/save_project" method="POST">
+		<form id="project_form" action="<?php echo $SITEROOT; ?>/admin/save_project" method="POST">
 			<div class="bigcol">
 				<label>Title</label>
 				<input type="text" id="project_title" name="project_title" value="<?php echo $project_title; ?>" />

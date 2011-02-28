@@ -38,7 +38,7 @@ if ($mode == "new") {
 			// success! now create the images directory
 			chmod($dir, 0775);
 			// redirect to upload page
-			header("Location: $SITEROOT/upload/$slug");
+			header("Location: $SITEROOT/admin/upload/$slug");
 		} else {
 			// redirect to error page
 			redirectToDashboard("", "Error creating images directory. Check your file permissions.");

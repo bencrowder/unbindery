@@ -40,7 +40,7 @@ $error = stripslashes($_GET["error"]);
 			</div>
 
 			<div class="sidebar">
-				<a href="<?php echo $SITEROOT; ?>/new_project" class="button">Create a new project</a>
+				<a href="<?php echo $SITEROOT; ?>/admin/new_project" class="button">Create a new project</a>
 			</div>
 		</div>
 	</div>
