@@ -145,7 +145,7 @@ class Item {
 			} else {
 				// update user score (+5 for completing a page)
 				// and only do it if they haven't previously completed this page
-				$query = "UPDATE users SET score = score + 5 WHERE username = '" . mysql_real_escape_string($username) . "' AND date_completed IS NULL";
+				$query = "UPDATE users SET score = score + 5 WHERE username = '" . mysql_real_escape_string($username) . "'";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				// update date_completed for this assignment
