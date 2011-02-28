@@ -110,13 +110,14 @@ global $SYSTEMGUIDELINES;
 			<?php 
 			$proofers = $project->getProoferStats();
 			foreach ($proofers as $proofer) { 
+				$page_s = ($proofer["pages"] == 1) ? "" : "s";
 			?>
 				<li>
 					<div class="percentage">
 						<div class="percentage_container">
 							<div class="percent" style="width: <?php echo $proofer["percentage"]; ?>px;"></div>
 						</div> 
-						<p><?php echo round($proofer["percentage"], 0) . "% (" . $proofer["pages"] . " pages)";?></p>
+						<p><?php echo round($proofer["percentage"], 0) . "% (" . $proofer["pages"] . " page$page_s)";?></p>
 					</div>
 					<div class="username"><?php echo $proofer["username"]; ?></div>
 				</li>
