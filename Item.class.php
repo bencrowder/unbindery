@@ -145,22 +145,34 @@ class Item {
 			} else {
 				// update user score (+5 for completing a page)
 				// and only do it if they haven't previously completed this page
-				$query = "UPDATE users SET score = score + 5 WHERE username = '" . mysql_real_escape_string($username) . "'";
+				$query = "UPDATE users, assignments SET score = score + 5 ";
+				$query .= "WHERE username = '" . mysql_real_escape_string($username) . "' ";
+				$query .= "AND item_id = " . $this->item_id . " ";
+				$query .= "AND project_id = " . $this->project_id . " ";
+				$query .= "AND date_completed IS NOT NULL ";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				// update date_completed for this assignment
-				$query = "UPDATE assignments SET date_completed = NOW() WHERE username = '" . mysql_real_escape_string($username) . "' AND item_id = " . $this->item_id . " AND project_id = " . $this->project_id;
+				$query = "UPDATE assignments SET date_completed = NOW() ";
+				$query .= "WHERE username = '" . mysql_real_escape_string($username) . "' ";
+				$query .= "AND item_id = " . $this->item_id . " ";
+				$query .= "AND project_id = " . $this->project_id;
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				// check number of revisions
-				$query = "SELECT COUNT(id) as revisioncount FROM assignments WHERE item_id = " . $this->item_id . " AND project_id = " . $this->project_id . " AND date_completed IS NOT NULL";
+				$query = "SELECT COUNT(id) as revisioncount FROM assignments ";
+				$query .= "WHERE item_id = " . $this->item_id . " ";
+				$query .= "AND project_id = " . $this->project_id . " ";
+				$query .= "AND date_completed IS NOT NULL";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				$row = mysql_fetch_assoc($result);
 				$revisioncount = $row["revisioncount"];
 
 				if (intval($revisioncount) >= intval($project->num_proofs)) {
-					$query = "UPDATE items SET status = 'completed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
+					$query = "UPDATE items SET status = 'completed' ";
+					$query .= "WHERE id = " . $this->item_id . " ";
+					$query .= "AND project_id = " . $this->project_id . ";";
 					$result = mysql_query($query) or die ("Couldn't run: $query");
 				}
 
