@@ -116,21 +116,8 @@ function load_items_for_editing(event, data) {
 		function(data) {
 			if (data.statuscode == "success") {
 				// load the first page into edit mode
-
-				// data.items = list of IDs
-				var content = '';
-
-				for (i in data.page_ids) {
-					var page = data.page_ids[i];
-					pagename = page.substr(0, page.lastIndexOf('_'));
-					pageid = page.substr(page.lastIndexOf('_') + 1, page.length);
-
-					content += '<label>' + pagename + '</label>';
-					content += '<textarea class="item_textarea" id="' + pageid + '_text" name="' + pageid + '_text"></textarea>\n';
-				}
-
-				$("#save_items #itemlist").html(content);
-				$("#save_items").show();
+				var firstpage = data.page_ids[0];
+				window.location.href = siteroot + '/admin/new_page/' + project_slug + '/' + firstpage;
 			} else {
 				console.log("error!");
 			}

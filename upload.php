@@ -41,14 +41,6 @@ include_once('include/header.php');
 		<div id="uploadcol">
 			<input id="file_upload" name="file_upload" type="file" />
 		</div>
-
-		<div id="items">
-			<form id="save_items" action="<?php echo $SITEROOT; ?>/admin/save_pages" method="post">
-				<div id="itemlist"></div>
-				<input type="submit" class="button" value="Save Changes" />
-				<input type="hidden" id="project_slug" name="project_slug" value="<?php echo $slug; ?>" />
-			</form>
-		</div>
 	</div>
 
 <?php include('include/footer.php'); ?>

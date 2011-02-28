@@ -67,7 +67,7 @@ class Item {
 		$query .= "itemtext = '" . mysql_real_escape_string($this->itemtext) . "', ";
 		$query .= "status = '" . mysql_real_escape_string($this->status) . "', ";
 		$query .= "type = '" . mysql_real_escape_string($this->type) . "', ";
-		$query .= "href = '" . mysql_real_escape_string($this->href) . "', ";
+		$query .= "href = '" . mysql_real_escape_string($this->href) . "' ";
 		$query .= "WHERE id = " . $this->item_id . " ";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
@@ -188,7 +188,7 @@ class Item {
 	public function getNextPage() {
 		$this->db->connect();
 
-		$query = "SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE projects.slug = '" . mysql_real_escape_string($this->project_slug) . "' AND items.id > '" . mysql_real_escape_string($this->id) . "' LIMIT 1";
+		$query = "SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE projects.slug = '" . mysql_real_escape_string($this->project_slug) . "' AND items.id > '" . mysql_real_escape_string($this->item_id) . "' LIMIT 1";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {

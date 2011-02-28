@@ -66,7 +66,7 @@ $item->load($item_id, $project_slug, $proofer_username);
 
 		<div id="text_container">
 			<form id="ub_text">
-				<textarea id="itemtext"><?php echo stripslashes($item->itemtext); ?></textarea>
+				<textarea id="page_text"><?php echo stripslashes($item->itemtext); ?></textarea>
 				<input type="hidden" name="item_id" id="item_id" value="<?php echo $item_id; ?>" />
 				<input type="hidden" name="project_slug" id="project_slug" value="<?php echo $project_slug; ?>" />
 			</form>

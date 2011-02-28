@@ -33,7 +33,13 @@ if ($retval) {
 	if ($next) {
 		// serve up next page
 		$nextpage_id = $page->getNextPage();
-		header("Location: $SITEROOT/admin/edit/$project_slug/$nextpage_id");
+		if ($nextpage_id) {
+			// we go to new_page/ instead of edit/ so that we keep getting next
+			header("Location: $SITEROOT/admin/new_page/$project_slug/$nextpage_id");
+		} else {
+			// run out of pages, go back to the admin project page
+			header("Location: $SITEROOT/admin/projects/$project_slug");
+		}
 	} else {
 		// go back to the admin project page
 		header("Location: $SITEROOT/admin/projects/$project_slug");
