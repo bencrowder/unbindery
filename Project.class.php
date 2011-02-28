@@ -38,9 +38,9 @@ class Project {
 		$this->db->connect();
 
 		$query = "SELECT *, ";
-		$query .= "DATE_FORMAT((SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1), '%e %b %Y') AS date_started, ";
-		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed, ";
-		$query .= "DATEDIFF((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), (SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1)) AS days_spent ";
+		$query .= "DATE_FORMAT(date_started, '%e %b %Y') AS datestarted, ";
+		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS datecompleted, ";
+		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
 		$query .= "FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
@@ -57,9 +57,8 @@ class Project {
 			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
 			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
 			$this->thumbnails = trim(mysql_result($result, 0, "thumbnails"));
-
-			$this->date_started = trim(mysql_result($result, 0, "date_started"));
-			$this->date_completed = trim(mysql_result($result, 0, "date_completed"));
+			$this->date_started = trim(mysql_result($result, 0, "datestarted"));
+			$this->date_completed = trim(mysql_result($result, 0, "datecompleted"));
 			$this->days_spent = trim(mysql_result($result, 0, "days_spent"));
 		}
 
@@ -80,6 +79,8 @@ class Project {
 		$query .= "guidelines = '" . mysql_real_escape_string($this->guidelines) . "', ";
 		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
 		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "', ";
+		if ($this->status == "completed") { $query .= "date_completed = NOW(), "; }
+		if ($this->status == "posted") { $query .= "date_posted = NOW(), "; }
 		$query .= "thumbnails = '" . mysql_real_escape_string($this->thumbnails) . "' ";
 		$query .= "WHERE id = " . $this->project_id . " ";
 
@@ -105,7 +106,7 @@ class Project {
 			$this->db->connect();
 
 			$query = "INSERT INTO projects ";
-			$query .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails) ";
+			$query .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails, date_started) ";
 			$query .= "VALUES (";
 			$query .= "'" . mysql_real_escape_string($this->title) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->author) . "', ";
@@ -117,7 +118,8 @@ class Project {
 			$query .= "'" . mysql_real_escape_string($this->guidelines) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->deadline_days) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->num_proofs) . "', ";
-			$query .= "'" . mysql_real_escape_string($this->thumbnails) . "') ";
+			$query .= "'" . mysql_real_escape_string($this->thumbnails) . "', ";
+			$query .= "NOW()) ";
 
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
