@@ -42,7 +42,7 @@ include_once('include/header.php');
 		</div>
 
 		<div id="items">
-			<form id="save_items" action="<?php echo $SITEROOT; ?>/save_items_backend/" method="post">
+			<form id="save_items" action="<?php echo $SITEROOT; ?>/save_pages/" method="post">
 				<div id="itemlist"></div>
 				<input type="submit" class="button" value="Save Changes" />
 				<input type="hidden" id="project_slug" name="project_slug" value="<?php echo $slug; ?>" />
