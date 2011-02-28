@@ -40,6 +40,7 @@ class Project {
 		$query = "SELECT *, ";
 		$query .= "DATE_FORMAT(date_started, '%e %b %Y') AS datestarted, ";
 		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS datecompleted, ";
+		$query .= "DATE_FORMAT(date_posted, '%e %b %Y') AS dateposted, ";
 		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
 		$query .= "FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
@@ -59,6 +60,7 @@ class Project {
 			$this->thumbnails = trim(mysql_result($result, 0, "thumbnails"));
 			$this->date_started = trim(mysql_result($result, 0, "datestarted"));
 			$this->date_completed = trim(mysql_result($result, 0, "datecompleted"));
+			$this->date_posted = trim(mysql_result($result, 0, "dateposted"));
 			$this->days_spent = trim(mysql_result($result, 0, "days_spent"));
 		}
 
