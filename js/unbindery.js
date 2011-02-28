@@ -111,12 +111,9 @@ function load_items_for_editing(event, data) {
 		pages.push(pagename);
 	});
 
-	console.log(project_slug);
-
 	// add them to the database
 	$.post(siteroot + "/unbindery.php?method=add_pages", { project_slug: project_slug, pages: pages },
 		function(data) {
-			console.log(data);
 			if (data.statuscode == "success") {
 				// load the first page into edit mode
 				var firstpage = data.page_ids[0];
