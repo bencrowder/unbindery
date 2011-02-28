@@ -217,6 +217,28 @@ class Project {
 		return $items;
 	}
 
+	public function getProoferStats() {
+		$this->db->connect();
+
+		$query = "SELECT username, ";
+		$query .= "COUNT(username) AS pages, ";
+		$query .= "COUNT(username) / (SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * 100 AS percentage ";
+		$query .= "FROM assignments ";
+		$query .= "WHERE project_id={$this->project_id} ";
+		$query .= "GROUP BY username ORDER BY pages DESC;";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$proofers = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($proofers, array("username" => $row["username"], "pages" => $row["pages"], "percentage" => $row["percentage"]));
+		}
+
+		$this->db->close();
+
+		return $proofers;
+	}
+
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "author" => $this->author, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}

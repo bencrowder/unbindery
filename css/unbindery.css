@@ -55,9 +55,9 @@ textarea#page_text						{ width: 650px; height: 200px; font-size: 16px; line-hei
 .percentage p							{ margin: 0px 0 0; }
 .percent								{ background: #000; height: 10px; }
 
-.proj_details .percentage				{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
-.proj_details .percentage_container		{ width: 200px; height: 20px; }
-.proj_details .percent					{ height: 20px; }
+.big.percentage							{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
+.big .percentage_container				{ width: 200px; height: 20px; }
+.big .percent							{ height: 20px; }
 
 .group									{ width: 250px; float: left; margin-right: 50px; }
 .group:last-child						{ margin-right: 0; }
@@ -233,3 +233,12 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 #main.edit textarea#page_text			{ width: 354px; height: 480px; }
 
 #controls input.button					{ font-size: 1em; margin-top: -6px; display: inline !important; }
+
+
+/* Project Details */
+/* --------------------------------------------------- */
+
+ul.proofers li							{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
+ul.proofers .username					{ font-size: 11px; }
+
+.sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }

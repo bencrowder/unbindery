@@ -5,6 +5,7 @@ include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
 include_once('Project.class.php');
 include_once('unbindery.php');
+include_once('utils.php');
 
 Alibaba::forceAuthentication();
 
@@ -17,6 +18,10 @@ $error = stripslashes($_GET["error"]);
 $project_slug = $_GET["project_slug"];
 
 $project = new Project($db, $project_slug);
+if ($project->title == "") {
+	redirectToDashboard("", "Error loading project.");
+}
+
 $project->loadStatus();
 
 // find out if the user is admin or project owner so they can see the rest of the details
@@ -81,7 +86,7 @@ global $SYSTEMGUIDELINES;
 		</div>
 
 		<div class="sidebar proj_details">
-			<div class="percentage">
+			<div class="percentage big">
 				<div class="percentage_container">
 					<div class="percent" style="width: <?php echo $project->percentage * 2; ?>px;"></div>
 				</div> 
@@ -91,24 +96,25 @@ global $SYSTEMGUIDELINES;
 			<?php if (!$user->isMember($project_slug)) { ?>
 			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="right_button join button">Join this project</a>
 			<?php } ?>
-		</div>
 
-		<?php if ($admin) { ?>
-		<div class="group half">
-			<h3>Pages</h3>
-			<ul>
-			<?php
-			$items = $project->getItems();
-			foreach ($items as $item) { ?>
-			<li><?php echo $item["title"] . ", " . $item["status"]; ?></li>
+			<ul class="proofers">
+			<h3>Proofers on This Project</h3>
+			<?php 
+			$proofers = $project->getProoferStats();
+			foreach ($proofers as $proofer) { 
+			?>
+				<li>
+					<div class="percentage">
+						<div class="percentage_container">
+							<div class="percent" style="width: <?php echo $proofer["percentage"]; ?>px;"></div>
+						</div> 
+						<p><?php echo round($proofer["percentage"], 0) . "% (" . $proofer["pages"] . " pages)";?></p>
+					</div>
+					<div class="username"><?php echo $proofer["username"]; ?></div>
+				</li>
 			<?php } ?>
 			</ul>
 		</div>
-
-		<div class="group half">
-			<h3>Project History</h3>
-		</div>
-		<?php } ?>
 	<?php } // else (if guidelines != true) ?>
 	</div>
 
