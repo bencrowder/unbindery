@@ -30,8 +30,6 @@ $page->load($page_id, $project_slug);
 
 // see if we're adding a new page or not
 $next = $_GET["next"];
-if ($next == "true") { $next = true; }
-else { $next = false; }
 
 ?>
 

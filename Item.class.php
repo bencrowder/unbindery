@@ -184,4 +184,19 @@ class Item {
 	public function getJSON() {
 		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href));
 	}
+
+	public function getNextPage() {
+		$this->db->connect();
+
+		$query = "SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE projects.slug = '" . mysql_real_escape_string($this->project_slug) . "' AND items.id > '" . mysql_real_escape_string($this->id) . "' LIMIT 1";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		if (mysql_numrows($result)) {
+			$nextpage_id = trim(mysql_result($result, 0, "id"));
+		}
+
+		$this->db->close();
+
+		return $nextpage_id;
+	}
 }
