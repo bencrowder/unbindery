@@ -26,7 +26,7 @@ class Server {
 	public function getTopUsers() {
 		$this->db->connect();
 
-		$query = "SELECT username, score FROM users ORDER BY score DESC LIMIT 10;";
+		$query = "SELECT username, score FROM users WHERE score > 0 ORDER BY score DESC LIMIT 10;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$users = array();
