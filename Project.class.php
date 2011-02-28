@@ -79,8 +79,6 @@ class Project {
 		$query .= "guidelines = '" . mysql_real_escape_string($this->guidelines) . "', ";
 		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
 		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "', ";
-		if ($this->status == "completed") { $query .= "date_completed = NOW(), "; }
-		if ($this->status == "posted") { $query .= "date_posted = NOW(), "; }
 		$query .= "thumbnails = '" . mysql_real_escape_string($this->thumbnails) . "' ";
 		$query .= "WHERE id = " . $this->project_id . " ";
 
