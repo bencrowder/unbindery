@@ -22,6 +22,7 @@ if ($mode == "new") {
 	$project_deadline = 7;
 	$project_numproofs = 1;
 	$project_desc = "[Publication date, number of pages, etc.]";
+	$project_status = "pending";
 } else {
 	$title = "Edit Project Settings";
 	$buttontitle = "Save";
@@ -37,6 +38,7 @@ if ($mode == "new") {
 	$project_desc = stripslashes($project->description);
 	$project_guidelines = stripslashes($project->guidelines);
 	$project_thumbnails = stripslashes($project->thumbnails);
+	$project_status = $project->status;
 }
 
 ?>
@@ -74,6 +76,14 @@ if ($mode == "new") {
 
 				<label>Thumbnails</label>
 				<input type="text" id="project_thumbnails" name="project_thumbnails" value="<?php echo $project_thumbnails; ?>" />
+
+				<label>Status</label>
+				<select id="project_status" name="project_status">
+					<option <?php if ($project_status == "pending") { echo 'selected '; } ?>value="pending">Pending</option>
+					<option <?php if ($project_status == "active") { echo 'selected '; } ?>value="active">Active</option>
+					<option <?php if ($project_status == "completed") { echo 'selected '; } ?>value="completed">Completed</option>
+					<option <?php if ($project_status == "posted") { echo 'selected '; } ?>value="posted">Posted</option>
+				</select>
 			</div>
 
 			<div class="sidebar">

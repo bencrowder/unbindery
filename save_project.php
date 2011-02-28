@@ -21,6 +21,7 @@ $guidelines = $_POST['project_guidelines'];
 $deadline_days = $_POST['project_deadline'];
 $num_proofs = $_POST['project_numproofs'];
 $thumbnails = $_POST['project_thumbnails'];
+$status = $_POST['project_status'];
 
 $mode = $_POST['mode'];
 
@@ -60,6 +61,7 @@ if ($mode == "new") {
 	$project->deadline_days = $deadline_days;
 	$project->num_proofs = $num_proofs;
 	$project->thumbnails = $thumbnails;
+	$project->status = $status;
 
 	$project->save();
 
