@@ -72,8 +72,9 @@ global $SYSTEMGUIDELINES;
 			<ul class="project_dates">
 				<li>Started: <label><?php echo $project->date_started; ?></label></li>
 				<?php if ($project->status == "completed" || $project->status == "posted"): ?>
+				<?php $days = ($project->days_spent == 1) ? "" : "s"; ?>
 				<li>Completed: <label><?php echo $project->date_completed; ?></label></li>
-				<li>Time Taken: <label><?php echo $project->days_spent; ?> days</label></li>
+				<li>Time Taken: <label><?php echo $project->days_spent; ?> day<?php echo $days; ?></label></li>
 				<?php endif; ?>
 			</ul>
 
