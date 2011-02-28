@@ -19,7 +19,7 @@ function save_item_text(is_draft, is_review) {
 
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
-	var itemtext = $("#itemtext").val();
+	var itemtext = $("#page_text").val();
 	var username = $("ul#nav .username").html();
 	var review_username = $("#review_username").html();
 

@@ -31,7 +31,10 @@ class Item {
 	public function load($item_id, $project_slug, $username = "") {
 		$this->db->connect();
 
-		$query = "SELECT * FROM items JOIN projects ON items.project_id = projects.id WHERE items.id = '" . mysql_real_escape_string($item_id) . "' AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
+		$query = "SELECT * FROM items ";
+		$query .= "JOIN projects ON items.project_id = projects.id ";
+		$query .= "WHERE items.id = '" . mysql_real_escape_string($item_id) . "' ";
+		$query .= "AND projects.slug = '" . mysql_real_escape_string($project_slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
@@ -47,7 +50,10 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$query = "SELECT itemtext FROM texts WHERE item_id=" . mysql_real_escape_string($item_id) . " AND project_id=" . mysql_real_escape_string($this->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
+			$query = "SELECT itemtext FROM texts ";
+			$query .= "WHERE item_id=" . mysql_real_escape_string($item_id) . " ";
+			$query .= "AND project_id=" . mysql_real_escape_string($this->project_id) . " ";
+			$query .= "AND user='" . mysql_real_escape_string($username) . "'";
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
 			if (mysql_numrows($result)) {
@@ -89,7 +95,10 @@ class Item {
 		$this->db->connect();
 
 		// check and see if we already have a draft
-		$query = "SELECT itemtext FROM texts WHERE item_id=" . mysql_real_escape_string($this->item_id) . " AND project_id=" . mysql_real_escape_string($this->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
+		$query = "SELECT itemtext FROM texts ";
+		$query .= "WHERE item_id=" . mysql_real_escape_string($this->item_id) . " ";
+		$query .= "AND project_id=" . mysql_real_escape_string($this->project_id) . " ";
+		$query .= "AND user='" . mysql_real_escape_string($username) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
@@ -110,7 +119,12 @@ class Item {
 
 		if ($existing_draft) {
 			// update texts with $draft status
-			$query = "UPDATE texts SET itemtext = '" . mysql_real_escape_string($itemtext) . "', date = NOW(), status = '" . mysql_real_escape_string($status) . "' WHERE item_id=" . mysql_real_escape_string($this->item_id) . " AND project_id=" . mysql_real_escape_string($this->project_id) . " AND user='" . mysql_real_escape_string($username) . "'";
+			$query = "UPDATE texts SET itemtext = '" . mysql_real_escape_string($itemtext) . "', ";
+			$query .= "date = NOW(), ";
+			$query .= "status = '" . mysql_real_escape_string($status) . "' ";
+			$query .= "WHERE item_id=" . mysql_real_escape_string($this->item_id) . " ";
+			$query .= "AND project_id=" . mysql_real_escape_string($this->project_id) . " ";
+			$query .= "AND user='" . mysql_real_escape_string($username) . "'";
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 		} else {
 			// insert into texts with $draft status
@@ -122,11 +136,18 @@ class Item {
 		if (!$draft) {
 			if ($review) {
 				// update date_reviewed for this assignment
-				$query = "UPDATE assignments SET date_reviewed = NOW() WHERE username = '" . mysql_real_escape_string($review_username) . "' AND item_id = " . $this->item_id . " AND project_id = " . $this->project_id;
+				$query = "UPDATE assignments ";
+				$query .= "SET date_reviewed = NOW() ";
+				$query .= "WHERE username = '" . mysql_real_escape_string($review_username) . "' ";
+				$query .= "AND item_id = {$this->item_id} ";
+				$query .= "AND project_id = {$this->project_id} ";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				// and set the status on the item to reviewed
-				$query = "UPDATE items SET status = 'reviewed' WHERE id = " . $this->item_id . " AND project_id = " . $this->project_id . ";";
+				$query = "UPDATE items ";
+				$query .= "SET status = 'reviewed' ";
+				$query .= "WHERE id = {$this->item_id} ";
+				$query .= "AND project_id = {$this->project_id} ";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				$subject = "[Unbindery] Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
@@ -135,7 +156,8 @@ class Item {
 
 				// if the user who did the proofing was in training, clear them
 				if ($review_user->status == "training") {
-					$query = "UPDATE users SET status = 'clear' WHERE username = '" . mysql_real_escape_string($review_username) . "';";
+					$query = "UPDATE users SET status = 'clear' ";
+					$query .= "WHERE username = '" . mysql_real_escape_string($review_username) . "';";
 					$result = mysql_query($query) or die ("Couldn't run: $query");
 
 					$subject = "[Unbindery] Cleared $review_username";
@@ -146,10 +168,10 @@ class Item {
 				// update user score (+5 for completing a page)
 				// and only do it if they haven't previously completed this page
 				$query = "UPDATE users, assignments SET score = score + 5 ";
-				$query .= "WHERE username = '" . mysql_real_escape_string($username) . "' ";
-				$query .= "AND item_id = " . $this->item_id . " ";
-				$query .= "AND project_id = " . $this->project_id . " ";
-				$query .= "AND date_completed IS NOT NULL ";
+				$query .= "WHERE users.username = '" . mysql_real_escape_string($username) . "' ";
+				$query .= "AND item_id = {$this->item_id} ";
+				$query .= "AND project_id = {$this->project_id} ";
+				$query .= "AND date_completed IS NULL ";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
 				// update date_completed for this assignment
