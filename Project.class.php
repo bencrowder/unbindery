@@ -37,7 +37,11 @@ class Project {
 	public function load($slug) {
 		$this->db->connect();
 
-		$query = "SELECT * FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
+		$query = "SELECT *, ";
+		$query .= "DATE_FORMAT(date_started, '%e %b %Y') AS datestarted, ";
+		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS datecompleted, ";
+		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
+		$query .= "FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
@@ -53,6 +57,9 @@ class Project {
 			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
 			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
 			$this->thumbnails = trim(mysql_result($result, 0, "thumbnails"));
+			$this->date_started = trim(mysql_result($result, 0, "datestarted"));
+			$this->date_completed = trim(mysql_result($result, 0, "datecompleted"));
+			$this->days_spent = trim(mysql_result($result, 0, "days_spent"));
 		}
 
 		$this->db->close();
@@ -97,7 +104,7 @@ class Project {
 			$this->db->connect();
 
 			$query = "INSERT INTO projects ";
-			$query .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails) ";
+			$query .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails, date_started) ";
 			$query .= "VALUES (";
 			$query .= "'" . mysql_real_escape_string($this->title) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->author) . "', ";
@@ -109,7 +116,8 @@ class Project {
 			$query .= "'" . mysql_real_escape_string($this->guidelines) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->deadline_days) . "', ";
 			$query .= "'" . mysql_real_escape_string($this->num_proofs) . "', ";
-			$query .= "'" . mysql_real_escape_string($this->thumbnails) . "') ";
+			$query .= "'" . mysql_real_escape_string($this->thumbnails) . "', ";
+			$query .= "NOW()) ";
 
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
@@ -215,6 +223,28 @@ class Project {
 		$this->db->close();
 
 		return $items;
+	}
+
+	public function getProoferStats() {
+		$this->db->connect();
+
+		$query = "SELECT username, ";
+		$query .= "COUNT(username) AS pages, ";
+		$query .= "COUNT(username) / (SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * 100 AS percentage ";
+		$query .= "FROM assignments ";
+		$query .= "WHERE project_id={$this->project_id} ";
+		$query .= "GROUP BY username ORDER BY pages DESC;";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$proofers = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($proofers, array("username" => $row["username"], "pages" => $row["pages"], "percentage" => $row["percentage"]));
+		}
+
+		$this->db->close();
+
+		return $proofers;
 	}
 
 	public function getJSON() {

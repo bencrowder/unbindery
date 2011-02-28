@@ -55,9 +55,9 @@ textarea#page_text						{ width: 650px; height: 200px; font-size: 16px; line-hei
 .percentage p							{ margin: 0px 0 0; }
 .percent								{ background: #000; height: 10px; }
 
-.proj_details .percentage				{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
-.proj_details .percentage_container		{ width: 200px; height: 20px; }
-.proj_details .percent					{ height: 20px; }
+.big.percentage							{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
+.big .percentage_container				{ width: 200px; height: 20px; }
+.big .percent							{ height: 20px; }
 
 .group									{ width: 250px; float: left; margin-right: 50px; }
 .group:last-child						{ margin-right: 0; }
@@ -110,7 +110,6 @@ ul.action_list li .deadline				{ font-size: .6em; color: #999; margin-left: 5px;
 ul.action_list li .impending			{ color: #f99; }
 ul.action_list li .overdue				{ color: #f00; font-weight: bold; font-size: .9em; }
 
-ul.action_list li .sub					{ margin-top: 5px; font-size: .9em; color: #666; }
 ul.action_list li .right_button			{ float: right; padding-top: 8px; }
 ul.action_list li .button				{ font-size: 1.2em; }
 
@@ -121,6 +120,8 @@ ul.action_list li:last-child			{ background: #333; padding: 0; height: 8px; bord
 ul.action_list.projects li:last-child	{ background: #345; }
 
 ul.action_list.projects .percentage		{ margin-top: 3px; }
+
+.sub									{ margin-top: 5px; font-size: .9em; color: #666; }
 
 #message								{ width: 830px; margin: 0px auto; background: #444; color: #fff;  padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
 #error									{ width: 830px; margin: 0px auto; background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
@@ -187,7 +188,11 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 
 .proj_details .project_title			{ font-size: 1.4em; font-weight: bold; margin-bottom: 3px; }
 .proj_details .project_author			{ font-size: 1.2em; line-height: 1.5em; color: #999; margin-bottom: .5em; }
-.proj_details .project_desc				{ font-size: 1.1em; line-height: 1.5em; margin-bottom: 2em; }
+.proj_details .project_desc				{ font-size: 1.1em; line-height: 1.5em; margin-bottom: 1em; }
+
+.proj_details ul.project_dates			{ margin-bottom: 2em; font-size: .9em; color: #999; padding-left: 25px; }
+.proj_details ul.project_dates li		{ line-height: 1.4em; }
+.proj_details ul.project_dates label	{ font-weight: bold; color: #000; }
 
 .proj_details .join						{ font-size: 1.1em; }
 .proj_details .right_button				{ float: right; }
@@ -233,3 +238,14 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 #main.edit textarea#page_text			{ width: 354px; height: 480px; }
 
 #controls input.button					{ font-size: 1em; margin-top: -6px; display: inline !important; }
+
+
+/* Project Details */
+/* --------------------------------------------------- */
+
+ul.proofers li							{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
+ul.proofers .username					{ font-size: 11px; }
+
+.sidebar ul.projects li a						{ font-size: 11px; color: #000; text-decoration: none; border-bottom: dotted 1px #666; font-weight: bold; }
+
+.sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
