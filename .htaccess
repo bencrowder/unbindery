@@ -43,6 +43,7 @@ RewriteRule ^admin/upload_backend upload_backend.php [L]
 RewriteRule ^admin/save_pages/ save_pages.php [L]
 RewriteRule ^admin/save_pages save_pages.php [L]
 RewriteRule ^admin/review/(.*)/(.*)/(.*) review.php?project_slug=$1&item_id=$2&user=$3 [L]
+RewriteRule ^admin/edit/(.*)/(.*) admin_edit.php?project_slug=$1&item_id=$2 [L]
 
 ## Editing
 

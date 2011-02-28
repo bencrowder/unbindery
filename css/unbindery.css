@@ -218,3 +218,16 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 .proj_guidelines pre, .proj_guidelines code		{ background: #eee; padding: 5px; font-family: Monaco, Courier, monospace; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 .proj_guidelines pre					{ margin-left: 35px; }
 .proj_guidelines a						{ color: #000; text-decoration: none; border-bottom: dotted 1px #666; }
+
+
+/* Admin */
+/* --------------------------------------------------- */
+
+#main.edit #metadata					{ overflow: hidden; clear: both; margin-bottom: 1.5em; }
+#main.edit label						{ font-weight: bold; }
+#main.edit input[type="text"]			{ width: 250px; border: solid 1px #999; padding: 3px; font-weight: bold; font-size: 1.2em; margin-left: 5px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+
+#main.edit #image_container				{ width: 400px; height: 500px; overflow: scroll; border: solid 1px #999; float: left; margin-right: 50px; }
+#main.edit #text_container				{ width: 398px; height: 500px; margin: 0; float: left; }
+
+#main.edit textarea#itemtext			{ width: 354px; height: 480px; }
