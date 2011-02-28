@@ -34,7 +34,7 @@ if ($retval == "success") {
 		// success! now create the images directory
 		chmod($dir, 0775);
 		// redirect to upload page
-		header("Location: $SITEROOT/upload_items/$slug");
+		header("Location: $SITEROOT/upload/$slug");
 	} else {
 		// redirect to error page
 		header("Location: $SITEROOT/dashboard/");

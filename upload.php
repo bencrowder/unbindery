@@ -17,7 +17,7 @@ $includes .= "<script type='text/javascript'>\n";
 $includes .= "	$(document).ready(function() {\n";
 $includes .= "		$('#file_upload').uploadify({\n";
 $includes .= "			'uploader'  : '$SITEROOT/lib/uploadify/uploadify.swf',\n";
-$includes .= "			'script'    : '$SITEROOT/upload_items_backend/',\n";
+$includes .= "			'script'    : '$SITEROOT/upload_backend/',\n";
 $includes .= "			'cancelImg' : '$SITEROOT/lib/uploadify/cancel.png',\n";
 $includes .= "			'folder'    : '/images/$slug',\n";
 $includes .= "			'fileDataName' : 'items',\n";
