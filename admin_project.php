@@ -80,7 +80,7 @@ if ($mode == "new") {
 				<input type="submit" value="<?php echo $buttontitle; ?>" class="button" />
 
 				<?php if ($mode != "new") { ?>
-				<a class="button" href="<?php echo $SITEROOT; ?>/admin/add_pages/<?php echo $slug; ?>">Add pages</a>
+				<a class="button" href="<?php echo $SITEROOT; ?>/admin/upload/<?php echo $slug; ?>">Add pages</a>
 				<?php } ?>
 
 				<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>" />

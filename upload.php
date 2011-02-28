@@ -3,6 +3,7 @@
 include_once('include/config.php');
 include_once('include/Alibaba.class.php');
 include_once('Database.class.php');
+include_once('User.class.php');
 
 Alibaba::forceAuthentication();
 
