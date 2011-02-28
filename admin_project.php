@@ -11,15 +11,32 @@ include_once('utils.php');
 Alibaba::forceAuthentication();
 
 $mode = $_GET["mode"];
+$slug = $_GET["slug"];
 
 $username = Alibaba::getUsername(); 
 
 if ($mode == "new") {
 	$title = "Create New Project";
 	$buttontitle = "Create Project";
+
+	$project_deadline = 7;
+	$project_numproofs = 1;
+	$project_desc = "[Publication date, number of pages, etc.]";
 } else {
 	$title = "Edit Project Settings";
 	$buttontitle = "Save";
+
+	$project = new Project($db, $slug);
+
+	$project_title = stripslashes($project->title);
+	$project_author = stripslashes($project->author);
+	$project_slug = stripslashes($project->slug);
+	$project_language = stripslashes($project->language);
+	$project_deadline = stripslashes($project->deadline_days);
+	$project_numproofs = stripslashes($project->num_proofs);
+	$project_desc = stripslashes($project->description);
+	$project_guidelines = stripslashes($project->guidelines);
+	$project_thumbnails = stripslashes($project->thumbnails);
 }
 
 ?>
@@ -32,32 +49,40 @@ if ($mode == "new") {
 		<form id="project_form" action="<?php echo $SITEROOT; ?>/save_project" method="POST">
 			<div class="bigcol">
 				<label>Title</label>
-				<input type="text" id="project_title" name="project_title" />
+				<input type="text" id="project_title" name="project_title" value="<?php echo $project_title; ?>" />
 
 				<label>Author</label>
-				<input type="text" id="project_author" name="project_author" />
+				<input type="text" id="project_author" name="project_author" value="<?php echo $project_author; ?>" />
 
 				<label>Slug</label>
-				<input type="text" id="project_slug" name="project_slug" />
+				<input type="text" id="project_slug" name="project_slug" value="<?php echo $project_slug; ?>" />
 
 				<label>Language</label>
-				<input type="text" id="project_language" name="project_language" />
+				<input type="text" id="project_language" name="project_language" value="<?php echo $project_language; ?>"/>
 
 				<label>Length of Deadline (# days)</label>
-				<input type="text" id="project_deadline" name="project_deadline" value="7" />
+				<input type="text" id="project_deadline" name="project_deadline" value="<?php echo $project_deadline; ?>" />
 
 				<label># of Proofs Per Item</label>
-				<input type="text" id="project_numproofs" name="project_numproofs" value="2" />
+				<input type="text" id="project_numproofs" name="project_numproofs" value="<?php echo $project_numproofs; ?>" />
 
 				<label>Description</label>
-				<textarea id="project_desc" name="project_desc">[Author, publication date, etc.]</textarea>
+				<textarea id="project_desc" name="project_desc"><?php echo $project_desc; ?></textarea>
 
 				<label>Guidelines</label>
-				<textarea id="project_guidelines" name="project_guidelines"></textarea>
+				<textarea id="project_guidelines" name="project_guidelines"><?php echo $project_guidelines; ?></textarea>
+
+				<label>Thumbnails</label>
+				<input type="text" id="project_thumbnails" name="project_thumbnails" value="<?php echo $project_thumbnails; ?>" />
 			</div>
 
 			<div class="sidebar">
 				<input type="submit" value="<?php echo $buttontitle; ?>" class="button" />
+
+				<?php if ($mode != "new") { ?>
+				<a class="button" href="<?php echo $SITEROOT; ?>/admin/add_pages/<?php echo $slug; ?>">Add pages</a>
+				<?php } ?>
+
 				<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>" />
 			</div>
 		</form>

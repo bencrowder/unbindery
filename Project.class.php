@@ -61,7 +61,7 @@ class Project {
 	public function save() {
 		$this->db->connect();
 
-		$query = "UPDATE projects WHERE id = " . $this->project_id . " ";
+		$query = "UPDATE projects ";
 		$query .= "SET title = '" . mysql_real_escape_string($this->title) . "', ";
 		$query .= "author = '" . mysql_real_escape_string($this->author) . "', ";
 		$query .= "slug = '" . mysql_real_escape_string($this->slug) . "', ";
@@ -73,6 +73,7 @@ class Project {
 		$query .= "deadline_days = '" . mysql_real_escape_string($this->deadline_days) . "', ";
 		$query .= "num_proofs = '" . mysql_real_escape_string($this->num_proofs) . "', ";
 		$query .= "thumbnails = '" . mysql_real_escape_string($this->thumbnails) . "' ";
+		$query .= "WHERE id = " . $this->project_id . " ";
 
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
