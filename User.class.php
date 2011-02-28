@@ -62,7 +62,7 @@ class User {
 	public function getAssignments() {
 		$this->db->connect();
 
-		$query = "SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline, DATEDIFF(deadline, NOW()) AS days_left FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username='" . mysql_real_escape_string($this->username) . "' AND date_completed IS NULL ORDER BY deadline ASC;";
+		$query = "SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline, DATEDIFF(deadline, NOW()) AS days_left FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username='" . mysql_real_escape_string($this->username) . "' AND assignments.date_completed IS NULL ORDER BY deadline ASC;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$items = array();
@@ -288,14 +288,14 @@ class User {
 	public function getHistory() {
 		$this->db->connect();
 
-		$query = "SELECT items.title AS item_title, projects.title AS project_title, date_completed, ";
-		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS completed, ";
+		$query = "SELECT items.title AS item_title, projects.title AS project_title, assignments.date_completed, ";
+		$query .= "DATE_FORMAT(assignments.date_completed, '%e %b %Y') AS completed, ";
 		$query .= "items.id as item_id, projects.slug as project_slug ";
 		$query .= "FROM assignments JOIN items ON item_id = items.id ";
 		$query .= "JOIN projects ON assignments.project_id = projects.id ";
 		$query .= "WHERE username = '" . mysql_real_escape_string($this->username) . "' ";
-		$query .= "AND date_completed IS NOT null ";
-		$query .= "ORDER BY date_completed DESC LIMIT 5;";
+		$query .= "AND assignments.date_completed IS NOT null ";
+		$query .= "ORDER BY assignments.date_completed DESC LIMIT 5;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$history = array();
