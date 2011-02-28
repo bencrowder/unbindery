@@ -1,8 +1,10 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
 	<title>Unbindery</title>
+
+	<link rel="shortcut icon" href="<?php echo $SITEROOT; ?>/img/favicon.png" />
 
 	<link rel="stylesheet" href="<?php echo $SITEROOT; ?>/css/unbindery.css" type="text/css" media="screen" charset="utf-8" />
 
