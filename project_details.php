@@ -69,6 +69,14 @@ global $SYSTEMGUIDELINES;
 			<div class="project_author">Author: <?php echo $project->author; ?></div>
 			<div class="project_desc"><?php echo $project->language; ?>. <?php echo $project->description; ?></div>
 
+			<ul class="project_dates">
+				<li>Started: <label><?php echo $project->date_started; ?></label></li>
+				<?php if ($project->status == "completed" || $project->status == "posted"): ?>
+				<li>Completed: <label><?php echo $project->date_completed; ?></label></li>
+				<li>Time Taken: <label><?php echo $project->days_spent; ?> days</label></li>
+				<?php endif; ?>
+			</ul>
+
 			<?php if ($project->guidelines): ?>
 				<a class="guidelines_link" target="_blank" href="<?php echo $project->slug; ?>/guidelines/">Project Guidelines</a>
 			<?php endif; ?>

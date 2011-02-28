@@ -43,6 +43,22 @@ $user = new User($db, $username);
 					<li></li>
 				</ul>
 			</div>
+
+			<div class="sidebar">
+				<h3>Past Projects</h3>
+				<ul class="projects">
+				<?php
+				$projects = $server->getCompletedProjects();
+				foreach ($projects as $project) {
+					$projectlink = $SITEROOT . '/projects/' . $project["slug"];
+				?>
+					<li>
+						<a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a>
+						<div class="sub">Completed <?php echo $project["date_completed"]; ?></div>
+					</li>
+				<?php } ?>
+				</ul>	
+			</div>
 		</div>
 	</div>
 

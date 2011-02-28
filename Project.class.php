@@ -37,7 +37,11 @@ class Project {
 	public function load($slug) {
 		$this->db->connect();
 
-		$query = "SELECT * FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
+		$query = "SELECT *, ";
+		$query .= "DATE_FORMAT((SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1), '%e %b %Y') AS date_started, ";
+		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed, ";
+		$query .= "DATEDIFF((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), (SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1)) AS days_spent ";
+		$query .= "FROM projects WHERE slug = '" . mysql_real_escape_string($slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
@@ -53,6 +57,10 @@ class Project {
 			$this->deadline_days = trim(mysql_result($result, 0, "deadline_days"));
 			$this->num_proofs = trim(mysql_result($result, 0, "num_proofs"));
 			$this->thumbnails = trim(mysql_result($result, 0, "thumbnails"));
+
+			$this->date_started = trim(mysql_result($result, 0, "date_started"));
+			$this->date_completed = trim(mysql_result($result, 0, "date_completed"));
+			$this->days_spent = trim(mysql_result($result, 0, "days_spent"));
 		}
 
 		$this->db->close();
