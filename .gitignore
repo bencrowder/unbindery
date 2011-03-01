@@ -1,5 +1,6 @@
 include/*config.php
 include/guidelines.php
 js/config.js
+scripts/config.py*
 images/*
 texts/*
