@@ -212,7 +212,7 @@ class Item {
 					$message .= "\n\n$username is in training, so you need to review their work and clear them.";
 				}
 
-				$message .= "\n\nReview link: $SITEROOT/review/{$this->project_slug}/{$this->item_id}/{$username}";
+				$message .= "\n\nReview link: $SITEROOT/admin/review/{$this->project_slug}/{$this->item_id}/{$username}";
 
 				Mail::sendMessage($ADMINEMAIL, $subject, $message);
 			}

@@ -88,7 +88,7 @@ class Server {
 	public function emailTardies() {
 		$this->db->connect();
 
-		$query = "SELECT users.email, item_id, items.title, projects.slug, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN users on assignments.username = users.username JOIN items ON item_id = items.id JOIN projects ON projects.id = assignments.project_id WHERE date_completed IS NULL AND DATEDIFF(deadline, NOW()) = 1;";
+		$query = "SELECT users.email, item_id, items.title, projects.slug, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN users on assignments.username = users.username JOIN items ON item_id = items.id JOIN projects ON projects.id = assignments.project_id WHERE assignments.date_completed IS NULL AND DATEDIFF(deadline, NOW()) = 1;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		global $SITEROOT;
