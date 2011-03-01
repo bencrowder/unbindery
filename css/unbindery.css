@@ -195,6 +195,7 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .proj_details ul.project_dates label	{ font-weight: bold; color: #000; }
 
 .proj_details .join						{ font-size: 1.1em; }
+.proj_details div.join_button			{ clear: both; overflow: hidden; margin-bottom: 3em; }
 .proj_details .right_button				{ float: right; }
 
 

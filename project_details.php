@@ -105,7 +105,7 @@ global $SYSTEMGUIDELINES;
 			</div>
 
 			<?php if (!$user->isMember($project_slug)) { ?>
-			<a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="right_button join button">Join this project</a>
+			<div class="join_button"><a href="<?php echo $SITEROOT; ?>/projects/<?php echo $project->slug; ?>/join" class="right_button join button">Join this project</a></div>
 			<?php } ?>
 
 			<ul class="proofers">

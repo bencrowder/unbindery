@@ -28,7 +28,7 @@ $mode = $_POST['mode'];
 if ($mode == "new") {
 	$project = new Project($db);
 
-	$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs);
+	$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails);
 
 	if ($retval == "success") {
 		// make project directory for images

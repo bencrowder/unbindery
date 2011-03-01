@@ -68,15 +68,11 @@ def main():
 		(conn, db) = dbconnect()
 
 		# create the update queries as a single string
-		query = ''
 		for i in range(num_page_ids):
-			query += 'UPDATE items SET itemtext = "%s" WHERE id = %s; ' % (conn.escape_string(page_texts[i]), page_ids[i])
+			query = 'UPDATE items SET itemtext = "%s" WHERE id = %s;' % (conn.escape_string(page_texts[i]), page_ids[i])
+			db.execute(query)
 
-		print query
-
-		# run the query
-		#db.execute(query)
-
+		# close the database connection
 		dbclose(conn, db)
 	else:
 		print "Usage: unslurp project_slug textfile"
