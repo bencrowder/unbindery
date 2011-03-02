@@ -31,7 +31,7 @@ class Server {
 		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed ";
 		$query .= "FROM projects ";
 		$query .= "WHERE projects.status = 'completed' OR projects.status = 'posted' ";
-		$query .= "ORDER BY date_started DESC";
+		$query .= "ORDER BY date_completed DESC";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$projects = array();
