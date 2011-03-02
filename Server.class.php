@@ -28,7 +28,8 @@ class Server {
 
 		$query = "SELECT projects.title, projects.author, projects.slug, ";
 		$query .= "(SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1) AS date_started, ";
-		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed ";
+		$query .= "(SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1) AS date_completed, ";
+		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed_text ";
 		$query .= "FROM projects ";
 		$query .= "WHERE projects.status = 'completed' OR projects.status = 'posted' ";
 		$query .= "ORDER BY date_completed DESC";
@@ -37,7 +38,7 @@ class Server {
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("title" => $row["title"], "author" => $row["author"], "slug" => $row["slug"], "date_started" => $row["date_started"], "date_completed" => $row["date_completed"]));
+			array_push($projects, array("title" => $row["title"], "author" => $row["author"], "slug" => $row["slug"], "date_started" => $row["date_started"], "date_completed" => $row["date_completed_text"]));
 		}
 
 		$this->db->close();
