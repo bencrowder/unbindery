@@ -164,7 +164,7 @@ class Item {
 					$subject = "[Unbindery] Clearance granted";
 					$message = "You've been cleared for further proofing!\n\n";
 					$message .= $SITEROOT;
-					Mail::sendMessage($user->email, $subject, $message);
+					Mail::sendMessage($review_user->email, $subject, $message);
 
 					// email admin to let them know
 					$subject = "[Unbindery] Cleared $review_username";
