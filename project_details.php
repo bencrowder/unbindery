@@ -53,9 +53,9 @@ global $SYSTEMGUIDELINES;
 		<div class="bigcol proj_guidelines">
 			<div class="project_title"><?php echo $project->title; ?></div>
 
-			<h2>Project-Specific Guidelines</h2>
+			<h2>Project-specific Guidelines</h2>
 
-			<?php echo $project->guidelines; ?>
+			<?php echo ($project->guidelines != "") ? $project->guidelines : "Nothing specific to this project."; ?>
 
 			<h2>System-wide Guidelines</h2>
 
@@ -80,9 +80,7 @@ global $SYSTEMGUIDELINES;
 				<?php endif; ?>
 			</ul>
 
-			<?php if ($project->guidelines): ?>
-				<a class="guidelines_link" target="_blank" href="<?php echo $project->slug; ?>/guidelines/">Project Guidelines</a>
-			<?php endif; ?>
+			<a class="guidelines_link" target="_blank" href="<?php echo $project->slug; ?>/guidelines/">Project Guidelines</a>
 
 			<?php if ($project->thumbnails): 
 				$thumbnails = explode(",", $project->thumbnails);
