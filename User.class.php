@@ -79,7 +79,7 @@ class User {
 	public function getProjects() {
 		$this->db->connect();
 
-		$query = "SELECT project_id, projects.title, projects.slug, projects.author, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.status = 'active' ORDER BY project_id ASC;";
+		$query = "SELECT project_id, projects.title, projects.slug, projects.author, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.status = 'active' ORDER BY percentage DESC;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$projects = array();
