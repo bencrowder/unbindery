@@ -79,13 +79,13 @@ class User {
 	public function getProjects() {
 		$this->db->connect();
 
-		$query = "SELECT project_id, projects.title, projects.slug, projects.author, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.status = 'active' ORDER BY percentage DESC;";
+		$query = "SELECT project_id, projects.title, projects.slug, projects.author, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id WHERE items.status = 'available' AND assignments.date_assigned IS NULL AND items.project_id = projects.id) AS available_pages FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.status = 'active' ORDER BY percentage DESC;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "author" => $row["author"], "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"]));
+			array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "author" => $row["author"], "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"], "available_pages" => $row["available_pages"]));
 		}
 
 		$this->db->close();

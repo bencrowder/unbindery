@@ -73,9 +73,8 @@ $projectlist = array();
 					<?php } ?>
 					<?php 
 					foreach ($projects as $project) {
-						if (!in_array($project["slug"], $projectlist)):
+						if (!in_array($project["slug"], $projectlist) && ($project["available_pages"] > 0)):
 							$projectlink = $SITEROOT . '/projects/' . $project["slug"];
-							$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
 							$percentage = round($project["completed"] / $project["total"] * 100, 0);
 					?>
 					<li>
@@ -133,7 +132,6 @@ $projectlist = array();
 
 					foreach ($projects as $project) {
 						$projectlink = $SITEROOT . '/projects/' . $project["slug"];
-						$getitemlink = $SITEROOT . '/get_item/' . $project["slug"];
 						$percentage = round($project["completed"] / $project["total"] * 100, 0);
 					?>
 					<li>
