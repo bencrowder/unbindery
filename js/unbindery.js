@@ -148,7 +148,7 @@ $(document).ready(function() {
 	});
 
 	$("#finished_review_button").click(function(e) {
-		save_item_text(false, true); // no draft, yes review
+		save_page_text(false, true, ''); // no draft, yes review
 	});
 
 	$("#save_page_button").click(function(e) {
