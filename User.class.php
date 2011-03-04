@@ -204,7 +204,7 @@ class User {
 		}
 	}
 
-	public function getNextItem($project_slug = "") {
+	public function getNewPage($project_slug = "") {
 		// if no project specified, get the user's first current project
 		if (!$project_slug || $project_slug == "") {
 			$projects = $this->getProjects(); 

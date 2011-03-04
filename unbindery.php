@@ -147,13 +147,13 @@ switch ($method) {
 		}
 		break;
 
-	case 'get_next_item':
+	case 'get_new_page':
 		$username = $_POST['username'];
 		$project_slug = $_POST['project_slug'];
 
 		if ($username) {
 			$user = new User($db, $username);
-			$result = $user->getNextItem($project_slug);
+			$result = $user->getNewPage($project_slug);
 
 			echo json_encode($result);
 		}

@@ -14,7 +14,7 @@ function redirect_to_dashboard(message, error) {
 	window.location.href = locstr;
 }
 
-function save_item_text(is_draft, is_review) {
+function save_page_text(is_draft, is_review, slug) {
 	$("#spinner").show();
 
 	var item_id = $("#item_id").val();
@@ -37,17 +37,23 @@ function save_item_text(is_draft, is_review) {
 						var message = "Finished item.";
 					}
 				}
-				redirect_to_dashboard(message, "");
+				if (slug != '') {
+					get_new_page(slug);
+				} else {
+					redirect_to_dashboard(message, "");
+				}
 			} else {
-				redirect_to_dashboard("", "Error saving page. Try again.");
+				if (redirect) {
+				 redirect_to_dashboard("", "Error saving page. Try again.");
+				}
 			}
 		}, 'json');
 }
 
-function get_new_item(project_slug) {
+function get_new_page(project_slug) {
 	var username = $("ul#nav .username").html();
 
-	$.post(siteroot + "/unbindery.php?method=get_next_item", { project_slug: project_slug, username: username },
+	$.post(siteroot + "/unbindery.php?method=get_new_page", { project_slug: project_slug, username: username },
 		function(data) {
 			switch(data.statuscode) {
 				case "success":
@@ -129,11 +135,16 @@ $(document).ready(function() {
 	$("textarea#page_text").focus();
 
 	$("#save_as_draft_button").click(function() {
-		save_item_text(true, false); // yes draft, no review
+		save_page_text(true, false, ''); // yes draft, no review, no get
 	});
 
 	$("#finished_button").click(function(e) {
-		save_item_text(false, false); // no draft, no review
+		save_page_text(false, false, ''); // no draft, no review, no get
+	});
+
+	$("#finish_get_next_button").click(function(e) {
+		var project_slug = $("#project_slug").val();
+		save_page_text(false, false, project_slug); // no draft, no review, do get another one
 	});
 
 	$("#finished_review_button").click(function(e) {
@@ -146,6 +157,6 @@ $(document).ready(function() {
 
 	$(".getnewitem").click(function(e) {
 		var project_slug = this.getAttribute('data-project-slug');
-		get_new_item(project_slug);
+		get_new_page(project_slug);
 	});
 });
