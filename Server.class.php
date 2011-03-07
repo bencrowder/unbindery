@@ -16,7 +16,7 @@ class Server {
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("title" => $row["title"], "author" => $row["author"], "slug" => $row["slug"], "completed" => $row["completed"], "total" => $row["total"], "percentage" => $row["percentage"]));
+			array_push($projects, array("title" => stripslashes($row["title"]), "author" => stripslashes($row["author"]), "slug" => $row["slug"], "completed" => $row["completed"], "total" => $row["total"], "percentage" => $row["percentage"]));
 		}
 
 		$this->db->close();

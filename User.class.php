@@ -85,7 +85,7 @@ class User {
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("project_id" => $row["project_id"], "title" => $row["title"], "slug" => $row["slug"], "author" => $row["author"], "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"], "available_pages" => $row["available_pages"]));
+			array_push($projects, array("project_id" => $row["project_id"], "title" => stripslashes($row["title"]), "slug" => $row["slug"], "author" => stripslashes($row["author"]), "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"], "available_pages" => $row["available_pages"]));
 		}
 
 		$this->db->close();
