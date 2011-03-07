@@ -68,7 +68,7 @@ class User {
 		$items = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($items, array("item_id" => $row["item_id"], "item_title" => $row["item_title"], "project_id" => $row["project_id"], "project_title" => $row["project_title"], "project_slug" => $row["project_slug"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"], "days_left" => $row["days_left"]));
+			array_push($items, array("item_id" => $row["item_id"], "item_title" => $row["item_title"], "project_id" => $row["project_id"], "project_title" => stripslashes($row["project_title"]), "project_slug" => $row["project_slug"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"], "days_left" => $row["days_left"]));
 		}
 
 		$this->db->close();
@@ -301,7 +301,7 @@ class User {
 		$history = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($history, array("item_id" => $row["item_id"], "project_slug" => $row["project_slug"], "item_title" => $row["item_title"], "project_title" => $row["project_title"], "date_completed" => $row["completed"]));
+			array_push($history, array("item_id" => $row["item_id"], "project_slug" => $row["project_slug"], "item_title" => $row["item_title"], "project_title" => stripslashes($row["project_title"]), "date_completed" => $row["completed"]));
 		}
 
 		$this->db->close();
