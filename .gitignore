@@ -4,3 +4,4 @@ js/config.js
 scripts/config.py*
 images/*
 texts/*
+lib/ace/*

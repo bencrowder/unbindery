@@ -19,7 +19,7 @@ function save_page_text(is_draft, is_review, slug) {
 
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
-	var itemtext = $("#page_text").val();
+	var itemtext = editor.session.doc.$lines.join('\n');
 	var username = $("ul#nav .username").html();
 	var review_username = $("#review_username").html();
 

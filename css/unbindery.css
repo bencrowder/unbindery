@@ -32,7 +32,6 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 #image_container						{ width: 848px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
 
 #text_container							{ width: 684px; height: 200px; margin: 0px auto; }
-textarea#page_text						{ width: 650px; height: 200px; font-size: 16px; line-height: 1.4em; font-family: Monaco, Courier, monospace; padding: 10px; padding-left: 32px; background: url(../img/textarea_bg.png) repeat-y; border: solid 1px #999; }
 
 .container								{ overflow: hidden; clear: both; margin-bottom: 3em; }
 .bigcol									{ width: 550px; float: left; margin-top: 20px; }
@@ -251,3 +250,18 @@ ul.proofers .username					{ font-size: 11px; }
 
 .sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
 .bigcol h4								{ color: #5d92b1; }
+
+
+/* Editor */
+/* --------------------------------------------------- */
+
+/* textarea#page_text						{ width: 650px; height: 200px; font-size: 16px; line-height: 1.4em; font-family: Monaco, Courier, monospace; padding: 10px; padding-left: 32px; background: url(../img/textarea_bg.png) repeat-y; border: solid 1px #999; } */
+#page_text								{ width: 700px; height: 230px; border: solid 1px #999; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+
+.ace_editor								{ font-size: 16px !important; font-family: Monaco, Menlo, Courier, monospace !important; }
+
+.ace-unbindery .ace_content				{ padding-left: 10px !important; padding-right: 10px !important; width: 630px !important; }
+.ace-unbindery .ace_scroller			{ overflow-x: hidden !important; }
+.ace-unbindery .ace_gutter				{ color: #999 !important; background: #eee !important; border-right: none !important; width: 30px !important; }
+.ace-unbindery .ace_gutter-layer		{ right: 6px !important; }
+.ace-unbindery .ace_marker-layer .ace_active_line	{ background: #fff !important; }

@@ -10,10 +10,9 @@ include_once('utils.php');
 
 Alibaba::forceAuthentication();
 
-/*
-$includes = "<link href='$SITEROOT/lib/jquery-linedtextarea/jquery-linedtextarea.css' type='text/css' rel='stylesheet' />\n";
-$includes .= "<script type='text/javascript' src='$SITEROOT/lib/jquery-linedtextarea/jquery-linedtextarea.js'></script>\n";
-*/
+$includes = "<script type='text/javascript' src='$SITEROOT/lib/ace/src/ace.js' charset='utf-8'></script>\n";
+$includes .= "<script type='text/javascript' src='$SITEROOT/js/theme-unbindery.js' charset='utf-8'></script>\n";
+$includes .= "<script type='text/javascript' src='$SITEROOT/js/edit.js' charset='utf-8'></script>\n";
 
 $item_id = $_GET["item_id"];
 $project_slug = $_GET["project_slug"];
@@ -61,7 +60,7 @@ $item->load($item_id, $project_slug, $username);
 
 		<div id="text_container">
 			<form id="ub_text">
-				<textarea id="page_text"><?php echo stripslashes($item->itemtext); ?></textarea>
+				<div id="page_text"><?php echo stripslashes($item->itemtext); ?></div>
 				<input type="hidden" name="item_id" id="item_id" value="<?php echo $item_id; ?>" />
 				<input type="hidden" name="project_slug" id="project_slug" value="<?php echo $project_slug; ?>" />
 			</form>
