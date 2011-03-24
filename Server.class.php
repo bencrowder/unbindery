@@ -75,7 +75,8 @@ class Server {
 
 		$query = "";
 		foreach ($users as $user) {
-			$query .= "UPDATE users SET score = score - " . $user["points_lost"] . " WHERE username = '" . $user["username"] . "'; ";
+			$points = intval($user["points_lost"]) * 10;
+			$query .= "UPDATE users SET score = score - " . $points . " WHERE username = '" . $user["username"] . "'; ";
 		}
 
 		if ($query != "") {
