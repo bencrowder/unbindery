@@ -194,7 +194,7 @@ class User {
 			$message .= "Deadline: $deadline\n";
 			$message .= "\n";
 
-			Mail::sendMessage($this->email, "[Unbindery] New assignment (due $deadline)", $message);
+			Mail::sendMessage($this->email, "$EMAILSUBJECT New assignment (due $deadline)", $message);
 
 			$this->db->close();
 

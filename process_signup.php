@@ -25,7 +25,7 @@ $message .= "\n";
 $message .= "$SITEROOT/activate/$hash\n";
 $message .= "\n";
 
-$status = Mail::sendMessage($email, "[Unbindery] Confirmation link", $message);
+$status = Mail::sendMessage($email, "$EMAILSUBJECT Confirmation link", $message);
 
 if ($status == 1) { 
 	$status = "done";
@@ -33,7 +33,7 @@ if ($status == 1) {
 	$status = "error mailing";
 }
 
-$status = Mail::sendMessage($ADMINEMAIL, "[Unbindery] New signup", "New user signed up: $username <$email>");
+$status = Mail::sendMessage($ADMINEMAIL, "$EMAILSUBJECT New signup", "New user signed up: $username <$email>");
 
 // return "done" (so Ajax can replace the div)
 echo json_encode(array("statuscode" => "done", "username" => $user->username));

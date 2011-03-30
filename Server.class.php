@@ -102,7 +102,7 @@ class Server {
 			$message .= "\n";
 			$message .= "Thanks! We appreciate your help.";
 			
-			$subject = "[Unbindery] Assignment '" . $row["title"] . "' due tomorrow (" . $row["deadline"] . ")";
+			$subject = "$EMAILSUBJECT Assignment '" . $row["title"] . "' due tomorrow (" . $row["deadline"] . ")";
 
 			Mail::sendMessage($row["email"], $subject, $message);
 

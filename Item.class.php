@@ -150,7 +150,7 @@ class Item {
 				$query .= "AND project_id = {$this->project_id} ";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
-				$subject = "[Unbindery] Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
+				$subject = "$EMAILSUBJECT Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
 				$message = "$username reviewed the item " . $this->project_slug . "/" . $this->item_id . ", proofed by $review_username.";
 				Mail::sendMessage($ADMINEMAIL, $subject, $message);
 
@@ -161,13 +161,13 @@ class Item {
 					$result = mysql_query($query) or die ("Couldn't run: $query");
 
 					// email the user to let them know
-					$subject = "[Unbindery] Clearance granted";
+					$subject = "$EMAILSUBJECT Clearance granted";
 					$message = "You've been cleared for further proofing!\n\n";
 					$message .= $SITEROOT;
 					Mail::sendMessage($review_user->email, $subject, $message);
 
 					// email admin to let them know
-					$subject = "[Unbindery] Cleared $review_username";
+					$subject = "$EMAILSUBJECT Cleared $review_username";
 					$message = "Cleared $review_username for further proofing.";
 					Mail::sendMessage($ADMINEMAIL, $subject, $message);
 				}
@@ -205,7 +205,7 @@ class Item {
 					$result = mysql_query($query) or die ("Couldn't run: $query");
 				}
 
-				$subject = "[Unbindery] $username completed " . $this->project_slug . "/" . $this->item_id;
+				$subject = "$EMAILSUBJECT $username completed " . $this->project_slug . "/" . $this->item_id;
 				$message = "$username completed the item " . $this->project_slug . "/" . $this->item_id;
 
 				if ($user->status == "training") {
