@@ -194,6 +194,7 @@ class User {
 			$message .= "Deadline: $deadline\n";
 			$message .= "\n";
 
+			global $EMAILSUBJECT;
 			Mail::sendMessage($this->email, "$EMAILSUBJECT New assignment (due $deadline)", $message);
 
 			$this->db->close();

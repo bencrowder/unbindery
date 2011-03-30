@@ -94,6 +94,7 @@ class Server {
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		global $SITEROOT;
+		global $EMAILSUBJECT;
 
 		while ($row = mysql_fetch_assoc($result)) {
 			$message = "Just a reminder that you have an item due tomorrow. If you finish it before the deadline, you won't lose any points.\n";
