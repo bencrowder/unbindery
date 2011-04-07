@@ -11,6 +11,8 @@ $ADMINEMAIL = "your@email.com";
 
 $EMAILSUBJECT = "[Your Project]";
 
+$EDITOR = "advanced";			// either "advanced" for Ace or "simple" for textarea
+
 include_once("guidelines.php");
 
 ?>

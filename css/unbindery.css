@@ -255,9 +255,13 @@ ul.proofers .username					{ font-size: 11px; }
 /* Editor */
 /* --------------------------------------------------- */
 
-/* textarea#page_text						{ width: 650px; height: 200px; font-size: 16px; line-height: 1.4em; font-family: Monaco, Courier, monospace; padding: 10px; padding-left: 32px; background: url(../img/textarea_bg.png) repeat-y; border: solid 1px #999; } */
+/* General */
 #page_text								{ width: 700px; height: 230px; border: solid 1px #999; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 
+/* For the textarea ("simple") */
+textarea#page_text						{ height: 200px; font-size: 16px; line-height: 1.4em; font-family: "Lucida Grande", "Lucida Sans Unicode", Monaco, Courier, sans-serif; padding: 10px; }
+
+/* For the Ace editor ("advanced") */
 .ace_editor								{ font-size: 16px !important; font-family: Monaco, Menlo, Courier, monospace !important; }
 
 .ace-unbindery .ace_content				{ padding-left: 10px !important; padding-right: 10px !important; width: 630px !important; }

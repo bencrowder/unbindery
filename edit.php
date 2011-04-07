@@ -10,8 +10,11 @@ include_once('utils.php');
 
 Alibaba::forceAuthentication();
 
-$includes = "<script type='text/javascript' src='$SITEROOT/lib/ace/src/ace.js' charset='utf-8'></script>\n";
-$includes .= "<script type='text/javascript' src='$SITEROOT/js/theme-unbindery.js' charset='utf-8'></script>\n";
+$includes = "";
+if ($EDITOR == "advanced") {
+	$includes .= "<script type='text/javascript' src='$SITEROOT/lib/ace/src/ace.js' charset='utf-8'></script>\n";
+	$includes .= "<script type='text/javascript' src='$SITEROOT/js/theme-unbindery.js' charset='utf-8'></script>\n";
+}
 $includes .= "<script type='text/javascript' src='$SITEROOT/js/edit.js' charset='utf-8'></script>\n";
 
 $item_id = $_GET["item_id"];
@@ -60,7 +63,11 @@ $item->load($item_id, $project_slug, $username);
 
 		<div id="text_container">
 			<form id="ub_text">
+				<?php if ($EDITOR == "advanced"): ?>
 				<div id="page_text"><?php echo stripslashes($item->itemtext); ?></div>
+				<?php else: ?>
+				<textarea id="page_text"><?php echo stripslashes($item->itemtext); ?></textarea>
+				<?php endif; ?>
 				<input type="hidden" name="item_id" id="item_id" value="<?php echo $item_id; ?>" />
 				<input type="hidden" name="project_slug" id="project_slug" value="<?php echo $project_slug; ?>" />
 			</form>
