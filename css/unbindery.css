@@ -48,7 +48,7 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .sidebar ul#stats li .stat				{ font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
 
 
-.percentage								{ float: right; font-size: 10px; color: #666; clear: both; }
+.percentage								{ float: right; font-size: 10px; color: #666; clear: both; margin-left: 15px; }
 .percentage p							{ text-align: right; padding-top: 4px; }
 .percentage_container					{ width: 100px; border: solid 1px #666; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; height: 10px; }
 .percentage p							{ margin: 0px 0 0; }
@@ -106,7 +106,7 @@ h3.action_header.projects				{ background: #345; }
 ul.action_list							{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; }
 ul.action_list li						{ border-bottom: solid 1px #ccc; padding: 6px; clear: both; overflow: hidden; }
 ul.action_list li .title				{ font-size: 1.2em; font-weight: bold; }
-ul.action_list li .title a				{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; }
+ul.action_list li .title a				{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; line-height: 1.4em; }
 ul.action_list li .deadline				{ font-size: .6em; color: #999; margin-left: 5px; }
 ul.action_list li .impending			{ color: #f99; }
 ul.action_list li .overdue				{ color: #f00; font-weight: bold; font-size: .9em; }
@@ -122,7 +122,7 @@ ul.action_list.projects li:last-child	{ background: #345; }
 
 ul.action_list.projects .percentage		{ margin-top: 3px; }
 
-.sub									{ margin-top: 5px; font-size: .9em; color: #666; }
+.sub									{ margin-top: 4px; font-size: .9em; color: #666; }
 
 #message								{ width: 830px; margin: 0px auto; background: #444; color: #fff;  padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
 #error									{ width: 830px; margin: 0px auto; background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }

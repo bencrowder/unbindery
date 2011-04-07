@@ -75,7 +75,6 @@ $projectlist = array();
 					foreach ($projects as $project) {
 						if (!in_array($project["slug"], $projectlist) && ($project["available_pages"] > 0)):
 							$projectlink = $SITEROOT . '/projects/' . $project["slug"];
-							$percentage = round($project["completed"] / $project["total"] * 100, 0);
 					?>
 					<li>
 						<div class="right_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new page</span></div>

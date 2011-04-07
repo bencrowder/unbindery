@@ -35,7 +35,7 @@ $user = new User($db, $username);
 								<div class="percent" style="width: <?php echo $project["percentage"]; ?>px;"></div>
 								<div class="percent_proofs" style="width: <?php echo $project["proof_percentage"]; ?>px;"></div>
 							</div> 
-							<p><?php echo round($project["percentage"], 0) . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+							<p><?php echo round($project["percentage"], 0) . "% (" . $project["available_pages"] . " left)";?></p>
 						</div>
 						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
 						<div class="sub">Author: <?php echo $project["author"]; ?></div>

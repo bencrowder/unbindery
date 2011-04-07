@@ -10,13 +10,13 @@ class Server {
 	public function getProjects() {
 		$this->db->connect();
 
-		$query = "SELECT projects.title, projects.author, projects.slug, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage FROM projects WHERE projects.status = 'active' ORDER BY percentage DESC";
+		$query = "SELECT projects.title, projects.author, projects.slug, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id WHERE items.status = 'available' AND assignments.date_assigned IS NULL AND items.project_id = projects.id) AS available_pages FROM projects WHERE projects.status = 'active' ORDER BY percentage DESC";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("title" => stripslashes($row["title"]), "author" => stripslashes($row["author"]), "slug" => $row["slug"], "completed" => $row["completed"], "total" => $row["total"], "percentage" => $row["percentage"], "proof_percentage" => $row["proof_percentage"]));
+			array_push($projects, array("title" => stripslashes($row["title"]), "author" => stripslashes($row["author"]), "slug" => $row["slug"], "completed" => $row["completed"], "total" => $row["total"], "percentage" => $row["percentage"], "proof_percentage" => $row["proof_percentage"], "available_pages" => $row["available_pages"]));
 		}
 
 		$this->db->close();
