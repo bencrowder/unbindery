@@ -115,12 +115,13 @@ function load_items_for_editing(event, data) {
 	var pages = [];
 	var project_slug = $("#project_slug").val();
 
+	pages = '';
 	$("#file_uploadQueue .fileName").each(function() {
 		var filename = $(this).html();
 		// strip up to the first dot
 		var pagename = filename.substr(0, filename.indexOf('.'));
 
-		pages.push(pagename);
+		pages += pagename + '|';
 	});
 
 	// add them to the database
@@ -134,7 +135,6 @@ function load_items_for_editing(event, data) {
 				console.log("error!");
 			}
 		}, 'json');
-
 }
 
 $(document).ready(function() {

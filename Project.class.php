@@ -153,6 +153,9 @@ class Project {
 
 		$page_ids = array();
 
+		// split the string up by the delimiter
+		$pages = explode('|', $pages, -1);
+
 		foreach ($pages as $page) {
 			$query = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES ({$this->project_id}, '" . mysql_real_escape_string($page) . "', NULL, 'available', 'image', '{$this->slug}/" . mysql_real_escape_string($page) . ".jpg'); ";
 
