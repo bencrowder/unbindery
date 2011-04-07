@@ -144,13 +144,6 @@ class Item {
 				$query .= "AND project_id = {$this->project_id} ";
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 
-				// and set the status on the item to reviewed
-				$query = "UPDATE items ";
-				$query .= "SET status = 'reviewed' ";
-				$query .= "WHERE id = {$this->item_id} ";
-				$query .= "AND project_id = {$this->project_id} ";
-				$result = mysql_query($query) or die ("Couldn't run: $query");
-
 				$subject = "$EMAILSUBJECT Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
 				$message = "$username reviewed the item " . $this->project_slug . "/" . $this->item_id . ", proofed by $review_username.";
 				Mail::sendMessage($ADMINEMAIL, $subject, $message);
