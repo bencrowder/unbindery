@@ -79,13 +79,13 @@ class User {
 	public function getProjects() {
 		$this->db->connect();
 
-		$query = "SELECT project_id, projects.title, projects.slug, projects.author, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id WHERE items.status = 'available' AND assignments.date_assigned IS NULL AND items.project_id = projects.id) AS available_pages FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.status = 'active' ORDER BY percentage DESC;";
+		$query = "SELECT project_id, projects.title, projects.slug, projects.author, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available' AND status != 'assigned') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id WHERE items.status = 'available' AND assignments.date_assigned IS NULL AND items.project_id = projects.id) AS available_pages FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = '" . mysql_real_escape_string($this->username) . "' AND projects.status = 'active' ORDER BY percentage DESC;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		$projects = array();
 
 		while ($row = mysql_fetch_assoc($result)) {
-			array_push($projects, array("project_id" => $row["project_id"], "title" => stripslashes($row["title"]), "slug" => $row["slug"], "author" => stripslashes($row["author"]), "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"], "available_pages" => $row["available_pages"]));
+			array_push($projects, array("project_id" => $row["project_id"], "title" => stripslashes($row["title"]), "slug" => $row["slug"], "author" => stripslashes($row["author"]), "role" => $row["role"], "completed" => $row["completed"], "total" => $row["total"], "available_pages" => $row["available_pages"], "proof_percentage" => $row["proof_percentage"]));
 		}
 
 		$this->db->close();
@@ -183,6 +183,20 @@ class User {
 			$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES ('" . mysql_real_escape_string($this->username) . "', " . $item_id . ", " . mysql_real_escape_string($project->project_id) . ", NOW(), DATE_ADD(NOW(), INTERVAL $deadlinelength DAY))";
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
+			// get the updated number of assignments for this page
+			$query = "SELECT COUNT(*) AS itemcount FROM assignments WHERE assignments.item_id = $item_id";
+			$result = mysql_query($query) or die ("Couldn't run: $query");
+
+			while ($row = mysql_fetch_assoc($result)) {
+				$itemcount = $row["itemcount"];
+			}
+
+			// if we're at the number of proofs, set the item to "assigned" (unavailable)
+			if ($itemcount == $project->num_proofs) {
+				$query = "UPDATE items SET status = 'assigned' WHERE id = $item_id";
+				$result = mysql_query($query) or die ("Couldn't run: $query");
+			}
+
 			// send email to user w/ edit link, deadline
 			global $SITEROOT;
 			$editlink = "$SITEROOT/edit/$project_slug/$item_id";
@@ -252,7 +266,7 @@ class User {
 		$query .= "AND items.id NOT IN ";
 		$query .= "(SELECT item_id FROM assignments ";
 		$query .= "WHERE username='{$this->username}' AND project_id = items.project_id) ";
-		$query .= "HAVING itemcount < {$project->num_proofs} "; //TODO: replace with $project->itemcount
+		$query .= "HAVING itemcount < {$project->num_proofs} ";
 		$query .= "ORDER BY items.id ASC ";
 		$query .= "LIMIT 1;";
 

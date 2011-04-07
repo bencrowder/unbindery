@@ -70,7 +70,7 @@ $item->load($item_id, $project_slug, $proofer_username);
 
 		<div id="text_container">
 			<form id="ub_text">
-				<?php if ($EDITOR == "simple"): ?>
+				<?php if ($EDITOR == "advanced"): ?>
 				<div id="page_text"><?php echo stripslashes($item->itemtext); ?></div>
 				<?php else: ?>
 				<textarea id="page_text"><?php echo stripslashes($item->itemtext); ?></textarea>

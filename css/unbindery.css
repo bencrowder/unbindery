@@ -52,11 +52,13 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .percentage p							{ text-align: right; padding-top: 4px; }
 .percentage_container					{ width: 100px; border: solid 1px #666; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; height: 10px; }
 .percentage p							{ margin: 0px 0 0; }
-.percent								{ background: #000; height: 10px; }
+.percent								{ background: #000; height: 10px; float: left; z-index: 50; }
+.percent_proofs							{ background: #ccc; height: 10px; z-index: -1; }
 
 .big.percentage							{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
 .big .percentage_container				{ width: 200px; height: 20px; }
 .big .percent							{ height: 20px; }
+.big .percent_proofs					{ height: 20px; }
 
 .group									{ width: 250px; float: left; margin-right: 50px; }
 .group:last-child						{ margin-right: 0; }

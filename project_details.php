@@ -98,8 +98,12 @@ global $SYSTEMGUIDELINES;
 			<div class="percentage big">
 				<div class="percentage_container">
 					<div class="percent" style="width: <?php echo $project->percentage * 2; ?>px;"></div>
+					<div class="percent_proofs" style="width: <?php echo $project->proof_percentage * 2; ?>px;"></div>
 				</div> 
-				<p><?php echo round($project->percentage, 0) . "% (" . $project->completed . "/" . $project->total . ")";?></p>
+				<?php if ($project->num_proofs > 1): ?>
+				<p>Proofed: <?php echo round($project->proof_percentage, 0) . "% (" . $project->proofed . "/" . ($project->total * $project->num_proofs) . ")";?></p>
+				<?php endif; ?>
+				<p>Completed: <?php echo round($project->percentage, 0) . "% (" . $project->completed . "/" . $project->total . ")";?></p>
 			</div>
 
 			<?php if (!$user->isMember($project_slug)) { ?>

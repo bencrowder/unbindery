@@ -33,6 +33,7 @@ $user = new User($db, $username);
 						<div class="percentage">
 							<div class="percentage_container">
 								<div class="percent" style="width: <?php echo $project["percentage"]; ?>px;"></div>
+								<div class="percent_proofs" style="width: <?php echo $project["proof_percentage"]; ?>px;"></div>
 							</div> 
 							<p><?php echo round($project["percentage"], 0) . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
 						</div>

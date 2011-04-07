@@ -133,13 +133,15 @@ $projectlist = array();
 					foreach ($projects as $project) {
 						$projectlink = $SITEROOT . '/projects/' . $project["slug"];
 						$percentage = round($project["completed"] / $project["total"] * 100, 0);
+						$proof_percentage = round($project["proof_percentage"]);
 					?>
 					<li>
 						<div class="percentage">
 							<div class="percentage_container">
 								<div class="percent" style="width: <?php echo $percentage; ?>px;"></div>
+								<div class="percent_proofs" style="width: <?php echo $proof_percentage; ?>px;"></div>
 							</div> 
-							<p><?php echo $percentage . "% (" . $project["completed"] . "/" . $project["total"] . ")";?></p>
+							<p><?php echo $percentage . "% (" . $project["available_pages"] . " left)";?></p>
 						</div>
 
 						<div class="project_title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>

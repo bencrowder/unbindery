@@ -134,13 +134,15 @@ class Project {
 	public function loadStatus() {
 		$this->db->connect();
 
-		$query = "SELECT (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage FROM projects WHERE slug = '" . mysql_real_escape_string($this->slug) . "'";
+		$query = "SELECT (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) AS proofed FROM projects WHERE slug = '" . mysql_real_escape_string($this->slug) . "'";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		if (mysql_numrows($result)) {
 			$this->completed = trim(mysql_result($result, 0, "completed"));
 			$this->total = stripslashes(trim(mysql_result($result, 0, "total")));
 			$this->percentage = stripslashes(trim(mysql_result($result, 0, "percentage")));
+			$this->proof_percentage = stripslashes(trim(mysql_result($result, 0, "proof_percentage")));
+			$this->proofed = stripslashes(trim(mysql_result($result, 0, "proofed")));
 		}
 
 		$this->db->close();
@@ -232,8 +234,9 @@ class Project {
 
 		$query = "SELECT username, ";
 		$query .= "COUNT(username) AS pages, ";
-		$query .= "COUNT(username) / (SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * 100 AS percentage ";
+		$query .= "COUNT(username) / ((SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * projects.num_proofs) * 100 AS percentage ";
 		$query .= "FROM assignments ";
+		$query .= "JOIN projects ON assignments.project_id = projects.id ";
 		$query .= "WHERE project_id={$this->project_id} ";
 		$query .= "GROUP BY username ORDER BY pages DESC;";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
