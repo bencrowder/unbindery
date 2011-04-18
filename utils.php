@@ -18,4 +18,10 @@ function redirectToDashboard($message = "", $error = "") {
 	header("Location: $locstr");
 }
 
+function escapebrackets($text) {
+	$text = str_replace("<", "&lt;", $text);
+	$text = str_replace(">", "&gt;", $text);
+	return $text;
+}
+
 ?>
