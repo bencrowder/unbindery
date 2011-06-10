@@ -17,5 +17,5 @@ $COOKIE_EXPIRATION = "30";	// in days
 
 $HASH_FUNCTION = "md5";		// or "sha1" or "md5sha1" or "sha1md5"
 
-$LOGIN_PAGE_URL = "$SITEROOT/login/";
+$LOGIN_PAGE_URL = "$SITEROOT/";
 ?>
