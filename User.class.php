@@ -197,6 +197,8 @@ class User {
 				$result = mysql_query($query) or die ("Couldn't run: $query");
 			}
 
+			/*
+			// don't do this anymore
 			// send email to user w/ edit link, deadline
 			global $SITEROOT;
 			$editlink = "$SITEROOT/edit/$project_slug/$item_id";
@@ -210,6 +212,7 @@ class User {
 
 			global $EMAILSUBJECT;
 			Mail::sendMessage($this->email, "$EMAILSUBJECT New assignment (due $deadline)", $message);
+			*/
 
 			$this->db->close();
 

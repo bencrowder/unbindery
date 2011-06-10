@@ -72,6 +72,8 @@ switch ($method) {
 			$status = $item->saveText($username, $draft, $review, $review_username, $itemtext);
 
 			echo json_encode(array("statuscode" => $status));
+		} else {
+			echo json_encode(array("statuscode" => "error"));
 		}
 		break;
 
