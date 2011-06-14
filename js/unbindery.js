@@ -119,9 +119,9 @@ function load_items_for_editing(event, data) {
 	$("#file_uploadQueue .fileName").each(function() {
 		var filename = $(this).html();
 		// strip up to the first dot
-		var pagename = filename.substr(0, filename.indexOf('.'));
+		//var pagename = filename.substr(0, filename.indexOf('.'));
 
-		pages += pagename + '|';
+		pages += filename + '|';
 	});
 
 	// add them to the database

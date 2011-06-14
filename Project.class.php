@@ -156,8 +156,12 @@ class Project {
 		// split the string up by the delimiter
 		$pages = explode('|', $pages, -1);
 
-		foreach ($pages as $page) {
-			$query = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES ({$this->project_id}, '" . mysql_real_escape_string($page) . "', NULL, 'available', 'image', '{$this->slug}/" . mysql_real_escape_string($page) . ".jpg'); ";
+		foreach ($pages as $filename) {
+			// get basename of the page
+			$path_parts = pathinfo($filename);
+			$pagename = $path_parts['filename'];
+
+			$query = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES ({$this->project_id}, '" . mysql_real_escape_string($pagename) . "', NULL, 'available', 'image', '{$this->slug}/" . mysql_real_escape_string($filename) . "'); ";
 
 			$result = mysql_query($query) or die ("Couldn't run: $query");
 
