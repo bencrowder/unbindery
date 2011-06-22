@@ -118,8 +118,8 @@ function load_items_for_editing(event, data) {
 	pages = '';
 	$("#file_uploadQueue .fileName").each(function() {
 		var filename = $(this).html();
-		// strip up to the first dot
-		//var pagename = filename.substr(0, filename.indexOf('.'));
+		// strip up to the space
+		filename = filename.substr(0, filename.indexOf(' '));
 
 		pages += filename + '|';
 	});
