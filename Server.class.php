@@ -77,11 +77,9 @@ class Server {
 		foreach ($users as $user) {
 			$points = intval($user["points_lost"]) * 10;
 			$query .= "UPDATE users SET score = score - " . $points . " WHERE username = '" . $user["username"] . "'; ";
-		}
-
-		if ($query != "") {
-			echo $query;
-			$result = mysql_query($query) or die("Couldn't run: $query");
+			if ($query != "") {
+				$result = mysql_query($query) or die("Couldn't run: $query");
+			}
 		}
 
 		$this->db->close();
