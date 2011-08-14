@@ -130,6 +130,7 @@ ul.action_list.projects .percentage		{ margin-top: 3px; }
 body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: #fff; padding: 15px; border: solid 2px #000; border-top: none; }
 
 #spinner								{ display: none; vertical-align: middle; }
+.spinner								{ display: none; vertical-align: middle; }
 
 #project_form							{ padding-top: 5px; }
 #project_form label						{ display: block; font-weight: bold; margin-top: 18px; margin-bottom: 2px; }

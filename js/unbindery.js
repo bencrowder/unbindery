@@ -162,6 +162,7 @@ $(document).ready(function() {
 	});
 
 	$(".getnewitem").click(function(e) {
+		$(this).siblings('.spinner').show();
 		var project_slug = this.getAttribute('data-project-slug');
 		get_new_page(project_slug);
 	});

@@ -77,7 +77,8 @@ $projectlist = array();
 							$projectlink = $SITEROOT . '/projects/' . $project["slug"];
 					?>
 					<li>
-						<div class="right_button"><span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new page</span></div>
+						<div class="right_button">
+							<img src="<?php echo $SITEROOT; ?>/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="<?php echo $project["slug"]; ?>">Get new page</span></div>
 
 						<div class="title"><a href="<?php echo $projectlink; ?>"><?php echo $project["title"]; ?></a></div>
 						<div class="sub">By <?php echo $project["author"]; ?></div>
