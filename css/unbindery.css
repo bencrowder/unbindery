@@ -244,6 +244,13 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 
 #controls input.button					{ font-size: 1em; margin-top: -6px; display: inline !important; }
 
+ul.items								{ list-style: none; padding-left: 0; }
+ul.items li								{ padding: 7px 0; border-top: solid 1px #ddd; }
+ul.items li label						{ width: 150px; margin-right: 10px; font-weight: bold; color: #345678; }
+ul.items li .status						{ width: 100px; margin-right: 10px; }
+ul.items li .status.completed			{ color: #000; }
+ul.items li .status.assigned			{ color: #009; }
+ul.items li .status.available			{ color: #900; }
 ul.items li a.assignment				{ background: #ddd; font-size: 10px; font-weight: bold; padding: 3px 8px; -moz-border-radius: 1em; -webkit-border-radius: 1em; border-radius: 1em; }
 ul.items li a.assignment.done			{ color: #fff; background: #444; }
 
