@@ -246,11 +246,11 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 
 ul.items								{ list-style: none; padding-left: 0; }
 ul.items li								{ padding: 7px 0; border-top: solid 1px #ddd; }
-ul.items li h4							{ margin: 0; width: 100px; margin-right: 10px; font-weight: bold; color: #345678; display: inline-block; }
+ul.items li h4							{ margin: 0; margin-right: 15px; font-weight: bold; color: #345678; display: inline-block; }
 ul.items li .status						{ width: 90px; margin-right: 10px; display: inline-block; font-size: .9em; }
-ul.items li .status.completed			{ color: #000; }
+ul.items li .status.completed			{ color: #999; }
 ul.items li .status.assigned			{ color: #009; }
-ul.items li .status.available			{ color: #900; }
+ul.items li .status.available			{ color: #090; }
 ul.items li a.assignment				{ background: #ddd; font-size: 10px; font-weight: bold; padding: 3px 8px; -moz-border-radius: 1em; -webkit-border-radius: 1em; border-radius: 1em; }
 ul.items li a.assignment.done			{ color: #fff; background: #444; }
 
