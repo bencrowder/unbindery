@@ -93,7 +93,7 @@ if ($mode == "new") {
 					<?php foreach ($items as $item) { ?>
 					<li><?php echo $item["title"]; ?> (<?php echo $item["status"]; ?>)
 						<?php foreach ($item["assignments"] as $assignment) { ?>
-						<a class="assignment"><?php echo $assignment["username"]; ?></a> (<?php echo $assignment["date_completed"]; ?>)
+						<a class="assignment<?php if ($assignment["date_completed"] != "") { echo " done"; }?>"><?php echo $assignment["username"]; ?></a>
 						<?php } ?>
 					<?php } ?>
 				<?php endif; ?>

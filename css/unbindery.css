@@ -244,6 +244,10 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 
 #controls input.button					{ font-size: 1em; margin-top: -6px; display: inline !important; }
 
+ul.items li a.assignment				{ background: #ddd; font-size: 10px; font-weight: bold; padding: 3px 8px; -moz-border-radius: 1em; -webkit-border-radius: 1em; border-radius: 1em; }
+ul.items li a.assignment.done			{ color: #fff; background: #444; }
+
+
 
 /* Project Details */
 /* --------------------------------------------------- */

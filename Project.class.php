@@ -278,8 +278,6 @@ class Project {
 
 		while ($row = mysql_fetch_assoc($result)) {
 			array_push($items[$row["item_id"]]["assignments"], array("username" => $row["username"], "date_completed" => $row["date_completed"]));
-			print_r($items[$row["item_id"]]);
-			echo "\n<br>";
 		}
 		
 		$this->db->close();
