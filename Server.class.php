@@ -123,7 +123,6 @@ class Server {
 			array_push($assignments, array("username" => $row["username"], "item_id" => $row["item_id"], "project_id" => $row["project_id"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"]));
 		}
 
-		print_r($assignments);
 		$this->db->close();
 		return $assignments;
 	}
