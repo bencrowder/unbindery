@@ -251,7 +251,8 @@ ul.items li .status						{ width: 90px; margin-right: 10px; display: inline-bloc
 ul.items li .status.completed			{ color: #999; }
 ul.items li .status.assigned			{ color: #009; }
 ul.items li .status.available			{ color: #090; }
-ul.items li a.assignment				{ background: #ddd; font-size: 10px; font-weight: bold; padding: 3px 8px; -moz-border-radius: 1em; -webkit-border-radius: 1em; border-radius: 1em; }
+ul.items li a.assignment				{ background: #ddd; font-size: 10px; font-weight: bold; padding: 3px 8px; -moz-border-radius: 1em; -webkit-border-radius: 1em; border-radius: 1em; text-decoration: none; }
+ul.items li a.assignment:hover			{ text-decoration: underline; }
 ul.items li a.assignment.done			{ color: #fff; background: #444; }
 
 

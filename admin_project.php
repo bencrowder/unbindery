@@ -90,10 +90,10 @@ if ($mode == "new") {
 				<?php if ($items): ?>
 				<h3>Items and Assignments</h3>
 				<ul class="items">
-					<?php foreach ($items as $item) { ?>
+					<?php foreach ($items as $item_id => $item) { ?>
 					<li><h4><?php echo $item["title"]; ?></h4> <span class="status <?php echo $item["status"]; ?>">(<?php echo $item["status"]; ?>)</span>
 						<?php foreach ($item["assignments"] as $assignment) { ?>
-						<a class="assignment<?php if ($assignment["date_completed"] != "") { echo " done"; }?>" href="<?php echo $SITEROOT; ?>/admin/review/<?php echo $slug; ?>/<?php echo key($item); ?>/<?php echo $assignment["username"]; ?>"><?php echo $assignment["username"]; ?></a>
+						<a class="assignment<?php if ($assignment["date_completed"] != "") { echo " done"; }?>" href="<?php echo $SITEROOT; ?>/admin/review/<?php echo $slug; ?>/<?php echo $item_id; ?>/<?php echo $assignment["username"]; ?>"><?php echo $assignment["username"]; ?></a>
 						<?php } ?>
 					<?php } ?>
 				<?php endif; ?>
