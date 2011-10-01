@@ -89,7 +89,13 @@ if ($mode == "new") {
 
 				<?php if ($items): ?>
 				<h3>Items and Assignments</h3>
-				<?php print_r($items); ?>
+				<ul class="items">
+					<?php foreach ($items as $item): ?>
+					<li><?php echo $item->title; ?> (<?php $item->status ?>)
+						<?php foreach ($item->assignments as $assignment): ?>
+						<a class="assignment"><?php echo $assignment->username; ?></a> (<?php echo $assignment->date_completed; ?>)
+						<?php endif; ?>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 
