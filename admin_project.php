@@ -93,8 +93,7 @@ if ($mode == "new") {
 					<?php foreach ($items as $item) { ?>
 					<li><h4><?php echo $item["title"]; ?></h4> <span class="status <?php echo $item["status"]; ?>">(<?php echo $item["status"]; ?>)</span>
 						<?php foreach ($item["assignments"] as $assignment) { ?>
-				<a class="button" href="<?php echo $SITEROOT; ?>/admin/upload/<?php echo $slug; ?>">Add pages</a>
-						<a class="assignment<?php if ($assignment["date_completed"] != "") { echo " done"; }?>" href="<?php echo $SITEROOT; ?>/admin/review/<?php echo $slug; ?>/<?php echo $item["id"]; ?>/<?php echo $assignment["username"]; ?>"><?php echo $assignment["username"]; ?></a>
+						<a class="assignment<?php if ($assignment["date_completed"] != "") { echo " done"; }?>" href="<?php echo $SITEROOT; ?>/admin/review/<?php echo $slug; ?>/<?php echo key($item); ?>/<?php echo $assignment["username"]; ?>"><?php echo $assignment["username"]; ?></a>
 						<?php } ?>
 					<?php } ?>
 				<?php endif; ?>
