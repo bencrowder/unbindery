@@ -91,7 +91,7 @@ if ($mode == "new") {
 				<h3>Items and Assignments</h3>
 				<ul class="items">
 					<?php foreach ($items as $item) { ?>
-					<li><label><?php echo $item["title"]; ?></label> <span class="status <?php echo $item["status"]; ?>">(<?php echo $item["status"]; ?>)</span>
+					<li><h4><?php echo $item["title"]; ?></h4> <span class="status <?php echo $item["status"]; ?>">(<?php echo $item["status"]; ?>)</span>
 						<?php foreach ($item["assignments"] as $assignment) { ?>
 						<a class="assignment<?php if ($assignment["date_completed"] != "") { echo " done"; }?>"><?php echo $assignment["username"]; ?></a>
 						<?php } ?>
