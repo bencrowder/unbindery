@@ -276,12 +276,10 @@ class Project {
 		$query = "SELECT item_id, username, date_completed FROM assignments WHERE project_id = " . $this->project_id . " ORDER BY item_id ASC";
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
-		$assignments = array();
-
 		while ($row = mysql_fetch_assoc($result)) {
 			$item = $items[$row["item_id"]];
 
-			array_push($item["assignments"], array("username" => $row["username"], "date_completed" => $row["date_completed"]));
+			$item["assignments"] = array("username" => $row["username"], "date_completed" => $row["date_completed"]);
 		}
 		
 		$this->db->close();
