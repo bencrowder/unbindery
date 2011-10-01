@@ -40,7 +40,7 @@ $error = stripslashes($_GET["error"]);
 				<h4>Current Assignments</h4>
 				<ul>
 				<?php
-					$assignments = $server->getAssignments();
+					$assignments = $server->getCurrentAssignments();
 					foreach ($assignments as $assignment) {
 						echo "<li>$username ($item_id, $project_id), assigned $date_assigned, deadline $deadline</li>";
 					}
