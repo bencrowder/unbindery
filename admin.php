@@ -34,9 +34,22 @@ $error = stripslashes($_GET["error"]);
 
 		<div class="container">
 			<div class="bigcol">
-				<p>Users</p>
-				<p>Projects</p>
-				<p>History</p>
+				<h4>Current Assignments</h4>
+
+				<h4>Projects</h4>
+				<ul>
+				<?php
+					$server = new Server($db);
+					$projects = $server->getProjects();
+					foreach ($projects as $project) {
+						echo "<li><a href='$SITEROOT/projects/{$project["slug"]}'>{$project["title"]}</li>\n";
+					}
+				?>
+				</ul>
+
+				<h4>Users</h4>
+
+				<h4>History</h4>
 			</div>
 
 			<div class="sidebar">
