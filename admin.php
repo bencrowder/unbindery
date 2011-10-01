@@ -52,7 +52,7 @@ $error = stripslashes($_GET["error"]);
 				<?php
 					$projects = $server->getProjects();
 					foreach ($projects as $project) {
-						echo "<li><a href='$SITEROOT/projects/{$project["slug"]}'>{$project["title"]}</a></li>\n";
+						echo "<li><a href='$SITEROOT/admin/projects/{$project["slug"]}'>{$project["title"]}</a></li>\n";
 					}
 				?>
 				</ul>
