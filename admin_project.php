@@ -39,6 +39,8 @@ if ($mode == "new") {
 	$project_guidelines = stripslashes($project->guidelines);
 	$project_thumbnails = stripslashes($project->thumbnails);
 	$project_status = $project->status;
+
+	$items = $project->getItemsAndAssignments();
 }
 
 ?>
@@ -84,6 +86,11 @@ if ($mode == "new") {
 					<option <?php if ($project_status == "completed") { echo 'selected '; } ?>value="completed">Completed</option>
 					<option <?php if ($project_status == "posted") { echo 'selected '; } ?>value="posted">Posted</option>
 				</select>
+
+				<?php if ($items): ?>
+				<h3>Items and Assignments</h3>
+				<?php print_r($items); ?>
+				<?php endif; ?>
 			</div>
 
 			<div class="sidebar">

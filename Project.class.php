@@ -259,6 +259,36 @@ class Project {
 		return $proofers;
 	}
 
+	public function getItemsAndAssignments() {
+		$this->db->connect();
+
+		/* Get all the items for this project */
+		$query = "SELECT id, title, status FROM items WHERE project_id = " . $this->project_id . " ORDER BY items.id ASC";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$items = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			$items[$row["id"]] = array("title" => $row["title"], "status" => $row["status"], "assignments" => array());
+		}
+
+		/* Now get assignments */
+		$query = "SELECT item_id, username, date_completed FROM assignments WHERE project_id = " . $this->project_id . " ORDER BY item_id ASC";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$assignments = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			$item = $items[$row["item_id"]];
+
+			array_push($item["assignments"], array("username" => $row["username"], "date_completed" => $row["date_completed"]));
+		}
+		
+		$this->db->close();
+
+		return $items;
+	}
+
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "author" => $this->author, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
