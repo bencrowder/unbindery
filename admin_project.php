@@ -91,11 +91,11 @@ if ($mode == "new") {
 				<h3>Items and Assignments</h3>
 				<ul class="items">
 					<?php foreach ($items as $item): ?>
-					<li><?php echo $item->title; ?> (<?php $item->status ?>)
+					<li><?php echo $item->title; ?> (<?php echo $item->status; ?>)
 						<?php foreach ($item->assignments as $assignment): ?>
 						<a class="assignment"><?php echo $assignment->username; ?></a> (<?php echo $assignment->date_completed; ?>)
-						<?php endif; ?>
-					<?php endif; ?>
+						<?php endfor; ?>
+					<?php endfor; ?>
 				<?php endif; ?>
 			</div>
 
