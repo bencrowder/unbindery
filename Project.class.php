@@ -277,10 +277,9 @@ class Project {
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		while ($row = mysql_fetch_assoc($result)) {
-			$item = $items[$row["item_id"]];
-
-			array_push($item["assignments"], array("username" => $row["username"], "date_completed" => $row["date_completed"]));
-			print_r($item);
+			array_push($items[$row["item_id"]]["assignments"], array("username" => $row["username"], "date_completed" => $row["date_completed"]));
+			print_r($items[$row["item_id"]]);
+			echo "\n<br>";
 		}
 		
 		$this->db->close();
