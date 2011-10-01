@@ -277,7 +277,9 @@ class Project {
 		$result = mysql_query($query) or die ("Couldn't run: $query");
 
 		while ($row = mysql_fetch_assoc($result)) {
+			echo $row["item_id"] . "|" . $row["username"];
 			$item = $items[$row["item_id"]];
+			echo "item: " . $item["title"];
 
 			array_push($item["assignments"], array("username" => $row["username"], "date_completed" => $row["date_completed"]));
 		}
