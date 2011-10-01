@@ -42,7 +42,7 @@ $error = stripslashes($_GET["error"]);
 				<?php
 					$assignments = $server->getCurrentAssignments();
 					foreach ($assignments as $assignment) {
-						echo "<li>{$assignments["username"]} ({$assignments["item_id"]}, {$assignments["project_id"]}), assigned {$assignments["date_assigned"]}, deadline {$assignments["deadline"]}</li>";
+						echo "<li>{$assignment["username"]} ({$assignment["item_id"]}, {$assignments["project_id"]}), assigned {$assignment["date_assigned"]}, deadline {$assignment["deadline"]}</li>";
 					}
 				?>
 				</ul>
@@ -52,7 +52,7 @@ $error = stripslashes($_GET["error"]);
 				<?php
 					$projects = $server->getProjects();
 					foreach ($projects as $project) {
-						echo "<li><a href='$SITEROOT/projects/{$project["slug"]}'>{$project["title"]}</li>\n";
+						echo "<li><a href='$SITEROOT/projects/{$project["slug"]}'>{$project["title"]}</a></li>\n";
 					}
 				?>
 				</ul>
