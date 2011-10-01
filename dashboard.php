@@ -139,7 +139,9 @@ $projectlist = array();
 						<div class="percentage">
 							<div class="percentage_container">
 								<div class="percent" style="width: <?php echo $percentage; ?>px;"></div>
+								<?php if ($project["num_proofs"] > 1): ?>
 								<div class="percent_proofs" style="width: <?php echo $proof_percentage; ?>px;"></div>
+								<?php endif; ?>
 							</div> 
 							<p><?php echo $percentage . "% (" . $project["available_pages"] . " left)";?></p>
 						</div>
