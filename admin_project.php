@@ -90,12 +90,12 @@ if ($mode == "new") {
 				<?php if ($items): ?>
 				<h3>Items and Assignments</h3>
 				<ul class="items">
-					<?php foreach ($items as $item): ?>
+					<?php foreach ($items as $item) { ?>
 					<li><?php echo $item->title; ?> (<?php echo $item->status; ?>)
-						<?php foreach ($item->assignments as $assignment): ?>
+						<?php foreach ($item->assignments as $assignment) { ?>
 						<a class="assignment"><?php echo $assignment->username; ?></a> (<?php echo $assignment->date_completed; ?>)
-						<?php endfor; ?>
-					<?php endfor; ?>
+						<?php } ?>
+					<?php } ?>
 				<?php endif; ?>
 			</div>
 
