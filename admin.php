@@ -15,6 +15,8 @@ if (!$user->admin) {
 	redirectToDashboard("", "You're not an administrator. Sorry.");
 }
 
+$server = new Server($db);
+
 $message = stripslashes($_GET["message"]);
 $error = stripslashes($_GET["error"]);
 
@@ -36,11 +38,18 @@ $error = stripslashes($_GET["error"]);
 		<div class="container">
 			<div class="bigcol">
 				<h4>Current Assignments</h4>
+				<ul>
+				<?php
+					$assignments = $server->getAssignments();
+					foreach ($assignments as $assignment) {
+						echo "<li>$username ($item_id, $project_id), assigned $date_assigned, deadline $deadline</li>";
+					}
+				?>
+				</ul>
 
 				<h4>Projects</h4>
 				<ul>
 				<?php
-					$server = new Server($db);
 					$projects = $server->getProjects();
 					foreach ($projects as $project) {
 						echo "<li><a href='$SITEROOT/projects/{$project["slug"]}'>{$project["title"]}</li>\n";

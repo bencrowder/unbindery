@@ -110,4 +110,20 @@ class Server {
 
 		$this->db->close();
 	}
+
+	public function getCurrentAssignments() {
+		$this->db->connect();
+
+		$query = "SELECT username, item_id, project_id, date_assigned, deadline FROM assignments WHERE date_completed IS NULL ORDER BY project_id, date_assigned DESC";
+		$result = mysql_query($query) or die ("Couldn't run: $query");
+
+		$assignments = array();
+
+		while ($row = mysql_fetch_assoc($result)) {
+			array_push($assignments, array("username" => $row["username"], "item_id" => $row["item_id"], "project_id" => $row["project_id"], "date_assigned" => $row["date_assigned"], "deadline" => $row["deadline"]));
+		}
+
+		$this->db->close();
+		return $assignments;
+	}
 }
