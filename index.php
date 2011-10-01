@@ -1,9 +1,9 @@
 <?php
 
-include_once('include/config.php');
-include_once('include/Alibaba.class.php');
-include_once('Database.class.php');
-include_once('unbindery.php');
+include_once 'include/config.php';
+include_once 'include/Alibaba.class.php';
+include_once 'Database.class.php';
+include_once 'unbindery.php';
 
 if (Alibaba::authenticated()) {
 	header("Location: $SITEROOT/dashboard");
