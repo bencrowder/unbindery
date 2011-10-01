@@ -42,7 +42,7 @@ $error = stripslashes($_GET["error"]);
 				<?php
 					$assignments = $server->getCurrentAssignments();
 					foreach ($assignments as $assignment) {
-						echo "<li>$username ($item_id, $project_id), assigned $date_assigned, deadline $deadline</li>";
+						echo "<li>{$assignments["username"]} ({$assignments["item_id"]}, {$assignments["project_id"]}), assigned {$assignments["date_assigned"]}, deadline {$assignments["deadline"]}</li>";
 					}
 				?>
 				</ul>
