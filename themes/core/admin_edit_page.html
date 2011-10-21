@@ -1,0 +1,34 @@
+{% include 'header.html' %}
+
+<form id="ub_text" action="{{ siteroot }}/admin/save_page" method="POST">
+	<div id="controls_container">
+		<div id="controls">
+			<ul id="controls_left">
+				<li><a href="{{ siteroot }}/admin/projects/{{ project_slug }}" class="button">Back</a></li>
+			</ul>
+			<ul id="controls_right">
+				<li><input type="submit" class="button" value="{{ savepage }}" /></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="main" class="edit">
+		<div id="metadata">
+			<label>Title</label>
+			<input type="text" id="page_title" name="page_title" value="{{ page.title }}" />
+		</div>
+
+		<div id="image_container">
+			<img src="{{ siteroot }}/images/{{ page.href }}" width="368" />
+		</div>
+
+		<div id="text_container">
+			<textarea id="page_text" name="page_text">{{ page.stripped_itemtext }}</textarea>
+			<input type="hidden" name="page_id" id="page_id" value="{{ page.id }}" />
+			<input type="hidden" name="project_slug" id="project_slug" value="{{ project_slug }}" />
+			<input type="hidden" name="next" id="next" value="{{ next }}" />
+		</div>
+	</div>
+</form>
+
+{% include 'footer.html' %}

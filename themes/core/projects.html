@@ -1,0 +1,41 @@
+{% include 'header.html' %}
+
+<div id="main">
+	<h2>Projects</h2>
+
+	<div class="container">
+		<div class="bigcol">
+			<h3 class="action_header projects">Available Projects</h3>
+			<ul class="action_list projects">
+				{% for project in projects %}
+				<li>
+					<div class="percentage">
+						<div class="percentage_container">
+							<div class="percent" style="width: {{ project.percentage }}px;"></div>
+							{% if project.num_proofs > 1 %}<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>{% endif %}
+						</div> 
+						<p>{{ project.percentage_rounded }}% ({{ project.available_pages }} left)</p>
+					</div>
+					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+					<div class="sub">Author: {{ project.author }}</div>
+				</li>
+				{% endfor %}
+				<li></li>
+			</ul>
+		</div>
+
+		<div class="sidebar">
+			<h3>Completed Projects</h3>
+			<ul class="projects">
+			{% for project in completedprojects %}
+				<li>
+					<a href="{{ project.link }}">{{ project.title }}</a>
+					<div class="sub">Completed {{ project.date_completed }}</div>
+				</li>
+			{% endfor %}
+			</ul>	
+		</div>
+	</div>
+</div>
+
+{% include 'footer.html' %}

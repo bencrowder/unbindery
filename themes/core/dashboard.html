@@ -1,0 +1,102 @@
+{% include 'header.html' %}
+
+{% if message %}<div id="message">{{ message }}</div>{% endif %}
+{% if error %}<div id="error">{{ error }}</div>{% endif %}
+
+<div id="main" class="dashboard">
+	<h2>Dashboard</h2>
+
+	<div class="container">
+		<div class="bigcol">
+			<h3 class="action_header">Current Assignments</h3>
+			<ul class="action_list">
+				{% if item_count == 0 and project_count == 0 %}
+					<li class="blankslate">Welcome. <a href="{{ siteroot }}/projects">Join a project</a> to get started proofing.</li>
+				{% endif %}
+
+				{% for item in items %}
+				<li>
+					<div class="right_button"><a href="{{ item.editlink }}" class="button">Proof</a></div>
+					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">Due {{ item.deadline }}</span></div>
+					<div class="sub">Project: {{ item.project_title }}</div>
+				</li>
+				{% endfor %}
+
+				{% for project in projects %}
+					{% if project.available %}
+				<li>
+					<div class="right_button">
+						<img src="{{ siteroot }}/img/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">Get new page</span></div>
+
+					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+					<div class="sub">By {{ project.author }}</div>
+				</li>
+					{% endif %}
+				{% endfor %}
+				<li></li>
+			</ul>
+		</div>
+
+		<div class="sidebar">
+			<ul id="stats">
+				<li><label>Score</label> <span class="stat">{{ user.score }}</span></li>
+				<li><label>Proofed</label> <span class="stat">{{ user.proofed }}</span></li>
+				<li><label>Proofed This Past Week</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="lower_dash">
+		<div class="group">
+			<h3>Recent History</h3>
+			<ul class="list">
+				{% if history_count == 0 %}
+				<li>Nothing so far -- you must be new here. :)</li>
+				{% endif %}
+
+				{% for entry in history %}
+				<li>
+					{{ entry.date_completed }}: <a href='{{ entry.editlink }}'>{{ entry.title }}</a>
+					<div class="history_projecttitle">Project: {{ entry.project_title }}</div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div class="group">
+			<h3>Current Projects</h3>
+			<ul class="list">
+				{% if project_count == 0 %}
+				<li>No current projects.</li>
+				{% endif %}
+
+				{% for project in projects %}
+				<li>
+					<div class="percentage">
+						<div class="percentage_container">
+							<div class="percent" style="width: {{ project.percentage }}px;"></div>
+							{% if project.num_proofs > 1 %}
+							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
+							{% endif %}
+						</div> 
+						<p>{{ project.percentage }}% ({{ project.available_pages }} left)</p>
+					</div>
+
+					<div class="project_title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div class="group leaderboard">
+			<h3>Top Proofers</h3>
+			<ol id="stats">
+			{% for user in topusers %} 
+			<li><label>{{ user.username }}</label> <span class="stat">{{ user.score }}</span></li>
+			{% endfor %}
+			</ol>
+		</div>
+	</div>
+</div>
+
+{% include 'footer.html' %}

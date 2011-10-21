@@ -1,7 +1,11 @@
 include/*config.php
 include/guidelines.php
+include/config.yaml
 js/config.js
 scripts/config.py*
 images/*
 texts/*
 lib/ace/*
+lib/Twig/*
+lib/sfyaml/*
+old/*
