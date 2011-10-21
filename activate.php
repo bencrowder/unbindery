@@ -6,7 +6,7 @@ include_once('User.class.php');
 
 $hash = $_GET["hash"];
 
-$user = new User($db);
+$user = new User();
 $status = $user->validateHash($hash);
 
 if ($status) {

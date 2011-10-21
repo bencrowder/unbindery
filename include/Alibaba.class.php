@@ -1,4 +1,4 @@
-<?
+<?php
 // Alibaba
 // PHP authentication library
 //

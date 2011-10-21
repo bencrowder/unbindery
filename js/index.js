@@ -26,7 +26,7 @@ $(document).ready(function() {
 					$("form#signup_form").hide();
 					$("#thankyou").show();
 				}
-		}, "json");
+			}, "json");
 
 		return false;
 	});

@@ -1,6 +1,6 @@
 <?php
 
-$SYSTEMGUIDELINES = <<<EOG;
+$SYSTEMGUIDELINES = <<<EOG
 <i>Questions? Email your administrator (your@email.com)</i>
 
 <h3>General</h3>

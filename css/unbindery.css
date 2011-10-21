@@ -232,7 +232,7 @@ a.guidelines_link						{ color: #000; border-bottom: dotted 1px #666; text-decor
 /* --------------------------------------------------- */
 
 #main label								{ font-weight: bold; color: #345678; }
-#main input[type="text"]				{ width: 250px; border: solid 1px #bbb; padding: 3px; font-weight: bold; font-size: 1.2em; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+#main input[type="text"], input[type="password"]	{ width: 250px; border: solid 1px #bbb; padding: 3px; font-weight: bold; font-size: 1.2em; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 #main textarea							{ border: solid 1px #bbb; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 3px; }
 
 #main.edit #metadata					{ overflow: hidden; clear: both; margin-bottom: 1.5em; }

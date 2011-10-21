@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="<?php echo $SITEROOT; ?>/lib/jquery.hotkeys.js"></script>
 
 	<?php // this is for the upload page ?>
-	<?php if ($includes != "") { echo $includes; } ?>
+	<?php if (isset($includes) && $includes != "") { echo $includes; } ?>
 
 	<script type="text/javascript" src="<?php echo $SITEROOT; ?>/js/config.js"></script>
 	<script type="text/javascript" src="<?php echo $SITEROOT; ?>/js/unbindery.js"></script>

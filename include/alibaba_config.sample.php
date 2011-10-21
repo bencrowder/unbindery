@@ -1,4 +1,4 @@
-<?
+<?php
 // Alibaba config file
 //
 // Included by Alibaba.class.php

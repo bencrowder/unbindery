@@ -9,7 +9,7 @@ include_once('Server.class.php');
 Alibaba::forceAuthentication();
 
 $username = Alibaba::getUsername();
-$user = new User($db, $username);
+$user = new User($username);
 
 if (!$user->admin) {
 	redirectToDashboard("", "You're not an administrator. Sorry.");
@@ -17,18 +17,18 @@ if (!$user->admin) {
 
 $server = new Server($db);
 
-$message = stripslashes($_GET["message"]);
-$error = stripslashes($_GET["error"]);
+if (array_key_exists('message', $_GET)) { $message = stripslashes($_GET["message"]); }
+if (array_key_exists('error', $_GET)) { $error = stripslashes($_GET["error"]); }
 
 ?>
 
 <?php include('include/header.php'); ?>
 
-<?php if ($message) { ?>
+<?php if (isset($message) && $message != '') { ?>
 	<div id="message"><?php echo $message; ?></div>
 <?php } ?>
 
-<?php if ($error) { ?>
+<?php if (isset($error) && $error != '') { ?>
 	<div id="error"><?php echo $error; ?></div>
 <?php } ?>
 

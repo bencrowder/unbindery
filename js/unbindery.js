@@ -29,8 +29,9 @@ function save_page_text(is_draft, is_review, slug) {
 	var username = $("ul#nav .username").html();
 	var review_username = $("#review_username").html();
 
-	$.post(siteroot + "/unbindery.php?method=save_item_text", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	$.post(siteroot + "/ws/save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
+			console.log('data', data);
 			if (data.statuscode == "success") {
 				$("#spinner").hide();
 
@@ -49,9 +50,8 @@ function save_page_text(is_draft, is_review, slug) {
 					redirect_to_dashboard(message, "");
 				}
 			} else {
-				if (redirect) {
-				 redirect_to_dashboard("", "Error saving page. Try again.");
-				}
+				// don't redirect to dashboard here, show error thing
+				// redirect_to_dashboard("", "Error saving page. Try again.");
 			}
 		}, 'json');
 }

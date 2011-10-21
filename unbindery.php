@@ -13,7 +13,11 @@ include_once('Mail.class.php');
 
 /* Dispatcher ********************************************************/
 
-$method = $_GET['method'];
+if (array_key_exists('method', $_GET)) {
+	$method = $_GET['method'];
+} else {
+	$method = '';
+}
 
 switch ($method) {
 	case 'get_item': 
@@ -55,33 +59,11 @@ switch ($method) {
 		}
 		break;
 
-	case 'save_item_text':
-		$item_id = $_POST['item_id'];
-		$project_slug = $_POST['project_slug'];
-		$username = $_POST['username'];
-		$review_username = $_POST['review_username'];
-		$itemtext = $_POST['itemtext'];
-	
-		// convert to boolean
-		$draft = ($_POST['draft'] == "true") ? true : false;
-		$review = ($_POST['review'] == "true") ? true : false;
-
-		if ($item_id && $project_slug && $username) {
-			$item = new Item($db);
-			$item->load($item_id, $project_slug, $username);
-			$status = $item->saveText($username, $draft, $review, $review_username, $itemtext);
-
-			echo json_encode(array("statuscode" => $status));
-		} else {
-			echo json_encode(array("statuscode" => "error"));
-		}
-		break;
-
 	case 'get_user_assignments':
 		$username = $_POST['username'];
 
 		if ($username) {
-			$user = new User($db, $username);
+			$user = new User($username);
 			$items = $user->getAssignments();
 
 			echo json_encode($items);
@@ -92,7 +74,7 @@ switch ($method) {
 		$username = $_POST['username'];
 
 		if ($username) {
-			$user = new User($db, $username);
+			$user = new User($username);
 			$projects = $user->getProjects();
 
 			echo json_encode($projects);
@@ -105,7 +87,7 @@ switch ($method) {
 		$project_slug = $_POST['project_slug'];
 
 		if ($username && $item_id && $project_slug) {
-			$user = new User($db, $username);
+			$user = new User($username);
 			$result = $user->isAssigned($item_id, $project_slug);
 
 			echo json_encode($result);
@@ -117,7 +99,7 @@ switch ($method) {
 		$project_slug = $_POST['project_slug'];
 
 		if ($username && $project_slug) {
-			$user = new User($db, $username);
+			$user = new User($username);
 			$result = $user->isMember($project_slug);
 
 			echo json_encode($result);
@@ -129,7 +111,7 @@ switch ($method) {
 		$project_slug = $_POST['project_slug'];
 
 		if ($username && $project_slug) {
-			$user = new User($db, $username);
+			$user = new User($username);
 			$result = $user->assignToProject($project_slug);
 
 			echo json_encode($result);
@@ -142,7 +124,7 @@ switch ($method) {
 		$project_slug = $_POST['project_slug'];
 
 		if ($username && $item_id && $project_slug) {
-			$user = new User($db, $username);
+			$user = new User($username);
 			$result = $user->assignItem($item_id, $project_slug);
 
 			echo json_encode($result);
@@ -153,8 +135,8 @@ switch ($method) {
 		$username = $_POST['username'];
 		$project_slug = $_POST['project_slug'];
 
-		if ($username) {
-			$user = new User($db, $username);
+		if ($username && $project_slug) {
+			$user = new User($username);
 			$result = $user->getNewPage($project_slug);
 
 			echo json_encode($result);

@@ -1,59 +1,67 @@
 <?php
 
-include_once 'include/config.php';
-include_once 'include/Alibaba.class.php';
-include_once 'Database.class.php';
-include_once 'unbindery.php';
+require_once 'include/config.php';
+require_once 'include/utils.php';
+require_once 'include/Alibaba.class.php';
+require_once 'include/Router.class.php';
+require_once 'lib/Twig/Autoloader.php';
 
-if (Alibaba::authenticated()) {
-	header("Location: $SITEROOT/dashboard");
-}
+Twig_Autoloader::register();
 
-$includes = "<script src='$SITEROOT/js/index.js' type='text/javascript'></script>\n";
+$dbengine = Settings::getProtected('dbengine');
+require_once "db/Db$dbengine.class.php";
 
-include('include/header_index.php');
+// Create the database object
+$dbClass = "Db$dbengine";
+$db = new $dbClass;
+$db->create(Settings::getProtected('db_host'), Settings::getProtected('db_username'), Settings::getProtected('db_password'), Settings::getProtected('db_database'));
+Settings::setProtected('db', $db);
 
-if (isset($_GET["message"])) { ?>
-	<div id="message"><?php echo $_GET["message"]; ?></div>
-<?php } ?>
+require_once 'classes/Database.class.php';
+require_once 'classes/User.class.php';
+require_once 'classes/Mail.class.php';
+require_once 'classes/Project.class.php';
+require_once 'classes/Server.class.php';
+require_once 'classes/Item.class.php';
 
-<div class="container">
-	<div id="logo_box"><img src="<?php echo $SITEROOT; ?>/img/logo_white.png" /></div>
-	<div id="login_box">
-		<h2>Login</h2>
+require_once 'classes/Handlers.class.php';
+require_once 'classes/WebServiceHandlers.class.php';
 
-		<form id="login_form" action="login/process" method="post" accept-charset="utf-8">
-			<label>Username:</label>
-			<input type="text" id="username" name="username" />
 
-			<label>Password:</label>
-			<input type="password" id="password" name="password" />
+// First, we get the URL from PHP
+$url = $_SERVER["REQUEST_URI"];
 
-			<input type="submit" value="Log In" class="button" />
+// Create the routes we want to use
+$routes = array(
+	'#^/?$#' => 'Handlers::indexHandler',
+	'#^/login/process/?$#' => 'Handlers::loginHandler',
+	'#^/signup/?$#' => 'Handlers::signupHandler',
+	'#^/logout/?$#' => 'Handlers::logoutHandler',
+	'#^/dashboard[/?]?(.*)/?$#' => 'Handlers::dashboardHandler',
+	'#^/settings/save/?$#' => 'Handlers::saveSettingsHandler',
+	'#^/settings/?$#' => 'Handlers::settingsHandler',
+	'#^/projects/(.*)/join/?$#' => 'Handlers::joinProjectHandler',
+	'#^/projects/(.*)/(guidelines)/?$#' => 'Handlers::projectHandler',
+	'#^/projects/(.*)/?$#' => 'Handlers::projectHandler',
+	'#^/projects/?$#' => 'Handlers::projectsHandler',
+	'#^/admin/projects/(.*)?$#' => 'Handlers::adminProjectHandler',
+	'#^/admin/new_project/?$#' => 'Handlers::adminProjectHandler',
+	'#^/admin/save_project/?$#' => 'Handlers::adminSaveProjectHandler',
+	'#^/admin/upload/(.*)/?$#' => 'Handlers::adminUploadHandler',
+	'#^/admin/upload_backend/?$#' => 'Handlers::adminUploadBackendHandler',
+	'#^/admin/save_page/?$#' => 'Handlers::adminSavePageHandler',
+	'#^/admin/new_page/(.*)/(.*)/?$#' => 'Handlers::adminNewPageHandler',
+	'#^/admin/edit/(.*)/(.*)/?$#' => 'Handlers::adminEditPageHandler',
+	'#^/admin/review/(.*)/(.*)/(.*)/?$#' => 'Handlers::adminReviewPageHandler',
+	'#^/admin/?$#' => 'Handlers::adminHandler',
+	'#^/edit/(.*)/(.*)/?$#' => 'Handlers::editPageHandler',
+	'#^/save_page/?$#' => 'Handlers::savePageHandler',
+	'#^/activate/(.*)/?$#' => 'Handlers::activateHandler',
 
-			<span id="signup">Sign up</span>
-		</form>
+	// Web services
+	'#^/ws/save_item_transcript/?$#' => 'WebServiceHandlers::saveItemTranscriptHandler'
+);
 
-		<form id="signup_form" style="display: none" action="signup" method="post" accept-charset="utf-8">
-			<label>Email:</label>
-			<input type="text" id="email_signup" name="email_signup" />
+Router::route($url, $routes, 'Handlers::fileNotFoundHandler');
 
-			<label>Username:</label>
-			<input type="text" id="username_signup" name="username_signup" />
-
-			<label>Password:</label>
-			<input type="password" id="password_signup" name="password_signup" />
-
-			<input type="submit" value="Sign Up" class="button" />
-
-			<span id="login">Log in</span>
-		</form>
-
-		<div id="thankyou" style="display: none">
-			We just sent you a confirmation link to your email address.
-		</div>
-	</div>
-</div>
-
-</body>
-</html>
+?>
