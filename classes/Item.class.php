@@ -29,48 +29,29 @@ class Item {
 	}
 
 	public function load($item_id, $project_slug, $username = "") {
-		$query = "SELECT * FROM items ";
-		$query .= "JOIN projects ON items.project_id = projects.id ";
-		$query .= "WHERE items.id = ? ";
-		$query .= "AND projects.slug = ?;";
-
-		$results = $this->db->query($query, array($item_id, $project_slug));
-		$result = $results[0];
-
-		if (isset($result)) {
-			$this->item_id = trim($result['id']);
-			$this->project_id = trim($result['project_id']);
+		$item = $this->db->loadItem($item_id, $project_slug);
+		if (isset($item)) {
+			$this->item_id = trim($item['id']);
+			$this->project_id = trim($item['project_id']);
 			$this->project_slug = $project_slug;
-			$this->title = trim($result['title']);
-			$this->itemtext = trim($result['itemtext']);
-			$this->status = trim($result['status']);
-			$this->type = trim($result['type']);
-			$this->href = trim($result['href']);
+			$this->title = trim($item['title']);
+			$this->itemtext = trim($item['itemtext']);
+			$this->status = trim($item['status']);
+			$this->type = trim($item['type']);
+			$this->href = trim($item['href']);
 		}
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$query = "SELECT itemtext FROM texts ";
-			$query .= "WHERE item_id = ? ";
-			$query .= "AND project_id = ? ";
-			$query .= "AND user = ?;";
-
-			$results = $this->db->query($query, array($item_id, $this->project_id, $username));
-
-			if (count($results) > 0) {
-				$this->itemtext = trim($results[0]['itemtext']);
+			$itemtext = $this->db->getUserTranscript($item_id, $this->project_id, $username);
+			if ($itemtext != '') {
+				$this->itemtext = $itemtext;
 			}
 		}
 	}
 
 	public function save() {
-		$sql = "UPDATE items ";
-		$sql .= "SET title = ?, project_id = ?, itemtext = ?, status = ?, type = ?, href = ? ";
-		$sql .= "WHERE id = ?;";
-
-		$this->db->execute($sql, array($this->title, $this->project_id, $this->itemtext, $this->status, $this->type, $this->href, $this->item_id));
-
-		return true;
+		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->itemtext, $this->status, $this->type, $this->href);
 	}
 
 	public function saveText($username, $draft, $review, $review_username, $itemtext) {
@@ -79,23 +60,12 @@ class Item {
 		$siteroot = Settings::getProtected('siteroot');
 
 		// load the project
-		$project = new Project($this->db, $this->project_slug);
+		$project = new Project($this->project_slug);
 		$user = new User($username);
 		$review_user = new User($review_username);
 
 		// check and see if we already have a draft
-		$query = "SELECT itemtext FROM texts ";
-		$query .= "WHERE item_id = ? ";
-		$query .= "AND project_id = ? ";
-		$query .= "AND user = ?;";
-		$results = $this->db->query($query, array($this->item_id, $this->project_id, $username));
-		$result = $results[0];
-
-		if (isset($result)) {
-			$existing_draft = true;
-		} else {
-			$existing_draft = false;
-		}
+		$existing_draft = $this->db->userHasTranscriptDraft($username, $this->item_id, $this->project_id);
 
 		if ($review) {
 			$status = "reviewed";
@@ -109,32 +79,17 @@ class Item {
 
 		if ($existing_draft) {
 			// update texts with $draft status
-			$sql = "UPDATE texts SET itemtext = ?, ";
-			$sql .= "date = NOW(), ";
-			$sql .= "status = ? ";
-			$sql .= "WHERE item_id = ? ";
-			$sql .= "AND project_id = ? ";
-			$sql .= "AND user = ?;";
-
-			$this->db->execute($sql, array($itemtext, $status, $this->item_id, $this->project_id, $username));
+			$this->db->updateItemTranscriptStatus($this->item_id, $this->project_id, $status, $itemtext, $username);
 		} else {
 			// insert into texts with $draft status
-			$sql = "INSERT INTO texts (project_id, item_id, user, date, itemtext, status) VALUES (?, ?, ?, NOW(), ?, ?);";
-
-			$this->db->execute($sql, array($this->project_id, $this->item_id, $username, $itemtext, $status));
+			$this->db->addItemTranscript($this->item_id, $this->project_id, $status, $itemtext, $username);
 		}
 
 		// we're finished with this item
 		if (!$draft) {
 			if ($review) {
 				// update date_reviewed for this assignment
-				$sql = "UPDATE assignments ";
-				$sql .= "SET date_reviewed = NOW() ";
-				$sql .= "WHERE username = ? ";
-				$sql .= "AND item_id = ? ";
-				$sql .= "AND project_id = ?;";
-
-				$this->db->execute($sql, array($review_username, $this->item_id, $this->project_id));
+				$this->db->updateAssignmentReviewDate($this->item_id, $this->project_id, $review_username);
 
 				$subject = "$emailsubject Reviewed " . $this->project_slug . "/" . $this->item_id . "/" . $review_username;
 				$message = "$username reviewed the item " . $this->project_slug . "/" . $this->item_id . ", proofed by $review_username.";
@@ -142,54 +97,32 @@ class Item {
 
 				// if the user who did the proofing was in training, clear them
 				if ($review_user->status == "training") {
-					$sql = "UPDATE users SET status = 'clear' WHERE username = ?;";
-					$this->db->execute($sql, array($review_username));
+					$this->db->updateUserStatus($review_username, 'clear');
 
 					// email the user to let them know
-					$subject = "$emailsubjecT Clearance granted";
+					$subject = "$emailsubject Clearance granted";
 					$message = "You've been cleared for further proofing!\n\n";
 					$message .= $siteroot;
 					Mail::sendMessage($review_user->email, $subject, $message);
 
 					// email admin to let them know
-					$subject = "$emailsubjecT Cleared $review_username";
+					$subject = "$emailsubject Cleared $review_username";
 					$message = "Cleared $review_username for further proofing.";
 					Mail::sendMessage($adminemail, $subject, $message);
 				}
 			} else {
 				// update user score (+5 for completing a page)
 				// and only do it if they haven't previously completed this page
-				$sql = "UPDATE users, assignments SET score = score + 5 ";
-				$sql .= "WHERE users.username = ? ";
-				$sql .= "AND item_id = ? ";
-				$sql .= "AND project_id = ? ";
-				$sql .= "AND date_completed IS NULL;";
-
-				$this->db->execute($sql, array($username, $this->item_id, $this->project_id));
+				$this->db->updateUserScoreForItem($username, $this->item_id, $this->project_id, 5));
 
 				// update date_completed for this assignment
-				$sql = "UPDATE assignments SET date_completed = NOW() ";
-				$sql .= "WHERE username = ? ";
-				$sql .= "AND item_id = ? ";
-				$sql .= "AND project_id = ?;";
-
-				$this->db->execute($sql, array($username, $this->item_id, $this->project_id));
+				$this->db->completeAssignment($username, $this->item_id, $this->project_id);
 
 				// check number of revisions
-				$query = "SELECT COUNT(id) as revisioncount FROM assignments ";
-				$query .= "WHERE item_id = ? ";
-				$query .= "AND project_id = ? ";
-				$query .= "AND date_completed IS NOT NULL";
+				$proofcount = $this->db->getItemProofCount($this->item_id, $this->project_id);
 
-				$results = $this->db->query($query, array($this->item_id, $this->project_id));
-				$revisioncount = $results[0]["revisioncount"];
-
-				if (intval($revisioncount) >= intval($project->num_proofs)) {
-					$sql = "UPDATE items SET status = 'completed' ";
-					$sql .= "WHERE id = ? ";
-					$sql .= "AND project_id = ?;";
-
-					$this->db->execute($sql, array($this->item_id, $this->project_id));
+				if ($proofcount >= intval($project->num_proofs)) {
+					$this->db->setItemStatus($this->item_id, 'completed');
 				}
 
 				$subject = "$emailsubject $username completed " . $this->project_slug . "/" . $this->item_id;
@@ -208,19 +141,11 @@ class Item {
 		return "success";
 	}
 
-	public function getJSON() {
-		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href));
+	public function getNextItem() {
+		return $this->db->getNextItem($this->item_id, $this->project_slug);
 	}
 
-	public function getNextPage() {
-		$this->db->connect();
-
-		$results = $this->db->query("SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE projects.slug = ? AND items.id > ? LIMIT 1", array($this->project_slug, $this->item_id));
-
-		if (count($results) > 0) {
-			$nextpage_id = trim($results[0]['id']);
-		}
-
-		return $nextpage_id;
+	public function getJSON() {
+		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href));
 	}
 }

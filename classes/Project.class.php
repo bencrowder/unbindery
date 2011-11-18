@@ -18,8 +18,8 @@ class Project {
 	private $num_proofs;
 	private $thumbnails;
 
-	public function Project($db, $slug = "") {
-		$this->db = $db;
+	public function Project($slug = "") {
+		$this->db = Settings::getProtected('db');
 
 		if ($slug != "") {
 			$this->load($slug);
@@ -35,51 +35,30 @@ class Project {
 	}
 
 	public function load($slug) {
-		$query = "SELECT *, ";
-		$query .= "DATE_FORMAT(date_started, '%e %b %Y') AS datestarted, ";
-		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS datecompleted, ";
-		$query .= "DATE_FORMAT(date_posted, '%e %b %Y') AS dateposted, ";
-		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
-		$query .= "FROM projects WHERE slug = ?;";
-		$results = $this->db->query($query, array($slug));
-		$result = $results[0];
+		$project = $this->db->loadProject($slug);
 
-		if (isset($result)) {
-			$this->project_id = stripslashes(trim($result['id']));
-			$this->title = stripslashes(trim($result['title']));
-			$this->author = stripslashes(trim($result['author']));
-			$this->slug = stripslashes(trim($result['slug']));
-			$this->language = stripslashes(trim($result['language']));
-			$this->description = stripslashes(trim($result['description']));
-			$this->owner = trim($result['owner']);
-			$this->status = trim($result['status']);
-			$this->guidelines = stripslashes(trim($result['guidelines']));
-			$this->deadline_days = trim($result['deadline_days']);
-			$this->num_proofs = trim($result['num_proofs']);
-			$this->thumbnails = trim($result['thumbnails']);
-			$this->date_started = trim($result['datestarted']);
-			$this->date_completed = trim($result['datecompleted']);
-			$this->date_posted = trim($result['dateposted']);
-			$this->days_spent = trim($result['days_spent']);
+		if (isset($project)) {
+			$this->project_id = stripslashes(trim($project['id']));
+			$this->title = stripslashes(trim($project['title']));
+			$this->author = stripslashes(trim($project['author']));
+			$this->slug = stripslashes(trim($project['slug']));
+			$this->language = stripslashes(trim($project['language']));
+			$this->description = stripslashes(trim($project['description']));
+			$this->owner = trim($project['owner']);
+			$this->status = trim($project['status']);
+			$this->guidelines = stripslashes(trim($project['guidelines']));
+			$this->deadline_days = trim($project['deadline_days']);
+			$this->num_proofs = trim($project['num_proofs']);
+			$this->thumbnails = trim($project['thumbnails']);
+			$this->date_started = trim($project['datestarted']);
+			$this->date_completed = trim($project['datecompleted']);
+			$this->date_posted = trim($project['dateposted']);
+			$this->days_spent = trim($project['days_spent']);
 		}
 	}
 
 	public function save() {
-		$sql = "UPDATE projects ";
-		$sql .= "SET title = ?, ";
-		$sql .= "author = ?, ";
-		$sql .= "slug = ?, ";
-		$sql .= "language = ?, ";
-		$sql .= "description = ?, ";
-		$sql .= "owner = ?, ";
-		$sql .= "status = ?, ";
-		$sql .= "guidelines = ?, ";
-		$sql .= "deadline_days = ?, ";
-		$sql .= "num_proofs = ?, ";
-		$sql .= "thumbnails = ? ";
-		$sql .= "WHERE id = ?;";
-
-		$this->db->execute($sql, array($this->title, $this->author, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails, $this->project_id));
+		$this->db->saveProject($this->title, $this->author, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails, $this->project_id);
 	}
 
 	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {
@@ -96,11 +75,7 @@ class Project {
 		$this->thumbnails = $thumbnails;
 
 		if ($title != "" && $slug != "") {
-			$sql = "INSERT INTO projects ";
-			$sql .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails, date_started) ";
-			$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
-
-			$this->db->execute($sql, array($this->title, $this->author, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails));
+			$this->db->addProject($this->title, $this->author, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails);
 
 			return "success";
 		} else {
@@ -109,16 +84,14 @@ class Project {
 	}
 
 	public function loadStatus() {
-		$query = "SELECT (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) AS proofed FROM projects WHERE slug = ?;";
-		$results = $this->db->query($query, array($this->slug));
-		$result = $results[0];
+		$project = $this->db->loadProjectStatus($this->slug);
 
-		if (isset($result)) {
-			$this->completed = trim($result['completed']);
-			$this->total = stripslashes(trim($result['total']));
-			$this->percentage = stripslashes(trim($result['percentage']));
-			$this->proof_percentage = stripslashes(trim($result['proof_percentage']));
-			$this->proofed = stripslashes(trim($result['proofed']));
+		if (isset($project)) {
+			$this->completed = trim($project['completed']);
+			$this->total = stripslashes(trim($project['total']));
+			$this->percentage = stripslashes(trim($project['percentage']));
+			$this->proof_percentage = stripslashes(trim($project['proof_percentage']));
+			$this->proofed = stripslashes(trim($project['proofed']));
 		}
 	}
 

@@ -246,7 +246,7 @@ class Handlers {
 		$user = new User($username);
 
 		// Load the project (and make sure it exists)
-		$project = new Project($db, $project_slug);
+		$project = new Project($project_slug);
 		if ($project->title == '') {
 			redirectToDashboard('', 'Error loading project.');
 		}
@@ -412,7 +412,7 @@ class Handlers {
 			$title = "Edit Project Settings";
 			$buttontitle = "Save Project";
 
-			$projObj = new Project($db, $slug);
+			$projObj = new Project($slug);
 
 			$project['title'] = stripslashes($projObj->title);
 			$project['author'] = stripslashes($projObj->author);
@@ -468,7 +468,7 @@ class Handlers {
 		$mode = $_POST['mode'];
 
 		if ($mode == 'new') {
-			$project = new Project($db);
+			$project = new Project();
 
 			$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails);
 
@@ -492,7 +492,7 @@ class Handlers {
 				redirectToDashboard("", "Error creating project");
 			}
 		} else {							// editing an existing project
-			$project = new Project($db, $slug);
+			$project = new Project($slug);
 
 			$project->title = $title;
 			$project->author = $author;
@@ -592,7 +592,7 @@ class Handlers {
 		if ($retval) {
 			if ($next) {
 				// serve up next page
-				$nextpage_id = $page->getNextPage();
+				$nextpage_id = $page->getNextItem();
 				if ($nextpage_id) {
 					// we go to new_page/ instead of edit/ so that we keep getting next
 					header("Location: $siteroot/admin/new_page/$project_slug/$nextpage_id");
@@ -792,7 +792,7 @@ class Handlers {
 		if ($retval) {
 			if ($next) {
 				// serve up next page
-				$nextpage_id = $page->getNextPage();
+				$nextpage_id = $page->getNextItem();
 				if ($nextpage_id) {
 					// we go to new_page/ instead of edit/ so that we keep getting next
 					header("Location: $siteroot/admin/new_page/$project_slug/$nextpage_id");
