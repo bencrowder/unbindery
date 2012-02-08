@@ -27,6 +27,38 @@ class WebServiceHandlers {
 			echo json_encode(array("statuscode" => "error"));
 		}
 	}
+
+	static public function getNewPageHandler($args) {
+		$siteroot = Settings::getProtected('siteroot');
+		$db = Settings::getProtected('db');
+
+		$username = $_POST['username'];
+		$project_slug = $_POST['project_slug'];
+
+		if ($username && $project_slug) {
+			$user = new User($username);
+			$result = $user->getNewPage($project_slug);
+
+			echo json_encode($result);
+		}
+	}
+
+	static public function addPagesHandler($args) {
+		$siteroot = Settings::getProtected('siteroot');
+		$db = Settings::getProtected('db');
+
+		$project_slug = $_POST['project_slug'];
+		$pages = $_POST['pages'];
+
+		if ($project_slug && $pages) {
+			$project = new Project($project_slug);
+			$result = $project->addPages($pages);
+
+			echo json_encode($result);
+		} else {
+			echo json_encode(array("statuscode" => "error", "slug" => $project_slug, "pages" => $pages));
+		}
+	}
 }
 
 ?>

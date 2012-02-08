@@ -712,6 +712,30 @@ class Handlers {
 		renderPage('admin_review_page', $options);
 	}
 
+	static public function adminHandler($args) {
+		$siteroot = Settings::getProtected('siteroot');
+		$db = Settings::getProtected('db');
+
+		Alibaba::forceAuthentication();
+
+		// get the current user's role on the project and make sure they're owner or admin
+		$username = Alibaba::getUsername();
+		$user = new User($username);
+
+		if (!$user->admin) {
+			redirectToDashboard("", "You don't have rights to use the admin screens.");
+		}
+
+		$options = array(
+			'siteroot' => $siteroot,
+			'user' => array(
+				'loggedin' => true,
+				'username' => $username,
+				'admin' => $user->admin),
+		);
+		renderPage('admin_dashboard', $options);
+	}
+
 	static public function editPageHandler($args, $next = false) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');

@@ -59,7 +59,7 @@ function save_page_text(is_draft, is_review, slug) {
 function get_new_page(project_slug) {
 	var username = $("ul#nav .username").html();
 
-	$.post(siteroot + "/unbindery.php?method=get_new_page", { project_slug: project_slug, username: username },
+	$.post(siteroot + "/ws/get_new_page", { project_slug: project_slug, username: username },
 		function(data) {
 			switch(data.statuscode) {
 				case "success":
@@ -125,7 +125,7 @@ function load_items_for_editing(event, data) {
 	});
 
 	// add them to the database
-	$.post(siteroot + "/unbindery.php?method=add_pages", { project_slug: project_slug, pages: pages },
+	$.post(siteroot + "/ws/add_pages", { project_slug: project_slug, pages: pages },
 		function(data) {
 			if (data.statuscode == "success") {
 				// load the first page into edit mode
@@ -162,6 +162,7 @@ $(document).ready(function() {
 	});
 
 	$(".getnewitem").click(function(e) {
+		$(this).hide();
 		$(this).siblings('.spinner').show();
 		var project_slug = this.getAttribute('data-project-slug');
 		get_new_page(project_slug);

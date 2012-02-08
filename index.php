@@ -59,7 +59,8 @@ $routes = array(
 	'#^/activate/(.*)/?$#' => 'Handlers::activateHandler',
 
 	// Web services
-	'#^/ws/save_item_transcript/?$#' => 'WebServiceHandlers::saveItemTranscriptHandler'
+	'#^/ws/save_item_transcript/?$#' => 'WebServiceHandlers::saveItemTranscriptHandler',
+	'#^/ws/get_new_page/?$#' => 'WebServiceHandlers::getNewPageHandler'
 );
 
 Router::route($url, $routes, 'Handlers::fileNotFoundHandler');
