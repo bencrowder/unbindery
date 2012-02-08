@@ -435,6 +435,7 @@ class Handlers {
 			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
+				'username' => $username,
 				'admin' => $user->admin),
 			'mode' => $mode,
 			'slug' => $slug,
