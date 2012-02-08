@@ -810,6 +810,22 @@ class Handlers {
 		}
 	}
 
+	static public function activateHandler($args) {
+		$siteroot = Settings::getProtected('siteroot');
+		$db = Settings::getProtected('db');
+
+		$hash = $_GET["hash"];
+
+		$user = new User();
+		$status = $user->validateHash($hash);
+
+		if ($status) {
+			header("Location: $siteroot/?message=Confirmed. Go ahead and log in.");
+		} else {
+			header("Location: $siteroot/?message=Invalid confirmation code.");
+		}
+	}
+
 	static public function fileNotFoundHandler() {
 		echo "File not found.";
 	}
