@@ -113,7 +113,7 @@ class Item {
 			} else {
 				// update user score (+5 for completing a page)
 				// and only do it if they haven't previously completed this page
-				$this->db->updateUserScoreForItem($username, $this->item_id, $this->project_id, 5));
+				$this->db->updateUserScoreForItem($username, $this->item_id, $this->project_id, 5);
 
 				// update date_completed for this assignment
 				$this->db->completeAssignment($username, $this->item_id, $this->project_id);

@@ -140,7 +140,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: boolean
 	public function isAssigned($username, $item_id, $project_slug) {
-		$result = $this->db->query("SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = ? AND assignments.item_id = ? AND projects.slug = ?", array($username, $item_id, $project_slug));
+		$result = $this->query("SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = ? AND assignments.item_id = ? AND projects.slug = ?", array($username, $item_id, $project_slug));
 
 		if (count($result) > 0) {
 			$retval = true;
@@ -153,7 +153,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: boolean
 	public function isMember($username, $project_slug) {
-		$result = $this->db->query("SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ' AND projects.slug = ?", array($username, $project_slug));
+		$result = $this->query("SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ' AND projects.slug = ?", array($username, $project_slug));
  
 		if (count($result) > 0) {
 			$retval = true;
@@ -177,7 +177,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: role (string)
 	public function getRoleForProject($username, $project_slug) {
-		$results = $this->db->query("SELECT role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
+		$results = $this->query("SELECT role FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
 		$result = $results[0];
 		$role = $result['role'];
 
@@ -187,13 +187,13 @@ class DbMySQL implements DbInterface {
 	// Returns: status
 	public function assignUserToProject($username, $project_id, $role) {
 		$sql = "INSERT INTO membership (project_id, username, role) VALUES (?, ?, ?);";
-		return $this->db->execute($sql, array($username, $project_id, $role);
+		return $this->execute($sql, array($username, $project_id, $role));
 	}
 
 	// Returns: boolean
 	public function itemExists($item_id, $project_slug) {
 		$query = "SELECT items.id FROM items JOIN projects ON projects.id = items.project_id WHERE items.id = ? AND projects.slug = ?";
-		$results = $this->db->query($query, array($item_id, $project_slug));
+		$results = $this->query($query, array($item_id, $project_slug));
 
 		if (count($results) > 0) {
 			return true;
@@ -206,13 +206,13 @@ class DbMySQL implements DbInterface {
 	public function assignItemToUser($username, $item_id, $project_id, $deadline_length) {
 		$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL $deadline_length DAY))";
 
-		$results = $this->db->query($query, array($username, $item_id, $project_id));
+		$results = $this->query($query, array($username, $item_id, $project_id));
 	}
 
 	// Returns: integer
 	public function getItemAssignmentsCount($item_id) {
 		$query = "SELECT COUNT(*) AS itemcount FROM assignments WHERE assignments.item_id = ?";
-		$results = $this->db->query($query, array($item_id));
+		$results = $this->query($query, array($item_id));
 		$result = $results[0];
 		$itemcount = $result["itemcount"];
 
@@ -222,19 +222,19 @@ class DbMySQL implements DbInterface {
 	// Returns: none
 	public function setItemStatus($item_id, $status) {
 		$sql = "UPDATE items SET status = ? WHERE id = ?";
-		return $this->db->execute($sql, array($status, $item_id));
+		return $this->execute($sql, array($status, $item_id));
 	}
 
 	// Returns: none
 	public function setUserStatus($username, $status) {
 		$sql = "UPDATE users SET status = ? WHERE username = ?";
-		return $this->db->execute($sql, array($status, $username));
+		return $this->execute($sql, array($status, $username));
 	}
 
 	// Returns: array of assignment IDs
-	public function userHas UnfinishedAssignment($username)	{
+	public function userHasUnfinishedAssignment($username) {
 		$query = "SELECT assignments.id FROM assignments WHERE username = ? AND date_completed IS NOT NULL";
-		$results = $this->db->query($query, array($username));
+		$results = $this->query($query, array($username));
 
 		return (count($results) > 0) ? true : false;
 	}
@@ -242,7 +242,7 @@ class DbMySQL implements DbInterface {
 	// Returns: boolean
 	public function userHasProjectAssignment($username, $project_slug) {
 		$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = ? AND projects.slug = ? AND assignments.date_completed IS NULL";
-		$results = $this->db->query($query, array($username, $project_slug));
+		$results = $this->query($query, array($username, $project_slug));
 
 		return (count($results) > 0) ? true : false;
 	}
@@ -261,14 +261,14 @@ class DbMySQL implements DbInterface {
 		$query .= "ORDER BY items.id ASC ";
 		$query .= "LIMIT 1;";
 
-		$results = $this->db->query($query, array($project_slug, $username, $num_proofs));
+		$results = $this->query($query, array($project_slug, $username, $num_proofs));
 
 		return (count($results) > 0) ? $results[0]['id'] : -1;
 	}
 
 	// Returns: user row
 	public function getUserStats($username) {
-		$users = $this->db->query("SELECT score, (SELECT COUNT(*) FROM assignments WHERE username = ? AND date_completed IS NOT NULL) AS proofed, (SELECT COUNT(*) FROM assignments WHERE username = ? AND date_completed IS NOT NULL AND DATE_COMPLETED > DATE_SUB(NOW(), INTERVAL 7 DAY)) AS proofed_past_week FROM users WHERE username = ?", array($username, $username, $username));
+		$users = $this->query("SELECT score, (SELECT COUNT(*) FROM assignments WHERE username = ? AND date_completed IS NOT NULL) AS proofed, (SELECT COUNT(*) FROM assignments WHERE username = ? AND date_completed IS NOT NULL AND DATE_COMPLETED > DATE_SUB(NOW(), INTERVAL 7 DAY)) AS proofed_past_week FROM users WHERE username = ?", array($username, $username, $username));
 		$user = $users[0];
 
 		return $user;
@@ -285,7 +285,7 @@ class DbMySQL implements DbInterface {
 		$query .= "AND assignments.date_completed IS NOT null ";
 		$query .= "ORDER BY assignments.date_completed DESC LIMIT 5;";
 
-		$history = $this->db->query($query, array($username));
+		$history = $this->query($query, array($username));
 
 		return $history;
 	}
@@ -293,7 +293,7 @@ class DbMySQL implements DbInterface {
 	// Returns: username or false
 	public function validateHash($hash) {
 		$query = "SELECT username FROM users WHERE hash = ?";
-		$results = $this->db->query($query, array($hash));
+		$results = $this->query($query, array($hash));
 
 		if (count($results)) {
 			$username = trim($results[0]["username"]);
@@ -307,13 +307,13 @@ class DbMySQL implements DbInterface {
 	// Returns: none
 	public function updateUserLastLogin($username) {
 		$sql = "UPDATE users SET last_login = NOW() WHERE username = ?";
-		return $this->db->execute($sql, array($username));
+		return $this->execute($sql, array($username));
 	}
 
 	// Returns: none
 	public function updateUserStatus($username, $status) {
 		$sql = "UPDATE users SET status = ? WHERE username = ?";
-		return $this->db->execute($sql, array($status, $username));
+		return $this->execute($sql, array($status, $username));
 	}
 
 	// Returns: id, project_id, title, itemtext, status, type
@@ -323,7 +323,7 @@ class DbMySQL implements DbInterface {
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.slug = ?;";
 
-		$results = $this->db->query($query, array($item_id, $project_slug));
+		$results = $this->query($query, array($item_id, $project_slug));
 
 		if (count($results) > 0) {
 			$result = $results[0];
@@ -341,7 +341,7 @@ class DbMySQL implements DbInterface {
 		$query .= "AND project_id = ? ";
 		$query .= "AND user = ?;";
 
-		$results = $this->db->query($query, array($item_id, $project_id, $username));
+		$results = $this->query($query, array($item_id, $project_id, $username));
 
 		return (count($results) > 0) ? trim($results[0]['itemtext']) : '';
 	}
@@ -352,7 +352,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "SET title = ?, project_id = ?, itemtext = ?, status = ?, type = ?, href = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->db->execute($sql, array($title, $project_id, $itemtext, $status, $type, $href, $item_id));
+		return $this->execute($sql, array($title, $project_id, $itemtext, $status, $type, $href, $item_id));
 	}
 
 	// Returns: boolean
@@ -362,10 +362,10 @@ class DbMySQL implements DbInterface {
 		$query .= "AND project_id = ? ";
 		$query .= "AND user = ?;";
 
-		$results = $this->db->query($query, array($item_id, $project_id, $username));
+		$results = $this->query($query, array($item_id, $project_id, $username));
 		$result = $results[0];
 
-		return isset($result));
+		return isset($result);
 	}
 
 	// Returns: none
@@ -377,14 +377,14 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND project_id = ? ";
 		$sql .= "AND user = ?;";
 
-		return $this->db->execute($sql, array($transcript, $status, $item_id, $project_id, $username));
+		return $this->execute($sql, array($transcript, $status, $item_id, $project_id, $username));
 	}
 
 	// Returns: none
 	public function addItemTranscript($item_id, $project_id, $status, $transcript, $username) {
 		$sql = "INSERT INTO texts (item_id, project_id, user, date, itemtext, status) VALUES (?, ?, ?, NOW(), ?, ?);";
 
-		return $this->db->execute($sql, array($item_id, $project_id, $username, $transcript, $status));
+		return $this->execute($sql, array($item_id, $project_id, $username, $transcript, $status));
 
 	}
 
@@ -396,7 +396,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND item_id = ? ";
 		$sql .= "AND project_id = ?;";
 
-		return $this->db->execute($sql, array($username, $item_id, $project_id));
+		return $this->execute($sql, array($username, $item_id, $project_id));
 	}
 
 	// Returns: none
@@ -407,7 +407,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND project_id = ? ";
 		$sql .= "AND date_completed IS NULL;";
 
-		return $this->db->execute($sql, array($score, $username, $item_id, $project_id));
+		return $this->execute($sql, array($score, $username, $item_id, $project_id));
 	}
 
 	// Returns: none
@@ -417,7 +417,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND item_id = ? ";
 		$sql .= "AND project_id = ?;";
 
-		return $this->db->execute($sql, array($username, $item_id, $project_id));
+		return $this->execute($sql, array($username, $item_id, $project_id));
 	}
 
 	// Returns: transcript_count
@@ -427,7 +427,7 @@ class DbMySQL implements DbInterface {
 		$query .= "AND project_id = ? ";
 		$query .= "AND date_completed IS NOT NULL";
 
-		$results = $this->db->query($query, array($item_id, $project_id));
+		$results = $this->query($query, array($item_id, $project_id));
 
 		if (count($results) > 0) {
 			return intval($results[0]['proofcount']);
@@ -438,7 +438,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: item_id
 	public function getNextItem($item_id, $project_slug) {
-		$results = $this->db->query("SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE items.id > ? AND projects.slug = ? LIMIT 1", array($item_id, $project_slug));
+		$results = $this->query("SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE items.id > ? AND projects.slug = ? LIMIT 1", array($item_id, $project_slug));
 
 		if (count($results) > 0) {
 			$next_item_id = trim($results[0]['id']);
@@ -450,7 +450,7 @@ class DbMySQL implements DbInterface {
 	// Returns: ?
 	public function addUser($username, $password, $email, $hash) {
 		$sql = "INSERT INTO users (username, password, email, status, admin, score, hash, signup_date) VALUES (?, ?, ?, 'pending', 0, 0, ?, NOW());";
-		return $this->db->execute($sql, array($username, $password, $meail, $hash));
+		return $this->execute($sql, array($username, $password, $meail, $hash));
 	}
 
 	// Returns: project array
@@ -461,7 +461,7 @@ class DbMySQL implements DbInterface {
 		$query .= "DATE_FORMAT(date_posted, '%e %b %Y') AS dateposted, ";
 		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
 		$query .= "FROM projects WHERE slug = ?;";
-		$results = $this->db->query($query, array($slug));
+		$results = $this->query($query, array($slug));
 		$result = $results[0];
 
 		if (isset($result)) {
@@ -487,7 +487,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "thumbnails = ? ";
 		$sql .= "WHERE id = ?;";
 
-		$this->db->execute($sql, array($title, $author, $slug, $language, $description, $owner, $status, $guidelines, $deadline_days, $num_proofs, $thumbnails, $project_id));
+		$this->execute($sql, array($title, $author, $slug, $language, $description, $owner, $status, $guidelines, $deadline_days, $num_proofs, $thumbnails, $project_id));
 	}
 
 	public function addProject($title, $author, $slug, $language, $description, $owner, $status, $guidelines, $deadline_days, $num_proofs, $thumbnails) {
@@ -495,12 +495,12 @@ class DbMySQL implements DbInterface {
 		$sql .= "(title, author, slug, language, description, owner, status, guidelines, deadline_days, num_proofs, thumbnails, date_started) ";
 		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		$this->db->execute($sql, array($title, $author, $slug, $language, $description, $owner, $status, $guidelines, $deadline_days, $num_proofs, $thumbnails));
+		$this->execute($sql, array($title, $author, $slug, $language, $description, $owner, $status, $guidelines, $deadline_days, $num_proofs, $thumbnails));
 	}
 
 	public function loadProjectStatus($project_slug) {
 		$query = "SELECT (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) AS proofed FROM projects WHERE slug = ?;";
-		$results = $this->db->query($query, array($project_slug));
+		$results = $this->query($query, array($project_slug));
 
 		if (count($results) > 0) {
 			return $results[0];
