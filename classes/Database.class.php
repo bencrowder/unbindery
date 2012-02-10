@@ -115,5 +115,3 @@ class Database {
 	function refValues($arr) { 
 	} 
 }
-
-$db = new Database($HOST, $USERNAME, $PASSWORD, $DATABASE);

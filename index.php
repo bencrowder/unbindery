@@ -1,22 +1,19 @@
 <?php
 
+// Includes
 require_once 'include/config.php';
 require_once 'include/utils.php';
-require_once 'include/Alibaba.class.php';
-require_once 'include/Router.class.php';
-require_once 'lib/Twig/Autoloader.php';
 
-Twig_Autoloader::register();
+// External libraries
+require_once 'lib/Alibaba.class.php';
+require_once 'lib/Router.class.php';
 
-$dbengine = Settings::getProtected('dbengine');
-require_once "db/Db$dbengine.class.php";
+// Modules
+require_once 'modules/Event.php';
+require_once 'modules/Dispatch.php';
+require_once 'modules/I18n.php';
 
-// Create the database object
-$dbClass = "Db$dbengine";
-$db = new $dbClass;
-$db->create(Settings::getProtected('db_host'), Settings::getProtected('db_username'), Settings::getProtected('db_password'), Settings::getProtected('db_database'));
-Settings::setProtected('db', $db);
-
+// App-specific logic
 require_once 'classes/Database.class.php';
 require_once 'classes/User.class.php';
 require_once 'classes/Mail.class.php';
@@ -24,10 +21,52 @@ require_once 'classes/Project.class.php';
 require_once 'classes/Server.class.php';
 require_once 'classes/Item.class.php';
 
+// Handlers
 require_once 'classes/Handlers.class.php';
 require_once 'classes/WebServiceHandlers.class.php';
 
 
+// Initialize Twig
+// --------------------------------------------------
+
+require_once 'lib/Twig/Autoloader.php';
+Twig_Autoloader::register();
+
+
+// Initialize auth engine 
+// --------------------------------------------------
+
+$authEngine = Settings::getProtected('authengine');
+require_once "auth/Auth$authEngine.class.php";
+
+// Load the appropriate auth engine class
+$authClass = "Auth$authEngine";
+$auth = new $authClass;
+$auth->init();
+
+Settings::setProtected('auth', $auth);
+
+
+// Initialize database
+// --------------------------------------------------
+
+$dbengine = Settings::getProtected('dbengine');
+require_once "db/Db$dbengine.class.php";
+
+// Load the appropriate database engine class
+$dbClass = "Db$dbengine";
+$db = new $dbClass;
+
+$db->create(Settings::getProtected('db_host'), Settings::getProtected('db_username'), Settings::getProtected('db_password'), Settings::getProtected('db_database'));
+
+// Save it to the settings manager
+Settings::setProtected('db', $db);
+
+
+// Parse the routes
+// --------------------------------------------------
+
+// TODO: replace Router
 // First, we get the URL from PHP
 $url = $_SERVER["REQUEST_URI"];
 

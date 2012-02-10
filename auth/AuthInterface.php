@@ -2,6 +2,9 @@
 // Class: AuthInterface
 
 interface AuthInterface {
+	// Initialization
+	public function init();
+
 	// Login (returns boolean)
 	public function login($username, $password);
 

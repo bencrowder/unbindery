@@ -4,8 +4,6 @@
 //
 // by Ben Crowder
 
-include_once("alibaba_config.php");
-
 class Alibaba {
 	private static $app_name = '';
 	private static $database_name = '';
@@ -19,18 +17,18 @@ class Alibaba {
 	private static $hash_function = '';
 	private static $login_page_url = '';
 
-	public static function AlibabaInit($APP_NAME, $DATABASE_NAME, $DATABASE_HOST, $DATABASE_USERNAME, $DATABASE_PASSWORD, $USER_TABLE_NAME, $USERNAME_FIELD, $PASSWORD_FIELD, $COOKIE_EXPIRATION, $HASH_FUNCTION, $LOGIN_PAGE_URL) {
-		self::$app_name = $APP_NAME;
-		self::$database_name = $DATABASE_NAME;
-		self::$database_host = $DATABASE_HOST;
-		self::$database_username = $DATABASE_USERNAME;
-		self::$database_password = $DATABASE_PASSWORD;
-		self::$user_table_name = $USER_TABLE_NAME;
-		self::$username_field = $USERNAME_FIELD;
-		self::$password_field = $PASSWORD_FIELD;
-		self::$cookie_expiration = $COOKIE_EXPIRATION;
-		self::$hash_function = $HASH_FUNCTION;
-		self::$login_page_url = $LOGIN_PAGE_URL;
+	public static function AlibabaInit($params) {
+		self::$app_name = $params['app_name'];
+		self::$database_name = $params['database_name'];
+		self::$database_host = $params['database_host'];
+		self::$database_username = $params['database_username'];
+		self::$database_password = $params['database_password'];
+		self::$user_table_name = $params['user_table_name'];
+		self::$username_field = $params['username_field'];
+		self::$password_field = $params['password_field'];
+		self::$cookie_expiration = $params['cookie_expiration'];
+		self::$hash_function = $params['hash_function'];
+		self::$login_page_url = $params['login_page_url'];
 	}
 
 	// The main methods to use
@@ -122,6 +120,6 @@ class Alibaba {
 	private static function db_close($conn) {
 		mysql_close($conn);
 	}
-} Alibaba::AlibabaInit($APP_NAME, $DATABASE_NAME, $DATABASE_HOST, $DATABASE_USERNAME, $DATABASE_PASSWORD, $USER_TABLE_NAME, $USERNAME_FIELD, $PASSWORD_FIELD, $COOKIE_EXPIRATION, $HASH_FUNCTION, $LOGIN_PAGE_URL);
+}
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../lib/sfyaml/sfYaml.php';
+require_once 'lib/sfyaml/sfYaml.php';
 
 class I18n {
 	private $translations = array();
