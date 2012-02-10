@@ -15,7 +15,7 @@ class AuthAlibaba implements AuthInterface {
 		$params['database_name'] = Settings::getProtected('db_database');
 		$params['database_username'] = Settings::getProtected('db_username');
 		$params['database_password'] = Settings::getProtected('db_password');
-		$params['user_table_name'] = Settings::getProtected('user_table_name');
+		$params['user_table_name'] = Settings::getProtected('users_table');
 		$params['username_field'] = Settings::getProtected('username_field');
 		$params['password_field'] = Settings::getProtected('password_field');
 		$params['cookie_expiration'] = Settings::getProtected('cookie_expiration');
