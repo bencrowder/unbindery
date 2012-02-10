@@ -3,8 +3,9 @@
 class Handlers {
 	static public function indexHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
+		$auth = Settings::getProtected('auth');
 
-		if (Alibaba::authenticated()) {
+		if ($auth->authenticated()) {
 			header("Location: $siteroot/dashboard");
 		}
 
@@ -25,24 +26,26 @@ class Handlers {
 	static public function loginHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
 		$username = $_POST["username"];
 		$password = $_POST["password"];
 
-		if (Alibaba::login($username, $password)) {
+		if ($auth->login($username, $password)) {
 			$user = new User($username);
 			$user->updateLogin();						// updates last_login time in database
 
 			header("Location: $siteroot/dashboard/");
 		} else {
-			Alibaba::redirectToLogin("Login failed");
+			$auth->redirectToLogin("Login failed");
 		}
 	}
 
 	static public function logoutHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::logout("$siteroot/");
+		$auth->logout("$siteroot/");
 	}
 
 	static public function signupHandler($args) {
@@ -88,13 +91,14 @@ class Handlers {
 	static public function dashboardHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
 		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 		$user->getStats();
 
@@ -170,13 +174,14 @@ class Handlers {
 	static public function settingsHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
 		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		$options = array(
@@ -196,14 +201,12 @@ class Handlers {
 	static public function saveSettingsHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
 		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
-
-		// $username = Alibaba::getUsername();
-		// $user = new User($username);
 
 		$username = (array_key_exists('username', $_POST)) ? stripslashes($_POST['username']) : '';
 		$user_name = (array_key_exists('user_name', $_POST)) ? stripslashes($_POST['user_name']) : '';
@@ -228,6 +231,7 @@ class Handlers {
 	static public function projectHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
 		$project_slug = $args[0];
 		$guidelines = false;
@@ -237,12 +241,12 @@ class Handlers {
 			}
 		}
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
 		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		// Load the project (and make sure it exists)
@@ -319,10 +323,11 @@ class Handlers {
 
 	static public function joinProjectHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
-		$username = Alibaba::getUsername(); 
+		$username = $auth->getUsername(); 
 		$user = new User($username);
 
 		$slug = (array_key_exists('slug', $_GET)) ? $_GET['slug'] : '';
@@ -340,10 +345,11 @@ class Handlers {
 	static public function projectsHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		$server = new Server($db);
@@ -373,6 +379,7 @@ class Handlers {
 	static public function adminProjectHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
 		if (array_key_exists(0, $args)) {
 			$slug = $args[0];
@@ -382,12 +389,12 @@ class Handlers {
 			$mode = 'new';
 		}
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
 		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		if ($mode == "new") {
@@ -450,9 +457,10 @@ class Handlers {
 	static public function adminSaveProjectHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
-		$username = Alibaba::getUsername(); 
+		$auth->forceAuthentication();
+		$username = $auth->getUsername(); 
 
 		$title = $_POST['project_title'];
 		$author = $_POST['project_author'];
@@ -514,11 +522,12 @@ class Handlers {
 
 	static public function adminUploadHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
+		$auth = Settings::getProtected('auth');
 
 		$slug = $args[0];
 
-		Alibaba::forceAuthentication();
-		$username = Alibaba::getUsername();
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		$includes = "<link href='$siteroot/lib/uploadify/uploadify.css' type='text/css' rel='stylesheet' />\n";
@@ -567,9 +576,10 @@ class Handlers {
 	static public function adminSavePageHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
-		$username = Alibaba::getUsername();
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		// Get info from POST
@@ -614,8 +624,9 @@ class Handlers {
 	static public function adminEditPageHandler($args, $next = false) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$project_slug = $args[0];
 		$page_id = $args[1];
@@ -623,7 +634,7 @@ class Handlers {
 			redirectToDashboard("", "Invalid page/project ID");
 		}
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 		// make sure they're an admin
 		if (!$user->admin) {
@@ -665,8 +676,9 @@ class Handlers {
 	static public function adminReviewPageHandler($args, $next = false) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$project_slug = $args[0];
 		$page_id = $args[1];
@@ -681,7 +693,7 @@ class Handlers {
 		}
 
 		// get the current user's role on the project and make sure they're owner or admin
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 		$role = $user->getRoleForProject($project_slug);
 
@@ -716,11 +728,12 @@ class Handlers {
 	static public function adminHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		// get the current user's role on the project and make sure they're owner or admin
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		if (!$user->admin) {
@@ -741,8 +754,9 @@ class Handlers {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
 		$editor = Settings::getProtected('editor');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
+		$auth->forceAuthentication();
 
 		$project_slug = $args[0];
 		$page_id = $args[1];
@@ -750,7 +764,7 @@ class Handlers {
 			redirectToDashboard("", "Invalid page/project ID");
 		}
 
-		$username = Alibaba::getUsername();
+		$username = $auth->getUsername();
 		// make sure they're assigned to this page
 		$user = new User($username);
 		if (!$user->isAssigned($page_id, $project_slug)) {
@@ -791,9 +805,10 @@ class Handlers {
 	static public function savePageHandler($args) {
 		$siteroot = Settings::getProtected('siteroot');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		Alibaba::forceAuthentication();
-		$username = Alibaba::getUsername();
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
 		$user = new User($username);
 
 		// Get info from POST
