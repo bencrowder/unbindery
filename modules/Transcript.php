@@ -4,7 +4,16 @@ require_once 'Event.php';
 
 class Transcript {
 	static private $functions = array();
+	static private $eventManager;
 	private $text;
+
+
+	// Set event manager
+	// --------------------------------------------------
+
+	static public function setEventManager($eventManager) {
+		self::$eventManager = $eventManager;
+	}
 
 
 	// Register load/save functions
@@ -44,8 +53,7 @@ class Transcript {
 		$this->text = $response;
 
 		// And trigger the load transcript event
-		$eventManager = new EventManager();
-		$eventManager->trigger('load', 'transcript', array('transcript' => $this));
+		self::$eventManager->trigger('load', 'transcript', array('transcript' => $this));
 	}
 
 
@@ -54,8 +62,7 @@ class Transcript {
 
 	public function save($params) {
 		// Trigger the save transcript event
-		$eventManager = new EventManager();
-		$eventManager->trigger('save', 'transcript', array('transcript' => $this));
+		self::$eventManager->trigger('save', 'transcript', array('transcript' => $this));
 
 		// Make sure the function's there, then call it with the parameters
 		if (array_key_exists('save', self::$functions)) {
