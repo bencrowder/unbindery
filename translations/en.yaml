@@ -1,0 +1,24 @@
+# Login
+login.username: 'Username'
+login.password: 'Password'
+login.login: 'Login'
+
+# Nav
+nav.dashboard: 'Dashboard'
+nav.projects: 'Projects'
+nav.settings: 'Settings'
+nav.logout: 'Logout'
+
+# Footer
+footer.text: '<a href="http:#bencrowder.net/coding/unbindery/>Unbindery</a> was written by <a href="http:#bencrowder.net/">Ben Crowder</a>.'
+
+# Dashboard
+dashboard.title: 'Dashboard'
+dashboard.current_assignments: 'Current Assignments'
+dashboard.get_new_page: 'Get new page'
+dashboard.score: 'Score'
+dashboard.proofed: 'Proofed'
+dashboard.proofed_past_week: 'Proofed this past week'
+dashboard.recent_history: 'Recent History'
+dashboard.current_project: 'Current Projects'
+dashboard.top_proofers: 'Top Proofers'
