@@ -11,16 +11,20 @@ class AuthAlibaba implements AuthInterface {
 	public function init() {
 		$params = array();
 		$params['app_name'] = Settings::getProtected('app_name');
-		$params['database_host'] = Settings::getProtected('db_host');
-		$params['database_name'] = Settings::getProtected('db_database');
-		$params['database_username'] = Settings::getProtected('db_username');
-		$params['database_password'] = Settings::getProtected('db_password');
-		$params['user_table_name'] = Settings::getProtected('users_table');
-		$params['username_field'] = Settings::getProtected('username_field');
-		$params['password_field'] = Settings::getProtected('password_field');
-		$params['cookie_expiration'] = Settings::getProtected('cookie_expiration');
-		$params['hash_function'] = Settings::getProtected('hash_function');
-		$params['login_page_url'] = Settings::getProtected('login_page_url');
+
+		$dbsettings = Settings::getProtected('database');
+		$params['database_host'] = $dbsettings['host'];
+		$params['database_name'] = $dbsettings['database'];
+		$params['database_username'] = $dbsettings['username'];
+		$params['database_password'] = $dbsettings['password'];
+
+		$alibaba = Settings::getProtected('alibaba');
+		$params['user_table_name'] = $alibaba['users_table'];
+		$params['username_field'] = $alibaba['username_field'];
+		$params['password_field'] = $alibaba['password_field'];
+		$params['cookie_expiration'] = $alibaba['cookie_expiration'];
+		$params['hash_function'] = $alibaba['hash_function'];
+		$params['login_page_url'] = $alibaba['login_page_url'];
 
 		Alibaba::AlibabaInit($params);
 	}

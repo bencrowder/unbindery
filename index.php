@@ -1,7 +1,10 @@
 <?php
 
-// Includes
-require_once 'include/config.php';
+// Configuration
+require_once 'include/Settings.class.php';
+Settings::loadFromYAML();
+
+// Utilities
 require_once 'include/utils.php';
 
 // External libraries
@@ -36,7 +39,7 @@ Twig_Autoloader::register();
 // Initialize auth engine 
 // --------------------------------------------------
 
-$authEngine = Settings::getProtected('authengine');
+$authEngine = Settings::getProtected('auth');
 require_once "auth/Auth$authEngine.class.php";
 
 // Load the appropriate auth engine class
@@ -50,14 +53,15 @@ Settings::setProtected('auth', $auth);
 // Initialize database
 // --------------------------------------------------
 
-$dbengine = Settings::getProtected('dbengine');
+$dbengine = Settings::getProtected('db');
 require_once "db/Db$dbengine.class.php";
 
 // Load the appropriate database engine class
 $dbClass = "Db$dbengine";
 $db = new $dbClass;
 
-$db->create(Settings::getProtected('db_host'), Settings::getProtected('db_username'), Settings::getProtected('db_password'), Settings::getProtected('db_database'));
+$dbsettings = Settings::getProtected('database');
+$db->create($dbsettings['host'], $dbsettings['username'], $dbsettings['password'], $dbsettings['database']);
 
 // Save it to the settings manager
 Settings::setProtected('db', $db);
