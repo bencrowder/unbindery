@@ -32,6 +32,14 @@ class I18n {
 			return '[MISSING TRANSLATION]';
 		}
 	}
+
+
+	// Translate shortcut
+	// --------------------------------------------------
+
+	public function t($key) {
+		return $this->translate($key);
+	}
 }
 
 ?>
