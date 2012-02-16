@@ -17,16 +17,16 @@ require_once 'modules/Dispatch.php';
 require_once 'modules/I18n.php';
 
 // App-specific logic
-require_once 'classes/Database.class.php';
-require_once 'classes/User.class.php';
-require_once 'classes/Mail.class.php';
-require_once 'classes/Project.class.php';
-require_once 'classes/Server.class.php';
-require_once 'classes/Item.class.php';
+require_once 'model/Database.class.php';
+require_once 'model/User.class.php';
+require_once 'model/Mail.class.php';
+require_once 'model/Project.class.php';
+require_once 'model/Server.class.php';
+require_once 'model/Item.class.php';
 
 // Handlers
-require_once 'classes/Handlers.class.php';
-require_once 'classes/WebServiceHandlers.class.php';
+require_once 'handlers/Handlers.class.php';
+require_once 'handlers/WebServiceHandlers.class.php';
 
 
 // Initialize Twig
@@ -40,7 +40,7 @@ Twig_Autoloader::register();
 // --------------------------------------------------
 
 $authEngine = Settings::getProtected('auth');
-require_once "auth/Auth$authEngine.class.php";
+require_once "modules/auth/Auth$authEngine.class.php";
 
 // Load the appropriate auth engine class
 $authClass = "Auth$authEngine";

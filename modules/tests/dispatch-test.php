@@ -1,6 +1,6 @@
 <?php
 
-include '../modules/Dispatch.php';
+include '../Dispatch.php';
 
 // Dummy data
 

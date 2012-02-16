@@ -1,6 +1,5 @@
 include/config.yaml
 scripts/config.py*
-images/*
-texts/*
+media/*
 lib/Twig/*
 lib/sfyaml/*

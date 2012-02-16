@@ -1,6 +1,6 @@
 <?php
 
-include '../modules/Queue.php';
+include '../Queue.php';
 
 class Point {
 	public $x;

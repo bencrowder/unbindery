@@ -1,6 +1,6 @@
 <?php
 
-include '../modules/Event.php';
+include '../Event.php';
 
 $eventManager = new EventManager();
 

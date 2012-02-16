@@ -1,6 +1,6 @@
 <?php
 
-include '../modules/I18n.php';
+include '../I18n.php';
 
 echo "Testing English...\n\n";
 
