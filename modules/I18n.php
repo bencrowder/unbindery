@@ -1,6 +1,6 @@
 <?php
 
-require_once 'lib/sfyaml/sfYaml.php';
+// You need to require_once 'lib/sfyaml/sfYaml.php'; to use this module
 
 class I18n {
 	private $translations = array();
@@ -9,15 +9,13 @@ class I18n {
 	// Constructor
 	// --------------------------------------------------
 
-	public function I18n($locale='en') {
-		// Default to en.php if the locale doesn't exist
-		$filename = "../translations/en.yaml";
-		if (file_exists("../translations/$locale.yaml")) {
-			$filename = "../translations/$locale.yaml";
-		}
+	public function I18n($transdir, $locale='en') {
+		if (file_exists("$transdir/$locale.yaml")) {
+			$filename = "$transdir/$locale.yaml";
 
-		// Load the YAML file
-		$this->translations = sfYaml::load($filename);
+			// Load the YAML file
+			$this->translations = sfYaml::load($filename);
+		}
 	}
 
 

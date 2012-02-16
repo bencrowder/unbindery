@@ -25,8 +25,8 @@ require_once 'classes/Server.class.php';
 require_once 'classes/Item.class.php';
 
 // Handlers
-require_once 'classes/Handlers.class.php';
-require_once 'classes/WebServiceHandlers.class.php';
+require_once 'handlers/Handlers.class.php';
+require_once 'handlers/WebServiceHandlers.class.php';
 
 
 // Initialize Twig
@@ -40,7 +40,7 @@ Twig_Autoloader::register();
 // --------------------------------------------------
 
 $authEngine = Settings::getProtected('auth');
-require_once "auth/Auth$authEngine.class.php";
+require_once "modules/auth/Auth$authEngine.class.php";
 
 // Load the appropriate auth engine class
 $authClass = "Auth$authEngine";
@@ -54,7 +54,7 @@ Settings::setProtected('auth', $auth);
 // --------------------------------------------------
 
 $dbengine = Settings::getProtected('db');
-require_once "db/Db$dbengine.class.php";
+require_once "modules/db/Db$dbengine.class.php";
 
 // Load the appropriate database engine class
 $dbClass = "Db$dbengine";

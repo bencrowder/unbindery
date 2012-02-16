@@ -482,18 +482,18 @@ class Handlers {
 			$retval = $project->create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails);
 
 			if ($retval == 'success') {
-				// make project directory for images
-				$dir = dirname(__FILE__) . "/images/$slug";
+				// make project directory for media
+				$dir = dirname(__FILE__) . "/media/$slug";
 
 				$rs = @mkdir($dir, 0775, true);
 				if ($rs) {
-					// success! now create the images directory
+					// success! now create the media directory
 					chmod($dir, 0775);
 					// redirect to upload page
 					header("Location: $siteroot/admin/upload/$slug");
 				} else {
 					// redirect to error page
-					redirectToDashboard("", "Error creating images directory. Check your file permissions.");
+					redirectToDashboard("", "Error creating media directory. Check your file permissions.");
 				}
 
 			} else {
@@ -539,7 +539,7 @@ class Handlers {
 		$includes .= "			'uploader'  : '$siteroot/lib/uploadify/uploadify.swf',\n";
 		$includes .= "			'script'    : '$siteroot/admin/upload_backend/',\n";
 		$includes .= "			'cancelImg' : '$siteroot/lib/uploadify/cancel.png',\n";
-		$includes .= "			'folder'    : '/images/$slug',\n";
+		$includes .= "			'folder'    : '/media/$slug',\n";
 		$includes .= "			'fileDataName' : 'items',\n";
 		$includes .= "			'removeCompleted' : false,\n";
 		$includes .= "			'multi'     : true,\n";

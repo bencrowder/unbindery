@@ -1,6 +1,6 @@
 <?php
 
-include '../modules/Transcript.php';
+include '../Transcript.php';
 
 // Dummy load function
 function myTranscriptLoadFunction($params) {

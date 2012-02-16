@@ -34,6 +34,9 @@ function renderPage($page, $options, $cached = false, $theme = 'core') {
 	$loader = new Twig_Loader_Filesystem("themes/$theme", "themes/core");
 	$twig = new Twig_Environment($loader, $twig_opts);
 
+	$options['themeroot'] = $options['siteroot'] . "/themes/$theme";
+	$options['i18n'] = new I18n("translations");
+
 	echo $twig->render("$page.html", $options);
 }
 
