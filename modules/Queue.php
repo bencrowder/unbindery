@@ -4,7 +4,7 @@ class Queue {
 	private $queue;
 	private $queueName;
 	private $saveOnChanges;
-	static private $functions = array('compare' => 'Queue::defaultItemCompareFunction');
+	static protected $functions = array('compare' => 'Queue::defaultItemCompareFunction');
 
 
 	// Constructor: loads the specified queue
