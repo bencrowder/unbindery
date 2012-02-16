@@ -8,6 +8,9 @@ nav.dashboard: 'Dashboard'
 nav.projects: 'Projects'
 nav.settings: 'Settings'
 nav.logout: 'Logout'
+nav.admin: 'Admin'
+nav.login: 'Login'
+nav.signup: 'Sign Up'
 
 # Footer
 footer.text: '<a href="http:#bencrowder.net/coding/unbindery/>Unbindery</a> was written by <a href="http:#bencrowder.net/">Ben Crowder</a>.'
