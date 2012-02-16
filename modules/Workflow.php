@@ -16,8 +16,9 @@ class Workflow extends Queue {
 	}
 
 	public function setIndex($input) {
+		print_r($this->workflow);
 		$this->currentIndex = $input;
-		$this->setItems(array_splice($this->workflow, $this->currentIndex));
+		$this->setItems(array_slice($this->workflow, $this->currentIndex));
 	}
 
 	public function getIndex() {
@@ -35,8 +36,10 @@ class Workflow extends Queue {
 		$rtn = false;
 		if (array_key_exists('callback_workflow', self::$functions) && self::$functions['callback_workflow'] != null) {
 			$currentAction = $this->getFirstItem();
-			$this->currentIndex++;
-			$rtn = call_user_func(self::$functions['callback_workflow'], $params, $currentAction);
+			if ($currentAction != null) {
+				$this->currentIndex++;
+				$rtn = call_user_func(self::$functions['callback_workflow'], $params, $currentAction);
+			}
 		}
 		return $rtn;
 	}
