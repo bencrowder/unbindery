@@ -4,21 +4,21 @@
 {% if error %}<div id="error">{{ error }}</div>{% endif %}
 
 <div id="main" class="dashboard">
-	<h2>Dashboard</h2>
+	<h2>{{ i18n.t('dashboard.title') }}</h2>
 
 	<div class="container">
 		<div class="bigcol">
-			<h3 class="action_header">Current Assignments</h3>
+			<h3 class="action_header">{{ i18n.t('dashboard.current_assignments') }}</h3>
 			<ul class="action_list">
 				{% if item_count == 0 and project_count == 0 %}
-					<li class="blankslate">Welcome. <a href="{{ siteroot }}/projects">Join a project</a> to get started proofing.</li>
+				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ siteroot }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
 				{% for item in items %}
 				<li>
-					<div class="right_button"><a href="{{ item.editlink }}" class="button">Proof</a></div>
-					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">Due {{ item.deadline }}</span></div>
-					<div class="sub">Project: {{ item.project_title }}</div>
+					<div class="right_button"><a href="{{ item.editlink }}" class="button">{{ i18n.t('dashboard.proof') }}</a></div>
+					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">{{ i18n.t('dashboard.due') }} {{ item.deadline }}</span></div>
+					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
 				</li>
 				{% endfor %}
 
@@ -26,7 +26,7 @@
 					{% if project.available %}
 				<li>
 					<div class="right_button">
-						<img src="{{ siteroot }}/img/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">Get new page</span></div>
+						<img src="{{ siteroot }}/img/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
 					<div class="sub">{{ project.author }}</div>
@@ -39,35 +39,35 @@
 
 		<div class="sidebar">
 			<ul id="stats">
-				<li><label>Score</label> <span class="stat">{{ user.score }}</span></li>
-				<li><label>Proofed</label> <span class="stat">{{ user.proofed }}</span></li>
-				<li><label>Proofed This Past Week</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
+				<li><label>{{ i18n.t('dashboard.score') }}</label> <span class="stat">{{ user.score }}</span></li>
+				<li><label>{{ i18n.t('dashboard.proofed') }}</label> <span class="stat">{{ user.proofed }}</span></li>
+				<li><label>{{ i18n.t('dashboard.proofed_past_week') }}</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
 			</ul>
 		</div>
 	</div>
 
 	<div id="lower_dash">
 		<div class="group">
-			<h3>Recent History</h3>
+			<h3>{{ i18n.t('dashboard.recent_history') }}</h3>
 			<ul class="list">
 				{% if history_count == 0 %}
-				<li>Nothing so far -- you must be new here. :)</li>
+				<li>{{ i18n.t('dashboard.no_history') }}</li>
 				{% endif %}
 
 				{% for entry in history %}
 				<li>
 					{{ entry.date_completed }}: <a href='{{ entry.editlink }}'>{{ entry.title }}</a>
-					<div class="history_projecttitle">Project: {{ entry.project_title }}</div>
+					<div class="history_projecttitle">{{ i18n.t('dashboard.project') }} {{ entry.project_title }}</div>
 				</li>
 				{% endfor %}
 			</ul>
 		</div>
 
 		<div class="group">
-			<h3>Current Projects</h3>
+			<h3>{{ i18n.t('dashboard.current_projects') }}</h3>
 			<ul class="list">
 				{% if project_count == 0 %}
-				<li>No current projects.</li>
+				<li>{{ i18n.t('dashboard.no_current_projects') }}</li>
 				{% endif %}
 
 				{% for project in projects %}
@@ -89,7 +89,7 @@
 		</div>
 
 		<div class="group leaderboard">
-			<h3>Top Proofers</h3>
+			<h3>{{ i18n.t('dashboard.top_proofers') }}</h3>
 			<ol id="stats">
 			{% for user in topusers %} 
 			<li><label>{{ user.username }}</label> <span class="stat">{{ user.score }}</span></li>
