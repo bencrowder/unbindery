@@ -3,20 +3,20 @@
 <body>
 	<div id="header_container">
 		<div id="header">
-			<div id="logo"><a href="{{ siteroot }}/"><img src="{{ siteroot }}/img/logo.jpg" alt="Unbindery" /></a></div>
+			<div id="logo"><a href="{{ siteroot }}/"><img src="{{ themeroot }}/images/logo.jpg" alt="Unbindery" /></a></div>
 			<ul id="nav">
 				{% if user.loggedin %}
 					<li>Logged in as <span class="username">{{ user.username }}</span></li>
-					<li><a href="{{ siteroot }}/dashboard">Dashboard</a></li>
-					<li><a href="{{ siteroot }}/projects">Projects</a></li>
+					<li><a href="{{ siteroot }}/dashboard">{{ i18n.translate("nav.dashboard") }}</a></li>
+					<li><a href="{{ siteroot }}/projects">{{ i18n.translate("nav.projects") }}</a></li>
 					{% if user.admin %}
-					<li><a href="{{ siteroot }}/admin">Admin</a></li>
+					<li><a href="{{ siteroot }}/admin">{{ i18n.translate("nav.admin") }}</a></li>
 					{% endif %}
-					<li><a href="{{ siteroot }}/settings">Settings</a></li>
-					<li><a href="{{ siteroot }}/logout">Logout</a></li>
+					<li><a href="{{ siteroot }}/settings">{{ i18n.translate("nav.settings") }}</a></li>
+					<li><a href="{{ siteroot }}/logout">{{ i18n.translate("nav.logout") }}</a></li>
 				{% else %}
-					<li><a href="{{ siteroot }}/signup">Sign Up</a></li>
-					<li><a href="{{ siteroot }}/login">Login</a></li>
+					<li><a href="{{ siteroot }}/signup">{{ i18n.translate("nav.signup") }}</a></li>
+					<li><a href="{{ siteroot }}/login">{{ i18n.translate("nav.login") }}</a></li>
 				{% endif %}
 			</ul>
 		</div>
