@@ -11,7 +11,7 @@ A book digitization web app written in PHP and JavaScript.
 ### Installation
 
 1. Create a MySQL database and a user for it.
-2. Copy `db/db.sql` to `import.sql` and edit it to reference that database.
+2. Copy `modules/db/db.sql` to `import.sql` and edit it to reference that database.
 3. Run `import.sql` (`mysql -u root -p < import.sql`).
 4. Copy `include/config.sample.yaml` to `include/config.yaml` and customize it.
 5. Copy `scripts/config.sample.py` to `scripts/config.py` and customize it.

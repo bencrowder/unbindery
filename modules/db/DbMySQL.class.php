@@ -508,4 +508,116 @@ class DbMySQL implements DbInterface {
 			return false;
 		}
 	}
+
+	// Returns: ?
+	public function addPage($projectId, $pageTitle, $href) {
+		$sql = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES (?, ?, NULL, 'available', 'image', ?); ";
+		return $this->execute($sql, array($projectId, $pageTitle, $href));
+	}
+
+	// Returns: ?
+	public function saveItemText($itemId, $itemText) {
+		$sql = "UPDATE items SET itemtext = ? WHERE id = ?; ";
+		return $this->execute($sql, array($itemText, $itemId));
+	}
+
+	// Returns: # items in project
+	public function getNumProjectItems($projectId) {
+		$query = "SELECT COUNT(*) AS total FROM items WHERE project_id = ?;";
+		$results = $this->query($query, array($projectId));
+		$result = $results[0];
+
+		if (isset($result)) {
+			return $result['total'];
+		} else {
+			return 0;
+		}
+	}
+
+	// Returns: # completed items in project
+	public function getNumCompletedProjectItems($projectId) {
+		$query = "SELECT COUNT(*) AS completed FROM items WHERE project_id = ? AND status = 'completed';";
+		$results = $this->query($query, array($projectId));
+		$result = $results[0];
+
+		if (isset($result)) {
+			return $result['completed'];
+		} else {
+			return 0;
+		}
+	}
+
+	// Returns: array of items
+	public function getItems($projectId) {
+		$results = $this->query("SELECT title, status, type, href, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS assignments, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id AND date_completed IS NOT NULL) AS completed FROM items WHERE project_id = ? ORDER BY items.id ASC;", array($projectId));
+
+		return $results;
+	}
+
+	// Returns: array of proofers
+	public function getProoferStats($projectId) {
+		$query = "SELECT username, ";
+		$query .= "COUNT(username) AS pages, ";
+		$query .= "COUNT(username) / ((SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * projects.num_proofs) * 100 AS percentage ";
+		$query .= "FROM assignments ";
+		$query .= "JOIN projects ON assignments.project_id = projects.id ";
+		$query .= "WHERE project_id = ? ";
+		$query .= "GROUP BY username ORDER BY pages DESC;";
+
+		return $this->db->query($query, array($projectId));
+	}
+
+	// Returns: array of items
+	public function getBasicItems($projectId) {
+		return $this->db->query("SELECT id, title, status FROM items WHERE project_id = ? ORDER BY items.id ASC;", array($projectId));
+	}
+
+	// Returns: array of assignments
+	public function getBasicAssignments($projectId) {
+		return $this->db->query("SELECT item_id, username, date_completed FROM assignments WHERE project_id = ? ORDER BY item_id ASC;", array($projectId));
+	}
+
+	// Returns: array of projects
+	public function getProjects() {
+		return $this->db->query("SELECT projects.title AS title, projects.author AS author, projects.slug AS slug, projects.num_proofs AS num_proofs, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id WHERE items.status = 'available' AND assignments.date_assigned IS NULL AND items.project_id = projects.id) AS available_pages FROM projects WHERE projects.status = 'active' ORDER BY percentage DESC");
+	}
+
+	// Returns: array of projects
+	public function getCompletedProjects() {
+		$query = "SELECT projects.title, projects.author, projects.slug, ";
+		$query .= "(SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1) AS date_started, ";
+		$query .= "(SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1) AS date_comp, ";
+		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed ";
+		$query .= "FROM projects ";
+		$query .= "WHERE projects.status = 'completed' OR projects.status = 'posted' ";
+		$query .= "ORDER BY date_comp DESC";
+
+		return $this->db->query($query);
+	}
+
+	// Returns: array of users (username, score)
+	public function getTopUsers() {
+		return $this->db->query("SELECT username, score FROM users WHERE score > 0 ORDER BY score DESC LIMIT 10;");
+	}
+
+	// Returns: array of users (username, points_lost)
+	public function getUserPointsLost() {
+		return $this->db->query("SELECT username, count(username) AS points_lost FROM assignments WHERE date_completed IS NULL AND deadline < NOW() GROUP BY username");
+	}
+
+	// Returns: ?
+	public function setUserScore($username, $score) {
+		$sql = "UPDATE users SET score = score - ? WHERE username = ?;";
+		return $this->db->execute($sql, array($username, $score));
+	}
+
+	// Returns: email, item_id, item title, project slug, deadline
+	public function getLateUserEmails() {
+		return $this->db->query("SELECT users.email, item_id, items.title, projects.slug, DATE_FORMAT(deadline, '%e %b %Y') AS deadline FROM assignments JOIN users on assignments.username = users.username JOIN items ON item_id = items.id JOIN projects ON projects.id = assignments.project_id WHERE assignments.date_completed IS NULL AND DATEDIFF(deadline, NOW()) = 1;");
+	}
+
+	// Returns: username, item_id, project_id, date_assigned, deadline
+	public function getCurrentAssignments() {
+		return $this->db->query("SELECT username, item_id, project_id, date_assigned, deadline FROM assignments WHERE date_completed IS NULL ORDER BY project_id, date_assigned DESC");
+	}
 }

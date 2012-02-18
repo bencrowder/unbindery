@@ -106,8 +106,7 @@ class Project {
 			$path_parts = pathinfo($filename);
 			$pagename = $path_parts['filename'];
 
-			$sql = "INSERT INTO items (project_id, title, itemtext, status, type, href) VALUES (?, ?, NULL, 'available', 'image', ?); ";
-			$this->db->execute($sql, array($this->project_id, $pagename, "{$this->slug}/$filename"));
+			$this->db->addPage($this->project_id, $pagename, "{$this->slug}/$filename");
 
 			// get the insert ID and add it to the array
 			$page_id = $this->db->last_insert_id();
@@ -122,69 +121,39 @@ class Project {
 			$item_id = $item[0];
 			$item_text = $item[1];
 
-			$sql = "UPDATE items SET itemtext = ? WHERE id = ?; ";
-			$this->db->execute($sql, array($item_text, $item_id));
+			$this->db->saveItemText($item_id, $item_text);
 		}
 
 		return array("statuscode" => "success");
 	}
 
 	public function getStatus() {
-		$completed = 0;
-		$total = 0;
-
-		// returns array with number of items and how many are completed
-		$query = "SELECT COUNT(*) AS total FROM items WHERE project_id = ?;";
-		$results = $this->db->query($query, array($this->project_id));
-		$result = $results[0];
-
-		if (isset($result)) {
-			$total = $result['total'];
-		}
-
-		$query = "SELECT COUNT(*) AS completed FROM items WHERE project_id = ? AND status = 'completed';";
-		$results = $this->db->query($query, array($this->project_id));
-		$result = $results[0];
-
-		if (isset($result)) {
-			$completed = $result['completed'];
-		}
+		$total = $this->db->getNumProjectItems($this->project_id);
+		$completed = $this->db->getNumProjectItems($this->project_id);
 
 		return array("completed" => $completed, "total" => $total);
 	}
 
 	public function getItems() {
-		$items = $this->db->query("SELECT title, status, type, href, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS assignments, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id AND date_completed IS NOT NULL) AS completed FROM items WHERE project_id = ? ORDER BY items.id ASC;", array($this->project_id));
-
-		return $items;
+		return $this->db->getItems($this->project_id);
 	}
 
 	public function getProoferStats() {
-		$query = "SELECT username, ";
-		$query .= "COUNT(username) AS pages, ";
-		$query .= "COUNT(username) / ((SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * projects.num_proofs) * 100 AS percentage ";
-		$query .= "FROM assignments ";
-		$query .= "JOIN projects ON assignments.project_id = projects.id ";
-		$query .= "WHERE project_id = ? ";
-		$query .= "GROUP BY username ORDER BY pages DESC;";
-
-		$proofers = $this->db->query($query, array($this->project_id));
-
-		return $proofers;
+		return $this->db->getProoferStats($this->project_id);
 	}
 
 	public function getItemsAndAssignments() {
 		$items = array();
 
 		/* Get all the items for this project */
-		$itemlist = $this->db->query("SELECT id, title, status FROM items WHERE project_id = ? ORDER BY items.id ASC;", array($this->project_id));
+		$itemlist = $this->db->getBasicItems($this->project_id);
 
 		foreach ($itemlist as $row) {
 			$items[$row["id"]] = array("title" => $row["title"], "status" => $row["status"], "assignments" => array());
 		}
 
 		/* Now get assignments */
-		$assignmentlist = $this->db->query("SELECT item_id, username, date_completed FROM assignments WHERE project_id = ? ORDER BY item_id ASC;", array($this->project_id));
+		$assignmentlist = $this->db->getBasicAssignments($this->project_id);
 
 		foreach ($assignmentlist as $assignment) {
 			array_push($items[$assignment["item_id"]]["assignments"], array("username" => $assignment["username"], "date_completed" => $assignment["date_completed"]));
