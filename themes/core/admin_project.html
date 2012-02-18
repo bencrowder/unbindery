@@ -3,7 +3,7 @@
 <div id="main">
 	<h2>{{ title }}</h2>
 
-	<form id="project_form" action="{{ siteroot }}/admin/save_project" method="POST">
+	<form id="project_form" action="{{ app_url }}/admin/save_project" method="POST">
 		<div class="bigcol">
 			<label>Title</label>
 			<input type="text" id="project_title" name="project_title" value="{{ project.title }}" />
@@ -46,7 +46,7 @@
 				{% for item in items %}
 				<li><h4>{{ item.title }}</h4> <span class="status {{ item.status }}">({{ item.status }})</span>
 					{% for assignment in item.assignments %}
-					<a class="assignment{% if assignment.date_completed != '' %} done{% endif%}" href="{{ siteroot }}/admin/review/{{ slug }}/{{ item.id }}/{{ assignment.username }}">{{ assignment.username }}</a>
+					<a class="assignment{% if assignment.date_completed != '' %} done{% endif%}" href="{{ app_url }}/admin/review/{{ slug }}/{{ item.id }}/{{ assignment.username }}">{{ assignment.username }}</a>
 					{% endfor %}
 				</li>
 				{% endfor %}
@@ -59,7 +59,7 @@
 
 			{% if mode != 'new' %}
 			<h3>Item Administration</h3>
-			<p><a class="button" href="{{ siteroot }}/admin/upload/{{ slug }}">Add Items</a></p>
+			<p><a class="button" href="{{ app_url }}/admin/upload/{{ slug }}">Add Items</a></p>
 			{% endif %}
 
 			<input type="hidden" id="mode" name="mode" value="{{ mode }}" />

@@ -11,7 +11,7 @@
 			<h3 class="action_header">{{ i18n.t('dashboard.current_assignments') }}</h3>
 			<ul class="action_list">
 				{% if item_count == 0 and project_count == 0 %}
-				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ siteroot }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
+				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
 				{% for item in items %}
@@ -26,7 +26,7 @@
 					{% if project.available %}
 				<li>
 					<div class="right_button">
-						<img src="{{ siteroot }}/img/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
+						<img src="{{ app_url }}/img/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
 					<div class="sub">{{ project.author }}</div>
@@ -91,8 +91,8 @@
 		<div class="group leaderboard">
 			<h3>{{ i18n.t('dashboard.top_proofers') }}</h3>
 			<ol id="stats">
-			{% for user in topusers %} 
-			<li><label>{{ user.username }}</label> <span class="stat">{{ user.score }}</span></li>
+			{% for topuser in topusers %} 
+			<li><label>{{ topuser.username }}</label> <span class="stat">{{ topuser.score }}</span></li>
 			{% endfor %}
 			</ol>
 		</div>

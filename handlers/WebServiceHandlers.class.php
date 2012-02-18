@@ -2,7 +2,7 @@
 
 class WebServiceHandlers {
 	static public function saveItemTranscriptHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
 		// Make sure the user is authenticated and that we can save this
@@ -29,7 +29,7 @@ class WebServiceHandlers {
 	}
 
 	static public function getNewPageHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
 		$username = $_POST['username'];
@@ -44,7 +44,7 @@ class WebServiceHandlers {
 	}
 
 	static public function addPagesHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
 		$project_slug = $_POST['project_slug'];

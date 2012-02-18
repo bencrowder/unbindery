@@ -2,29 +2,28 @@
 
 class Handlers {
 	static public function indexHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
 		if ($auth->authenticated()) {
-			header("Location: $siteroot/dashboard");
+			header("Location: $app_url/dashboard");
 		}
 
 		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => false
 				),
-			'includes' => "<script src='$siteroot/js/index.js' type='text/javascript'></script>\n",
+			'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n",
 			'message' => $message	
 		);
 
-		renderPage('index', $options);
+		Page::render('index', $options);
 	}
 
 	static public function loginHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -35,21 +34,21 @@ class Handlers {
 			$user = new User($username);
 			$user->updateLogin();						// updates last_login time in database
 
-			header("Location: $siteroot/dashboard/");
+			header("Location: $app_url/dashboard/");
 		} else {
 			$auth->redirectToLogin("Login failed");
 		}
 	}
 
 	static public function logoutHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
-		$auth->logout("$siteroot/");
+		$auth->logout("$app_url/");
 	}
 
 	static public function signupHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$emailsubject = Settings::getProtected('emailsubject');
 		$adminemail = Settings::getProtected('adminemail');
 		$db = Settings::getProtected('db');
@@ -71,7 +70,7 @@ class Handlers {
 		// send confirmation link to user via email
 		$message = "Thanks for signing up! Here's the confirmation link to activate your account\n";
 		$message .= "\n";
-		$message .= "$siteroot/activate/$hash\n";
+		$message .= "$app_url/activate/$hash\n";
 		$message .= "\n";
 
 		$status = Mail::sendMessage($email, "$emailsubject Confirmation link", $message);
@@ -89,7 +88,7 @@ class Handlers {
 	}
 
 	static public function dashboardHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -111,7 +110,7 @@ class Handlers {
 		$topusers = $server->getTopUsers();
 
 		foreach ($items as &$item) {
-			$item["editlink"] = $siteroot . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
+			$item["editlink"] = $app_url . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
 			$projectlist[] = $item["project_slug"];
 			
 			$days_left = $item["days_left"];
@@ -138,25 +137,23 @@ class Handlers {
 			if (!in_array($project["slug"], $projectlist) && ($project["available_pages"] > 0)) {
 				$project["available"] = true;
 			}
-			$project["link"] = $siteroot . '/projects/' . $project["slug"];
+			$project["link"] = $app_url . '/projects/' . $project["slug"];
 			$project["percentage"] = round($project["completed"] / $project["total"] * 100, 0);
 			$project["proof_percentage"] = round($project["proof_percentage"]);
 		}
 
 		foreach ($history as &$event) {
-			$event["editlink"] = "$siteroot/edit/" . $event["project_slug"] . "/" . $event["item_id"];	
+			$event["editlink"] = "$app_url/edit/" . $event["project_slug"] . "/" . $event["item_id"];	
 			$event["title"] = $event["item_title"];
 		}
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin,
 				'score' => $user->score,
 				'proofed' => $user->proofed,
-				'proofed_past_week' => $user->proofed_past_week,
-				'username' => $username),
+				'proofed_past_week' => $user->proofed_past_week),
 			'message' => $message,
 			'error' => $error,
 			'items' => $items,
@@ -168,11 +165,11 @@ class Handlers {
 			'history_count' => count($history)
 		);
 
-		renderPage('dashboard', $options);
+		Page::render('dashboard', $options);
 	}
 
 	static public function settingsHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -185,21 +182,19 @@ class Handlers {
 		$user = new User($username);
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin,
 				'name' => $user->name,
-				'email' => $user->email,
-				'username' => $username),
+				'email' => $user->email),
 			'message' => $message
 		);
 
-		renderPage('settings', $options);
+		Page::render('settings', $options);
 	}
 
 	static public function saveSettingsHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -220,16 +215,16 @@ class Handlers {
 			$change_password = true;
 
 			// else redirect to settings with an error
-			//header("Location: $SITEROOT/settings?message=Passwords didn't match. Try again.");
+			//header("Location: $app_url/settings?message=Passwords didn't match. Try again.");
 		}
 
 		$db->updateUserSettings($username, $user_name, $user_email, $user_newpassword1);
 
-		header("Location: $siteroot/settings?message=Settings saved.");
+		header("Location: $app_url/settings?message=Settings saved.");
 	}
 
 	static public function projectHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -285,11 +280,9 @@ class Handlers {
 		}
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin,
-				'username' => $username,
 				'ismember' => $userismember),
 			'project' => array(
 				'slug' => $project_slug,
@@ -318,11 +311,12 @@ class Handlers {
 			'guidelines' => $guidelines,
 			'systemguidelines' => $systemguidelines
 		);
-		renderPage('project', $options);
+
+		Page::render('project', $options);
 	}
 
 	static public function joinProjectHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();
@@ -335,15 +329,15 @@ class Handlers {
 		$retval = $user->assignToProject($slug);
 
 		if ($retval) {
-			header("Location: $siteroot/dashboard/");
+			header("Location: $app_url/dashboard/");
 		} else {
 			// redirect to error page
-			header("Location: $siteroot/dashboard/?message=Error joining project.");
+			header("Location: $app_url/dashboard/?message=Error joining project.");
 		}
 	}
 
 	static public function projectsHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -355,29 +349,28 @@ class Handlers {
 		$server = new Server($db);
 		$projects = $server->getProjects();
 		foreach ($projects as &$project) {
-			$project['link'] = $siteroot . '/projects/' . $project['slug'];
+			$project['link'] = $app_url . '/projects/' . $project['slug'];
 			$project['proof_percentage_rounded'] = round($project['proof_percentage'], 0);
 			$project['percentage_rounded'] = round($project['percentage'], 0);
 		}
 
 		$completedprojects = $server->getCompletedProjects();
 		foreach ($completedprojects as &$project) {
-			$project['link'] = $siteroot . '/projects/' . $project['slug'];
+			$project['link'] = $app_url . '/projects/' . $project['slug'];
 		}	
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
-				'admin' => $user->admin,
-				'username' => $username),
+				'admin' => $user->admin),
 			'projects' => $projects
 		);
-		renderPage('projects', $options);
+
+		Page::render('projects', $options);
 	}
 
 	static public function adminProjectHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -439,10 +432,8 @@ class Handlers {
 		}
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
-				'username' => $username,
 				'admin' => $user->admin),
 			'mode' => $mode,
 			'slug' => $slug,
@@ -451,11 +442,12 @@ class Handlers {
 			'project' => $project,
 			'items' => $items
 		);
-		renderPage('admin_project', $options);
+
+		Page::render('admin_project', $options);
 	}
 
 	static public function adminSaveProjectHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -490,7 +482,7 @@ class Handlers {
 					// success! now create the media directory
 					chmod($dir, 0775);
 					// redirect to upload page
-					header("Location: $siteroot/admin/upload/$slug");
+					header("Location: $app_url/admin/upload/$slug");
 				} else {
 					// redirect to error page
 					redirectToDashboard("", "Error creating media directory. Check your file permissions.");
@@ -516,12 +508,12 @@ class Handlers {
 
 			$project->save();
 
-			header("Location: $siteroot/admin/projects/$slug");
+			header("Location: $app_url/admin/projects/$slug");
 		}
 	}
 
 	static public function adminUploadHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
 		$slug = $args[0];
@@ -530,15 +522,15 @@ class Handlers {
 		$username = $auth->getUsername();
 		$user = new User($username);
 
-		$includes = "<link href='$siteroot/lib/uploadify/uploadify.css' type='text/css' rel='stylesheet' />\n";
-		$includes .= "<script type='text/javascript' src='$siteroot/lib/uploadify/swfobject.js'></script>\n";
-		$includes .= "<script type='text/javascript' src='$siteroot/lib/uploadify/jquery.uploadify.v2.1.4.min.js'></script>\n";
+		$includes = "<link href='$app_url/lib/uploadify/uploadify.css' type='text/css' rel='stylesheet' />\n";
+		$includes .= "<script type='text/javascript' src='$app_url/lib/uploadify/swfobject.js'></script>\n";
+		$includes .= "<script type='text/javascript' src='$app_url/lib/uploadify/jquery.uploadify.v2.1.4.min.js'></script>\n";
 		$includes .= "<script type='text/javascript'>\n";
 		$includes .= "	$(document).ready(function() {\n";
 		$includes .= "		$('#file_upload').uploadify({\n";
-		$includes .= "			'uploader'  : '$siteroot/lib/uploadify/uploadify.swf',\n";
-		$includes .= "			'script'    : '$siteroot/admin/upload_backend/',\n";
-		$includes .= "			'cancelImg' : '$siteroot/lib/uploadify/cancel.png',\n";
+		$includes .= "			'uploader'  : '$app_url/lib/uploadify/uploadify.swf',\n";
+		$includes .= "			'script'    : '$app_url/admin/upload_backend/',\n";
+		$includes .= "			'cancelImg' : '$app_url/lib/uploadify/cancel.png',\n";
 		$includes .= "			'folder'    : '/media/$slug',\n";
 		$includes .= "			'fileDataName' : 'items',\n";
 		$includes .= "			'removeCompleted' : false,\n";
@@ -552,14 +544,14 @@ class Handlers {
 		$includes .= "</script>\n";
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin),
 			'includes' => $includes,
 			'slug' => $slug
 		);
-		renderPage('admin_upload', $options);
+
+		Page::render('admin_upload', $options);
 	}
 
 	static public function adminUploadBackendHandler($args) {
@@ -574,7 +566,7 @@ class Handlers {
 	}
 
 	static public function adminSavePageHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -606,14 +598,14 @@ class Handlers {
 				$nextpage_id = $page->getNextItem();
 				if ($nextpage_id) {
 					// we go to new_page/ instead of edit/ so that we keep getting next
-					header("Location: $siteroot/admin/new_page/$project_slug/$nextpage_id");
+					header("Location: $app_url/admin/new_page/$project_slug/$nextpage_id");
 				} else {
 					// run out of pages, go back to the admin project page
-					header("Location: $siteroot/admin/projects/$project_slug");
+					header("Location: $app_url/admin/projects/$project_slug");
 				}
 			} else {
 				// go back to the admin project page
-				header("Location: $siteroot/admin/projects/$project_slug");
+				header("Location: $app_url/admin/projects/$project_slug");
 			}
 		} else {
 			// redirect to error page
@@ -622,7 +614,7 @@ class Handlers {
 	}
 
 	static public function adminEditPageHandler($args, $next = false) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -657,7 +649,6 @@ class Handlers {
 		}
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin),
@@ -666,7 +657,8 @@ class Handlers {
 			'next' => $next,
 			'savepage' => $savepage
 		);
-		renderPage('admin_edit_page', $options);
+
+		Page::render('admin_edit_page', $options);
 	}
 
 	static public function adminNewPageHandler($args) {
@@ -674,7 +666,7 @@ class Handlers {
 	}
 
 	static public function adminReviewPageHandler($args, $next = false) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -684,9 +676,9 @@ class Handlers {
 		$page_id = $args[1];
 		$proofer_username = $args[2];	// the user who proofed the text
 
-		$includes = "<script type='text/javascript' src='$siteroot/lib/ace/src/ace.js' charset='utf-8'></script>\n";
-		$includes .= "<script type='text/javascript' src='$siteroot/js/theme-unbindery.js' charset='utf-8'></script>\n";
-		$includes .= "<script type='text/javascript' src='$siteroot/js/edit.js' charset='utf-8'></script>\n";
+		$includes = "<script type='text/javascript' src='$app_url/lib/ace/src/ace.js' charset='utf-8'></script>\n";
+		$includes .= "<script type='text/javascript' src='$app_url/js/theme-unbindery.js' charset='utf-8'></script>\n";
+		$includes .= "<script type='text/javascript' src='$app_url/js/edit.js' charset='utf-8'></script>\n";
 
 		if (!$page_id || !$project_slug || !$proofer_username) {
 			redirectToDashboard("", "Invalid item/project ID or username");
@@ -714,7 +706,6 @@ class Handlers {
 		$item->stripped_itemtext = stripslashes($item->itemtext);
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin),
@@ -722,11 +713,12 @@ class Handlers {
 			'proofer' => $proofer,
 			'item' => $item
 		);
-		renderPage('admin_review_page', $options);
+
+		Page::render('admin_review_page', $options);
 	}
 
 	static public function adminHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -741,17 +733,16 @@ class Handlers {
 		}
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
-				'username' => $username,
 				'admin' => $user->admin),
 		);
-		renderPage('admin_dashboard', $options);
+
+		Page::render('admin_dashboard', $options);
 	}
 
 	static public function editPageHandler($args, $next = false) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$editor = Settings::getProtected('editor');
 		$auth = Settings::getProtected('auth');
@@ -783,27 +774,25 @@ class Handlers {
 
 		$includes = "";
 		if ($editor == "advanced") {
-			$includes .= "<script type='text/javascript' src='$siteroot/lib/ace/src/ace.js' charset='utf-8'></script>\n";
-			$includes .= "<script type='text/javascript' src='$siteroot/js/theme-unbindery.js' charset='utf-8'></script>\n";
+			$includes .= "<script type='text/javascript' src='$app_url/lib/ace/src/ace.js' charset='utf-8'></script>\n";
+			$includes .= "<script type='text/javascript' src='$app_url/js/theme-unbindery.js' charset='utf-8'></script>\n";
 		}
-		$includes .= "<script type='text/javascript' src='$siteroot/js/edit.js' charset='utf-8'></script>\n";
+		$includes .= "<script type='text/javascript' src='$app_url/js/edit.js' charset='utf-8'></script>\n";
 
 		$options = array(
-			'siteroot' => $siteroot,
 			'user' => array(
 				'loggedin' => true,
-				'username' => $username,
 				'admin' => $user->admin),
 			'project_slug' => $project_slug,
 			'includes' => $includes,
 			'item' => $item
 		);
 
-		renderPage('edit_page', $options);
+		Page::render('edit_page', $options);
 	}
 
 	static public function savePageHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -835,14 +824,14 @@ class Handlers {
 				$nextpage_id = $page->getNextItem();
 				if ($nextpage_id) {
 					// we go to new_page/ instead of edit/ so that we keep getting next
-					header("Location: $siteroot/admin/new_page/$project_slug/$nextpage_id");
+					header("Location: $app_url/admin/new_page/$project_slug/$nextpage_id");
 				} else {
 					// run out of pages, go back to the admin project page
-					header("Location: $siteroot/admin/projects/$project_slug");
+					header("Location: $app_url/admin/projects/$project_slug");
 				}
 			} else {
 				// go back to the admin project page
-				header("Location: $siteroot/admin/projects/$project_slug");
+				header("Location: $app_url/admin/projects/$project_slug");
 			}
 		} else {
 			// redirect to error page
@@ -851,7 +840,7 @@ class Handlers {
 	}
 
 	static public function activateHandler($args) {
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
 		$hash = $_GET["hash"];
@@ -860,9 +849,9 @@ class Handlers {
 		$status = $user->validateHash($hash);
 
 		if ($status) {
-			header("Location: $siteroot/?message=Confirmed. Go ahead and log in.");
+			header("Location: $app_url/?message=Confirmed. Go ahead and log in.");
 		} else {
-			header("Location: $siteroot/?message=Invalid confirmation code.");
+			header("Location: $app_url/?message=Invalid confirmation code.");
 		}
 	}
 

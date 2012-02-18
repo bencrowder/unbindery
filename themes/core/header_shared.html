@@ -4,16 +4,16 @@
 	<meta charset="utf-8">
 	<title>Unbindery</title>
 
-	<link rel="shortcut icon" href="{{ themeroot }}/images/favicon.png" />
+	<link rel="shortcut icon" href="{{ theme_root }}/images/favicon.png" />
 
-	<link rel="stylesheet" href="{{ themeroot }}/css/unbindery.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="{{ theme_root }}/css/unbindery.css" type="text/css" media="screen" charset="utf-8" />
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-	<script type="text/javascript" src="{{ siteroot }}/lib/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="{{ app_url }}/lib/jquery.hotkeys.js"></script>
 
 	{% if includes %}{% autoescape false %}{{ includes }}{% endautoescape %}{% endif %}
 
-	<script type="text/javascript">var siteroot = "{{ siteroot }}";</script>
+	<script type="text/javascript">var app_url = "{{ app_url }}";</script>
 
-	<script type="text/javascript" src="{{ siteroot }}/js/unbindery.js"></script>
+	<script type="text/javascript" src="{{ app_url }}/js/unbindery.js"></script>
 </head>

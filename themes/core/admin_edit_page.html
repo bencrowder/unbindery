@@ -1,10 +1,10 @@
 {% include 'header.html' %}
 
-<form id="ub_text" action="{{ siteroot }}/admin/save_page" method="POST">
+<form id="ub_text" action="{{ app_url }}/admin/save_page" method="POST">
 	<div id="controls_container">
 		<div id="controls">
 			<ul id="controls_left">
-				<li><a href="{{ siteroot }}/admin/projects/{{ project_slug }}" class="button">Back</a></li>
+				<li><a href="{{ app_url }}/admin/projects/{{ project_slug }}" class="button">Back</a></li>
 			</ul>
 			<ul id="controls_right">
 				<li><input type="submit" class="button" value="{{ savepage }}" /></li>
@@ -19,7 +19,7 @@
 		</div>
 
 		<div id="image_container">
-			<img src="{{ siteroot }}/media/{{ page.href }}" width="368" />
+			<img src="{{ app_url }}/media/{{ page.href }}" width="368" />
 		</div>
 
 		<div id="text_container">

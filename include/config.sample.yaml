@@ -7,7 +7,8 @@ database:
     username: dbuser        # database username
     password: dbpass        # database user's password
 
-siteroot: &SITEROOT http://path/to/unbindery
+app_url: &SITEROOT http://path/to/unbindery
+sys_path: /filesystem/path/to/unbindery
 admin_email: administrator@email.com        # site admin's email
 email_subject: [unbindery]  # prepended to notification emails
 

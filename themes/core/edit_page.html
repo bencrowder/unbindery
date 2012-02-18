@@ -3,11 +3,11 @@
 <div id="controls_container">
 	<div id="controls">
 		<ul id="controls_left">
-			<li><a href="{{ siteroot }}/dashboard" class="button">Back</a></li>
-			<li><a href="{{ siteroot }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+			<li><a href="{{ app_url }}/dashboard" class="button">Back</a></li>
+			<li><a href="{{ app_url }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
 		</ul>
 		<ul id="controls_right">
-			<li><img src="{{ siteroot }}/img/snake.gif" id="spinner" /></li>
+			<li><img src="{{ app_url }}/img/snake.gif" id="spinner" /></li>
 			<li><span id="save_as_draft_button" class="button">Save as Draft</span></li>
 			<li><span id="finished_button" class="button">Finish</span></li>
 			<li><span id="finish_get_next_button" class="button">Finish &amp; Continue</span></li>
@@ -19,7 +19,7 @@
 	<h2>{{ item.title }}</h2>
 
 	<div id="image_container">
-		<img src="{{ siteroot }}/media/{{ item.href }}" width="850" />
+		<img src="{{ app_url }}/media/{{ item.href }}" width="850" />
 	</div>
 
 	<div id="text_container">

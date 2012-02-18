@@ -1,5 +1,5 @@
 function redirect_to_dashboard(message, error) {
-	var locstr = siteroot + "/dashboard";
+	var locstr = app_url + "/dashboard";
 
 	if (message || error) { locstr += "?"; }
 
@@ -29,7 +29,7 @@ function save_page_text(is_draft, is_review, slug) {
 	var username = $("ul#nav .username").html();
 	var review_username = $("#review_username").html();
 
-	$.post(siteroot + "/ws/save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	$.post(app_url + "/ws/save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			console.log('data', data);
 			if (data.statuscode == "success") {
@@ -59,11 +59,11 @@ function save_page_text(is_draft, is_review, slug) {
 function get_new_page(project_slug) {
 	var username = $("ul#nav .username").html();
 
-	$.post(siteroot + "/ws/get_new_page", { project_slug: project_slug, username: username },
+	$.post(app_url + "/ws/get_new_page", { project_slug: project_slug, username: username },
 		function(data) {
 			switch(data.statuscode) {
 				case "success":
-					var locstr = siteroot + '/edit/' + project_slug + '/' + data.item_id;
+					var locstr = app_url + '/edit/' + project_slug + '/' + data.item_id;
 					window.location.href = locstr;
 					break;
 				case "waiting_for_clearance":
@@ -90,7 +90,7 @@ function save_page() {
 	var username = $("ul#nav .username").html();
 	var review_username = $("#review_username").html();
 
-	$.post(siteroot + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	$.post(app_url + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
 				$("#spinner").hide();
@@ -125,12 +125,12 @@ function load_items_for_editing(event, data) {
 	});
 
 	// add them to the database
-	$.post(siteroot + "/ws/add_pages", { project_slug: project_slug, pages: pages },
+	$.post(app_url + "/ws/add_pages", { project_slug: project_slug, pages: pages },
 		function(data) {
 			if (data.statuscode == "success") {
 				// load the first page into edit mode
 				var firstpage = data.page_ids[0];
-				window.location.href = siteroot + '/admin/new_page/' + project_slug + '/' + firstpage;
+				window.location.href = app_url + '/admin/new_page/' + project_slug + '/' + firstpage;
 			} else {
 				console.log("error!");
 			}

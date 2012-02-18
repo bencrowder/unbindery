@@ -42,7 +42,7 @@
 			<h4>Preview</h4>
 			<ul class="thumbnails">
 			{% for thumbnail in project.thumbnails %}
-			<li><img src="{{ siteroot }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
+			<li><img src="{{ app_url }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
 			{% endfor %}
 			</ul>
 		{% endif %}
@@ -61,7 +61,7 @@
 		</div>
 
 		{% if not user.ismember %}
-		<div class="join_button"><a href="{{ siteroot }}/projects/{{ project.slug }}/join" class="right_button join button">Join this project</a></div>
+		<div class="join_button"><a href="{{ app_url }}/projects/{{ project.slug }}/join" class="right_button join button">Join this project</a></div>
 		{% endif %}
 
 		<ul class="proofers">

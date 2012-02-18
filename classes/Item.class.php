@@ -57,7 +57,7 @@ class Item {
 	public function saveText($username, $draft, $review, $review_username, $itemtext) {
 		$adminemail = Settings::getProtected('adminemail');
 		$emailsubject = Settings::getProtected('emailsubject');
-		$siteroot = Settings::getProtected('siteroot');
+		$app_url = Settings::getProtected('app_url');
 
 		// load the project
 		$project = new Project($this->project_slug);
@@ -102,7 +102,7 @@ class Item {
 					// email the user to let them know
 					$subject = "$emailsubject Clearance granted";
 					$message = "You've been cleared for further proofing!\n\n";
-					$message .= $siteroot;
+					$message .= $app_url;
 					Mail::sendMessage($review_user->email, $subject, $message);
 
 					// email admin to let them know
@@ -132,7 +132,7 @@ class Item {
 					$message .= "\n\n$username is in training, so you need to review their work and clear them.";
 				}
 
-				$message .= "\n\nReview link: $siteroot/admin/review/{$this->project_slug}/{$this->item_id}/{$username}";
+				$message .= "\n\nReview link: $app_url/admin/review/{$this->project_slug}/{$this->item_id}/{$username}";
 
 				Mail::sendMessage($adminemail, $subject, $message);
 			}

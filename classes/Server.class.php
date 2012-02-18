@@ -87,7 +87,7 @@ class Server {
 	}
 
 	public function getCurrentAssignments() {
-		$assigments = $this->db->query("SELECT username, item_id, project_id, date_assigned, deadline FROM assignments WHERE date_completed IS NULL ORDER BY project_id, date_assigned DESC");
+		$assignments = $this->db->query("SELECT username, item_id, project_id, date_assigned, deadline FROM assignments WHERE date_completed IS NULL ORDER BY project_id, date_assigned DESC");
 
 		return $assignments;
 	}

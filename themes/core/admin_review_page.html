@@ -3,11 +3,11 @@
 <div id="controls_container" class="review">
 	<div id="controls">
 		<ul id="controls_left">
-			<li><a href="{{ siteroot }}/dashboard" class="button">Back</a></li>
-			<li><a href="{{ siteroot }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+			<li><a href="{{ app_url }}/dashboard" class="button">Back</a></li>
+			<li><a href="{{ app_url }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
 		</ul>
 		<ul id="controls_right">
-			<li><img src="{{ siteroot }}/img/snake.gif" id="spinner" /></li>
+			<li><img src="{{ app_url }}/img/snake.gif" id="spinner" /></li>
 			<li><span id="finished_review_button" class="button">Finish Review{% if proofer.status == 'training' %} and Clear{% endif %}</span></li>
 		</ul>
 	</div>
@@ -17,7 +17,7 @@
 	<h2>{{ item.title }} (proofed by <span id="review_username">{{ proofer.username }}</span>)</h2>
 
 	<div id="image_container">
-		<img src="{{ siteroot }}/media/{{ item.href }}" width="850" />
+		<img src="{{ app_url }}/media/{{ item.href }}" width="850" />
 	</div>
 
 	<div id="text_container">

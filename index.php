@@ -19,6 +19,7 @@ require_once 'modules/I18n.php';
 // App-specific logic
 require_once 'classes/User.class.php';
 require_once 'classes/Mail.class.php';
+require_once 'classes/Page.class.php';
 require_once 'classes/Project.class.php';
 require_once 'classes/Server.class.php';
 require_once 'classes/Item.class.php';
