@@ -1,37 +1,39 @@
 {% include 'header.html' %}
 
-<div id="controls_container">
-	<div id="controls">
-		<ul id="controls_left">
-			<li><a href="{{ app_url }}/dashboard" class="button">Back</a></li>
-			<li><a href="{{ app_url }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
-		</ul>
-		<ul id="controls_right">
-			<li><img src="{{ app_url }}/img/snake.gif" id="spinner" /></li>
-			<li><span id="save_as_draft_button" class="button">Save as Draft</span></li>
-			<li><span id="finished_button" class="button">Finish</span></li>
-			<li><span id="finish_get_next_button" class="button">Finish &amp; Continue</span></li>
-		</ul>
-	</div>
-</div>
-
-<div id="main">
-	<h2>{{ item.title }}</h2>
-
-	<div id="image_container">
-		<img src="{{ app_url }}/media/{{ item.href }}" width="850" />
+<section id="page">
+	<div id="controls_container" class="controls">
+		<div id="controls" class="container">
+			<ul id="controls_left">
+				<li><a href="{{ app_url }}/dashboard" class="button">Back</a></li>
+				<li><a href="{{ app_url }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+			</ul>
+			<ul id="controls_right">
+				<li><img src="{{ theme_root }}/images/spinner.gif" id="spinner" /></li>
+				<li><span id="save_as_draft_button" class="button">Save as Draft</span></li>
+				<li><span id="finished_button" class="button">Finish</span></li>
+				<li><span id="finish_get_next_button" class="button">Finish &amp; Continue</span></li>
+			</ul>
+		</div>
 	</div>
 
-	<div id="text_container">
-		<form id="ub_text">
-			{% if editor == 'advanced' %}
-			<div id="page_text">{{ item.escaped_stripped_itemtext }}</div>
-			{% else %}
-			<textarea id="page_text">{{ item.escaped_stripped_itemtext }}</textarea>
-			{% endif %}
-			<input type="hidden" name="item_id" id="item_id" value="{{ item.id }}" />
-			<input type="hidden" name="project_slug" id="project_slug" value="{{ project_slug }}" />
-		</form>
+	<div id="main" class="container">
+		<h2>{{ item.title }}</h2>
+
+		<div id="image_container">
+			<img src="{{ app_url }}/media/{{ item.href }}" width="850" />
+		</div>
+
+		<div id="text_container">
+			<form id="ub_text">
+				{% if editor == 'advanced' %}
+				<div id="page_text">{{ item.escaped_stripped_itemtext }}</div>
+				{% else %}
+				<textarea id="page_text">{{ item.escaped_stripped_itemtext }}</textarea>
+				{% endif %}
+				<input type="hidden" name="item_id" id="item_id" value="{{ item.id }}" />
+				<input type="hidden" name="project_slug" id="project_slug" value="{{ project_slug }}" />
+			</form>
+		</div>
 	</div>
 </div>
 

@@ -26,7 +26,7 @@ function save_page_text(is_draft, is_review, slug) {
 	} else {
 		itemtext = editor.session.doc.$lines.join('\n');		// Ace
 	}
-	var username = $("ul#nav .username").html();
+	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
 	$.post(app_url + "/ws/save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
@@ -57,11 +57,11 @@ function save_page_text(is_draft, is_review, slug) {
 }
 
 function get_new_page(project_slug) {
-	var username = $("ul#nav .username").html();
+	var username = $("nav ul .username").html();
 
 	$.post(app_url + "/ws/get_new_page", { project_slug: project_slug, username: username },
 		function(data) {
-			switch(data.statuscode) {
+			switch (data.statuscode) {
 				case "success":
 					var locstr = app_url + '/edit/' + project_slug + '/' + data.item_id;
 					window.location.href = locstr;
@@ -79,6 +79,8 @@ function get_new_page(project_slug) {
 					break;
 			}
 		}, 'json');
+
+	return false;
 }
 
 function save_page() {
@@ -87,7 +89,7 @@ function save_page() {
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
 	var pagetext = $("#pagetext").val();
-	var username = $("ul#nav .username").html();
+	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
 	$.post(app_url + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
@@ -165,6 +167,7 @@ $(document).ready(function() {
 		$(this).hide();
 		$(this).siblings('.spinner').show();
 		var project_slug = this.getAttribute('data-project-slug');
+
 		get_new_page(project_slug);
 	});
 });

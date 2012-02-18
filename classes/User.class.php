@@ -43,23 +43,19 @@ class User {
 	}
 
 	public function getAssignments() {
-		$items = $this->db->getUserAssignments($this->username);
-		return $items;
+		return $this->db->getUserAssignments($this->username);
 	}
 
 	public function getProjects() {
-		$projects = $this->db->getUserProjects($this->username);
-		return $projects;
+		return $this->db->getUserProjects($this->username);
 	}
 
 	public function isAssigned($item_id, $project_slug) {
-		$isAssigned = $this->db->isAssigned($this->username, $item_id, $project_slug);
-		return $isAssigned;
+		return $this->db->isAssigned($this->username, $item_id, $project_slug);
 	}
 
 	public function isMember($project_slug) {
-		$isMember = $this->db->isMember($this->username, $project_slug);
-		return $isMember;
+		return $this->db->isMember($this->username, $project_slug);
 	}
 
 	public function getRoleForProject($project_slug) {

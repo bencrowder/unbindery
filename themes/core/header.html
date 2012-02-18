@@ -1,10 +1,11 @@
 {% include 'header_shared.html' %}
 
 <body>
-	<div id="header_container">
-		<div id="header">
+	<header>
+		<div class="container">
 			<div id="logo"><a href="{{ app_url }}/"><img src="{{ theme_root }}/images/logo.jpg" alt="Unbindery" /></a></div>
-			<ul id="nav">
+			<nav>
+				<ul>
 				{% if user.loggedin %}
 					<li>Logged in as <span class="username">{{ username }}</span></li>
 					<li><a href="{{ app_url }}/dashboard">{{ i18n.translate("nav.dashboard") }}</a></li>
@@ -18,6 +19,7 @@
 					<li><a href="{{ app_url }}/signup">{{ i18n.translate("nav.signup") }}</a></li>
 					<li><a href="{{ app_url }}/login">{{ i18n.translate("nav.login") }}</a></li>
 				{% endif %}
-			</ul>
+				</ul>
+			</nav>
 		</div>
-	</div>
+	</header>

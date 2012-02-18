@@ -153,8 +153,8 @@ class DbMySQL implements DbInterface {
 
 	// Returns: boolean
 	public function isMember($username, $project_slug) {
-		$result = $this->query("SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ' AND projects.slug = ?", array($username, $project_slug));
- 
+		$result = $this->query("SELECT membership.id FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
+
 		if (count($result) > 0) {
 			$retval = true;
 		} else {
@@ -206,7 +206,7 @@ class DbMySQL implements DbInterface {
 	public function assignItemToUser($username, $item_id, $project_id, $deadline_length) {
 		$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL $deadline_length DAY))";
 
-		$results = $this->query($query, array($username, $item_id, $project_id));
+		return $this->execute($query, array($username, $item_id, $project_id));
 	}
 
 	// Returns: integer
@@ -461,7 +461,7 @@ class DbMySQL implements DbInterface {
 		$query .= "DATE_FORMAT(date_posted, '%e %b %Y') AS dateposted, ";
 		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
 		$query .= "FROM projects WHERE slug = ?;";
-		$results = $this->query($query, array($slug));
+		$results = $this->query($query, array($project_slug));
 		$result = $results[0];
 
 		if (isset($result)) {

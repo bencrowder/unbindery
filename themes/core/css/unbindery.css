@@ -1,41 +1,88 @@
+/* Unbindery CSS */
+/* --------------------------------------------------- */
+
+*										{ -moz-box-sizing: border-box; box-sizing: border-box; }
+
 body									{ margin: 0; padding: 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; font-size: 12px; }
 body#index								{ background: #22435f url(../images/indexbg.jpg) 50% 0 no-repeat; }
 body.dark								{ background: #111; color: #fff; }
 
-#header_container						{ background: url(../images/bannerbg.jpg); color: #fff; height: 63px; overflow: hidden; }
-#header									{ width: 850px; margin: 0px auto; }
+.container								{ max-width: 950px; width: 92%; margin: 0px auto; overflow: hidden; clear: both; }
+
+
+/* Header */
+/* --------------------------------------------------- */
+
+body > header							{ background: url(../images/bannerbg.jpg); color: #fff; height: 63px; overflow: hidden; border-bottom: solid 10px #000; }
 
 #logo									{ float: left; }
 #logo img								{ border: none; }
 #logo h1								{ font-size: 16px; color: #666; line-height: 1em; margin-top: 8px; text-indent: -1000em; }
-ul#nav									{ float: right; list-style: none; margin-top: 30px; }
-ul#nav li								{ display: inline; margin-left: 15px; color: #5d92b1; font-size: 11px; }
-ul#nav li a								{ color: #fff; font-weight: bold; text-decoration: none; }
-ul#nav li .username						{ font-weight: bold; }
 
-#controls_container						{ background: #eee; height: 40px; border-bottom: solid 1px #999; margin-bottom: 20px; }
-#controls								{ width: 850px; margin: 0px auto; }
-ul#controls_left						{ float: left; list-style: none; padding: 0; }
-ul#controls_left li						{ display: inline-block; margin-right: 5px; }
-ul#controls_right						{ float: right; list-style: none; padding: 0; }
-ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
-.button									{ padding: 5px 7px; background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); background: -moz-linear-gradient(white, #ccc); -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; color: #000; font-weight: bold; text-decoration: none; border: solid 1px #999; }
-.button:hover							{ background: #fff; cursor: pointer; }
-.smallbutton							{ padding: 1px 3px; font-size: .9em; }
+/* Nav */
+/* --------------------------------------------------- */
+
+nav ul									{ float: right; list-style: none; margin-top: 30px; }
+nav ul li								{ display: inline; margin-left: 15px; color: #5d92b1; font-size: 11px; }
+nav ul li a								{ color: #fff; font-weight: bold; text-decoration: none; }
+nav ul li .username						{ font-weight: bold; }
+
+
+/* Scoreboard */
+/* --------------------------------------------------- */
+
+#scoreboard ul							{ list-style: none; padding: 0; margin-bottom: 0; }
+#scoreboard ul li						{ display: inline-block; margin-right: 20px; padding-right: 20px; border-right: solid 1px #333; }
+#scoreboard ul li:last-child			{ margin-right: 0; padding-right: 0; border-right: none; }
+
+#scoreboard label						{ font-size: 11px; color: #555; text-transform: uppercase; display: block; font-weight: bold; text-shadow: 0 1px #000; }
+#scoreboard .stat						{ font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; color: #999; text-shadow: 0 1px #000; }
+
+
+/* Controls */
+/* --------------------------------------------------- */
+
+.controls								{ background: #222; padding: 7px 0 8px; border-bottom: solid 1px #999; }
 
 #controls_container.review				{ background: url(../images/review_bg.png) repeat-x; }
 
-#main									{ width: 850px; margin: 0px auto; overflow: hidden; clear: both; padding-bottom: 25px; margin-bottom: 75px; }
-#main h2								{ font-size: 12px; color: #aaa; text-transform: uppercase; }
+#controls_container ul li a				{ display: inline-block; }
+#controls_container ul li span			{ display: inline-block; }
 
-#image_container						{ width: 848px; height: 300px; overflow: scroll; margin-bottom: 2em; border: solid 1px #999; }
+ul#controls_left						{ float: left; list-style: none; padding: 0; margin: 0; }
+ul#controls_left li						{ display: inline-block; margin-right: 5px; }
 
-#text_container							{ width: 684px; height: 200px; margin: 0px auto; }
+ul#controls_right						{ float: right; list-style: none; padding: 0; margin: 0; }
+ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
-.container								{ overflow: hidden; clear: both; margin-bottom: 3em; }
-.bigcol									{ width: 550px; float: left; margin-top: 20px; }
-.sidebar								{ width: 200px; margin-left: 100px; float: left; margin-top: 20px; }
+.button									{ padding: 5px 7px 6px; background: #444; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444)); background: -moz-linear-gradient(white, #ccc); -moz-border-radius: 3px; border-radius: 3px; color: #fff; font-weight: bold; text-decoration: none; border: solid 1px #111; }
+.button:hover							{ background: #fff; cursor: pointer; }
+
+.button.light							{ background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); background: -moz-linear-gradient(white, #ccc); color: #000; border: solid 1px #999; }
+
+.smallbutton							{ padding: 1px 3px; font-size: .9em; }
+
+
+/* Main page area */
+/* --------------------------------------------------- */
+
+#page									{ }
+
+#main									{ padding: 3em 0 1em; margin-bottom: 75px; }
+#main h2								{ font-size: 21px; color: #aaa; margin: 0; letter-spacing: -0.03em; }
+
+.content								{ width: 60%; margin-right: 10%; float: left; margin-top: 20px; }
+.sidebar								{ width: 30%; float: left; margin-top: 20px; }
+
+
+/* Page editor */
+/* --------------------------------------------------- */
+
+#image_container						{ width: 100%; height: 300px; overflow: scroll; margin: 2em 0; border: solid 1px #999; }
+
+#text_container							{ width: 70%; height: 200px; margin: 0px auto; }
+
 
 /* Sidebar */
 /* --------------------------------------------------- */
@@ -44,23 +91,25 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .sidebar ul li							{ padding: 7px 0; border-bottom: solid 1px #999; }
 .sidebar ul li:last-child				{ border-bottom: none; }
 
-.sidebar ul#stats li label				{ font-size: 10px; color: #999; text-transform: uppercase; display: block; }
-.sidebar ul#stats li .stat				{ font-size: 1.3em; font-weight: bold; display: block; margin-top: 3px; }
 
+/* Percentage bar */
+/* --------------------------------------------------- */
 
-.percentage								{ float: right; font-size: 10px; color: #666; clear: both; margin-left: 15px; }
-.percentage p							{ text-align: right; padding-top: 4px; }
-.percentage_container					{ width: 100px; border: solid 1px #666; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; height: 10px; }
-.percentage p							{ margin: 0px 0 0; }
+.progress_bar							{ font-size: 10px; color: #666; clear: both; }
+.progress_bar span						{ margin-left: 3px; line-height: 1em; vertical-align: top; }
+
+.capsule								{ width: 100px; border: solid 1px #666; -moz-border-radius: 3px; border-radius: 3px; height: 12px; display: inline-block; }
+
 .percent								{ background: #000; height: 10px; float: left; z-index: 50; }
 .percent_proofs							{ background: #ccc; height: 10px; z-index: -1; }
 
-.big.percentage							{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
-.big .percentage_container				{ width: 200px; height: 20px; }
+.big.progress_bar						{ font-size: 12px; clear: both; overflow: hidden; margin-bottom: 30px; }
+
+.big .capsule							{ width: 200px; height: 22px; }
 .big .percent							{ height: 20px; }
 .big .percent_proofs					{ height: 20px; }
 
-.group									{ width: 250px; float: left; margin-right: 50px; }
+
 .group:last-child						{ margin-right: 0; }
 .group h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
 
@@ -94,17 +143,12 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 /* Dashboard */
 /* --------------------------------------------------- */
 
-.dashboard .sidebar						{ width: 250px; margin-left: 50px; }
+.content h3								{ margin: 3em 0 0; color: #5d92b1; padding: 0 0 3px 0; font-size: 1em; }
+.content h3:first-child					{ margin-top: 0; }
 
-
-.bigcol h3								{ margin-top: 3em; padding: 3px 6px; }
-.bigcol h3:first-child					{ margin-top: 0; }
-
-h3.action_header						{ background: #333; color: #fff; padding-top: 5px; margin-bottom: 0; border-top-left-radius: 7px; border-top-right-radius: 7px; }
-h3.action_header.projects				{ background: #345; }
-
-ul.action_list							{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; }
-ul.action_list li						{ border-bottom: solid 1px #ccc; padding: 6px; clear: both; overflow: hidden; }
+ul.action_list							{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; }
+ul.action_list li						{ border-bottom: solid 1px #ddd; padding: 6px 0; clear: both; overflow: hidden; }
+ul.action_list li:last-child			{ border-bottom: none; }
 ul.action_list li .title				{ font-size: 1.2em; font-weight: bold; }
 ul.action_list li .title a				{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; line-height: 1.4em; }
 ul.action_list li .deadline				{ font-size: .6em; color: #999; margin-left: 5px; }
@@ -116,16 +160,17 @@ ul.action_list li .button				{ font-size: 1.2em; }
 
 ul.action_list li.blankslate a			{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; font-weight: bold; }
 
-ul.action_list li:last-child			{ background: #333; padding: 0; height: 8px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
-
 ul.action_list.projects li:last-child	{ background: #345; }
 
 ul.action_list.projects .percentage		{ margin-top: 3px; }
 
 .sub									{ margin-top: 4px; font-size: .9em; color: #666; }
 
-#message								{ width: 830px; margin: 0px auto; background: #444; color: #fff;  padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
-#error									{ width: 830px; margin: 0px auto; background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+.item .sub								{ margin-bottom: 4px; }
+.item .sub, .item .progress_bar			{ margin-left: 1em; }
+
+#message								{ background: #444; color: #fff; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+#error									{ background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
 
 body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: #fff; padding: 15px; border: solid 2px #000; border-top: none; }
 
@@ -211,8 +256,9 @@ ul.thumbnails li						{ border: solid 1px #ddd; display: inline-block; margin-ri
 /* Footer */
 /* --------------------------------------------------- */
 
-#footer									{ width: 850px; margin: 50px auto; border-top: solid 1px #ccc; padding-top: 5px; font-size: 10px; color: #999; }
-#footer a								{ color: #666; text-decoration: none; border-bottom: dotted 1px #666; }
+footer									{ border-top: dotted 1px #ccc; padding: 8px 0; font-size: .9em; color: #bbb; }
+footer a								{ color: #aaa; font-weight: bold; text-decoration: none; }
+footer a:hover							{ text-decoration: underline; }
 
 
 /* Project Guidelines */
@@ -266,14 +312,14 @@ ul.proofers .username					{ font-size: 11px; }
 .sidebar ul.projects li a						{ font-size: 11px; color: #000; text-decoration: none; border-bottom: dotted 1px #666; font-weight: bold; }
 
 .sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
-.bigcol h4								{ color: #5d92b1; }
+.content h4								{ color: #5d92b1; }
 
 
 /* Editor */
 /* --------------------------------------------------- */
 
 /* General */
-#page_text								{ width: 700px; height: 230px; border: solid 1px #999; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+#page_text								{ width: 100%; height: 230px; border: solid 1px #999; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 
 /* For the textarea ("simple") */
 textarea#page_text						{ height: 200px; font-size: 16px; line-height: 1.4em; font-family: "Lucida Grande", "Lucida Sans Unicode", Monaco, Courier, sans-serif; padding: 10px; }

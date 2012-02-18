@@ -1,102 +1,110 @@
 {% include 'header.html' %}
 
-{% if message %}<div id="message">{{ message }}</div>{% endif %}
-{% if error %}<div id="error">{{ error }}</div>{% endif %}
+{% if message %}<div id="message" class="container">{{ message }}</div>{% endif %}
+{% if error %}<div id="error" class="container">{{ error }}</div>{% endif %}
 
-<div id="main" class="dashboard">
-	<h2>{{ i18n.t('dashboard.title') }}</h2>
+<section id="page">
+	<div id="scoreboard" class="controls">
+		<ul class="container">
+			<li><label>{{ i18n.t('dashboard.score') }}</label> <span class="stat">{{ user.score }}</span></li>
+			<li><label>{{ i18n.t('dashboard.proofed') }}</label> <span class="stat">{{ user.proofed }}</span></li>
+			<li><label>{{ i18n.t('dashboard.proofed_past_week') }}</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
+		</ul>
+	</div>
 
-	<div class="container">
-		<div class="bigcol">
-			<h3 class="action_header">{{ i18n.t('dashboard.current_assignments') }}</h3>
+	<div id="main" class="dashboard container">
+		<h2>{{ i18n.t('dashboard.title') }}</h2>
+
+		<div class="content">
+			<h3>{{ i18n.t('dashboard.current_assignments') }}</h3>
 			<ul class="action_list">
 				{% if item_count == 0 and project_count == 0 %}
 				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
 				{% for item in items %}
-				<li>
+				<li class="item">
 					<div class="right_button"><a href="{{ item.editlink }}" class="button">{{ i18n.t('dashboard.proof') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">{{ i18n.t('dashboard.due') }} {{ item.deadline }}</span></div>
+
 					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
-				</li>
-				{% endfor %}
 
-				{% for project in projects %}
-					{% if project.available %}
-				<li>
-					<div class="right_button">
-						<img src="{{ app_url }}/img/snake.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
-
-					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
-					<div class="sub">{{ project.author }}</div>
-				</li>
-					{% endif %}
-				{% endfor %}
-				<li></li>
-			</ul>
-		</div>
-
-		<div class="sidebar">
-			<ul id="stats">
-				<li><label>{{ i18n.t('dashboard.score') }}</label> <span class="stat">{{ user.score }}</span></li>
-				<li><label>{{ i18n.t('dashboard.proofed') }}</label> <span class="stat">{{ user.proofed }}</span></li>
-				<li><label>{{ i18n.t('dashboard.proofed_past_week') }}</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
-			</ul>
-		</div>
-	</div>
-
-	<div id="lower_dash">
-		<div class="group">
-			<h3>{{ i18n.t('dashboard.recent_history') }}</h3>
-			<ul class="list">
-				{% if history_count == 0 %}
-				<li>{{ i18n.t('dashboard.no_history') }}</li>
-				{% endif %}
-
-				{% for entry in history %}
-				<li>
-					{{ entry.date_completed }}: <a href='{{ entry.editlink }}'>{{ entry.title }}</a>
-					<div class="history_projecttitle">{{ i18n.t('dashboard.project') }} {{ entry.project_title }}</div>
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
-
-		<div class="group">
-			<h3>{{ i18n.t('dashboard.current_projects') }}</h3>
-			<ul class="list">
-				{% if project_count == 0 %}
-				<li>{{ i18n.t('dashboard.no_current_projects') }}</li>
-				{% endif %}
-
-				{% for project in projects %}
-				<li>
-					<div class="percentage">
-						<div class="percentage_container">
+					<div class="progress_bar">
+						<div class="capsule">
 							<div class="percent" style="width: {{ project.percentage }}px;"></div>
 							{% if project.num_proofs > 1 %}
 							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
 							{% endif %}
 						</div> 
-						<p>{{ project.percentage }}% ({{ project.available_pages }} left)</p>
+						<span>{{ project.percentage }}% ({{ project.available_pages }} left)</span>
 					</div>
+				</li>
+				{% endfor %}
 
-					<div class="project_title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+				{% for project in projects %}
+					{% if project.available %}
+				<li class="project">
+					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
+
+					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+
+					<div class="progress_bar">
+						<div class="capsule">
+							<div class="percent" style="width: {{ project.percentage }}px;"></div>
+							{% if project.num_proofs > 1 %}
+							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
+							{% endif %}
+						</div> 
+						<span>{{ project.percentage }}% ({{ project.available_pages }} left)</span>
+					</div>
+				</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+
+			<h3>Review Queue</h3>
+			<ul class="action_list">
+				{% if item_count == 0 %}
+				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
+				{% endif %}
+
+				{% for item in items %}
+				<li>
+					<div class="right_button"><a href="{{ item.editlink }}" class="button">{{ i18n.t('dashboard.review') }}</a></div>
+					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">{{ i18n.t('dashboard.due') }} {{ item.deadline }}</span></div>
+					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
 				</li>
 				{% endfor %}
 			</ul>
 		</div>
 
-		<div class="group leaderboard">
-			<h3>{{ i18n.t('dashboard.top_proofers') }}</h3>
-			<ol id="stats">
-			{% for topuser in topusers %} 
-			<li><label>{{ topuser.username }}</label> <span class="stat">{{ topuser.score }}</span></li>
-			{% endfor %}
-			</ol>
+		<div class="sidebar">
+			<div class="group leaderboard">
+				<h3>{{ i18n.t('dashboard.top_proofers') }}</h3>
+				<ol id="stats">
+				{% for topuser in topusers %} 
+				<li><label>{{ topuser.username }}</label> <span class="stat">{{ topuser.score }}</span></li>
+				{% endfor %}
+				</ol>
+			</div>
+
+			<div class="group">
+				<h3>{{ i18n.t('dashboard.recent_history') }}</h3>
+				<ul class="list">
+					{% if history_count == 0 %}
+					<li>{{ i18n.t('dashboard.no_history') }}</li>
+					{% endif %}
+
+					{% for entry in history %}
+					<li>
+						{{ entry.date_completed }}: <a href='{{ entry.editlink }}'>{{ entry.title }}</a>
+						<div class="history_projecttitle">{{ i18n.t('dashboard.project') }} {{ entry.project_title }}</div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
 		</div>
 	</div>
-</div>
+</section>
 
 {% include 'footer.html' %}
