@@ -24,7 +24,7 @@
 
 				{% for item in items %}
 				<li class="item">
-					<div class="right_button"><a href="{{ item.editlink }}" class="button">{{ i18n.t('dashboard.proof') }}</a></div>
+					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.proof') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">{{ i18n.t('dashboard.due') }} {{ item.deadline }}</span></div>
 
 					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
@@ -44,7 +44,7 @@
 				{% for project in projects %}
 					{% if project.available %}
 				<li class="project">
-					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
+					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
 

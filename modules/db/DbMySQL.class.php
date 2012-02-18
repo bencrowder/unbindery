@@ -318,7 +318,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, itemtext, status, type
 	public function loadItem($item_id, $project_slug) {
-		$query = "SELECT * FROM items ";
+		$query = "SELECT items.id as id, projects.id as project_id, projects.slug as project_slug, items.title as title, items.itemtext as itemtext, items.status as status, items.type as type, items.href as href FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.slug = ?;";
@@ -363,9 +363,14 @@ class DbMySQL implements DbInterface {
 		$query .= "AND user = ?;";
 
 		$results = $this->query($query, array($item_id, $project_id, $username));
-		$result = $results[0];
 
-		return isset($result);
+		if (count($results) > 0) {
+			$result = true;
+		} else {
+			$result = false;
+		}
+
+		return $result;
 	}
 
 	// Returns: none

@@ -2,33 +2,35 @@
 
 {% if message %}<div id="message">{{ message }}</div>{% endif %}
 
-<div id="main">
-	<h2>Settings</h2>
+<section id="page">
+	<div id="main" class="container">
+		<h2>Settings</h2>
 
-	<form id="user_settings" action="{{ app_url }}/settings/save" method="post">
-		<h3>Basic Information</h3>
+		<form id="user_settings" action="{{ app_url }}/settings/save" method="post">
+			<h3>Basic Information</h3>
 
-		<label>Name</label>
-		<input type="text" id="user_name" name="user_name" value="{{ user.name }}" />
+			<label>Name</label>
+			<input type="text" id="user_name" name="user_name" value="{{ user.name }}" />
 
-		<label>Email address</label>
-		<input type="text" id="user_email" name="user_email" value="{{ user.email }}" />
+			<label>Email address</label>
+			<input type="text" id="user_email" name="user_email" value="{{ user.email }}" />
 
-		<h3>Change Password</h3>
+			<h3>Change Password</h3>
 
-		<label>Old password</label>
-		<input type="password" id="user_oldpassword" name="user_oldpassword" />
-		
-		<label>New password</label>
-		<input type="password" id="user_newpassword1" name="user_newpassword1" />
+			<label>Old password</label>
+			<input type="password" id="user_oldpassword" name="user_oldpassword" />
+			
+			<label>New password</label>
+			<input type="password" id="user_newpassword1" name="user_newpassword1" />
 
-		<label>New password (again, for good measure)</label>
-		<input type="password" id="user_newpassword2" name="user_newpassword2" />
+			<label>New password (again, for good measure)</label>
+			<input type="password" id="user_newpassword2" name="user_newpassword2" />
 
-		<input type="submit" value="Save Changes" class="button" />
+			<input type="submit" value="Save Changes" class="button" />
 
-		<input type="hidden" name="username" id="username" value="{{ username }}" />
-	</form>
-</div>
+			<input type="hidden" name="username" id="username" value="{{ username }}" />
+		</form>
+	</div>
+</section>
 
 {% include 'footer.html' %}

@@ -3,83 +3,85 @@
 {% if message %}<div id="message">{{ message }}</div>{% endif %}
 {% if error %}<div id="error">{{ error }}</div>{% endif %}
 
-<div id="main">
-{% if guidelines == true %}
-	<h2>Project Guidelines</h2>
-	
-	<div class="content proj_guidelines">
-		<div class="project_title">{{ project.title }}</div>
+<section id="page">
+	<div id="main" class="container">
+	{% if guidelines == true %}
+		<h2>Project Guidelines</h2>
+		
+		<div class="content proj_guidelines">
+			<div class="project_title">{{ project.title }}</div>
 
-		<h2>Project-specific Guidelines</h2>
+			<h2>Project-specific Guidelines</h2>
 
-		{% if project.guidelines != '' %}{{ project.guidelines }}{% else %}Nothing specific to this project.{% endif %}
+			{% if project.guidelines != '' %}{{ project.guidelines }}{% else %}Nothing specific to this project.{% endif %}
 
-		<h2>System-wide Guidelines</h2>
+			<h2>System-wide Guidelines</h2>
 
-		{% autoescape false%}{{ systemguidelines }}{% endautoescape %}
-	</div>
-{% else %}
-	<h2>Project Details</h2>
+			{% autoescape false%}{{ systemguidelines }}{% endautoescape %}
+		</div>
+	{% else %}
+		<h2>Project Details</h2>
 
-	<div class="content proj_details">
-		<div class="project_title">{{ project.title }}</div>
-		<div class="project_author">Author: {{ project.author }}</div>
-		<div class="project_desc">{{ project.language }}. {{ project.description }}</div>
+		<div class="content proj_details">
+			<div class="project_title">{{ project.title }}</div>
+			<div class="project_author">Author: {{ project.author }}</div>
+			<div class="project_desc">{{ project.language }}. {{ project.description }}</div>
 
-		<ul class="project_dates">
-			<li>Started: <label>{{ project.date_started }}</label></li>
-			{% if project.status == 'completed' or project.status == 'posted' %}
-			<li>Completed: <label>{{ project.date_completed }} ({{ project.days_spent }})</label></li>
-				{% if project.status == 'posted' %}
-			<li>Posted: <label>{{ project.date_posted }}</label></li>
+			<ul class="project_dates">
+				<li>Started: <label>{{ project.date_started }}</label></li>
+				{% if project.status == 'completed' or project.status == 'posted' %}
+				<li>Completed: <label>{{ project.date_completed }} ({{ project.days_spent }})</label></li>
+					{% if project.status == 'posted' %}
+				<li>Posted: <label>{{ project.date_posted }}</label></li>
+					{% endif %}
 				{% endif %}
-			{% endif %}
-		</ul>
-
-		<a class="guidelines_link" target="_blank" href="{{ project.slug }}/guidelines/">Project Guidelines</a>
-
-		{% if project.thumbnails %}
-			<h4>Preview</h4>
-			<ul class="thumbnails">
-			{% for thumbnail in project.thumbnails %}
-			<li><img src="{{ app_url }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
-			{% endfor %}
 			</ul>
-		{% endif %}
-	</div>
 
-	<div class="sidebar proj_details">
-		<div class="percentage big">
-			<div class="percentage_container">
-				<div class="percent" style="width: {{ project.percentage * 2 }}px;"></div>
-				<div class="percent_proofs" style="width: {{ project.proof_percentage * 2 }}px;"></div>
-			</div> 
-			{% if project.num_proofs > 1 %}
-			<p>Proofed: {{ project.proof_percentage_rounded }}% ({{ project.proofed }}/{{ project.total_proofs }})</p>
+			<a class="guidelines_link" target="_blank" href="{{ project.slug }}/guidelines/">Project Guidelines</a>
+
+			{% if project.thumbnails %}
+				<h4>Preview</h4>
+				<ul class="thumbnails">
+				{% for thumbnail in project.thumbnails %}
+				<li><img src="{{ app_url }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
+				{% endfor %}
+				</ul>
 			{% endif %}
-			<p>Completed: {{ project.percentage_rounded }}% ({{ project.completed }}/{{ project.total }})</p>
 		</div>
 
-		{% if not user.ismember %}
-		<div class="join_button"><a href="{{ app_url }}/projects/{{ project.slug }}/join" class="right_button join button">Join this project</a></div>
-		{% endif %}
+		<div class="sidebar proj_details">
+			<div class="progress_bar big">
+				<div class="capsule">
+					<div class="percent" style="width: {{ project.percentage * 2 }}px;"></div>
+					<div class="percent_proofs" style="width: {{ project.proof_percentage * 2 }}px;"></div>
+				</div> 
+				{% if project.num_proofs > 1 %}
+				<p>Proofed: {{ project.proof_percentage_rounded }}% ({{ project.proofed }}/{{ project.total_proofs }})</p>
+				{% endif %}
+				<p>Completed: {{ project.percentage_rounded }}% ({{ project.completed }}/{{ project.total }})</p>
+			</div>
 
-		<ul class="proofers">
-		<h3>Proofers on This Project</h3>
-		{% for proofer in proofers %}
-			<li>
-				<div class="percentage">
-					<div class="percentage_container">
-						<div class="percent" style="width: {{ proofer.percentage }}px;"></div>
-					</div> 
-					<p>{{ proofer.percentage_rounded }}% ({{ proofer.pages }})</p>
-				</div>
-				<div class="username">{{ proofer.username }}</div>
-			</li>
-		{% endfor %}
-		</ul>
+			{% if not user.ismember %}
+			<div class="join_button"><a href="{{ app_url }}/projects/{{ project.slug }}/join" class="right_button join button">Join this project</a></div>
+			{% endif %}
+
+			<ul class="proofers">
+			<h3>Proofers on This Project</h3>
+			{% for proofer in proofers %}
+				<li>
+					<div class="progress_bar">
+						<div class="capsule">
+							<div class="percent" style="width: {{ proofer.percentage }}px;"></div>
+						</div> 
+						<p>{{ proofer.percentage_rounded }}% ({{ proofer.pages }})</p>
+					</div>
+					<div class="username">{{ proofer.username }}</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
 	</div>
-{% endif %}
-</div>
+</section>
 
 {% include 'footer.html' %}

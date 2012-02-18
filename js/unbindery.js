@@ -31,7 +31,6 @@ function save_page_text(is_draft, is_review, slug) {
 
 	$.post(app_url + "/ws/save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
-			console.log('data', data);
 			if (data.statuscode == "success") {
 				$("#spinner").hide();
 

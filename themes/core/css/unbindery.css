@@ -56,10 +56,11 @@ ul#controls_left li						{ display: inline-block; margin-right: 5px; }
 ul#controls_right						{ float: right; list-style: none; padding: 0; margin: 0; }
 ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
-.button									{ padding: 5px 7px 6px; background: #444; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444)); background: -moz-linear-gradient(white, #ccc); -moz-border-radius: 3px; border-radius: 3px; color: #fff; font-weight: bold; text-decoration: none; border: solid 1px #111; }
-.button:hover							{ background: #fff; cursor: pointer; }
+.button									{ padding: 5px 7px 6px; background: #444; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444)); background: -moz-linear-gradient(white, #ccc); -moz-border-radius: 3px; border-radius: 3px; color: #fff; font-weight: bold; text-decoration: none; border: solid 1px #111; text-shadow: 0 1px #000; }
+.button:hover							{ background: #345678; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#547698), to(#345678)); background: -moz-linear-gradient(#547698, #345678); cursor: pointer; }
 
-.button.light							{ background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); background: -moz-linear-gradient(white, #ccc); color: #000; border: solid 1px #999; }
+.button.light							{ background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); background: -moz-linear-gradient(white, #ccc); color: #000; border: solid 1px #999; text-shadow: 0 1px #fff; }
+.button.light:hover						{ background: #fff; cursor: pointer; }
 
 .smallbutton							{ padding: 1px 3px; font-size: .9em; }
 
@@ -79,7 +80,7 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 /* Page editor */
 /* --------------------------------------------------- */
 
-#image_container						{ width: 100%; height: 300px; overflow: scroll; margin: 2em 0; border: solid 1px #999; }
+#image_container						{ width: 100%; height: 300px; overflow: scroll; margin: 1em 0 2em; border: solid 1px #999; }
 
 #text_container							{ width: 70%; height: 200px; margin: 0px auto; }
 
