@@ -13,7 +13,7 @@ nav.login: 'Login'
 nav.signup: 'Sign Up'
 
 # Footer
-footer.text: '<a href="http:#bencrowder.net/coding/unbindery/>Unbindery</a> was written by <a href="http:#bencrowder.net/">Ben Crowder</a>.'
+footer.text: '<a href="http://bencrowder.net/coding/unbindery/">Unbindery</a> was written by <a href="http://bencrowder.net/">Ben Crowder</a> and <a href="http:/chadgh.com/">Chad Hansen</a>.'
 
 # Dashboard
 dashboard.title: 'Dashboard'

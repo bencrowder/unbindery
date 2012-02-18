@@ -4,8 +4,8 @@ A book digitization web app written in PHP and JavaScript.
 
 ### Dependencies
 
-* Twig
-* sfyaml
+* Twig (1.6.0 included)
+* sfYaml (included)
 * uploadify
 
 ### Installation
