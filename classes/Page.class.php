@@ -1,7 +1,9 @@
 <?php
 
 class Page {
-	static public function render($page, $options, $cached = false, $theme = 'core') {
+	static public function render($page, $options, $theme = 'core') {
+		$cached = Settings::getProtected('theme_cached');
+
 		if ($cached) {
 			$twig_opts = array('cache' => 'themes/cache');
 		} else {

@@ -11,6 +11,7 @@ app_url: &SITEROOT http://path/to/unbindery
 sys_path: /filesystem/path/to/unbindery
 admin_email: administrator@email.com        # site admin's email
 email_subject: [unbindery]  # prepended to notification emails
+theme_cached: false
 
 system_guidelines: |
     <i>Questions? Email your administrator (your@email.com)</i>
