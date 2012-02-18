@@ -17,11 +17,18 @@ class Page {
 		$options['theme_root'] = $options['app_url'] . "/themes/$theme";
 		$options['i18n'] = new I18n("translations");
 
+		$options['message'] = (array_key_exists('ub_message', $_SESSION)) ? $_SESSION['ub_message'] : '';
+		$options['error'] = (array_key_exists('ub_error', $_SESSION)) ? $_SESSION['ub_error'] : '';
+
 		$auth = Settings::getProtected('auth');
 		$username = $auth->getUsername();
 		if (isset($username)) { $options['username'] = $auth->getUsername(); }
 
 		echo $twig->render("$page.html", $options);
+
+		// Now that we've displayed it, get rid of it
+		unset($_SESSION['ub_message']);
+		unset($_SESSION['ub_error']);
 	}
 }
 

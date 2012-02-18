@@ -9,14 +9,11 @@ class Handlers {
 			header("Location: $app_url/dashboard");
 		}
 
-		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
-
 		$options = array(
 			'user' => array(
 				'loggedin' => false
 				),
 			'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n",
-			'message' => $message	
 		);
 
 		Page::render('index', $options);
@@ -94,9 +91,6 @@ class Handlers {
 
 		$auth->forceAuthentication();
 
-		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
-		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
-
 		$username = $auth->getUsername();
 		$user = new User($username);
 		$user->getStats();
@@ -154,8 +148,6 @@ class Handlers {
 				'score' => $user->score,
 				'proofed' => $user->proofed,
 				'proofed_past_week' => $user->proofed_past_week),
-			'message' => $message,
-			'error' => $error,
 			'items' => $items,
 			'projects' => $projects,
 			'history' => $history,
@@ -175,9 +167,6 @@ class Handlers {
 
 		$auth->forceAuthentication();
 
-		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
-		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
-
 		$username = $auth->getUsername();
 		$user = new User($username);
 
@@ -187,7 +176,6 @@ class Handlers {
 				'admin' => $user->admin,
 				'name' => $user->name,
 				'email' => $user->email),
-			'message' => $message
 		);
 
 		Page::render('settings', $options);
@@ -199,9 +187,6 @@ class Handlers {
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();
-
-		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
-		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
 		$username = (array_key_exists('username', $_POST)) ? stripslashes($_POST['username']) : '';
 		$user_name = (array_key_exists('user_name', $_POST)) ? stripslashes($_POST['user_name']) : '';
@@ -220,7 +205,9 @@ class Handlers {
 
 		$db->updateUserSettings($username, $user_name, $user_email, $user_newpassword1);
 
-		header("Location: $app_url/settings?message=Settings saved.");
+		$_SESSION['ub_message'] = "Settings saved.";
+
+		header("Location: $app_url/settings");
 	}
 
 	static public function projectHandler($args) {
@@ -237,9 +224,6 @@ class Handlers {
 		}
 
 		$auth->forceAuthentication();
-
-		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
-		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
 		$username = $auth->getUsername();
 		$user = new User($username);
@@ -306,8 +290,6 @@ class Handlers {
 				'guidelines' => $project->guidelines,
 				'thumbnails' => $project->thumbnails),
 			'proofers' => $proofers,
-			'message' => $message,
-			'error' => $error,
 			'guidelines' => $guidelines,
 			'systemguidelines' => $systemguidelines
 		);
@@ -328,12 +310,11 @@ class Handlers {
 
 		$retval = $user->assignToProject($slug);
 
-		if ($retval) {
-			header("Location: $app_url/dashboard/");
-		} else {
-			// redirect to error page
-			header("Location: $app_url/dashboard/?message=Error joining project.");
+		if (!$retval) {
+			$_SESSION['ub_error'] = "Error joining project";
 		}
+
+		header("Location: $app_url/dashboard/");
 	}
 
 	static public function projectsHandler($args) {
@@ -383,9 +364,6 @@ class Handlers {
 		}
 
 		$auth->forceAuthentication();
-
-		$message = (array_key_exists('message', $_GET)) ? stripslashes($_GET['message']) : '';
-		$error = (array_key_exists('error', $_GET)) ? stripslashes($_GET['error']) : '';
 
 		$username = $auth->getUsername();
 		$user = new User($username);
@@ -849,10 +827,12 @@ class Handlers {
 		$status = $user->validateHash($hash);
 
 		if ($status) {
-			header("Location: $app_url/?message=Confirmed. Go ahead and log in.");
+			$_SESSION['ub_message'] = "Confirmed. Go ahead and log in.";
 		} else {
-			header("Location: $app_url/?message=Invalid confirmation code.");
+			$_SESSION['ub_message'] = "Invalid confirmation code.";
 		}
+
+		header("Location: $app_url");
 	}
 
 	static public function fileNotFoundHandler() {

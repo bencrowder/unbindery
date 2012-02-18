@@ -29,6 +29,12 @@ require_once 'handlers/Handlers.class.php';
 require_once 'handlers/WebServiceHandlers.class.php';
 
 
+// Initialize the session
+// --------------------------------------------------
+
+session_start();
+
+
 // Initialize Twig
 // --------------------------------------------------
 
