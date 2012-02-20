@@ -4,10 +4,11 @@
 
 <div class="container">
 	<div id="logo_box"><img src="{{ theme_root }}/images/logo_white.png" /></div>
+
 	<div id="login_box">
 		<h2>Login</h2>
 
-		<form id="login_form" action="login/process" method="post" accept-charset="utf-8">
+		<form id="login_form" action="{{ app_url }}/login/process" method="post" accept-charset="utf-8">
 			<label>Username:</label>
 			<input type="text" id="username" name="username" />
 
@@ -20,7 +21,7 @@
 		</form>
 
 		{% if allow_signup %}
-		<form id="signup_form" style="display: none" action="signup" method="post" accept-charset="utf-8">
+		<form id="signup_form" style="display: none" action="{{ app_url }}/signup" method="post" accept-charset="utf-8">
 			<label>Email:</label>
 			<input type="text" id="email_signup" name="email_signup" />
 
