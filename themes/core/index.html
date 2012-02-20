@@ -16,9 +16,10 @@
 
 			<input type="submit" value="Log In" class="button light" />
 
-			<span id="signup">Sign up</span>
+			{% if allow_signup %}<span id="signup">Sign up</span>{% endif %}
 		</form>
 
+		{% if allow_signup %}
 		<form id="signup_form" style="display: none" action="signup" method="post" accept-charset="utf-8">
 			<label>Email:</label>
 			<input type="text" id="email_signup" name="email_signup" />
@@ -37,6 +38,7 @@
 		<div id="thankyou" style="display: none">
 			We just sent you a confirmation link to your email address.
 		</div>
+		{% endif %}
 	</div>
 </div>
 

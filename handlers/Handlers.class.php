@@ -4,19 +4,26 @@ class Handlers {
 	static public function indexHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
+		$externalLogin = Settings::getProtected('external_login');
+		$allowSignup = Settings::getProtected('allow_signup');
 
-		if ($auth->authenticated()) {
-			header("Location: $app_url/dashboard");
+		if ($externalLogin) {
+			$auth->redirectToLogin();
+		} else {
+			if ($auth->authenticated()) {
+				header("Location: $app_url/dashboard");
+			}
+
+			$options = array(
+				'user' => array(
+					'loggedin' => false
+					),
+				'allow_signup' => $allowSignup,
+				'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n"
+			);
+
+			Page::render('index', $options);
 		}
-
-		$options = array(
-			'user' => array(
-				'loggedin' => false
-				),
-			'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n",
-		);
-
-		Page::render('index', $options);
 	}
 
 	static public function loginHandler($args) {
