@@ -21,8 +21,10 @@ class Page {
 		$options['error'] = (array_key_exists('ub_error', $_SESSION)) ? $_SESSION['ub_error'] : '';
 
 		$auth = Settings::getProtected('auth');
-		$username = $auth->getUsername();
-		if (isset($username)) { $options['username'] = $auth->getUsername(); }
+		if ($auth->authenticated()) {
+			$username = $auth->getUsername();
+			if (isset($username)) { $options['username'] = $auth->getUsername(); }
+		}
 
 		echo $twig->render("$page.html", $options);
 

@@ -10,7 +10,6 @@ class AuthAlibaba implements AuthInterface {
 
 	public function init() {
 		$params = array();
-		$params['app_name'] = Settings::getProtected('app_name');
 
 		$dbsettings = Settings::getProtected('database');
 		$params['database_host'] = $dbsettings['host'];
@@ -19,6 +18,7 @@ class AuthAlibaba implements AuthInterface {
 		$params['database_password'] = $dbsettings['password'];
 
 		$alibaba = Settings::getProtected('alibaba');
+		$params['app_name'] = $alibaba['app_name'];
 		$params['user_table_name'] = $alibaba['users_table'];
 		$params['username_field'] = $alibaba['username_field'];
 		$params['password_field'] = $alibaba['password_field'];
