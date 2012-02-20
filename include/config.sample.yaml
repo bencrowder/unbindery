@@ -13,12 +13,8 @@ admin_email: administrator@email.com        # site admin's email
 email_subject: [unbindery]  # prepended to notification emails
 theme_cached: false
 
-system_guidelines: |
-    <i>Questions? Email your administrator (your@email.com)</i>
-
-    <h3>General</h3>
-
-    <p>Follow <a href='http://www.gutenberg.org/wiki/Gutenberg:Volunteers%27_FAQ#About_the_formatting_of_a_text_file'>the Project Gutenberg guidelines</a>.</p>
+external_login: false       # whether to call Auth::redirectToLogin on index page
+allow_signup: true          # whether to show link to sign up
 
 alibaba:
     app_name: unbindery     # for Alibaba session variable
@@ -28,3 +24,10 @@ alibaba:
     cookie_expiration: 30               # in days
     hash_function: md5                  # or sha1 or md5sha1 or sha1md5
     login_page_url: *SITEROOT
+
+system_guidelines: |
+    <i>Questions? Email your administrator (your@email.com)</i>
+
+    <h3>General</h3>
+
+    <p>Follow <a href='http://www.gutenberg.org/wiki/Gutenberg:Volunteers%27_FAQ#About_the_formatting_of_a_text_file'>the Project Gutenberg guidelines</a>.</p>
