@@ -117,13 +117,27 @@ class DbMySQL implements DbInterface {
 
 	// Returns: name, email, status, admin
 	public function loadUser($username) {
-		$users = $this->query("SELECT name, email, status, admin FROM users WHERE username = ?", array($username));
+		$users = $this->query("SELECT username, password, name, email, status, admin, hash FROM users WHERE username = ?", array($username));
 		if (count($users) > 0) {
 			$user = $users[0];
 		} else {
 			$user = array();
 		}
 		return $user;
+	}
+
+	// Returns: ?
+	public function saveUser($user) {
+		$sql = "UPDATE users SET username = ?, password = ?, name = ?, email = ?, status = ?, admin = ?, hash = ? WHERE username = ?";
+
+		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->status, $user->admin, $user->hash, $user->username));
+	}
+
+	// Returns: ?
+	public function createUser($user) {
+		$sql = "INSERT INTO users (username, password, name, email, status, admin, hash, score, signup_date) VALUES (?, ?, ?, ?, ?, ?, ?, 0, NOW());";
+
+		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->status, $user->admin, $user->hash));
 	}
 
 	// Returns: item_id, item_title, project_id, project_title, project_slug, date_assigned, deadline, days_left
@@ -450,12 +464,6 @@ class DbMySQL implements DbInterface {
 		} else {
 			$next_item_id = -1;
 		}
-	}
-
-	// Returns: ?
-	public function addUser($username, $password, $email, $hash) {
-		$sql = "INSERT INTO users (username, password, email, status, admin, score, hash, signup_date) VALUES (?, ?, ?, 'pending', 0, 0, ?, NOW());";
-		return $this->execute($sql, array($username, $password, $meail, $hash));
 	}
 
 	// Returns: project array

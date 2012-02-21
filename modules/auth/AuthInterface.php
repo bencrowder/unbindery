@@ -5,6 +5,12 @@ interface AuthInterface {
 	// Initialization
 	public function init();
 
+	// Check to see if the user has an Unbindery account
+	public function hasAccount($username);
+
+	// Create an Unbindery account for the user
+	public function createAccount($user);
+
 	// Login (returns boolean)
 	public function login($username, $password);
 

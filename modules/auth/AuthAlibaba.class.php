@@ -29,12 +29,56 @@ class AuthAlibaba implements AuthInterface {
 		Alibaba::AlibabaInit($params);
 	}
 
+	public function hasAccount($username) {
+		$user = new User($username);
+		return ($user->hash != '' && $user->status != 'pending');	// If there's a hash, they have an account
+	}
+
+	public function createAccount($user) {
+		$app_url = Settings::getProtected('app_url');
+		$email_subject = Settings::getProtected('email_subject');
+		$admin_email = Settings::getProtected('admin_email');
+		$i18n = new I18n(Settings::getProtected('language'));
+
+		// Add username/email here if they're not already in Unbindery (unnecessary for Alibaba)
+		// Example:
+		// $user->username = $this->getUsername();
+		// $user->email = $this->getEmail();
+
+		// Generate hash
+		$user->hash = md5($user->email . $user->username . time());
+
+		// Add user to the database or update if they're already there
+		$user->save();
+
+		// Send confirmation link to user via email
+		$message = $i18n->t('signup.confirmation_email');
+		$message .= "\n";
+		$message .= "$app_url/activate/{$user->hash}\n";
+		$message .= "\n";
+
+		error_log($message);
+
+		$status = Mail::sendMessage($user->email, "$email_subject " . $i18n->t('signup.confirmation_link'), $message);
+
+		if ($status == 1) { 
+			$status = "done";
+		} else {
+			$status = "error mailing";
+		}
+
+		$status = Mail::sendMessage($admin_email, "$email_subject " . $i18n->t('signup.new_signup'), $i18n->t('signup.new_user') . " {$user->username} <{$user->email}>");
+
+	}
+
 	public function login($username, $password) {
 		$status = Alibaba::login($username, $password);
 
 		if ($status) {
 			$this->username = $username;
 		}
+
+		return $status;
 	}
 
 	public function logout($redirect = '') {

@@ -34,3 +34,15 @@ dashboard.review: 'Review'
 dashboard.due: 'Due'
 dashboard.project: 'Project:'
 dashboard.no_history: 'Nothing so far -- you must be new here. :)'
+
+# Create account
+signup.confirmation_email: "Thanks for signing up! Here's the confirmation link to activate your account:"
+signup.confirmation_link: "Confirmation link"
+signup.new_signup: "New signup"
+signup.new_user: "New user signed up:"
+
+signup.thanks: "Thanks for signing up!"
+signup.conf_link_sent: "We just sent a confirmation link to your email address."
+
+signup.activated: "Welcome to Unbindery."
+signup.invalid_code: "Invalid confirmation code."

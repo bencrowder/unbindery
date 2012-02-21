@@ -9,6 +9,7 @@ database:
 
 app_url: &SITEROOT http://path/to/unbindery
 sys_path: /filesystem/path/to/unbindery
+language: en                # default language
 admin_email: administrator@email.com        # site admin's email
 email_subject: [unbindery]  # prepended to notification emails
 theme_cached: false

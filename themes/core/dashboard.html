@@ -1,8 +1,5 @@
 {% include 'header.html' %}
 
-{% if message %}<div id="message" class="container">{{ message }}</div>{% endif %}
-{% if error %}<div id="error" class="container">{{ error }}</div>{% endif %}
-
 <section id="page">
 	<div id="scoreboard" class="controls">
 		<ul class="container">
@@ -11,6 +8,8 @@
 			<li><label>{{ i18n.t('dashboard.proofed_past_week') }}</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
 		</ul>
 	</div>
+	{% if message %}<div id="message" class="container">{{ message }}</div>{% endif %}
+	{% if error %}<div id="error" class="container">{{ error }}</div>{% endif %}
 
 	<div id="main" class="dashboard container">
 		<h2>{{ i18n.t('dashboard.title') }}</h2>

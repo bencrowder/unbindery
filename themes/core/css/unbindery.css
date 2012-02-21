@@ -203,22 +203,25 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #save_items label						{ font-weight: bold; margin-bottom: 5px; display: block; }
 #save_items textarea					{ font-size: 1em; width: 400px; height: 100px; margin-bottom: 2em; }
 
+
 /* Index page */
 /* --------------------------------------------------- */
 
 #index .container						{ width: 300px; margin: 100px auto; }
 #logo_box								{ }
-#login_box								{ background: rgba(0, 0, 0, 0.3); padding: 25px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; }
-#login_box h2							{ margin: 0; margin-bottom: 10px; font-size: 14px; color: #fff; }
-#login_box label						{ color: #5d92b1; font-size: 10px; text-transform: uppercase; }
-#login_box input[type="text"]			{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 7px; }
-#login_box input[type="password"]		{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 15px; }
-#login_box input[type="submit"]			{ font-size: 1.2em; }
 
-#login_box span							{ color: #7db2d1; margin-left: 10px; border-bottom: dotted 1px #5d92b1; }
-#login_box span:hover					{ cursor: pointer; }
+.box									{ background: rgba(0, 0, 0, 0.3); padding: 25px 30px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; }
+.box h2									{ margin: 0; margin-bottom: 10px; font-size: 14px; color: #fff; }
+.box label								{ color: #5d92b1; font-size: 11px; text-transform: uppercase; }
+.box input[type="text"]					{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 7px; }
+.box input[type="password"]				{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 15px; }
+.box input[type="submit"]				{ font-size: 1.2em; }
 
-#login_box #thankyou					{ color: #fff; line-height: 1.4em; }
+.box span								{ color: #7db2d1; margin-left: 10px; border-bottom: dotted 1px #5d92b1; }
+.box span:hover							{ cursor: pointer; }
+
+.box #thankyou							{ color: #fff; line-height: 1.4em; }
+
 
 /* Settings page */
 /* --------------------------------------------------- */

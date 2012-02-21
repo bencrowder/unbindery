@@ -7,22 +7,40 @@ class Handlers {
 		$externalLogin = Settings::getProtected('external_login');
 		$allowSignup = Settings::getProtected('allow_signup');
 
-		if ($externalLogin) {
-			$auth->redirectToLogin();
-		} else {
-			if ($auth->authenticated()) {
+		if ($auth->authenticated()) {
+			$username = $auth->getUsername();
+
+			// Check to see if they have an account
+			if ($auth->hasAccount($username)) {
 				header("Location: $app_url/dashboard");
+			} else {
+				// Create account and email confirmation link to user
+				$user = new User($username);
+				$auth->createAccount($user);
+
+				// Redirect back to index with message
+				$options = array(
+					'user' => array(
+						'loggedin' => false
+						),
+				);
+
+				Page::render('confirmation', $options);
 			}
+		} else {
+			if ($externalLogin) {
+				$auth->redirectToLogin();
+			} else {
+				$options = array(
+					'user' => array(
+						'loggedin' => false
+						),
+					'allow_signup' => $allowSignup,
+					'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n"
+				);
 
-			$options = array(
-				'user' => array(
-					'loggedin' => false
-					),
-				'allow_signup' => $allowSignup,
-				'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n"
-			);
-
-			Page::render('index', $options);
+				Page::render('index', $options);
+			}
 		}
 	}
 
@@ -38,7 +56,7 @@ class Handlers {
 			$user = new User($username);
 			$user->updateLogin();						// updates last_login time in database
 
-			header("Location: $app_url/dashboard/");
+			header("Location: $app_url/dashboard");
 		} else {
 			$auth->redirectToLogin("Login failed");
 		}
@@ -48,47 +66,34 @@ class Handlers {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
-		$auth->logout("$app_url/");
+		$auth->logout($app_url);
 	}
 
 	static public function signupHandler($args) {
 		$app_url = Settings::getProtected('app_url');
-		$emailsubject = Settings::getProtected('emailsubject');
-		$adminemail = Settings::getProtected('adminemail');
 		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
 
-		$email = $_POST["email"];
-		$username = $_POST["username"];
-		$password = $_POST["password"];
+		$email = $_POST["email_signup"];
+		$username = $_POST["username_signup"];
+		$password = $_POST["password_signup"];
 
-		// generate hash
-		$hash = md5($email . $username . time());
-
-		// add user to database with "pending" as status
+		// Add user to database with "pending" as status
 		$user = new User();
 		$user->username = $username;
-		$user->password = $password;
+		$user->password = md5($password);
 		$user->email = $email;
-		$user->addToDatabase($hash);
+		$user->save();
 
-		// send confirmation link to user via email
-		$message = "Thanks for signing up! Here's the confirmation link to activate your account\n";
-		$message .= "\n";
-		$message .= "$app_url/activate/$hash\n";
-		$message .= "\n";
-
-		$status = Mail::sendMessage($email, "$emailsubject Confirmation link", $message);
-
-		if ($status == 1) { 
-			$status = "done";
+		// Now go back to the home page to create the account
+		if ($auth->login($username, $password)) {
+			header("Location: $app_url");
 		} else {
-			$status = "error mailing";
+			error_log("Login didn't work.");
 		}
 
-		$status = Mail::sendMessage($adminemail, "$emailsubject New signup", "New user signed up: $username <$email>");
-
 		// return "done" (so Ajax can replace the div)
-		echo json_encode(array("statuscode" => "done", "username" => $user->username));
+		//echo json_encode(array("statuscode" => "done", "username" => $user->username));
 	}
 
 	static public function dashboardHandler($args) {
@@ -827,16 +832,17 @@ class Handlers {
 	static public function activateHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
+		$i18n = new I18n(Settings::getProtected('language'));
 
-		$hash = $_GET["hash"];
+		$hash = $args[0];
 
 		$user = new User();
 		$status = $user->validateHash($hash);
 
 		if ($status) {
-			$_SESSION['ub_message'] = "Confirmed. Go ahead and log in.";
+			$_SESSION['ub_message'] = $i18n->t("signup.activated");
 		} else {
-			$_SESSION['ub_message'] = "Invalid confirmation code.";
+			$_SESSION['ub_message'] = $i18n->t("signup.invalid_code");
 		}
 
 		header("Location: $app_url");

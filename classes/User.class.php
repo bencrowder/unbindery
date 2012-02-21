@@ -4,13 +4,21 @@ class User {
 	private $db;
 
 	private $username;
+	private $password;
 	private $name;
 	private $email;
 	private $status;
 	private $admin;
+	private $hash;
+
+	private $in_db;			// Whether we have a db entry yet
 
 	public function User($username = "") {
 		$this->db = Settings::getProtected('db');
+
+		// Defaults
+		$this->status = 'pending';
+		$this->admin = false;
 
 		if ($username != "") { 
 			$this->load($username);
@@ -26,20 +34,27 @@ class User {
 	}
 
 	public function load($username) {
-		$db = Settings::getProtected('db');
-		$user = $db->loadUser($username);
+		$user = $this->db->loadUser($username);
 
 		if (isset($user) && array_key_exists('name', $user) && array_key_exists('email', $user) && array_key_exists('status', $user) && array_key_exists('admin', $user)) {
+			$this->password = trim($user["password"]);
 			$this->name = trim($user["name"]);
 			$this->email = trim($user["email"]);
-			$this->status = trim($user["status"]);
+			$this->status = $user["status"];
 			$this->admin = $user["admin"];
+			$this->hash = $user["hash"];
+			$this->in_db = true;
 		}
 		$this->username = $username;
 	}
 
-	public function addToDatabase($hash) {
-		$this->db->addUser($this->username, $this->password, $this->email, $hash);
+	public function save() {
+		if ($this->in_db) {
+			$this->db->saveUser($this);
+		} else {
+			$this->db->createUser($this);
+			$this->in_db = true;
+		}
 	}
 
 	public function getAssignments() {
