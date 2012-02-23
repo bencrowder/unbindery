@@ -19,7 +19,7 @@ $roleArray = array(
 	'user:admin' => 50,
 	'user:siteadmin' => 100,
 
-	// Arbitray division numerically
+	// Arbitrary division numerically
 	'project:proofer' => 1000,
 	'project:reviewer' => 2000,
 	'project:admin' => 5000

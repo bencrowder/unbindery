@@ -2,10 +2,10 @@ db: mysql                   # database engine to use (in db/)
 auth: alibaba               # authentication engine to use (in auth/)
 
 database:
-    host: localhost         # hostname
-    database: mydatabase    # database name
-    username: dbuser        # database username
-    password: dbpass        # database user's password
+  host: localhost           # hostname
+  database: mydatabase      # database name
+  username: dbuser          # database username
+  password: dbpass           # database user's password
 
 app_url: &SITEROOT http://path/to/unbindery
 sys_path: /filesystem/path/to/unbindery
@@ -18,13 +18,13 @@ external_login: false       # whether to call Auth::redirectToLogin on index pag
 allow_signup: true          # whether to show link to sign up
 
 alibaba:
-    app_name: unbindery     # for Alibaba session variable
-    users_table: users      # which table the user info is stored in
-    username_field: username
-    password_field: password
-    cookie_expiration: 30               # in days
-    hash_function: md5                  # or sha1 or md5sha1 or sha1md5
-    login_page_url: *SITEROOT
+  app_name: unbindery       # for Alibaba session variable
+  users_table: users        # which table the user info is stored in
+  username_field: username
+  password_field: password
+  cookie_expiration: 30     # in days
+  hash_function: md5        # or sha1 or md5sha1 or sha1md5
+  login_page_url: *SITEROOT
 
 system_guidelines: |
     <i>Questions? Email your administrator (your@email.com)</i>
@@ -32,3 +32,12 @@ system_guidelines: |
     <h3>General</h3>
 
     <p>Follow <a href='http://www.gutenberg.org/wiki/Gutenberg:Volunteers%27_FAQ#About_the_formatting_of_a_text_file'>the Project Gutenberg guidelines</a>.</p>
+
+roles:
+  'user:user': 10
+  'user:creator': 30
+  'user:admin': 50
+  'user:siteadmin': 100
+  'project:proofer': 1000
+  'project:reviewer': 2000
+  'project:admin': 5000
