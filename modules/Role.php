@@ -35,6 +35,19 @@ class Role {
 	}
 
 
+	// Force clearance function (make sure they're verified and redirect if not)
+	// --------------------------------------------------
+
+	public function forceClearance($params) {
+		// Make sure the function's there, then call it with the parameters
+		if (array_key_exists('force_clearance', self::$functions)) {
+			$response = call_user_func(self::$functions['force_clearance'], $params);
+		}
+
+		return $response;
+	}
+
+
 	// Get roles array
 	// --------------------------------------------------
 

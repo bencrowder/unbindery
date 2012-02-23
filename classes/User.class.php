@@ -9,6 +9,7 @@ class User {
 	private $email;
 	private $status;
 	private $admin;
+	private $role;
 	private $hash;
 
 	private $in_db;			// Whether we have a db entry yet
@@ -19,6 +20,7 @@ class User {
 		// Defaults
 		$this->status = 'pending';
 		$this->admin = false;
+		$this->role = "user";
 
 		if ($username != "") { 
 			$this->load($username);
@@ -42,6 +44,7 @@ class User {
 			$this->email = trim($user["email"]);
 			$this->status = $user["status"];
 			$this->admin = $user["admin"];
+			if ($this->admin) { $this->role = "admin"; } // TODO: replace admin with role entirely
 			$this->hash = $user["hash"];
 			$this->in_db = true;
 		}

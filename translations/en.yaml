@@ -46,3 +46,6 @@ signup.conf_link_sent: "We just sent a confirmation link to your email address."
 
 signup.activated: "Welcome to Unbindery."
 signup.invalid_code: "Invalid confirmation code."
+
+# Role/clearance
+role.insufficient: "Sorry, you have insufficient clearance to do that."

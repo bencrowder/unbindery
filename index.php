@@ -12,9 +12,16 @@ require_once 'lib/Alibaba.class.php';
 require_once 'lib/Router.class.php';
 
 // Modules
-require_once 'modules/Event.php';
 require_once 'modules/Dispatch.php';
+require_once 'modules/Event.php';
 require_once 'modules/I18n.php';
+require_once 'modules/Queue.php';
+require_once 'modules/Role.php';
+require_once 'modules/Transcript.php';
+require_once 'modules/Workflow.php';
+
+// Module controllers
+require_once 'classes/RoleController.class.php';
 
 // App-specific logic
 require_once 'classes/User.class.php';
@@ -71,6 +78,14 @@ $db->create($dbsettings['host'], $dbsettings['username'], $dbsettings['password'
 
 // Save it to the settings manager
 Settings::setProtected('db', $db);
+
+
+// Initialize roles
+// --------------------------------------------------
+
+Role::register('verify', 'RoleController::verify');
+Role::register('force_clearance', 'RoleController::forceClearance');
+Role::init(Settings::getProtected('roles'));
 
 
 // Parse the routes

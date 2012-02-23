@@ -710,25 +710,24 @@ class Handlers {
 	static public function adminHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
 
+		$auth = Settings::getProtected('auth');
 		$auth->forceAuthentication();
 
-		// get the current user's role on the project and make sure they're owner or admin
 		$username = $auth->getUsername();
 		$user = new User($username);
 
-		if (!$user->admin) {
-			redirectToDashboard("", "You don't have rights to use the admin screens.");
+		// Get the current user's role on the project and make sure they're owner or admin
+		$roleManager = new Role();
+		if ($roleManager->forceClearance(array('role' => 'user:creator', 'user' => $user))) {
+			$options = array(
+				'user' => array(
+					'loggedin' => true,
+					'admin' => $user->admin),
+			);
+
+			Page::render('admin_dashboard', $options);
 		}
-
-		$options = array(
-			'user' => array(
-				'loggedin' => true,
-				'admin' => $user->admin),
-		);
-
-		Page::render('admin_dashboard', $options);
 	}
 
 	static public function editPageHandler($args, $next = false) {
