@@ -6,14 +6,14 @@ A book digitization web app written in PHP and JavaScript.
 
 * Twig (1.6.0 included)
 * sfYaml (included)
-* uploadify
+* uploadify (included)
 
 ### Installation
 
 1. Create a MySQL database and a user for it.
 2. Copy `modules/db/db.sql` to `import.sql` and edit it to reference that database.
 3. Run `import.sql` (`mysql -u root -p < import.sql`).
-4. Copy `include/config.sample.yaml` to `include/config.yaml` and customize it.
+4. Copy `config.sample.yaml` to `config.yaml` and customize it.
 5. Copy `scripts/config.sample.py` to `scripts/config.py` and customize it.
 6. Create a directory `media/`.
 7. Give Apache rights to write to `media/` (`chgrp apache media`, `chmod g+w media`).
