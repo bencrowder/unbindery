@@ -67,7 +67,7 @@ Settings::setProtected('auth', $auth);
 // --------------------------------------------------
 
 $dbengine = Settings::getProtected('db');
-require_once "../modules/db/Db$dbengine.class.php";
+require_once "../modules/db/$dbengine/Db$dbengine.class.php";
 
 // Load the appropriate database engine class
 $dbClass = "Db$dbengine";

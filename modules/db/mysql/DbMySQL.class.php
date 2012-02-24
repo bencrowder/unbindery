@@ -1,6 +1,6 @@
 <?php
 
-require_once 'DbInterface.php';
+require_once '../modules/db/DbInterface.php';
 
 class DbMySQL implements DbInterface {
 	private $host;
@@ -110,7 +110,6 @@ class DbMySQL implements DbInterface {
 	public function last_insert_id() {
 		return $this->db->insert_id;
 	}
-
 
 	/* Data retrieval functions */
 	/* -------------------------------------------------- */
