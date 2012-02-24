@@ -189,4 +189,10 @@ class User {
 	public function updateLogin() {
 		$this->db->updateUserLastLogin($this->username);
 	}
+
+	static public function getTopUsers() {
+		$db = Settings::getProtected('db');
+
+		return $db->getTopUsers();
+	}
 }

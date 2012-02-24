@@ -107,13 +107,11 @@ class Handlers {
 		$user = new User($username);
 		$user->getStats();
 
-		$server = new Server($db);
-
 		$items = $user->getAssignments();
 		$projects = $user->getProjects();
 		$projectlist = array();
 		$history = $user->getHistory();
-		$topusers = $server->getTopUsers();
+		$topusers = User::getTopUsers();
 
 		foreach ($items as &$item) {
 			$item["editlink"] = $app_url . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
@@ -339,15 +337,14 @@ class Handlers {
 		$username = $auth->getUsername();
 		$user = new User($username);
 
-		$server = new Server($db);
-		$projects = $server->getProjects();
+		$projects = Project::getProjects();
 		foreach ($projects as &$project) {
 			$project['link'] = $app_url . '/projects/' . $project['slug'];
 			$project['proof_percentage_rounded'] = round($project['proof_percentage'], 0);
 			$project['percentage_rounded'] = round($project['percentage'], 0);
 		}
 
-		$completedprojects = $server->getCompletedProjects();
+		$completedprojects = Project::getCompletedProjects();
 		foreach ($completedprojects as &$project) {
 			$project['link'] = $app_url . '/projects/' . $project['slug'];
 		}	

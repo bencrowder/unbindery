@@ -165,4 +165,21 @@ class Project {
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "author" => $this->author, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
+
+	static public function getProjects() {
+		$db = Settings::getProtected('db');
+		$projects = $db->getProjects();
+
+		foreach ($projects as &$project) {
+			$project["title"] = stripslashes($project["title"]);
+			$project["author"] = stripslashes($project["author"]);
+		}
+
+		return $projects;
+	}
+
+	static public function getCompletedProjects() {
+		$db = Settings::getProtected('db');
+		return $db->getCompletedProjects();
+	}
 }
