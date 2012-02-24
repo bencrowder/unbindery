@@ -36,6 +36,7 @@ require_once '../controllers/WorkflowController.class.php';
 // Page handler controllers
 require_once '../controllers/Handlers.class.php';
 require_once '../controllers/WebServiceHandlers.class.php';
+require_once '../controllers/SystemPageController.class.php';
 
 // Object models
 require_once '../model/User.class.php';
@@ -97,30 +98,33 @@ $url = $_SERVER["REQUEST_URI"];
 
 // Create the routes we want to use
 $routes = array(
-	'#^/?$#' => 'Handlers::indexHandler',
-	'#^/login/process/?$#' => 'Handlers::loginHandler',
-	'#^/signup/?$#' => 'Handlers::signupHandler',
-	'#^/logout/?$#' => 'Handlers::logoutHandler',
-	'#^/dashboard[/?]?(.*)/?$#' => 'Handlers::dashboardHandler',
-	'#^/settings/save/?$#' => 'Handlers::saveSettingsHandler',
-	'#^/settings/?$#' => 'Handlers::settingsHandler',
-	'#^/projects/(.*)/join/?$#' => 'Handlers::joinProjectHandler',
-	'#^/projects/(.*)/(guidelines)/?$#' => 'Handlers::projectHandler',
-	'#^/projects/(.*)/?$#' => 'Handlers::projectHandler',
-	'#^/projects/?$#' => 'Handlers::projectsHandler',
-	'#^/admin/projects/(.*)?$#' => 'Handlers::adminProjectHandler',
-	'#^/admin/new_project/?$#' => 'Handlers::adminProjectHandler',
-	'#^/admin/save_project/?$#' => 'Handlers::adminSaveProjectHandler',
-	'#^/admin/upload/(.*)/?$#' => 'Handlers::adminUploadHandler',
-	'#^/admin/upload_backend/?$#' => 'Handlers::adminUploadBackendHandler',
-	'#^/admin/save_page/?$#' => 'Handlers::adminSavePageHandler',
-	'#^/admin/new_page/(.*)/(.*)/?$#' => 'Handlers::adminNewPageHandler',
-	'#^/admin/edit/(.*)/(.*)/?$#' => 'Handlers::adminEditPageHandler',
-	'#^/admin/review/(.*)/(.*)/(.*)/?$#' => 'Handlers::adminReviewPageHandler',
-	'#^/admin/?$#' => 'Handlers::adminHandler',
-	'#^/edit/(.*)/(.*)/?$#' => 'Handlers::editPageHandler',
-	'#^/save_page/?$#' => 'Handlers::savePageHandler',
-	'#^/activate/(.*)/?$#' => 'Handlers::activateHandler',
+	// System pages
+	'#^/?$#'									=> 'SystemPageController::indexHandler',
+	'#^/login/?$#'								=> 'SystemPageController::loginHandler',
+	'#^/logout/?$#'								=> 'SystemPageController::logoutHandler',
+	'#^/signup/?$#'								=> 'SystemPageController::signupHandler',
+	'#^/signup/activate/(.*)/?$#'				=> 'SystemPageController::activateHandler',
+
+	// User pages
+	'#^/dashboard[/?]?(.*)/?$#'					=> 'Handlers::dashboardHandler',
+	'#^/settings/save/?$#'						=> 'Handlers::saveSettingsHandler',
+	'#^/settings/?$#'							=> 'Handlers::settingsHandler',
+	'#^/projects/(.*)/join/?$#'					=> 'Handlers::joinProjectHandler',
+	'#^/projects/(.*)/(guidelines)/?$#'			=> 'Handlers::projectHandler',
+	'#^/projects/(.*)/?$#'						=> 'Handlers::projectHandler',
+	'#^/projects/?$#'							=> 'Handlers::projectsHandler',
+	'#^/admin/projects/(.*)?$#'					=> 'Handlers::adminProjectHandler',
+	'#^/admin/new_project/?$#'					=> 'Handlers::adminProjectHandler',
+	'#^/admin/save_project/?$#'					=> 'Handlers::adminSaveProjectHandler',
+	'#^/admin/upload/(.*)/?$#'					=> 'Handlers::adminUploadHandler',
+	'#^/admin/upload_backend/?$#'				=> 'Handlers::adminUploadBackendHandler',
+	'#^/admin/save_page/?$#'					=> 'Handlers::adminSavePageHandler',
+	'#^/admin/new_page/(.*)/(.*)/?$#'			=> 'Handlers::adminNewPageHandler',
+	'#^/admin/edit/(.*)/(.*)/?$#'				=> 'Handlers::adminEditPageHandler',
+	'#^/admin/review/(.*)/(.*)/(.*)/?$#'		=> 'Handlers::adminReviewPageHandler',
+	'#^/admin/?$#'								=> 'Handlers::adminHandler',
+	'#^/edit/(.*)/(.*)/?$#'						=> 'Handlers::editPageHandler',
+	'#^/save_page/?$#'							=> 'Handlers::savePageHandler',
 
 	// Web services
 	'#^/ws/save_item_transcript/?$#' => 'WebServiceHandlers::saveItemTranscriptHandler',

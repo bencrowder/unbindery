@@ -54,7 +54,7 @@ class AuthAlibaba implements AuthInterface {
 		// Send confirmation link to user via email
 		$message = $i18n->t('signup.confirmation_email');
 		$message .= "\n";
-		$message .= "$app_url/activate/{$user->hash}\n";
+		$message .= "$app_url/signup/activate/{$user->hash}\n";
 		$message .= "\n";
 
 		$status = Mail::sendMessage($user->email, "$email_subject " . $i18n->t('signup.confirmation_link'), $message);
