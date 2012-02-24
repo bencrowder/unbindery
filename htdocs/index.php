@@ -93,10 +93,6 @@ Role::init(Settings::getProtected('roles'));
 // Parse the routes
 // --------------------------------------------------
 
-// TODO: replace Router
-// First, we get the URL from PHP
-$url = $_SERVER["REQUEST_URI"];
-
 // Create the routes we want to use
 $routes = array(
 	// System pages
@@ -138,6 +134,7 @@ $routes = array(
 	'#^/ws/get_new_page/?$#'					=> 'WebServiceHandlers::getNewPageHandler'
 );
 
-Router::route($url, $routes, 'SystemPageController::fileNotFoundHandler');
+$router = new Router('SystemPageController::fileNotFoundHandler');
+$router->route($routes);
 
 ?>
