@@ -756,7 +756,10 @@ class Handlers {
 		$item['id'] = $page_id;
 		$item['title'] = $itemObj->title;
 		$item['href'] = $itemObj->href;
-		$item['escaped_stripped_itemtext'] = escapebrackets(stripslashes($itemObj->itemtext));
+
+		$stripped = stripslashes($itemObj->itemtext);
+		$escaped = str_replace("<", "&lt;", $stripped);
+		$item['escaped_stripped_itemtext'] = str_replace(">", "&gt;", $escaped);
 
 		$includes = "";
 		if ($editor == "advanced") {
