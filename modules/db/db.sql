@@ -4,21 +4,19 @@
 USE yourdatabase;		-- Edit this!
 
 --
--- Table structure for table `assignments`
+-- Table structure for table `queues`
 --
 
-DROP TABLE IF EXISTS `assignments`;
+DROP TABLE IF EXISTS `queues`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `assignments` (
+CREATE TABLE `queues` (
   `id` int(11) NOT NULL auto_increment,
-  `username` varchar(255) NOT NULL,
+  `queue_name` varchar(255) NOT NULL,
   `item_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
-  `deadline` datetime NOT NULL,
-  `date_assigned` datetime NOT NULL,
-  `date_completed` datetime default NULL,
-  `date_reviewed` datetime default NULL,
+  `date_added` datetime NOT NULL,
+  `date_removed` datetime default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
@@ -34,22 +32,23 @@ CREATE TABLE `items` (
   `id` int(11) NOT NULL auto_increment,
   `project_id` int(11) NOT NULL,
   `title` varchar(255) default NULL,
-  `itemtext` text,
+  `transcript` text,
   `status` varchar(255) default NULL,
   `type` varchar(255) NOT NULL,
   `href` varchar(1000) default NULL,
+  `workflow_index` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `membership`
+-- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `membership`;
+DROP TABLE IF EXISTS `roles`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `membership` (
+CREATE TABLE `roles` (
   `id` int(11) NOT NULL auto_increment,
   `project_id` int(11) NOT NULL,
   `username` varchar(255) default NULL,
@@ -72,34 +71,33 @@ CREATE TABLE `projects` (
   `description` varchar(4000) default NULL,
   `owner` varchar(255) default NULL,
   `status` varchar(255) default NULL,
-  `guidelines` text,
-  `deadline_days` int(11) default NULL,
-  `num_proofs` int(11) default NULL,
-  `author` varchar(255) default NULL,
+  `workflow` varchar(2000) default NULL,
+  `guidelines` text default NULL,
   `language` varchar(255) default NULL,
   `thumbnails` varchar(400) default NULL,
   `date_started` date default NULL,
   `date_completed` date default NULL,
-  `date_posted` date default NULL,
+  `fields` varchar(4000) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `texts`
+-- Table structure for table `transcripts`
 --
 
-DROP TABLE IF EXISTS `texts`;
+DROP TABLE IF EXISTS `transcripts`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `texts` (
+CREATE TABLE `transcripts` (
   `id` int(11) NOT NULL auto_increment,
   `project_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `user` varchar(255) default NULL,
   `date` datetime default NULL,
-  `itemtext` text,
+  `transcript` text,
   `status` varchar(255) default NULL,
+  `fields` varchar(8000) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
@@ -121,8 +119,25 @@ CREATE TABLE `users` (
   `hash` varchar(32) default NULL,
   `signup_date` date default NULL,
   `last_login` datetime default NULL,
-  `admin` int(4) default NULL,
+  `role` varchar(255) default NULL,
   `theme` varchar(255) default NULL,
   PRIMARY KEY  (`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `metadata`
+--
+
+DROP TABLE IF EXISTS `metadata`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `metadata` (
+  `id` int(11) NOT NULL auto_increment,
+  `table` varchar(255) NOT NULL,
+  `object_id` int(11) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `value` varchar(4000),
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
