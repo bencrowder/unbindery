@@ -91,8 +91,8 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `transcripts` (
   `id` int(11) NOT NULL auto_increment,
-  `project_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
   `user` varchar(255) default NULL,
   `date` datetime default NULL,
   `transcript` text,

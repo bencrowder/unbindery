@@ -8,9 +8,12 @@ class User {
 	private $name;
 	private $email;
 	private $status;
-	private $admin;
-	private $role;
+	private $score;
 	private $hash;
+	private $signup_date;
+	private $last_login;
+	private $role;
+	private $theme;
 
 	private $in_db;			// Whether we have a db entry yet
 
@@ -43,9 +46,12 @@ class User {
 			$this->name = trim($user["name"]);
 			$this->email = trim($user["email"]);
 			$this->status = $user["status"];
-			$this->admin = $user["admin"];
-			if ($this->admin) { $this->role = "admin"; } // TODO: replace admin with role entirely
+			$this->role = $user["role"];
+			$this->score = $user["score"];
+			$this->signup_date = $user["signup_date"];
+			$this->last_login = $user["last_login"];
 			$this->hash = $user["hash"];
+			$this->theme = $user["theme"];
 			$this->in_db = true;
 		}
 		$this->username = $username;
