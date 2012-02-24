@@ -1,0 +1,58 @@
+## Unbindery URL schema
+
+### System handler
+
+* /
+* /login
+* /logout
+* /signup
+* /signup/activate
+
+
+### User handler
+
+* /users
+* /users/add (?)
+* /users/admin (?)
+* /users/[USERNAME]
+* /users/[USERNAME]/dashboard
+* /users/[USERNAME]/settings
+* /users/[USERNAME]/save
+* /users/[USERNAME]/remove
+* /users/[USERNAME]/projects/[PROJECT]
+
+
+### Project handler
+
+* /projects
+* /projects/add
+* /projects/[PROJECT]
+* /projects/[PROJECT]/admin
+* /projects/[PROJECT]/save
+* /projects/[PROJECT]/remove
+* /projects/[PROJECT]/guidelines (?)
+* /projects/[PROJECT]/join
+* /projects/[PROJECT]/leave
+
+
+### Item handler
+
+* /projects/[PROJECT]/items/add
+* /projects/[PROJECT]/items/upload
+* /projects/[PROJECT]/items/[ITEM]/admin
+* /projects/[PROJECT]/items/[ITEM]/remove
+* /projects/[PROJECT]/items/[ITEM]/save
+* /projects/[PROJECT]/items/[ITEM]/remove
+* /projects/[PROJECT]/items/[ITEM]/proof
+* /projects/[PROJECT]/items/[ITEM]/review
+* /projects/[PROJECT]/items/[ITEM]/savetranscript
+
+
+### Admin handler
+
+* /admin
+
+
+### Web services
+
+* For web services, add .json to the end of the URL
