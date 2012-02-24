@@ -1,15 +1,22 @@
 <?php
 
-// Configuration
-require_once 'include/Settings.class.php';
-Settings::loadFromYAML();
+/* Unbindery */
+/* ------------------------------------------------- */
 
-// Utilities
-require_once 'include/utils.php';
+// Helpers
+require_once 'helpers/Mail.class.php';
+require_once 'helpers/Template.class.php';
+require_once 'helpers/Server.class.php';
+
+// Configuration
+require_once 'helpers/Settings.class.php';
+Settings::loadFromYAML();
 
 // External libraries
 require_once 'lib/Alibaba.class.php';
 require_once 'lib/Router.class.php';
+require_once 'lib/Twig/Autoloader.php';
+Twig_Autoloader::register();
 
 // Modules
 require_once 'modules/Dispatch.php';
@@ -21,32 +28,20 @@ require_once 'modules/Transcript.php';
 require_once 'modules/Workflow.php';
 
 // Module controllers
-require_once 'classes/RoleController.class.php';
+require_once 'controllers/RoleController.class.php';
+require_once 'controllers/Handlers.class.php';
+require_once 'controllers/WebServiceHandlers.class.php';
 
-// App-specific logic
-require_once 'classes/User.class.php';
-require_once 'classes/Mail.class.php';
-require_once 'classes/Page.class.php';
-require_once 'classes/Project.class.php';
-require_once 'classes/Server.class.php';
-require_once 'classes/Item.class.php';
-
-// Handlers
-require_once 'handlers/Handlers.class.php';
-require_once 'handlers/WebServiceHandlers.class.php';
+// Object models
+require_once 'model/User.class.php';
+require_once 'model/Project.class.php';
+require_once 'model/Item.class.php';
 
 
 // Initialize the session
 // --------------------------------------------------
 
 session_start();
-
-
-// Initialize Twig
-// --------------------------------------------------
-
-require_once 'lib/Twig/Autoloader.php';
-Twig_Autoloader::register();
 
 
 // Initialize auth engine 

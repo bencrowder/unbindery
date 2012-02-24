@@ -1,4 +1,4 @@
-include/config.yaml
+config.yaml
 scripts/config.py*
 media/*
 themes/cache

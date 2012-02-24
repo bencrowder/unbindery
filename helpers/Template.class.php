@@ -1,6 +1,6 @@
 <?php
 
-class Page {
+class Template {
 	static public function render($page, $options, $theme = 'core') {
 		$cached = Settings::getProtected('theme_cached');
 

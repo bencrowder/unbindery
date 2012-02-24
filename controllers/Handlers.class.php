@@ -25,7 +25,7 @@ class Handlers {
 						),
 				);
 
-				Page::render('confirmation', $options);
+				Template::render('confirmation', $options);
 			}
 		} else {
 			if ($externalLogin) {
@@ -39,7 +39,7 @@ class Handlers {
 					'includes' => "<script src='$app_url/js/index.js' type='text/javascript'></script>\n"
 				);
 
-				Page::render('index', $options);
+				Template::render('index', $options);
 			}
 		}
 	}
@@ -169,7 +169,7 @@ class Handlers {
 			'history_count' => count($history)
 		);
 
-		Page::render('dashboard', $options);
+		Template::render('dashboard', $options);
 	}
 
 	static public function settingsHandler($args) {
@@ -190,7 +190,7 @@ class Handlers {
 				'email' => $user->email),
 		);
 
-		Page::render('settings', $options);
+		Template::render('settings', $options);
 	}
 
 	static public function saveSettingsHandler($args) {
@@ -306,7 +306,7 @@ class Handlers {
 			'systemguidelines' => $systemguidelines
 		);
 
-		Page::render('project', $options);
+		Template::render('project', $options);
 	}
 
 	static public function joinProjectHandler($args) {
@@ -359,7 +359,7 @@ class Handlers {
 			'projects' => $projects
 		);
 
-		Page::render('projects', $options);
+		Template::render('projects', $options);
 	}
 
 	static public function adminProjectHandler($args) {
@@ -433,7 +433,7 @@ class Handlers {
 			'items' => $items
 		);
 
-		Page::render('admin_project', $options);
+		Template::render('admin_project', $options);
 	}
 
 	static public function adminSaveProjectHandler($args) {
@@ -541,7 +541,7 @@ class Handlers {
 			'slug' => $slug
 		);
 
-		Page::render('admin_upload', $options);
+		Template::render('admin_upload', $options);
 	}
 
 	static public function adminUploadBackendHandler($args) {
@@ -648,7 +648,7 @@ class Handlers {
 			'savepage' => $savepage
 		);
 
-		Page::render('admin_edit_page', $options);
+		Template::render('admin_edit_page', $options);
 	}
 
 	static public function adminNewPageHandler($args) {
@@ -704,7 +704,7 @@ class Handlers {
 			'item' => $item
 		);
 
-		Page::render('admin_review_page', $options);
+		Template::render('admin_review_page', $options);
 	}
 
 	static public function adminHandler($args) {
@@ -726,7 +726,7 @@ class Handlers {
 					'admin' => $user->admin),
 			);
 
-			Page::render('admin_dashboard', $options);
+			Template::render('admin_dashboard', $options);
 		}
 	}
 
@@ -777,7 +777,7 @@ class Handlers {
 			'item' => $item
 		);
 
-		Page::render('edit_page', $options);
+		Template::render('edit_page', $options);
 	}
 
 	static public function savePageHandler($args) {
