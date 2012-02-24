@@ -28,7 +28,12 @@ require_once 'modules/Transcript.php';
 require_once 'modules/Workflow.php';
 
 // Module controllers
+require_once 'controllers/QueueController.class.php';
 require_once 'controllers/RoleController.class.php';
+require_once 'controllers/TranscriptController.class.php';
+require_once 'controllers/WorkflowController.class.php';
+
+// Page handler controllers
 require_once 'controllers/Handlers.class.php';
 require_once 'controllers/WebServiceHandlers.class.php';
 
