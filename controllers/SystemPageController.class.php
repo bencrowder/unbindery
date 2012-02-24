@@ -95,4 +95,27 @@ class SystemPageController {
 		// return "done" (so Ajax can replace the div)
 		//echo json_encode(array("statuscode" => "done", "username" => $user->username));
 	}
+
+	static public function activateHandler($args) {
+		$app_url = Settings::getProtected('app_url');
+		$db = Settings::getProtected('db');
+		$i18n = new I18n(Settings::getProtected('language'));
+
+		$hash = $args[0];
+
+		$user = new User();
+		$status = $user->validateHash($hash);
+
+		if ($status) {
+			$_SESSION['ub_message'] = $i18n->t("signup.activated");
+		} else {
+			$_SESSION['ub_message'] = $i18n->t("signup.invalid_code");
+		}
+
+		header("Location: $app_url");
+	}
+
+	static public function fileNotFoundHandler() {
+		echo "File not found.";
+	}
 }

@@ -37,6 +37,7 @@ require_once '../controllers/WorkflowController.class.php';
 require_once '../controllers/Handlers.class.php';
 require_once '../controllers/WebServiceHandlers.class.php';
 require_once '../controllers/SystemPageController.class.php';
+require_once '../controllers/UserPageController.class.php';
 
 // Object models
 require_once '../model/User.class.php';
@@ -106,31 +107,37 @@ $routes = array(
 	'#^/signup/activate/(.*)/?$#'				=> 'SystemPageController::activateHandler',
 
 	// User pages
-	'#^/dashboard[/?]?(.*)/?$#'					=> 'Handlers::dashboardHandler',
-	'#^/settings/save/?$#'						=> 'Handlers::saveSettingsHandler',
-	'#^/settings/?$#'							=> 'Handlers::settingsHandler',
-	'#^/projects/(.*)/join/?$#'					=> 'Handlers::joinProjectHandler',
-	'#^/projects/(.*)/(guidelines)/?$#'			=> 'Handlers::projectHandler',
-	'#^/projects/(.*)/?$#'						=> 'Handlers::projectHandler',
-	'#^/projects/?$#'							=> 'Handlers::projectsHandler',
-	'#^/admin/projects/(.*)?$#'					=> 'Handlers::adminProjectHandler',
-	'#^/admin/new_project/?$#'					=> 'Handlers::adminProjectHandler',
-	'#^/admin/save_project/?$#'					=> 'Handlers::adminSaveProjectHandler',
-	'#^/admin/upload/(.*)/?$#'					=> 'Handlers::adminUploadHandler',
-	'#^/admin/upload_backend/?$#'				=> 'Handlers::adminUploadBackendHandler',
-	'#^/admin/save_page/?$#'					=> 'Handlers::adminSavePageHandler',
-	'#^/admin/new_page/(.*)/(.*)/?$#'			=> 'Handlers::adminNewPageHandler',
-	'#^/admin/edit/(.*)/(.*)/?$#'				=> 'Handlers::adminEditPageHandler',
-	'#^/admin/review/(.*)/(.*)/(.*)/?$#'		=> 'Handlers::adminReviewPageHandler',
-	'#^/admin/?$#'								=> 'Handlers::adminHandler',
-	'#^/edit/(.*)/(.*)/?$#'						=> 'Handlers::editPageHandler',
-	'#^/save_page/?$#'							=> 'Handlers::savePageHandler',
+	'#^/dashboard/?$#'							=> 'UserPageController::dashboardHandler',
+	'#^/settings/save/?$#'						=> 'UserPageController::saveSettingsHandler',
+	'#^/settings/?$#'							=> 'UserPageController::settingsHandler',
+
+	// Project pages
+	'#^/projects/(.*)/join/?$#'					=> 'ProjectPageController::joinProjectHandler',
+	'#^/projects/(.*)/(guidelines)/?$#'			=> 'ProjectPageController::projectHandler',
+	'#^/projects/(.*)/?$#'						=> 'ProjectPageController::projectHandler',
+	'#^/projects/?$#'							=> 'ProjectPageController::projectsHandler',
+	'#^/admin/projects/(.*)?$#'					=> 'ProjectPageController::adminProjectHandler',
+	'#^/admin/new_project/?$#'					=> 'ProjectPageController::adminProjectHandler',
+	'#^/admin/save_project/?$#'					=> 'ProjectPageController::adminSaveProjectHandler',
+
+	// Item pages
+	'#^/admin/upload/(.*)/?$#'					=> 'ItemPageController::adminUploadHandler',
+	'#^/admin/upload_backend/?$#'				=> 'ItemPageController::adminUploadBackendHandler',
+	'#^/admin/save_page/?$#'					=> 'ItemPageController::adminSavePageHandler',
+	'#^/admin/new_page/(.*)/(.*)/?$#'			=> 'ItemPageController::adminNewPageHandler',
+	'#^/admin/edit/(.*)/(.*)/?$#'				=> 'ItemPageController::adminEditPageHandler',
+	'#^/admin/review/(.*)/(.*)/(.*)/?$#'		=> 'ItemPageController::adminReviewPageHandler',
+	'#^/edit/(.*)/(.*)/?$#'						=> 'ItemPageController::editPageHandler',
+	'#^/save_page/?$#'							=> 'ItemPageController::savePageHandler',
+
+	// Admin pages
+	'#^/admin/?$#'								=> 'AdminPageController::adminHandler',
 
 	// Web services
-	'#^/ws/save_item_transcript/?$#' => 'WebServiceHandlers::saveItemTranscriptHandler',
-	'#^/ws/get_new_page/?$#' => 'WebServiceHandlers::getNewPageHandler'
+	'#^/ws/save_item_transcript/?$#'			=> 'WebServiceHandlers::saveItemTranscriptHandler',
+	'#^/ws/get_new_page/?$#'					=> 'WebServiceHandlers::getNewPageHandler'
 );
 
-Router::route($url, $routes, 'Handlers::fileNotFoundHandler');
+Router::route($url, $routes, 'SystemPageController::fileNotFoundHandler');
 
 ?>
