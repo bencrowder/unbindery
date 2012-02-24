@@ -4,43 +4,43 @@
 /* ------------------------------------------------- */
 
 // Helpers
-require_once 'helpers/Mail.class.php';
-require_once 'helpers/Media.class.php';
-require_once 'helpers/Template.class.php';
+require_once '../helpers/Mail.class.php';
+require_once '../helpers/Media.class.php';
+require_once '../helpers/Template.class.php';
 
 // Configuration
-require_once 'helpers/Settings.class.php';
+require_once '../helpers/Settings.class.php';
 Settings::loadFromYAML();
 
 // External libraries
-require_once 'lib/Alibaba.class.php';
-require_once 'lib/Router.class.php';
-require_once 'lib/Twig/Autoloader.php';
+require_once '../lib/Alibaba.class.php';
+require_once '../lib/Router.class.php';
+require_once '../lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
 // Modules
-require_once 'modules/Dispatch.php';
-require_once 'modules/Event.php';
-require_once 'modules/I18n.php';
-require_once 'modules/Queue.php';
-require_once 'modules/Role.php';
-require_once 'modules/Transcript.php';
-require_once 'modules/Workflow.php';
+require_once '../modules/Dispatch.php';
+require_once '../modules/Event.php';
+require_once '../modules/I18n.php';
+require_once '../modules/Queue.php';
+require_once '../modules/Role.php';
+require_once '../modules/Transcript.php';
+require_once '../modules/Workflow.php';
 
 // Module controllers
-require_once 'controllers/QueueController.class.php';
-require_once 'controllers/RoleController.class.php';
-require_once 'controllers/TranscriptController.class.php';
-require_once 'controllers/WorkflowController.class.php';
+require_once '../controllers/QueueController.class.php';
+require_once '../controllers/RoleController.class.php';
+require_once '../controllers/TranscriptController.class.php';
+require_once '../controllers/WorkflowController.class.php';
 
 // Page handler controllers
-require_once 'controllers/Handlers.class.php';
-require_once 'controllers/WebServiceHandlers.class.php';
+require_once '../controllers/Handlers.class.php';
+require_once '../controllers/WebServiceHandlers.class.php';
 
 // Object models
-require_once 'model/User.class.php';
-require_once 'model/Project.class.php';
-require_once 'model/Item.class.php';
+require_once '../model/User.class.php';
+require_once '../model/Project.class.php';
+require_once '../model/Item.class.php';
 
 
 // Initialize the session
@@ -53,7 +53,7 @@ session_start();
 // --------------------------------------------------
 
 $authEngine = Settings::getProtected('auth');
-require_once "modules/auth/Auth$authEngine.class.php";
+require_once "../modules/auth/Auth$authEngine.class.php";
 
 // Load the appropriate auth engine class
 $authClass = "Auth$authEngine";
@@ -67,7 +67,7 @@ Settings::setProtected('auth', $auth);
 // --------------------------------------------------
 
 $dbengine = Settings::getProtected('db');
-require_once "modules/db/Db$dbengine.class.php";
+require_once "../modules/db/Db$dbengine.class.php";
 
 // Load the appropriate database engine class
 $dbClass = "Db$dbengine";

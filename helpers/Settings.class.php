@@ -37,9 +37,9 @@ abstract class Settings
 	}
 
 	public static function loadFromYAML() {
-		require_once 'lib/sfyaml/sfYaml.php';
+		require_once '../lib/sfyaml/sfYaml.php';
 
-		$array = sfYaml::load("config.yaml");
+		$array = sfYaml::load("../config.yaml");
 
 		foreach ($array as $key => $value) {
 			self::setProtected($key, $value);

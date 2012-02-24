@@ -5,17 +5,17 @@ class Template {
 		$cached = Settings::getProtected('theme_cached');
 
 		if ($cached) {
-			$twig_opts = array('cache' => 'themes/cache');
+			$twig_opts = array('cache' => '../templates/cache');
 		} else {
 			$twig_opts = array();
 		}
 
-		$loader = new Twig_Loader_Filesystem("themes/$theme", "themes/core");
+		$loader = new Twig_Loader_Filesystem("../templates/$theme", "../templates/core");
 		$twig = new Twig_Environment($loader, $twig_opts);
 
 		$options['app_url'] = Settings::getProtected('app_url');
 		$options['theme_root'] = $options['app_url'] . "/themes/$theme";
-		$options['i18n'] = new I18n("translations");
+		$options['i18n'] = new I18n("../translations");
 
 		$options['message'] = (array_key_exists('ub_message', $_SESSION)) ? $_SESSION['ub_message'] : '';
 		$options['error'] = (array_key_exists('ub_error', $_SESSION)) ? $_SESSION['ub_error'] : '';
