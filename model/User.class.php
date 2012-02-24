@@ -41,7 +41,7 @@ class User {
 	public function load($username) {
 		$user = $this->db->loadUser($username);
 
-		if (isset($user) && array_key_exists('name', $user) && array_key_exists('email', $user) && array_key_exists('status', $user) && array_key_exists('admin', $user)) {
+		if (isset($user) && array_key_exists('name', $user) && array_key_exists('email', $user) && array_key_exists('status', $user)) {
 			$this->password = trim($user["password"]);
 			$this->name = trim($user["name"]);
 			$this->email = trim($user["email"]);
