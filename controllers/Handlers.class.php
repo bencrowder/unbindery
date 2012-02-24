@@ -663,10 +663,6 @@ class Handlers {
 		$page_id = $args[1];
 		$proofer_username = $args[2];	// the user who proofed the text
 
-		$includes = "<script type='text/javascript' src='$app_url/lib/ace/src/ace.js' charset='utf-8'></script>\n";
-		$includes .= "<script type='text/javascript' src='$app_url/js/theme-unbindery.js' charset='utf-8'></script>\n";
-		$includes .= "<script type='text/javascript' src='$app_url/js/edit.js' charset='utf-8'></script>\n";
-
 		if (!$page_id || !$project_slug || !$proofer_username) {
 			redirectToDashboard("", "Invalid item/project ID or username");
 		}
@@ -761,19 +757,11 @@ class Handlers {
 		$escaped = str_replace("<", "&lt;", $stripped);
 		$item['escaped_stripped_itemtext'] = str_replace(">", "&gt;", $escaped);
 
-		$includes = "";
-		if ($editor == "advanced") {
-			$includes .= "<script type='text/javascript' src='$app_url/lib/ace/src/ace.js' charset='utf-8'></script>\n";
-			$includes .= "<script type='text/javascript' src='$app_url/js/theme-unbindery.js' charset='utf-8'></script>\n";
-		}
-		$includes .= "<script type='text/javascript' src='$app_url/js/edit.js' charset='utf-8'></script>\n";
-
 		$options = array(
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin),
 			'project_slug' => $project_slug,
-			'includes' => $includes,
 			'item' => $item
 		);
 
