@@ -6,46 +6,59 @@
 * /login
 * /logout
 * /signup
-* /signup/activate
+	* GET = get signup page (?)
+	* POST = activate
 
 
 ### User handler
 
 * /users
-* /users/add (?)
+	* GET = get list of users
+	* POST = create new user
 * /users/admin (?)
 * /users/[USERNAME]
+	* GET = get user info
+	* PUT = save user info
+	* DELETE = delete user
 * /users/[USERNAME]/dashboard
 * /users/[USERNAME]/settings
-* /users/[USERNAME]/save
-* /users/[USERNAME]/remove
-* /users/[USERNAME]/projects/[PROJECT]
+* /users/[USERNAME]/projects/[PROJECT] -- see below (same as /projects/[PROJECT])
 
 
 ### Project handler
 
 * /projects
-* /projects/add
+	* GET = get list of projects
+	* POST = create project
 * /projects/[PROJECT]
-* /projects/[PROJECT]/admin
-* /projects/[PROJECT]/save
-* /projects/[PROJECT]/remove
+	* GET = get project info
+	* PUT = save project info
+	* DELETE = delete project
 * /projects/[PROJECT]/guidelines (?)
-* /projects/[PROJECT]/join
-* /projects/[PROJECT]/leave
+	* GET = list guidelines
+* /projects/[PROJECT]/membership
+	* POST = join project
+	* DELETE = leave project
+* /projects/[PROJECT]/admin
 
 
 ### Item handler
 
-* /projects/[PROJECT]/items/add
-* /projects/[PROJECT]/items/upload
+* /projects/[PROJECT]/items
+	* GET = get list of items for project
+	* POST = create new item
+* /projects/[PROJECT]/items/media
+	* POST = upload item media
+* /projects/[PROJECT]/items/transcripts
+	* POST = upload transcripts
+	* PUT = save transcripts
+* /projects/[PROJECT]/items/[ITEM]
+	* GET = load item page for proofing/reviewing
+	* PUT = save item info
+	* DELETE = delete item
 * /projects/[PROJECT]/items/[ITEM]/admin
-* /projects/[PROJECT]/items/[ITEM]/remove
-* /projects/[PROJECT]/items/[ITEM]/save
-* /projects/[PROJECT]/items/[ITEM]/remove
-* /projects/[PROJECT]/items/[ITEM]/proof
-* /projects/[PROJECT]/items/[ITEM]/review
-* /projects/[PROJECT]/items/[ITEM]/savetranscript
+* /projects/[PROJECT]/items/[ITEM]/transcript
+	* POST = save transcript
 
 
 ### Admin handler

@@ -103,6 +103,7 @@ $routes = array(
 	'#^/logout/?$#'								=> 'SystemPageController::logoutHandler',
 	'#^/signup/?$#'								=> 'SystemPageController::signupHandler',
 	'#^/signup/activate/(.*)/?$#'				=> 'SystemPageController::activateHandler',
+	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
 
 	// User pages
 	'#^/dashboard/?$#'							=> 'UserPageController::dashboardHandler',

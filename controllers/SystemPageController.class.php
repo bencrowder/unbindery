@@ -115,6 +115,26 @@ class SystemPageController {
 		header("Location: $app_url");
 	}
 
+	static public function testPageHandler($args) {
+		$app_url = Settings::getProtected('app_url');
+		$auth = Settings::getProtected('auth');
+
+		if ($auth->authenticated()) {
+			$username = $auth->getUsername();
+
+			$user = new User($username);
+
+			// Redirect back to index with message
+			$options = array(
+				'user' => array(
+					'loggedin' => false
+					),
+			);
+
+			Template::render($args[0], $options);
+		}
+	}
+
 	static public function fileNotFoundHandler() {
 		echo "File not found.";
 	}
