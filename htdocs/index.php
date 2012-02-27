@@ -34,10 +34,12 @@ require_once '../controllers/TranscriptController.class.php';
 require_once '../controllers/WorkflowController.class.php';
 
 // Page handler controllers
-require_once '../controllers/Handlers.class.php';
-require_once '../controllers/WebServiceHandlers.class.php';
 require_once '../controllers/SystemPageController.class.php';
 require_once '../controllers/UserPageController.class.php';
+require_once '../controllers/AdminPageController.class.php';
+require_once '../controllers/ProjectPageController.class.php';
+require_once '../controllers/ItemPageController.class.php';
+require_once '../controllers/WebServiceHandlers.class.php'; // TODO: remove
 
 // Object models
 require_once '../model/User.class.php';
