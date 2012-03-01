@@ -1,6 +1,87 @@
 <?php
 
 class ProjectPageController {
+	// --------------------------------------------------
+	// Projects handler
+	// URL: /projects
+	// Methods: GET = get list of projects
+	//          POST = create new project
+
+	static public function projects($params) {
+		$format = $params['args'][0] != '' ? $params['args'][0] : 'html';
+
+		switch ($params['method']) {
+			// GET: Get list of projects
+			case 'GET':
+				echo "<h2>Getting list of projects</h2>";
+				echo "(" . $format . ")";
+
+				$projects = Project::getProjects();
+				print_r($projects);
+
+				break;
+
+			// POST: Create new project
+			// Required parameters:
+			// - name (string)
+			case 'POST':
+				echo "<h2>Creating new project</h2>";
+				echo "(" . $format . ")";
+				print_r($_POST);
+
+				// Create the project
+				$project = new Project();
+				$project->title = $_POST['name'];
+				$project->slug = strtolower($_POST['name']);
+
+				// And add it to the database
+				$status = $project->save();
+
+				// Return JSON
+				$response = array("code" => $status);
+				echo json_encode($response);
+
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
+	// Project page handler
+	// URL: /projects/[PROJECT]
+	// Methods: GET = get project info
+	//          PUT = save project info
+	//          DELETE = delete project
+
+	static public function projectPage($params) {
+		echo "Project page (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// Project membership handler
+	// URL: /projects/[PROJECT]/membership
+	// Methods: POST = join project
+	//          DELETE = leave project
+
+	static public function membership($params) {
+		echo "Membership (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// Project admin handler
+	// URL: /projects/[PROJECT]/admin
+	// Methods: GET = show admin page
+
+	static public function admin($params) {
+		echo "Admin (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
 	static public function projectHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');

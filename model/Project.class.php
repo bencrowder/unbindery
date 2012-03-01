@@ -6,17 +6,14 @@ class Project {
 	private $project_id;
 
 	private $title;
-	private $author;
 	private $slug;
 	private $language;
 	private $description;
 	private $owner;
 	private $status;
-
 	private $guidelines;
-	private $deadline_days;
-	private $num_proofs;
 	private $thumbnails;
+	private $workflow;
 
 	public function Project($slug = "") {
 		$this->db = Settings::getProtected('db');
@@ -40,25 +37,25 @@ class Project {
 		if (isset($project)) {
 			$this->project_id = stripslashes(trim($project['id']));
 			$this->title = stripslashes(trim($project['title']));
-			$this->author = stripslashes(trim($project['author']));
 			$this->slug = stripslashes(trim($project['slug']));
 			$this->language = stripslashes(trim($project['language']));
 			$this->description = stripslashes(trim($project['description']));
 			$this->owner = trim($project['owner']);
 			$this->status = trim($project['status']);
 			$this->guidelines = stripslashes(trim($project['guidelines']));
-			$this->deadline_days = trim($project['deadline_days']);
-			$this->num_proofs = trim($project['num_proofs']);
 			$this->thumbnails = trim($project['thumbnails']);
 			$this->date_started = trim($project['datestarted']);
 			$this->date_completed = trim($project['datecompleted']);
-			$this->date_posted = trim($project['dateposted']);
 			$this->days_spent = trim($project['days_spent']);
 		}
 	}
 
 	public function save() {
-		$this->db->saveProject($this->title, $this->author, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails, $this->project_id);
+		if ($this->project_id) {
+			$this->db->saveProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->project_id);
+		} else {
+			$this->db->addProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails);
+		}
 	}
 
 	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {

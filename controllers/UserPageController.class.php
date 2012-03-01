@@ -1,7 +1,68 @@
 <?php
 
 class UserPageController {
-	static public function dashboardHandler($args) {
+
+	// --------------------------------------------------
+	// Users handler
+	// URL: /users
+	// Methods: GET = get list of users
+	//          POST = create new user
+
+	static public function users($params) {
+		$format = $params['args'][0] != '' ? $params['args'][0] : 'html';
+
+		switch ($params['method']) {
+			// GET: Get list of users
+			case 'GET':
+				echo "<h2>Getting list of users</h2>";
+				echo "(" . $format . ")";
+				break;
+
+			// POST: Create new user
+			case 'POST':
+				echo "<h2>Creating new user</h2>";
+				echo "(" . $format . ")";
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
+	// User page handler
+	// URL: /users/[USERNAME]
+	// Methods: GET = get user info
+	//          PUT = save user info
+	//          DELETE = delete user
+
+	static public function userPage($params) {
+		echo "User page (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// User settings handler
+	// URL: /users/[USERNAME]/settings
+	// Methods: GET = get user settings
+
+	static public function userSettings($params) {
+		echo "Settings page (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// User dashboard handler
+	// URL: /users/[USERNAME]/dashboard
+	// Methods: GET = get user dashboard info
+
+	static public function userDashboard($params) {
+		echo "Dashboard (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	static public function userDashboardHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
@@ -75,7 +136,7 @@ class UserPageController {
 		Template::render('dashboard', $options);
 	}
 
-	static public function settingsHandler($args) {
+	static public function userSettingsHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
@@ -96,7 +157,8 @@ class UserPageController {
 		Template::render('settings', $options);
 	}
 
-	static public function saveSettingsHandler($args) {
+	/* MOVE TO PUT */
+	static public function userSaveSettingsHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');

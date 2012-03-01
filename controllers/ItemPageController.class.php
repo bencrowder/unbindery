@@ -1,6 +1,76 @@
 <?php
 
 class ItemPageController {
+	// --------------------------------------------------
+	// Item media handler
+	// URL: /projects/PROJECT/items/ITEM/media
+	// Methods: 
+
+	static public function media($params) {
+		echo "Item media (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// Item transcript handler
+	// URL: /projects/PROJECT/items/ITEM/transcript
+	// Methods: 
+
+	static public function transcript($params) {
+		echo "Item transcript (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// Item admin handler
+	// URL: /projects/PROJECT/items/ITEM/admin
+	// Methods: 
+
+	static public function admin($params) {
+		echo "Item admin (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+
+	// --------------------------------------------------
+	// Item handler
+	// URL: /projects/PROJECT/items/ITEM
+	// Methods: 
+
+	static public function item($params) {
+		echo "Item (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// General items transcripts handler
+	// URL: /projects/PROJECT/items/transcripts
+	// Methods: 
+
+	static public function transcripts($params) {
+		echo "Item transcripts (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+	// --------------------------------------------------
+	// General items handler
+	// URL: /projects/PROJECT/items
+	// Methods: 
+
+	static public function items($params) {
+		echo "Items (" . $params['method'] . "): ";
+		print_r($params['args']);
+	}
+
+
+
+
+
 	static public function adminUploadHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');

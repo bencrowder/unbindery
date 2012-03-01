@@ -36,8 +36,8 @@ require_once '../controllers/WorkflowController.class.php';
 // Page handler controllers
 require_once '../controllers/SystemPageController.class.php';
 require_once '../controllers/UserPageController.class.php';
-require_once '../controllers/AdminPageController.class.php';
 require_once '../controllers/ProjectPageController.class.php';
+require_once '../controllers/AdminPageController.class.php';
 require_once '../controllers/ItemPageController.class.php';
 require_once '../controllers/WebServiceHandlers.class.php'; // TODO: remove
 
@@ -95,46 +95,54 @@ Role::init(Settings::getProtected('roles'));
 // Parse the routes
 // --------------------------------------------------
 
+// The \.?([^/]*)?/? at the end allows us to add .json, etc. for other formats
+
 // Create the routes we want to use
 $routes = array(
 	// System pages
 	'#^/?$#'									=> 'SystemPageController::indexHandler',
 	'#^/login/?$#'								=> 'SystemPageController::loginHandler',
 	'#^/logout/?$#'								=> 'SystemPageController::logoutHandler',
-	'#^/signup/?$#'								=> 'SystemPageController::signupHandler',
-	'#^/signup/activate/(.*)/?$#'				=> 'SystemPageController::activateHandler',
+	'#^/signup\.?([^/]+)?/?$#'					=> 'SystemPageController::signupHandler',
+	'#^/signup/activate/(.*)/\.?([^/]+)?/?$#'	=> 'SystemPageController::activateHandler',
 	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
 
-	// User pages
-	'#^/dashboard/?$#'							=> 'UserPageController::dashboardHandler',
-	'#^/settings/save/?$#'						=> 'UserPageController::saveSettingsHandler',
-	'#^/settings/?$#'							=> 'UserPageController::settingsHandler',
+	// User project item pages
+	'#^/users/([^/]+)/projects/([^/]+)/items/media\.?([^/]+)?/?#'				=> 'ItemPageController::media',
+	'#^/users/([^/]+)/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
+	'#^/users/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
+	'#^/users/([^/]+)/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
+	'#^/users/([^/]+)/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'			=> 'ItemPageController::item',
+	'#^/users/([^/]+)/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
 
-	// Project pages
-	'#^/projects/(.*)/join/?$#'					=> 'ProjectPageController::joinProjectHandler',
-	'#^/projects/(.*)/(guidelines)/?$#'			=> 'ProjectPageController::projectHandler',
-	'#^/projects/(.*)/?$#'						=> 'ProjectPageController::projectHandler',
-	'#^/projects/?$#'							=> 'ProjectPageController::projectsHandler',
-	'#^/admin/projects/(.*)?$#'					=> 'ProjectPageController::adminProjectHandler',
-	'#^/admin/new_project/?$#'					=> 'ProjectPageController::adminProjectHandler',
-	'#^/admin/save_project/?$#'					=> 'ProjectPageController::adminSaveProjectHandler',
+	// User projects
+	'#^/users/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
+	'#^/users/([^/]+)/projects/([^/]+)/admin\.?([^/]+)?/?#'			=> 'ProjectPageController::admin',
+	'#^/users/([^/]+)/projects/([^/.]+)\.?([^/]+)?/?#'				=> 'ProjectPageController::projectPage',
+	'#^/users/([^/]+)/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
+
+	// User pages
+	'#^/users/([^/]+)/dashboard\.?([^/]+)?/?#'	=> 'UserPageController::userDashboard',
+	'#^/users/([^/]+)/settings\.?([^/]+)?/?#'	=> 'UserPageController::userSettings',
+	'#^/users/([^/.]+)\.?([^/]+)?/?#'			=> 'UserPageController::userPage',
+	'#^/users\.?([^/]+)?/?#'					=> 'UserPageController::users',
 
 	// Item pages
-	'#^/admin/upload/(.*)/?$#'					=> 'ItemPageController::adminUploadHandler',
-	'#^/admin/upload_backend/?$#'				=> 'ItemPageController::adminUploadBackendHandler',
-	'#^/admin/save_page/?$#'					=> 'ItemPageController::adminSavePageHandler',
-	'#^/admin/new_page/(.*)/(.*)/?$#'			=> 'ItemPageController::adminNewPageHandler',
-	'#^/admin/edit/(.*)/(.*)/?$#'				=> 'ItemPageController::adminEditPageHandler',
-	'#^/admin/review/(.*)/(.*)/(.*)/?$#'		=> 'ItemPageController::adminReviewPageHandler',
-	'#^/edit/(.*)/(.*)/?$#'						=> 'ItemPageController::editPageHandler',
-	'#^/save_page/?$#'							=> 'ItemPageController::savePageHandler',
+	'#^/projects/([^/]+)/items/media\.?([^/]+)?/?#'					=> 'ItemPageController::media',
+	'#^/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
+	'#^/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
+	'#^/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
+	'#^/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'				=> 'ItemPageController::item',
+	'#^/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
+
+	// Project pages
+	'#^/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
+	'#^/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
+	'#^/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
+	'#^/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
 
 	// Admin pages
-	'#^/admin/?$#'								=> 'AdminPageController::adminHandler',
-
-	// Web services
-	'#^/ws/save_item_transcript/?$#'			=> 'WebServiceHandlers::saveItemTranscriptHandler',
-	'#^/ws/get_new_page/?$#'					=> 'WebServiceHandlers::getNewPageHandler'
+	'#^/admin\.?([^/]+)?/?$#'					=> 'AdminPageController::adminHandler',
 );
 
 $router = new Router('SystemPageController::fileNotFoundHandler');

@@ -6,7 +6,8 @@
 * /login
 * /logout
 * /signup
-	* GET = get signup page (?)
+	* POST = create new signup
+* /signup/activate
 	* POST = activate
 
 

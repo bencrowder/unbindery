@@ -69,6 +69,7 @@ class SystemPageController {
 		$auth->logout($app_url);
 	}
 
+	/* POST */
 	static public function signupHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
@@ -94,8 +95,10 @@ class SystemPageController {
 
 		// return "done" (so Ajax can replace the div)
 		//echo json_encode(array("statuscode" => "done", "username" => $user->username));
+		break;
 	}
 
+	/* POST */
 	static public function activateHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
