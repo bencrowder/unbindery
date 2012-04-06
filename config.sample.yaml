@@ -46,3 +46,5 @@ private_key: 'hash together a private key and put it here'
 
 devkeys:
   unbindery: 'hash together a dev key and put it here'
+
+google_analytics: UA-YOUR-GA-CODE

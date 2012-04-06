@@ -14,6 +14,7 @@ class Template {
 		$twig = new Twig_Environment($loader, $twig_opts);
 
 		$options['app_url'] = Settings::getProtected('app_url');
+		$options['google_analytics'] = Settings::getProtected('google_analytics');
 		$options['theme_root'] = $options['app_url'] . "/themes/$theme";
 		$options['i18n'] = new I18n("../translations");
 
