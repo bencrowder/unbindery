@@ -475,7 +475,6 @@ class DbMySQL implements DbInterface {
 		$query = "SELECT *, ";
 		$query .= "DATE_FORMAT(date_started, '%e %b %Y') AS datestarted, ";
 		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS datecompleted, ";
-		$query .= "DATE_FORMAT(date_posted, '%e %b %Y') AS dateposted, ";
 		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
 		$query .= "FROM projects WHERE slug = ?;";
 		$results = $this->query($query, array($project_slug));

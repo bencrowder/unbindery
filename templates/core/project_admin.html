@@ -4,7 +4,7 @@
 	<div id="scoreboard" class="controls"></div>
 
 	<div id="main" class="container">
-		<h2>New Project</h2>
+		<h2>Edit Project</h2>
 
 		<form id="new_project_form" name="new_project_form" action="{{ app_url }}/projects" method="POST">
 			<input id="project_owner" name="project_owner" type="hidden" value="{{ username }}" />
@@ -14,22 +14,22 @@
 					<h3>Step 1: Basic information</h3>
 
 					<label>Title</label>
-					<input id="project_name" name="project_name" type="text" placeholder="Project title" />
+					<input id="project_name" name="project_name" type="text" value="{{ project.title }}" />
 
 					<label>Type</label>
 					<select id="project_type" name="project_type">
 						<option></option>
-						<option value="public">Public</option>
-						<option value="private">Private</option>
+						<option{% if project.type == 'public' %}selected{% endif %} value="public">Public</option>
+						<option{% if project.type == 'private' %}selected{% endif %} value="private">Private</option>
 					</select>
 
 					<label>Description</label>
-					<textarea id="project_desc" name="project_desc"></textarea>
+					<textarea id="project_desc" name="project_desc">{{ project.description }}</textarea>
 
 					<label>Language</label>
-					<input id="project_lang" name="project_lang" type="text" value="English" />
+					<input id="project_lang" name="project_lang" type="text" value="{{ project.language }}" />
 
-					<p class="small">You can add more metadata to the project after this initial step.</p>
+					Metadata goes here
 				</section>
 
 				<section id="step_2" class="step active">
@@ -38,7 +38,6 @@
 					<p>These are fields users will fill in while proofing items for this project.</p>
 
 					<ul class="fields">
-						<li><a class="delete">×</a><label>Confidence</label> <input name="project_fields[]" type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
 						<li><a class="delete">×</a><label>Confidence</label> <input name="project_fields[]" type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
 					</ul>
 
@@ -58,23 +57,23 @@
 					<h3>Step 3: Workflow</h3>
 
 					<label>Workflow string</label>
-					<input id="project_workflow" name="project_workflow" type="text" placeholder="@proofer, @reviewer, etc." />
+					<input id="project_workflow" name="project_workflow" type="text" value="{{ project.workflow }}"/>
 				</section>
 
 				<section id="step_4" class="step">
 					<h3>Step 4: User whitelist (if applicable)</h3>
 
 					<label>One username per line.</label>
-					<textarea id="project_whitelist" name="project_whitelist"></textarea>
+					<textarea id="project_whitelist" name="project_whitelist">{{ project.whitelist }}</textarea>
 				</section>
 
 				<section class="step">
-					<input type="submit" value="Create Project" class="button light" />
+					<input type="submit" value="Save Project" class="button light" />
 				</section>
 			</div>
 
 			<div class="sidebar">
-				<input type="submit" value="Create Project" class="button light" />
+				<input type="submit" value="Save Project" class="button light" />
 			</div>
 		</form>
 	</div>

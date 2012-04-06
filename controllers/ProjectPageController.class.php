@@ -9,10 +9,7 @@ class ProjectPageController {
 	//          POST = create new project
 
 	static public function projects($params) {
-		$projectPage = self::getProjectPageType($params['args']);
-		$formatIndex = ($projectPage == 'system') ? 0 : 1;
-
-		$format = $params['args'][$formatIndex] != '' ? $params['args'][$formatIndex] : 'html';
+		$format = self::getFormat($params['args'], 0, 2);
 
 		switch ($params['method']) {
 			// GET: Get list of projects
@@ -111,7 +108,8 @@ class ProjectPageController {
 
 	static public function newProject($params) {
 		// Parse parameters
-		$projectPage = self::getProjectPageType($params['args']);
+		//$projectPage = self::getProjectPageType($params['args']);
+		$format = self::getFormat($params['args'], 0, 1);
 
 		// Authenticate
 		$auth = Settings::getProtected('auth');
@@ -149,7 +147,7 @@ class ProjectPageController {
 	//          DELETE = delete project
 
 	static public function projectPage($params) {
-		$format = $params['args'][0] != '' ? $params['args'][0] : 'html';
+		$format = self::getFormat($params['args'], 0, 2);
 
 		switch ($params['method']) {
 			case 'GET':
@@ -181,12 +179,58 @@ class ProjectPageController {
 
 	// --------------------------------------------------
 	// Project admin handler
-	// URL: /projects/[PROJECT]/admin
+	// URL: /projects/[PROJECT]/admin OR /users/[USER]/projects/[PROJECT]/admin
 	// Methods: GET = show admin page
 
 	static public function admin($params) {
-		echo "Admin (" . $params['method'] . "): ";
-		print_r($params['args']);
+		$format = self::getFormat($params['args'], 1, 3);
+
+		// Authenticate
+		$auth = Settings::getProtected('auth');
+		$auth->forceAuthentication();
+
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		// Verify clearance
+		// TODO: add this
+
+		// Load the project
+		$project_slug = (self::getProjectPageType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
+		$project = new Project($project_slug);
+
+		if ($project->title == '') {
+			redirectToDashboard('', 'Error loading project.');
+		}
+
+		// Load the project
+
+		switch ($params['method']) {
+			// GET: Get new project page
+			case 'GET':
+				$options = array(
+					'user' => array(
+						'loggedin' => true,
+						'admin' => $user->admin,
+					),
+					'project' => array(
+						'title' => $project->title,
+						'id' => $project->project_id,
+						'slug' => $project->slug,
+						'type' => 'public',
+						'language' => $project->language,
+						'description' => $project->description,
+						'owner' => $project->owner,
+						'status' => $project->status,
+						'thumbnails' => $project->thumbnails,
+						'workflow' => $project->workflow,
+						'whitelist' => $project->whitelist,
+					),
+				);
+
+				Template::render('project_admin', $options);
+				break;
+		}
 	}
 
 
@@ -471,13 +515,17 @@ class ProjectPageController {
 
 	
 	static public function getProjectPageType($args) {
-		if (count($args) == 2) {
-			return 'system';
-		} else if (count($args) == 3) {
+		if ($args[0] == 'users') {
 			return 'user';
+		} else {
+			return 'system';
 		}
+	}
 
-		return 'error';
+	static public function getFormat($args, $systemIndex, $userIndex) {
+		$projectPage = self::getProjectPageType($args);
+		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
+		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }
 

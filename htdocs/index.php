@@ -109,19 +109,19 @@ $routes = array(
 	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
 
 	// User project item pages
-	'#^/users/([^/]+)/projects/([^/]+)/items/media\.?([^/]+)?/?#'				=> 'ItemPageController::media',
-	'#^/users/([^/]+)/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
-	'#^/users/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
-	'#^/users/([^/]+)/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
-	'#^/users/([^/]+)/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'			=> 'ItemPageController::item',
-	'#^/users/([^/]+)/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/media\.?([^/]+)?/?#'					=> 'ItemPageController::media',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'				=> 'ItemPageController::item',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
 
 	// User projects
-	'#^/users/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
-	'#^/users/([^/]+)/projects/([^/]+)/admin\.?([^/]+)?/?#'			=> 'ProjectPageController::admin',
-	'#^/users/([^/]+)/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
-	'#^/users/([^/]+)/projects/([^/.]+)\.?([^/]+)?/?#'				=> 'ProjectPageController::projectPage',
-	'#^/users/([^/]+)/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
+	'#^/(users)/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
+	'#^/(users)/([^/]+)/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
+	'#^/(users)/([^/]+)/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
+	'#^/(users)/([^/]+)/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
+	'#^/(users)/([^/]+)/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
 
 	// User pages
 	'#^/users/([^/]+)/dashboard\.?([^/]+)?/?#'	=> 'UserPageController::userDashboard',
