@@ -7,6 +7,7 @@
 require_once '../helpers/Mail.class.php';
 require_once '../helpers/Media.class.php';
 require_once '../helpers/Template.class.php';
+require_once '../helpers/Utils.class.php';
 
 // Configuration
 require_once '../helpers/Settings.class.php';

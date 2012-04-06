@@ -20,8 +20,8 @@
 					<label>Type</label>
 					<select id="project_type" name="project_type">
 						<option></option>
-						<option>Public</option>
-						<option>Private</option>
+						<option value="public">Public</option>
+						<option value="private">Private</option>
 					</select>
 
 					<label>Description</label>
@@ -39,8 +39,8 @@
 					<p>These are fields users will fill in while proofing items for this project.</p>
 
 					<ul class="fields">
-						<li><a class="delete">×</a><label>Confidence</label> <input type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
-						<li><a class="delete">×</a><label>Confidence</label> <input type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
+						<li><a class="delete">×</a><label>Confidence</label> <input name="project_fields[]" type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
+						<li><a class="delete">×</a><label>Confidence</label> <input name="project_fields[]" type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
 					</ul>
 
 					<label>New field name</label>

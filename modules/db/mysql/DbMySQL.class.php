@@ -75,6 +75,8 @@ class DbMySQL implements DbInterface {
 	}
 
 	public function execute($sql, $params = array()) {
+		$status = false;
+
 		$types = '';
 
 		$this->connect();
@@ -100,11 +102,13 @@ class DbMySQL implements DbInterface {
 				call_user_func_array(array($stmt, "bind_param"), $bind_params);
 			}
 
-			$stmt->execute();
+			$status = $stmt->execute();
 			$stmt->close();
 		}
 
 		$this->close();
+
+		return $status;
 	}
 
 	public function last_insert_id() {
@@ -481,7 +485,7 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails) {
+	public function saveProject($project_id, $title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
 		$sql .= "slug = ?, ";
@@ -492,17 +496,18 @@ class DbMySQL implements DbInterface {
 		$sql .= "guidelines = ?, ";
 		$sql .= "language = ?, ";
 		$sql .= "thumbnails = ? ";
+		$sql .= "fields  = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $project_id));
+		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields, $project_id));
 	}
 
-	public function addProject($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails) {
+	public function addProject($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, slug, description, owner, status, workflow, guidelines, language, thumbnails, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, slug, description, owner, status, workflow, guidelines, language, thumbnails, fields, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails));
+		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields));
 	}
 
 	// TODO: Rewrite

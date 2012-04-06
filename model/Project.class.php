@@ -58,9 +58,9 @@ class Project {
 		$status = false;
 
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->project_id);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		} else {
-			$status = $this->db->addProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails);
+			$status = $this->db->addProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		}
 
 		return $status;

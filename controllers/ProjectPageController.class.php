@@ -46,31 +46,32 @@ class ProjectPageController {
 
 				// Create the project
 				$project = new Project();
-				$project->title = $_POST['project_name'];
-				$project->type = $_POST['project_type'];
-				$project->description = $_POST['project_desc'];
-				$project->lang = $_POST['project_lang'];
-				$project->workflow = $_POST['project_workflow'];
-				$project->fields = $_POST['project_fields'];
-				$project->whitelist = $_POST['project_whitelist'];
-				$project->owner = $_POST['project_owner'];
+				$project->title = Utils::POST('project_name');
+				$project->type = Utils::POST('project_type');
+				$project->description = Utils::POST('project_desc');
+				$project->language = Utils::POST('project_lang');
+				$project->workflow = Utils::POST('project_workflow');
+				$project->fields = Utils::POST('project_fields');
+				$project->whitelist = Utils::POST('project_whitelist');
+				$project->guidelines = Utils::POST('project_guidelines');
+				$project->owner = Utils::POST('project_owner');
+				$project->status = 'pending';
 
-				$project->slug = str_replace(' ', '-', strtolower($_POST['project_name']));
+				$project->slug = str_replace(' ', '-', strtolower($project->title));
 				$project->slug = preg_replace('/[^a-z0-9-]+/i', '', $project->slug);
 
 				// And add it to the database
 				$status = $project->save();
 
-				echo $status;
-				if ($status) {
+				if ($status == true) {
 					switch ($project->type) {
 						case 'public':
-							$project->url = "/projects/" . $project->slug;
-							$project->admin_url = "/projects/" . $project->slug . "/admin";
+							$project->url = "projects/" . $project->slug;
+							$project->admin_url = "projects/" . $project->slug . "/admin";
 							break;
 						case 'private':
-							$project->url = "/users/" . $project->owner . "/projects/" . $project->slug;
-							$project->admin_url = "/users/" . $project->owner . "/projects/" . $project->slug . "/admin";
+							$project->url = "users/" . $project->owner . "/projects/" . $project->slug;
+							$project->admin_url = "users/" . $project->owner . "/projects/" . $project->slug . "/admin";
 							break;
 					}
 				}
@@ -470,9 +471,9 @@ class ProjectPageController {
 
 	
 	static public function getProjectPageType($args) {
-		if (count($args) == 1) {
+		if (count($args) == 2) {
 			return 'system';
-		} else if (count($args) == 2) {
+		} else if (count($args) == 3) {
 			return 'user';
 		}
 
