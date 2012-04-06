@@ -118,6 +118,7 @@ $routes = array(
 	// User projects
 	'#^/users/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
 	'#^/users/([^/]+)/projects/([^/]+)/admin\.?([^/]+)?/?#'			=> 'ProjectPageController::admin',
+	'#^/users/([^/]+)/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
 	'#^/users/([^/]+)/projects/([^/.]+)\.?([^/]+)?/?#'				=> 'ProjectPageController::projectPage',
 	'#^/users/([^/]+)/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
 
@@ -138,6 +139,7 @@ $routes = array(
 	// Project pages
 	'#^/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
 	'#^/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
+	'#^/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
 	'#^/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
 	'#^/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
 

@@ -494,7 +494,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "thumbnails = ? ";
 		$sql .= "WHERE id = ?;";
 
-		$this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $project_id));
+		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $project_id));
 	}
 
 	public function addProject($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails) {
@@ -502,7 +502,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "(title, slug, description, owner, status, workflow, guidelines, language, thumbnails, date_started) ";
 		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		$this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails));
+		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails));
 	}
 
 	// TODO: Rewrite

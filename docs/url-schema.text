@@ -31,6 +31,8 @@
 * /projects
 	* GET = get list of projects
 	* POST = create project
+* /projects/new-project
+	* GET = get new project page (since it has to go somewhere)
 * /projects/[PROJECT]
 	* GET = get project info
 	* PUT = save project info

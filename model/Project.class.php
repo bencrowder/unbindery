@@ -14,6 +14,10 @@ class Project {
 	private $guidelines;
 	private $thumbnails;
 	private $workflow;
+	private $whitelist;
+
+	private $url;
+	private $admin_url;
 
 	public function Project($slug = "") {
 		$this->db = Settings::getProtected('db');
@@ -51,11 +55,15 @@ class Project {
 	}
 
 	public function save() {
+		$status = false;
+
 		if ($this->project_id) {
-			$this->db->saveProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->project_id);
+			$status = $this->db->saveProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->project_id);
 		} else {
-			$this->db->addProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails);
+			$status = $this->db->addProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails);
 		}
+
+		return $status;
 	}
 
 	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {

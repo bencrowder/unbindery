@@ -1,6 +1,7 @@
 <?php
 
 class ProjectPageController {
+
 	// --------------------------------------------------
 	// Projects handler
 	// URL: /projects
@@ -8,7 +9,10 @@ class ProjectPageController {
 	//          POST = create new project
 
 	static public function projects($params) {
-		$format = $params['args'][0] != '' ? $params['args'][0] : 'html';
+		$projectPage = self::getProjectPageType($params['args']);
+		$formatIndex = ($projectPage == 'system') ? 0 : 1;
+
+		$format = $params['args'][$formatIndex] != '' ? $params['args'][$formatIndex] : 'html';
 
 		switch ($params['method']) {
 			// GET: Get list of projects
@@ -16,7 +20,13 @@ class ProjectPageController {
 				echo "<h2>Getting list of projects</h2>";
 				echo "(" . $format . ")";
 
-				$projects = Project::getProjects();
+				// Verify user access to the list
+
+				if ($projectPage == 'system') {
+					$projects = Project::getProjects();
+				} else {
+					// get user projects
+				}
 				print_r($projects);
 
 				break;
@@ -24,23 +34,107 @@ class ProjectPageController {
 			// POST: Create new project
 			// Required parameters:
 			// - name (string)
+			// - type (public/private)
+			// - owner (string)
 			case 'POST':
-				echo "<h2>Creating new project</h2>";
-				echo "(" . $format . ")";
-				print_r($_POST);
+				// Verify the POST elements
+				// See what type it is (public or private)
+				// Verify that the user is who they say they are
+					// How are we going to do this?
+				// Verify that the user can actually create the project
+				// Verify that there isn't already a project with the same name/slug in that scope
 
 				// Create the project
 				$project = new Project();
-				$project->title = $_POST['name'];
-				$project->slug = strtolower($_POST['name']);
+				$project->title = $_POST['project_name'];
+				$project->type = $_POST['project_type'];
+				$project->description = $_POST['project_desc'];
+				$project->lang = $_POST['project_lang'];
+				$project->workflow = $_POST['project_workflow'];
+				$project->fields = $_POST['project_fields'];
+				$project->whitelist = $_POST['project_whitelist'];
+				$project->owner = $_POST['project_owner'];
+
+				$project->slug = str_replace(' ', '-', strtolower($_POST['project_name']));
+				$project->slug = preg_replace('/[^a-z0-9-]+/i', '', $project->slug);
 
 				// And add it to the database
 				$status = $project->save();
 
-				// Return JSON
-				$response = array("code" => $status);
-				echo json_encode($response);
+				echo $status;
+				if ($status) {
+					switch ($project->type) {
+						case 'public':
+							$project->url = "/projects/" . $project->slug;
+							$project->admin_url = "/projects/" . $project->slug . "/admin";
+							break;
+						case 'private':
+							$project->url = "/users/" . $project->owner . "/projects/" . $project->slug;
+							$project->admin_url = "/users/" . $project->owner . "/projects/" . $project->slug . "/admin";
+							break;
+					}
+				}
 
+				$response = array("code" => $status, "project" => array("url" => $project->url, "admin_url" => $project->admin_url));
+
+				switch ($format) {
+					case 'json':
+						// Return JSON
+						$response["project"]["url"] .= ".json";
+						$response["project"]["admin_url"] .= ".json";
+						echo json_encode($response);
+						break;
+					case 'html':
+						// Return HTML
+
+						if ($status) {
+							$app_url = Settings::getProtected('app_url');
+
+							header("Location: $app_url/{$project->admin_url}");
+						} else {
+							echo "Error";
+						}
+						break;
+				}
+
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
+	// New project handler
+	// URL: /projects/new-project OR /users/USER/projects/new-project
+	// Methods: GET = get new project page
+	// Formats: HTML
+
+	static public function newProject($params) {
+		// Parse parameters
+		$projectPage = self::getProjectPageType($params['args']);
+
+		// Authenticate
+		$auth = Settings::getProtected('auth');
+		$auth->forceAuthentication();
+
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		// Verify clearance
+		// TODO: add this
+
+		// Output data
+
+		switch ($params['method']) {
+			// GET: Get new project page
+			case 'GET':
+				$options = array(
+					'user' => array(
+						'loggedin' => true,
+						'admin' => $user->admin,
+					),
+				);
+
+				Template::render('new_project', $options);
 				break;
 		}
 	}
@@ -54,6 +148,19 @@ class ProjectPageController {
 	//          DELETE = delete project
 
 	static public function projectPage($params) {
+		$format = $params['args'][0] != '' ? $params['args'][0] : 'html';
+
+		switch ($params['method']) {
+			case 'GET':
+				break;
+
+			case 'PUT':
+				break;
+
+			case 'DELETE':
+				break;
+		}
+
 		echo "Project page (" . $params['method'] . "): ";
 		print_r($params['args']);
 	}
@@ -186,7 +293,7 @@ class ProjectPageController {
 			$_SESSION['ub_error'] = "Error joining project";
 		}
 
-		header("Location: $app_url/dashboard/");
+		header("Location: $app_url/users/$username/dashboard/");
 	}
 
 	static public function projectsHandler($args) {
@@ -359,6 +466,17 @@ class ProjectPageController {
 
 			header("Location: $app_url/admin/projects/$slug");
 		}
+	}
+
+	
+	static public function getProjectPageType($args) {
+		if (count($args) == 1) {
+			return 'system';
+		} else if (count($args) == 2) {
+			return 'user';
+		}
+
+		return 'error';
 	}
 }
 

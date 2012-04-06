@@ -359,6 +359,9 @@ textarea#page_text						{ height: 200px; font-size: 16px; line-height: 1.4em; fo
 #page.add .step ul.fields li input		{ display: inline-block; }
 
 #page.add .step a.delete				{ float: right; color: #999; }
+#page.add .step a.delete:hover			{ cursor: pointer; color: #000; }
 
 #page.add .step ul.draggable			{ list-type: none; padding-left: 0; }
 #page.add .step ul.draggable li			{ padding: 5px 8px; font-weight: bold; background: #eee; border: dotted 1px #ccc; margin-bottom: 5px; -moz-border-radius: 1em; border-radius: 1em; }
+
+p.small									{ font-size: .95em; color: #999; }

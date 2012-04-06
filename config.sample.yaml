@@ -41,3 +41,8 @@ roles:
   'project:proofer': 1000
   'project:reviewer': 2000
   'project:admin': 5000
+
+private_key: 'hash together a private key and put it here'
+
+devkeys:
+  unbindery: 'hash together a dev key and put it here'

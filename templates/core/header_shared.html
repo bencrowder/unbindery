@@ -16,7 +16,16 @@
 
 	{% if includes %}{% autoescape false %}{{ includes }}{% endautoescape %}{% endif %}
 
-	<script type="text/javascript">var app_url = "{{ app_url }}";</script>
+	<script type="text/javascript">
+		var app_url = "{{ app_url }}";
+{% if username %}var username = "{{ username }}";{% endif %}
+{% if methods %}
+		var methods = {};
+		{% for method in methods %}
+methods['{{ method.name }}'] = '{{ method.value }}';
+		{% endfor %}
+{% endif %}
+	</script>
 
 	<script type="text/javascript" src="{{ app_url }}/js/unbindery.js"></script>
 </head>

@@ -26,6 +26,22 @@ class Template {
 			if (isset($username)) { $options['username'] = $auth->getUsername(); }
 		}
 
+		// Prepare the methods they want
+		if (array_key_exists('registered_methods', $options)) {
+			// TODO: get user token
+			$userToken = 'foo';
+			$appName = 'unbindery';
+			$privateKey = Settings::getProtected('private_key');
+			$devKeys = Settings::getProtected('devkeys');
+			$devKey = $devKeys['unbindery'];
+			
+			$options['methods'] = array();
+			foreach ($options['registered_methods'] as $method) {
+				// Create the signature hash for each method we'll use on the page in Javascript
+				$options['methods'][$method] = array("name" => $method, "value" => md5($method . $userToken . $appName . $privateKey . $devKey));
+			}
+		}
+
 		echo $twig->render("$page.html", $options);
 
 		// Now that we've displayed it, get rid of it

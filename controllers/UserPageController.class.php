@@ -57,12 +57,10 @@ class UserPageController {
 	// Methods: GET = get user dashboard info
 
 	static public function userDashboard($params) {
-		echo "Dashboard (" . $params['method'] . "): ";
-		print_r($params['args']);
-	}
+//		echo "Dashboard (" . $params['method'] . "): ";
+//		print_r($params['args']);
+		// $username = 
 
-
-	static public function userDashboardHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
@@ -123,10 +121,14 @@ class UserPageController {
 				'admin' => $user->admin,
 				'score' => $user->score,
 				'proofed' => $user->proofed,
-				'proofed_past_week' => $user->proofed_past_week),
+				'proofed_past_week' => $user->proofed_past_week,
+				),
 			'items' => $items,
 			'projects' => $projects,
 			'history' => $history,
+			'registered_methods' => array(
+				'/users/' . $username,
+				),	
 			'topusers' => $topusers,
 			'item_count' => count($items),
 			'project_count' => count($projects),

@@ -12,7 +12,7 @@ class SystemPageController {
 
 			// Check to see if they have an account
 			if ($auth->hasAccount($username)) {
-				header("Location: $app_url/dashboard");
+				header("Location: $app_url/users/$username/dashboard");
 			} else {
 				// Create account and email confirmation link to user
 				$user = new User($username);
@@ -56,7 +56,7 @@ class SystemPageController {
 			$user = new User($username);
 			$user->updateLogin();						// updates last_login time in database
 
-			header("Location: $app_url/dashboard");
+			header("Location: $app_url/users/$username/dashboard");
 		} else {
 			$auth->redirectToLogin("Login failed");
 		}

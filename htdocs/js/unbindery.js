@@ -1,5 +1,61 @@
-function redirect_to_dashboard(message, error) {
-	var locstr = app_url + "/dashboard";
+/* Unbindery */
+/* -------------------------------------------------- */
+
+$(document).ready(function() {
+	/* New Project page */
+	/* -------------------------------------------------- */
+	
+	$("form#new_project_form select#project_type").on("change", function() {
+		if ($(this).val() == "Public") {
+			// Change the action
+			$("form#new_project_form").attr("action", app_url + "/projects");
+
+			if ($("#step_4:visible").length != 0) {
+				$("#step_4").fadeOut(100);
+			}
+		} else if ($(this).val() == "Private") {
+			// Change the action
+			$("form#new_project_form").attr("action", app_url + "/users/" + username + "/projects");
+
+			if ($("#step_4:visible").length == 0) {
+				$("#step_4").fadeIn(100);
+			}
+		}
+	});
+
+	$("form#new_project_form #step_2 input[type=button]").on("click", function() {
+		newFieldName = $(this).siblings("#new_field_name").val().trim();
+		newFieldType = $(this).siblings("#new_field_type").val().trim();
+
+		console.log("Here", newFieldName, newFieldType);
+
+		if (newFieldName != '' && newFieldType != '') {
+			newFieldHTML = "<li><a class='delete'>x</a><label>";
+			newFieldHTML += newFieldName;
+			newFieldHTML += "</label><input type='text' value='";
+			newFieldHTML += newFieldType;
+			newFieldHTML += "' /></li>";
+
+			$(newFieldHTML).appendTo($(this).siblings("ul"));
+
+			$(this).siblings("#new_field_name").val('');	
+			$(this).siblings("#new_field_type").val('');	
+		}
+
+		return false;
+	});
+
+	$("form#new_project_form #step_2").on("click", "a.delete", function() {
+		$(this).parents("li:first").fadeOut(100, function() {
+			$(this).remove();
+		});
+
+		return false;
+	});
+});
+
+function redirect_to_dashboard(message, error, username) {
+	var locstr = app_url + "/users/" + username + "/dashboard";
 
 	if (message || error) { locstr += "?"; }
 
@@ -46,7 +102,7 @@ function save_page_text(is_draft, is_review, slug) {
 				if (slug != '') {
 					get_new_page(slug);
 				} else {
-					redirect_to_dashboard(message, "");
+					redirect_to_dashboard(message, "", username);
 				}
 			} else {
 				// don't redirect to dashboard here, show error thing
@@ -66,15 +122,15 @@ function get_new_page(project_slug) {
 					window.location.href = locstr;
 					break;
 				case "waiting_for_clearance":
-					redirect_to_dashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)");
+					redirect_to_dashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)", username);
 					break;	
 				case "have_item_already":
-					redirect_to_dashboard("", "You already have one page for this project. Finish it and then you'll be able to get a new one.");
+					redirect_to_dashboard("", "You already have one page for this project. Finish it and then you'll be able to get a new one.", username);
 				case "not_a_member":
-					redirect_to_dashboard("", "You're not a member of that project.");
+					redirect_to_dashboard("", "You're not a member of that project.", username);
 					break;
 				default:
-					redirect_to_dashboard("", "Error getting new page.");
+					redirect_to_dashboard("", "Error getting new page.", username);
 					break;
 			}
 		}, 'json');
@@ -105,9 +161,9 @@ function save_page() {
 						var message = "Finished item.";
 					}
 				}
-				redirect_to_dashboard(message, "");
+				redirect_to_dashboard(message, "", username);
 			} else {
-				redirect_to_dashboard("", "Error saving page. Try again.");
+				redirect_to_dashboard("", "Error saving page. Try again.", username);
 			}
 		}, 'json');
 }
