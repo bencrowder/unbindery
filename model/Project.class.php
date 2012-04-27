@@ -6,6 +6,7 @@ class Project {
 	private $project_id;
 
 	private $title;
+	private $type;
 	private $slug;
 	private $language;
 	private $description;
@@ -41,6 +42,7 @@ class Project {
 		if (isset($project)) {
 			$this->project_id = stripslashes(trim($project['id']));
 			$this->title = stripslashes(trim($project['title']));
+			$this->type = stripslashes(trim($project['type']));
 			$this->slug = stripslashes(trim($project['slug']));
 			$this->language = stripslashes(trim($project['language']));
 			$this->description = stripslashes(trim($project['description']));
@@ -58,17 +60,18 @@ class Project {
 		$status = false;
 
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		} else {
-			$status = $this->db->addProject($this->title, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->addProject($this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		}
 
 		return $status;
 	}
 
-	public function create($title, $author, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {
+	public function create($title, $type, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {
 		$this->title = $title;
-		$this->author = $author;
+		$this->type = $type;
+		$this->slug = $slug;
 		$this->slug = $slug;
 		$this->language = $language;
 		$this->description = $description;
@@ -80,7 +83,7 @@ class Project {
 		$this->thumbnails = $thumbnails;
 
 		if ($title != "" && $slug != "") {
-			$this->db->addProject($this->title, $this->author, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails);
+			$this->db->addProject($this->title, $this->type, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails);
 
 			return "success";
 		} else {
@@ -168,7 +171,7 @@ class Project {
 	}
 
 	public function getJSON() {
-		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "author" => $this->author, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
+		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "type" => $this->type, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
 
 	static public function getProjects() {
@@ -177,7 +180,6 @@ class Project {
 
 		foreach ($projects as &$project) {
 			$project["title"] = stripslashes($project["title"]);
-			$project["author"] = stripslashes($project["author"]);
 		}
 
 		return $projects;

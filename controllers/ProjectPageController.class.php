@@ -4,7 +4,7 @@ class ProjectPageController {
 
 	// --------------------------------------------------
 	// Projects handler
-	// URL: /projects
+	// URL: /projects OR /users/[USER]/projects
 	// Methods: GET = get list of projects
 	//          POST = create new project
 
@@ -24,7 +24,15 @@ class ProjectPageController {
 				} else {
 					// get user projects
 				}
-				print_r($projects);
+
+				switch ($format) {
+					case 'json':
+						echo json_encode($projects);
+						break;
+					case 'html':
+						print_r($projects);
+						break;
+				}
 
 				break;
 
@@ -102,21 +110,16 @@ class ProjectPageController {
 
 	// --------------------------------------------------
 	// New project handler
-	// URL: /projects/new-project OR /users/USER/projects/new-project
+	// URL: /projects/new-project OR /users/[USER]/projects/new-project
 	// Methods: GET = get new project page
 	// Formats: HTML
 
 	static public function newProject($params) {
 		// Parse parameters
-		//$projectPage = self::getProjectPageType($params['args']);
 		$format = self::getFormat($params['args'], 0, 1);
 
 		// Authenticate
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = self::authenticate();
 
 		// Verify clearance
 		// TODO: add this
@@ -141,7 +144,7 @@ class ProjectPageController {
 
 	// --------------------------------------------------
 	// Project page handler
-	// URL: /projects/[PROJECT]
+	// URL: /projects/[PROJECT] or /users/[USER]/projects/[PROJECT]
 	// Methods: GET = get project info
 	//          PUT = save project info
 	//          DELETE = delete project
@@ -167,13 +170,43 @@ class ProjectPageController {
 
 	// --------------------------------------------------
 	// Project membership handler
-	// URL: /projects/[PROJECT]/membership
+	// URL: /projects/[PROJECT]/membership OR /users/[USER]/projects/[PROJECT]/membership
 	// Methods: POST = join project
 	//          DELETE = leave project
 
 	static public function membership($params) {
-		echo "Membership (" . $params['method'] . "): ";
-		print_r($params['args']);
+		// Parse parameters
+		$format = self::getFormat($params['args'], 1, 3);
+		$projectPage = self::getProjectPageType($params['args']);
+		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		//$user = self::authenticate();
+		$user = new User("bencrowder");
+
+		switch ($params['method']) {
+			// POST: join project
+			case 'POST':
+				echo "Project: " . $projectSlug;
+
+				// Load project
+				$project = new Project($projectSlug);
+
+				echo "Project type: " . $project->type;
+				// $status = $user->assignToProject($project_slug);
+
+				// If project type is private and the user isn't in the whitelist, set status to rejected
+				// Else status = go && proceed
+				echo "POST";
+				break;
+			case 'DELETE':
+				echo "Leaving project";
+
+				// If we're a member
+				// Delete membership record
+				// Return status
+				break;
+		}
 	}
 
 
@@ -185,12 +218,7 @@ class ProjectPageController {
 	static public function admin($params) {
 		$format = self::getFormat($params['args'], 1, 3);
 
-		// Authenticate
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = self::authenticate();
 
 		// Verify clearance
 		// TODO: add this
@@ -237,7 +265,6 @@ class ProjectPageController {
 	static public function projectHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
 
 		$project_slug = $args[0];
 		$guidelines = false;
@@ -247,10 +274,7 @@ class ProjectPageController {
 			}
 		}
 
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = self::authenticate();
 
 		// Load the project (and make sure it exists)
 		$project = new Project($project_slug);
@@ -323,12 +347,8 @@ class ProjectPageController {
 
 	static public function joinProjectHandler($args) {
 		$app_url = Settings::getProtected('app_url');
-		$auth = Settings::getProtected('auth');
 
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername(); 
-		$user = new User($username);
+		$user = self::authenticate();
 
 		$slug = (array_key_exists('slug', $_GET)) ? $_GET['slug'] : '';
 
@@ -338,18 +358,14 @@ class ProjectPageController {
 			$_SESSION['ub_error'] = "Error joining project";
 		}
 
-		header("Location: $app_url/users/$username/dashboard/");
+		header("Location: $app_url/users/{$user->getUsername()}/dashboard/");
 	}
 
 	static public function projectsHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
 
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = self::authenticate();
 
 		$projects = Project::getProjects();
 		foreach ($projects as &$project) {
@@ -376,7 +392,6 @@ class ProjectPageController {
 	static public function adminProjectHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
 
 		if (array_key_exists(0, $args)) {
 			$slug = $args[0];
@@ -386,10 +401,7 @@ class ProjectPageController {
 			$mode = 'new';
 		}
 
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = self::authenticate();
 
 		if ($mode == "new") {
 			$title = "Create New Project";
@@ -450,17 +462,15 @@ class ProjectPageController {
 	static public function adminSaveProjectHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
 
-		$auth->forceAuthentication();
-		$username = $auth->getUsername(); 
+		$user = self::authenticate();
 
 		$title = $_POST['project_title'];
 		$author = $_POST['project_author'];
 		$slug = $_POST['project_slug'];
 		$language = $_POST['project_language'];
 		$description = $_POST['project_desc'];
-		$owner = $username;
+		$owner = $user->getUsername();
 		$guidelines = $_POST['project_guidelines'];
 		$deadline_days = $_POST['project_deadline'];
 		$num_proofs = $_POST['project_numproofs'];
@@ -526,6 +536,16 @@ class ProjectPageController {
 		$projectPage = self::getProjectPageType($args);
 		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
 		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
+	}
+
+	static public function authenticate() {
+		$auth = Settings::getProtected('auth');
+		$auth->forceAuthentication();
+
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		return $user;
 	}
 }
 

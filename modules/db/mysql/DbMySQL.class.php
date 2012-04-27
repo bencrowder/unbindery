@@ -484,9 +484,10 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields) {
+	public function saveProject($project_id, $title, $type, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
+		$sql .= "type = ?, ";
 		$sql .= "slug = ?, ";
 		$sql .= "description = ?, ";
 		$sql .= "owner = ?, ";
@@ -498,15 +499,15 @@ class DbMySQL implements DbInterface {
 		$sql .= "fields  = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields, $project_id));
+		return $this->execute($sql, array($title, $type, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields, $project_id));
 	}
 
-	public function addProject($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields) {
+	public function addProject($title, $type, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, slug, description, owner, status, workflow, guidelines, language, thumbnails, fields, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, type, slug, description, owner, status, workflow, guidelines, language, thumbnails, fields, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields));
+		return $this->execute($sql, array($title, $type, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $thumbnails, $fields));
 	}
 
 	// TODO: Rewrite

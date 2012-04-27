@@ -67,6 +67,7 @@ SET character_set_client = utf8;
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL auto_increment,
   `title` varchar(255) NOT NULL,
+  `type` varchar(255) default NULL,
   `slug` varchar(255) default NULL,
   `description` varchar(4000) default NULL,
   `owner` varchar(255) default NULL,
