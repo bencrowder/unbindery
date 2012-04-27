@@ -50,19 +50,30 @@ class Project {
 			$this->status = trim($project['status']);
 			$this->guidelines = stripslashes(trim($project['guidelines']));
 			$this->thumbnails = trim($project['thumbnails']);
+			$this->workflow = trim($project['workflow']);
+			$this->whitelist = trim($project['whitelist']);
 			$this->date_started = trim($project['datestarted']);
 			$this->date_completed = trim($project['datecompleted']);
 			$this->days_spent = trim($project['days_spent']);
+
+			// Put the whitelist into an array
+			if ($this->whitelist != '') {
+			   	$this->whitelist = explode(",", $this->whitelist);
+			} else {
+				$this->whitelist = array();
+			}
 		}
 	}
 
 	public function save() {
 		$status = false;
 
+		$whitelist = implode(",", $this->whitelist);
+
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->addProject($this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		}
 
 		return $status;
@@ -188,5 +199,9 @@ class Project {
 	static public function getCompletedProjects() {
 		$db = Settings::getProtected('db');
 		return $db->getCompletedProjects();
+	}
+
+	static public function allowedToJoin($username) {
+		return in_array($username, $this->whitelist);
 	}
 }

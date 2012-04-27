@@ -187,17 +187,17 @@ class ProjectPageController {
 		switch ($params['method']) {
 			// POST: join project
 			case 'POST':
-				echo "Project: " . $projectSlug;
-
 				// Load project
 				$project = new Project($projectSlug);
 
-				echo "Project type: " . $project->type;
-				// $status = $user->assignToProject($project_slug);
+				// If the project is public OR the user is on the whitelist, let them join
+				if ($project->type == 'public' || $project->allowedToJoin($user->username)) {
+					$status = ($user->assignToProject($projectSlug)) ? 'success' : 'error';
+				} else {
+					$status = 'access-denied';
+				}
 
-				// If project type is private and the user isn't in the whitelist, set status to rejected
-				// Else status = go && proceed
-				echo "POST";
+				echo json_encode(array('status' => $status));
 				break;
 			case 'DELETE':
 				echo "Leaving project";

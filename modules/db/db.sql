@@ -73,6 +73,7 @@ CREATE TABLE `projects` (
   `owner` varchar(255) default NULL,
   `status` varchar(255) default NULL,
   `workflow` varchar(2000) default NULL,
+  `whitelist` varchar(2000) default NULL,
   `guidelines` text default NULL,
   `language` varchar(255) default NULL,
   `thumbnails` varchar(400) default NULL,
