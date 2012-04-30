@@ -78,8 +78,8 @@ class User {
 		return $this->db->isAssigned($this->username, $item_id, $project_slug);
 	}
 
-	public function isMember($project_slug) {
-		return $this->db->isMember($this->username, $project_slug);
+	public function isMember($projectSlug) {
+		return $this->db->isMember($this->username, $projectSlug);
 	}
 
 	public function getRoleForProject($project_slug) {
@@ -87,10 +87,10 @@ class User {
 		return $role;
 	}
 
-	public function assignToProject($project_slug) {
+	public function assignToProject($projectSlug) {
 		// make sure they're not already a member
-		if (!$this->isMember($project_slug)) {
-			$project = new Project($project_slug);
+		if (!$this->isMember($projectSlug)) {
+			$project = new Project($projectSlug);
 
 			// insert into membership (default = proofer)
 			$this->db->assignUserToProject($this->username, $project->project_id, 'proofer');
@@ -100,6 +100,18 @@ class User {
 			return false;
 		}
 	}
+
+	public function removeFromProject($projectSlug) {
+		if ($this->isMember($projectSlug)) {
+			$project = new Project($projectSlug);
+			$this->db->removeUserFromProject($this->username, $project->project_id);
+
+			return true;
+		}
+
+		return false;
+	}
+
 
 	public function assignItem($item_id, $project_slug) {
 		// make sure the item exists

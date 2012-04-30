@@ -200,11 +200,9 @@ class ProjectPageController {
 				echo json_encode(array('status' => $status));
 				break;
 			case 'DELETE':
-				echo "Leaving project";
+				$status = ($user->removeFromProject($projectSlug)) ? 'success' : 'error';
 
-				// If we're a member
-				// Delete membership record
-				// Return status
+				echo json_encode(array('status' => $status));
 				break;
 		}
 	}

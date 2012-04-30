@@ -202,6 +202,12 @@ class DbMySQL implements DbInterface {
 		return $this->execute($sql, array($project_id, $username, $role));
 	}
 
+	// Returns: status
+	public function removeUserFromProject($username, $project_id) {
+		$sql = "DELETE FROM roles WHERE project_id = ? AND username = ?";
+		return $this->execute($sql, array($project_id, $username));
+	}
+
 	// Returns: boolean
 	public function itemExists($item_id, $project_slug) {
 		$query = "SELECT items.id FROM items JOIN projects ON projects.id = items.project_id WHERE items.id = ? AND projects.slug = ?";

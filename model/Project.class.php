@@ -83,15 +83,14 @@ class Project {
 		$this->title = $title;
 		$this->type = $type;
 		$this->slug = $slug;
-		$this->slug = $slug;
 		$this->language = $language;
 		$this->description = $description;
 		$this->owner = $owner;
 		$this->status = "pending";
 		$this->guidelines = $guidelines;
-		$this->deadline_days = $deadline_days;
-		$this->num_proofs = $num_proofs;
 		$this->thumbnails = $thumbnails;
+		$this->workflow = $workflow;
+		$this->whitelist = $whitelist;
 
 		if ($title != "" && $slug != "") {
 			$this->db->addProject($this->title, $this->type, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails);
@@ -181,6 +180,14 @@ class Project {
 		return $items;
 	}
 
+	public function allowedToJoin($username) {
+		if (is_array($this->whitelist)) {
+			return in_array($username, $this->whitelist);
+		} else {
+			return false;
+		}
+	}
+
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "type" => $this->type, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
@@ -199,9 +206,5 @@ class Project {
 	static public function getCompletedProjects() {
 		$db = Settings::getProtected('db');
 		return $db->getCompletedProjects();
-	}
-
-	static public function allowedToJoin($username) {
-		return in_array($username, $this->whitelist);
 	}
 }
