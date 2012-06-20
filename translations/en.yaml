@@ -17,7 +17,8 @@ footer.text: '<a href="http://bencrowder.net/coding/unbindery/">Unbindery</a> is
 
 # Dashboard
 dashboard.title: 'Dashboard'
-dashboard.current_assignments: 'Current Assignments'
+dashboard.proofing_queue: 'Proofing Queue'
+dashboard.reviewing_queue: 'Reviewing Queue'
 dashboard.get_new_page: 'Get new page'
 dashboard.score: 'Score'
 dashboard.proofed: 'Proofed'

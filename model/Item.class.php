@@ -35,7 +35,29 @@ class Item {
 			$this->project_id = trim($item['project_id']);
 			$this->project_slug = $project_slug;
 			$this->title = trim($item['title']);
-			$this->itemtext = trim($item['itemtext']);
+			$this->transcript = trim($item['transcript']);
+			$this->status = trim($item['status']);
+			$this->type = trim($item['type']);
+			$this->href = trim($item['href']);
+		}
+
+		// Update the item text with the user's revision, if available
+		if ($username != '') {
+			$itemtext = $this->db->getUserTranscript($item_id, $this->project_id, $username);
+			if ($itemtext != '') {
+				$this->itemtext = $itemtext;
+			}
+		}
+	}
+
+	public function loadWithProjectID($item_id, $project_id, $username = "") {
+		$item = $this->db->loadItemWithProjectID($item_id, $project_id);
+		if (isset($item)) {
+			$this->item_id = trim($item['id']);
+			$this->project_id = $project_id;
+			$this->project_slug = trim($item['project_slug']);
+			$this->title = trim($item['title']);
+			$this->transcript = trim($item['transcript']);
 			$this->status = trim($item['status']);
 			$this->type = trim($item['type']);
 			$this->href = trim($item['href']);

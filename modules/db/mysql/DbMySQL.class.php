@@ -351,13 +351,19 @@ class DbMySQL implements DbInterface {
 
 		$results = $this->query($query, array($item_id, $project_slug));
 
-		if (count($results) > 0) {
-			$result = $results[0];
-		} else {
-			$result = false;
-		}
+		return (count($results) > 0) ? $results[0] : false;
+	}	
 
-		return $result;
+	// Returns: id, project_id, title, transcript, status, type
+	public function loadItemWithProjectID($item_id, $project_id) {
+		$query = "SELECT items.id as id, projects.id as project_id, projects.slug as project_slug, items.title as title, items.transcript as transcript, items.status as status, items.type as type, items.href as href FROM items ";
+		$query .= "JOIN projects ON items.project_id = projects.id ";
+		$query .= "WHERE items.id = ? ";
+		$query .= "AND projects.id = ?;";
+
+		$results = $this->query($query, array($item_id, $project_id));
+
+		return (count($results) > 0) ? $results[0] : false;
 	}	
 
 	// Returns: transcript
@@ -635,5 +641,12 @@ class DbMySQL implements DbInterface {
 	// Returns: username, item_id, project_id, date_assigned, deadline
 	public function getCurrentAssignments() {
 		return $this->query("SELECT username, item_id, project_id, date_assigned, deadline FROM assignments WHERE date_completed IS NULL ORDER BY project_id, date_assigned DESC", array());
+	}
+
+	// Returns: item_id, project_id, date_added
+	public function loadQueue($name, $includeRemoved = false) {
+		$date_removed = ($includeRemoved) ? "" : " AND date_removed IS NULL";
+
+		return $this->query("SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?" . $date_removed . " ORDER BY date_added ASC", array($name));
 	}
 }

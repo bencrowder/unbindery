@@ -15,16 +15,16 @@
 		<h2>{{ i18n.t('dashboard.title') }}</h2>
 
 		<div class="content">
-			<h3>{{ i18n.t('dashboard.current_assignments') }}</h3>
+			<h3>{{ i18n.t('dashboard.proofing_queue') }}</h3>
 			<ul class="action_list">
 				{% if item_count == 0 and project_count == 0 %}
 				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
-				{% for item in items %}
+				{% for item in proofItems %}
 				<li class="item">
 					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.proof') }}</a></div>
-					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">{{ i18n.t('dashboard.due') }} {{ item.deadline }}</span></div>
+					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
 
 					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
 
@@ -61,16 +61,16 @@
 				{% endfor %}
 			</ul>
 
-			<h3>Review Queue</h3>
+			<h3>{{ i18n.t('dashboard.reviewing_queue') }}</h3>
 			<ul class="action_list">
 				{% if item_count == 0 %}
 				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
-				{% for item in items %}
+				{% for item in reviewItems %}
 				<li>
 					<div class="right_button"><a href="{{ item.editlink }}" class="button">{{ i18n.t('dashboard.review') }}</a></div>
-					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a> <span class="deadline{{ item.deadlineclass }}">{{ i18n.t('dashboard.due') }} {{ item.deadline }}</span></div>
+					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
 					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
 				</li>
 				{% endfor %}

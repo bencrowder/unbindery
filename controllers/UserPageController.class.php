@@ -57,10 +57,6 @@ class UserPageController {
 	// Methods: GET = get user dashboard info
 
 	static public function userDashboard($params) {
-//		echo "Dashboard (" . $params['method'] . "): ";
-//		print_r($params['args']);
-		// $username = 
-
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
@@ -71,34 +67,37 @@ class UserPageController {
 		$user = new User($username);
 		$user->getStats();
 
-		$items = $user->getAssignments();
-		$projects = $user->getProjects();
-		$projectlist = array();
+		// Load the user's item proofing queue
+		$proofQueue = new Queue("user.proof:$username");
+		$proofItems = array();
+		foreach ($proofQueue->getItems() as $item) {
+			array_push($proofItems, array("title" => $item->title, "status" => $item->status, "project_slug" => $item->project_slug, "item_id" => $item->item_id));
+		}
+
+		// Load the user's item reviewing queue
+		$reviewQueue = new Queue("user.review:$username");
+		$reviewItems = array();
+		foreach ($reviewQueue->getItems() as $item) {
+			array_push($reviewItems, array("title" => $item->title, "status" => $item->status, "project_slug" => $item->project_slug, "item_id" => $item->item_id));
+		}
+
+		// Get the user's history and the top proofers information
 		$history = $user->getHistory();
 		$topusers = User::getTopUsers();
 
-		foreach ($items as &$item) {
-			$item["editlink"] = $app_url . '/edit/' . $item["project_slug"] . '/' . $item["item_id"];
+		// Get the user's projects
+		$projects = $user->getProjects();
+		$projectlist = array();
+
+		// Add extra info (edit link and slug) to each item
+		foreach ($proofItems as &$item) {
+			$item["editlink"] = $app_url . '/proof/' . $item["project_slug"] . '/' . $item["item_id"];
 			$projectlist[] = $item["project_slug"];
-			
-			$days_left = $item["days_left"];
-			$deadline = $item["deadline"];
+		}	
 
-			if ($days_left <= 2 && $days_left >= 0) {
-				$deadlineclass = " impending";
-				$deadline = "in $days_left day";
-				if ($days_left != 1) { $deadline .= "s"; }
-			} else if ($days_left < 0) {
-				$deadlineclass = " overdue";
-				$deadline = ($days_left * -1) . " days ago";
-			} else {
-				$deadlineclass = "";
-			}
-
-			$item["deadline"] = $deadline;
-			$item["deadlineclass"] = $deadlineclass;
-
-			$item["title"] = $item["item_title"];
+		foreach ($reviewItems as &$item) {
+			$item["editlink"] = $app_url . '/review/' . $item["project_slug"] . '/' . $item["item_id"];
+			$projectlist[] = $item["project_slug"];
 		}	
 
 		foreach ($projects as &$project) {
@@ -123,14 +122,15 @@ class UserPageController {
 				'proofed' => $user->proofed,
 				'proofed_past_week' => $user->proofed_past_week,
 				),
-			'items' => $items,
+			'proofItems' => $proofItems,
+			'reviewItems' => $reviewItems,
 			'projects' => $projects,
 			'history' => $history,
 			'registered_methods' => array(
 				'/users/' . $username,
 				),	
 			'topusers' => $topusers,
-			'item_count' => count($items),
+			'item_count' => count($proofItems),
 			'project_count' => count($projects),
 			'history_count' => count($history)
 		);
