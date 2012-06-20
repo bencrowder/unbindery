@@ -1,0 +1,5 @@
+## Unbindery roles
+
+* proofer: A user who proofs pages
+* reviewer: A user who reviews already-proofed pages
+* admin: A user who can administrate a project
