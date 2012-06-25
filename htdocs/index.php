@@ -29,6 +29,7 @@ require_once '../modules/Transcript.php';
 require_once '../modules/Workflow.php';
 
 // Module controllers
+require_once '../controllers/DispatchController.class.php';
 require_once '../controllers/QueueController.class.php';
 require_once '../controllers/RoleController.class.php';
 require_once '../controllers/TranscriptController.class.php';
@@ -93,6 +94,12 @@ Role::register('force_clearance', 'RoleController::forceClearance');
 Role::init(Settings::getProtected('roles'));
 
 
+// Initialize dispatcher
+$dispatch = new Dispatch();
+$dispatch->register(array('DispatchController', 'getNextAvailableItem'));
+Settings::setProtected('dispatch', $dispatch);
+
+
 // Parse the routes
 // --------------------------------------------------
 
@@ -109,6 +116,7 @@ $routes = array(
 	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
 
 	// User project item pages
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/get\.?([^/]+)?/?#'					=> 'ItemPageController::getNewItem',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/media\.?([^/]+)?/?#'					=> 'ItemPageController::media',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
@@ -132,6 +140,7 @@ $routes = array(
 	'#^/users\.?([^/]+)?/?#'					=> 'UserPageController::users',
 
 	// Item pages
+	'#^/projects/([^/]+)/items/get\.?([^/]+)?/?#'					=> 'ItemPageController::getNewItem',
 	'#^/projects/([^/]+)/items/media\.?([^/]+)?/?#'					=> 'ItemPageController::media',
 	'#^/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
 	'#^/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',

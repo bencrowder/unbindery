@@ -170,8 +170,8 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
-	public function isMember($username, $project_slug) {
-		$result = $this->query("SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
+	public function isMember($username, $projectSlug) {
+		$result = $this->query("SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $projectSlug));
 
 		return (count($result) > 0) ? true : false;
 	}
@@ -260,31 +260,33 @@ class DbMySQL implements DbInterface {
 		return (count($results) > 0) ? true : false;
 	}
 
-	// TODO: Rewrite
 	// Returns: boolean
-	public function userHasProjectAssignment($username, $project_slug) {
-		$query = "SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = ? AND projects.slug = ? AND assignments.date_completed IS NULL";
-		$results = $this->query($query, array($username, $project_slug));
+	public function userHasProjectItem($username, $projectSlug) {
+		$query = "SELECT queues.id ";
+		$query .= "FROM queues ";
+		$query .= "JOIN projects ON queues.project_id = projects.id ";
+		$query .= "WHERE username = ? ";
+		$query .= "AND projects.slug = ? ";
+		$query .= "AND queues.date_removed IS NULL";
+
+		$results = $this->query($query, array($username, $projectSlug));
 
 		return (count($results) > 0) ? true : false;
 	}
 
-	// TODO: Rewrite
 	// Returns: item ID
-	public function getNextAvailableItem($username, $project_slug, $num_proofs) {
-		$query = "SELECT items.id, items.project_id, ";
-		$query .= "(SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS itemcount ";
+	public function getNextAvailableItem($username, $projectSlug) {
+		$query = "SELECT items.id, items.project_id ";
 		$query .= "FROM items JOIN projects ON projects.id = items.project_id ";
 		$query .= "WHERE items.status = 'available' ";
 		$query .= "AND projects.slug = ? ";
 		$query .= "AND items.id NOT IN ";
-		$query .= "(SELECT item_id FROM assignments ";
-		$query .= "WHERE username = ? AND project_id = items.project_id) ";
-		$query .= "HAVING itemcount < ? ";
+		$query .= "(SELECT item_id FROM queues ";
+		$query .= "WHERE queue_name = ? AND project_id = items.project_id) ";
 		$query .= "ORDER BY items.id ASC ";
 		$query .= "LIMIT 1;";
 
-		$results = $this->query($query, array($project_slug, $username, $num_proofs));
+		$results = $this->query($query, array($projectSlug, "user.proof:$username"));
 
 		return (count($results) > 0) ? $results[0]['id'] : -1;
 	}
@@ -648,6 +650,19 @@ class DbMySQL implements DbInterface {
 		$date_removed = ($includeRemoved) ? "" : " AND date_removed IS NULL";
 
 		return $this->query("SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?" . $date_removed . " ORDER BY date_added ASC", array($name));
+	}
+
+	// Returns: ?
+	public function saveToQueue($queueName, $itemId, $projectId) {
+		return $this->execute("INSERT INTO queues (queue_name, item_id, project_id, date_added) values (?, ?, ?, NOW());", array($queueName, $itemId, $projectId));
+	}
+
+	// Returns: ?
+	public function removeFromQueue($queueName, $items) {
+		foreach ($items as $item) {
+			$sql = "UPDATE queues SET date_removed = NOW() WHERE queue_name = ? AND item_id = ? AND project_id = ?";
+			$this->execute($sql, array($queueName, $item['item_id'], $item['project_id']));
+		}
 	}
 
 	// Returns: array of projects

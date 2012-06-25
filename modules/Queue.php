@@ -100,7 +100,9 @@ class Queue {
 	public function add($item) {
 		array_push($this->queue, $item);
 
-		if ($this->saveOnChanges) $this->save();
+		if ($this->saveOnChanges == true) {
+			$this->save();
+		}
 	}
 
 
@@ -120,7 +122,9 @@ class Queue {
 			}
 		}
 
-		if ($this->saveOnChanges) $this->save();
+		if ($this->saveOnChanges) {
+			$this->save();
+		}
 
 		return $rtnItem;
 	}

@@ -86,6 +86,10 @@ class User {
 		return $this->db->isMember($this->username, $projectSlug);
 	}
 
+	public function hasProjectItem($projectSlug) {
+		return $this->db->userHasProjectItem($this->username, $projectSlug);
+	}
+
 	public function getRoleForProject($project_slug) {
 		$role = $this->db->getRoleForProject($this->username, $project_slug);
 		return $role;

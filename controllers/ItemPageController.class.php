@@ -58,6 +58,53 @@ class ItemPageController {
 
 
 	// --------------------------------------------------
+	// Get new item handler
+	// URL: /projects/PROJECT/items/get OR /users/USER/projects/PROJECT/items/get
+	// Methods: POST = get next available item
+
+	static public function getNewItem($params) {
+		$format = self::getFormat($params['args'], 0, 2);
+		$projectPage = self::getProjectPageType($params['args']);
+		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
+
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		switch ($params['method']) {
+			// POST: Get next available item
+			case 'POST':
+				$dispatch = Settings::getProtected('dispatch');
+				$dispatch->init(array('username' => $username, 'projectSlug' => $projectSlug));
+				$response = $dispatch->next();
+
+				if ($response['status'] == true) {
+					$itemId = $response['code'];
+
+					// Load the item to make sure it's real
+					$item = new Item('', $itemId, $projectSlug, $username);
+
+					// Verification check
+					if ($item->status == 'available') {
+						// Put it in the user's queue
+						$queue = new Queue("user.proof:$username", true);
+						$queue->add($item);
+						$queue->save();
+					}
+				}
+
+				echo json_encode($response);
+
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
 	// General items handler
 	// URL: /projects/PROJECT/items
 	// Methods: 
@@ -363,6 +410,20 @@ class ItemPageController {
 			// redirect to error page
 			redirectToDashboard("", "Error saving page.");
 		}
+	}
+
+	static public function getProjectPageType($args) {
+		if ($args[0] == 'users') {
+			return 'user';
+		} else {
+			return 'system';
+		}
+	}
+
+	static public function getFormat($args, $systemIndex, $userIndex) {
+		$projectPage = self::getProjectPageType($args);
+		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
+		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }
 

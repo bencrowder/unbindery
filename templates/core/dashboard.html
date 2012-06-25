@@ -33,7 +33,7 @@
 				{% for project in projects %}
 					{% if project.available_for_proofing %}
 				<li class="project">
-					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
+				<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-type="{{ project.type }}" data-project-owner="{{ project.owner }}" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
 				</li>

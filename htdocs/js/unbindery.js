@@ -2,8 +2,23 @@
 /* -------------------------------------------------- */
 
 var Unbindery = function() {
-	this.callAPI = function(call, data, callback) {
-		$.post(app_url + '/ws/' + call, data, callback, 'json');
+	this.callAPI = function(call, method, data, callback) {
+		// Prepare the URL
+		switch (call) {
+			case 'get-new-item':
+				if (data.projectType == 'public') {
+					url = '/projects/' + data.projectSlug + '/items/get';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/get';
+				}
+				break;
+		}
+
+		if (method == 'POST') { 
+			$.post(app_url + url, data, callback, 'json');
+		} else if (method == 'GET') {
+			$.get(app_url + url, data, callback, 'json');
+		}
 	}
 
 	this.showSpinner = function() {
@@ -12,6 +27,47 @@ var Unbindery = function() {
 
 	this.hideSpinner = function() {
 		$("#spinner").hide();
+	}
+
+	this.getNewItem = function(projectSlug, projectOwner, projectType) {
+		// Get the username
+		var username = $("nav ul .username").html();
+
+		this.callAPI('get-new-item', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username },
+			function(data) {
+				if (data.status == true) {
+					if (projectType == 'public') {
+						var locStr = app_url + '/projects/' + projectSlug + '/items/' + data.code + '/proof';
+					} else {
+						var locStr = app_url + '/users/' + projectOwner + '/projects/' + projectSlug + '/items/' + data.code + '/proof';
+					}
+
+					window.location.href = locStr;
+				} else {
+					unbindery.hideSpinner();
+					console.log(data);
+					console.log("failure", data.code);
+
+/*					switch (data.code) {
+						case "waiting_for_clearance":
+							redirect_to_dashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)", username);
+							break;	
+						case "have_item_already":
+							redirect_to_dashboard("", "You already have one page for this project. Finish it and then you'll be able to get a new one.", username);
+						case "not_a_member":
+							redirect_to_dashboard("", "You're not a member of that project.", username);
+							break;
+						default:
+							redirect_to_dashboard("", "Error getting new page.", username);
+							break;
+
+					}
+					*/
+				}
+			}
+		);
+
+		return false;
 	}
 }
 
@@ -101,7 +157,7 @@ function save_page_text(is_draft, is_review, slug) {
 	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
-	Unbindery.callAPI("save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	Unbindery.callAPI("save_item_transcript", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
 				Unbindery.hideSpinner();
@@ -128,34 +184,6 @@ function save_page_text(is_draft, is_review, slug) {
 	);
 }
 
-function get_new_page(project_slug) {
-	var username = $("nav ul .username").html();
-
-	Unbindery.callAPI("get_new_page", { project_slug: project_slug, username: username },
-		function(data) {
-			switch (data.statuscode) {
-				case "success":
-					var locstr = app_url + '/edit/' + project_slug + '/' + data.item_id;
-					window.location.href = locstr;
-					break;
-				case "waiting_for_clearance":
-					redirect_to_dashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)", username);
-					break;	
-				case "have_item_already":
-					redirect_to_dashboard("", "You already have one page for this project. Finish it and then you'll be able to get a new one.", username);
-				case "not_a_member":
-					redirect_to_dashboard("", "You're not a member of that project.", username);
-					break;
-				default:
-					redirect_to_dashboard("", "Error getting new page.", username);
-					break;
-			}
-		}
-	);
-
-	return false;
-}
-
 function save_page() {
 	Unbindery.showSpinner();
 
@@ -165,7 +193,7 @@ function save_page() {
 	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
-	Unbindery.callAPI(app_url + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	Unbindery.callAPI(app_url + "/unbindery.php?method=save_page", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
 				Unbindery.hideSpinner();
@@ -201,7 +229,7 @@ function load_items_for_editing(event, data) {
 	});
 
 	// add them to the database
-	Unbindery.callAPI("add_pages", { project_slug: project_slug, pages: pages },
+	Unbindery.callAPI("add_pages", 'POST', { project_slug: project_slug, pages: pages },
 		function(data) {
 			if (data.statuscode == "success") {
 				// load the first page into edit mode
@@ -238,11 +266,19 @@ $(document).ready(function() {
 		save_page();
 	});
 
+	// Set up click handler for getting a new item
 	$(".getnewitem").click(function(e) {
+		// Hide the button (so we don't click it again)
 		$(this).hide();
-		$(this).siblings('.spinner').show();
-		var project_slug = this.getAttribute('data-project-slug');
 
-		get_new_page(project_slug);
+		// Show the spinner
+		$(this).siblings('.spinner').show();
+
+		// And get the new page
+		var projectSlug = this.getAttribute('data-project-slug');
+		var projectOwner = this.getAttribute('data-project-owner');
+		var projectType = this.getAttribute('data-project-type');
+
+		unbindery.getNewItem(projectSlug, projectOwner, projectType);
 	});
 });

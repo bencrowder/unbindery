@@ -50,6 +50,8 @@
 * /projects/[PROJECT]/items
 	* GET = get list of items for project
 	* POST = create new item
+* /projects/[PROJECT]/items/get
+	* GET = get new item
 * /projects/[PROJECT]/items/media
 	* POST = upload item media
 * /projects/[PROJECT]/items/transcripts
