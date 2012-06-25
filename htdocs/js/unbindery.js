@@ -1,7 +1,23 @@
 /* Unbindery */
 /* -------------------------------------------------- */
 
+var Unbindery = function() {
+	this.callAPI = function(call, data, callback) {
+		$.post(app_url + '/ws/' + call, data, callback, 'json');
+	}
+
+	this.showSpinner = function() {
+		$("#spinner").show();
+	}
+
+	this.hideSpinner = function() {
+		$("#spinner").hide();
+	}
+}
+
 $(document).ready(function() {
+	unbindery = new Unbindery();
+
 	/* New Project page */
 	/* -------------------------------------------------- */
 	
@@ -71,7 +87,7 @@ function redirect_to_dashboard(message, error, username) {
 }
 
 function save_page_text(is_draft, is_review, slug) {
-	$("#spinner").show();
+	Unbindery.showSpinner();
 
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
@@ -85,10 +101,10 @@ function save_page_text(is_draft, is_review, slug) {
 	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
-	$.post(app_url + "/ws/save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	Unbindery.callAPI("save_item_transcript", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
-				$("#spinner").hide();
+				Unbindery.hideSpinner();
 
 				if (is_review) {
 					var message = "Finished review.";
@@ -108,13 +124,14 @@ function save_page_text(is_draft, is_review, slug) {
 				// don't redirect to dashboard here, show error thing
 				// redirect_to_dashboard("", "Error saving page. Try again.");
 			}
-		}, 'json');
+		}
+	);
 }
 
 function get_new_page(project_slug) {
 	var username = $("nav ul .username").html();
 
-	$.post(app_url + "/ws/get_new_page", { project_slug: project_slug, username: username },
+	Unbindery.callAPI("get_new_page", { project_slug: project_slug, username: username },
 		function(data) {
 			switch (data.statuscode) {
 				case "success":
@@ -133,13 +150,14 @@ function get_new_page(project_slug) {
 					redirect_to_dashboard("", "Error getting new page.", username);
 					break;
 			}
-		}, 'json');
+		}
+	);
 
 	return false;
 }
 
 function save_page() {
-	$("#spinner").show();
+	Unbindery.showSpinner();
 
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
@@ -147,10 +165,10 @@ function save_page() {
 	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
-	$.post(app_url + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	Unbindery.callAPI(app_url + "/unbindery.php?method=save_page", { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
 		function(data) {
 			if (data.statuscode == "success") {
-				$("#spinner").hide();
+				Unbindery.hideSpinner();
 
 				if (is_review) {
 					var message = "Finished review.";
@@ -165,7 +183,8 @@ function save_page() {
 			} else {
 				redirect_to_dashboard("", "Error saving page. Try again.", username);
 			}
-		}, 'json');
+		}
+	);
 }
 
 function load_items_for_editing(event, data) {
@@ -182,7 +201,7 @@ function load_items_for_editing(event, data) {
 	});
 
 	// add them to the database
-	$.post(app_url + "/ws/add_pages", { project_slug: project_slug, pages: pages },
+	Unbindery.callAPI("add_pages", { project_slug: project_slug, pages: pages },
 		function(data) {
 			if (data.statuscode == "success") {
 				// load the first page into edit mode
@@ -191,7 +210,8 @@ function load_items_for_editing(event, data) {
 			} else {
 				console.log("error!");
 			}
-		}, 'json');
+		}
+	);
 }
 
 $(document).ready(function() {

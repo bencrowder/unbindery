@@ -40,7 +40,7 @@
 				</li>
 				{% endfor %}
 
-				{% for project in projects %}
+				{% for project in proofingProjects %}
 					{% if project.available %}
 				<li class="project">
 					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
@@ -73,6 +73,26 @@
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
 					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
 				</li>
+				{% endfor %}
+
+				{% for project in reviewingProjects %}
+					{% if project.available %}
+				<li class="project">
+					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
+
+					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+
+					<div class="progress_bar">
+						<div class="capsule">
+							<div class="percent" style="width: {{ project.percentage }}px;"></div>
+							{% if project.num_proofs > 1 %}
+							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
+							{% endif %}
+						</div> 
+						<span>{{ project.percentage }}% ({{ project.available_pages }} left)</span>
+					</div>
+				</li>
+					{% endif %}
 				{% endfor %}
 			</ul>
 		</div>

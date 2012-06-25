@@ -649,4 +649,9 @@ class DbMySQL implements DbInterface {
 
 		return $this->query("SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?" . $date_removed . " ORDER BY date_added ASC", array($name));
 	}
+
+	// Returns: array of projects
+	public function getUserProjectsByRole($username, $role) {
+		return $this->query("SELECT projects.title AS title, projects.slug AS slug FROM projects JOIN roles ON projects.id = project_id WHERE projects.status = 'active' AND username = ? AND role = ? ORDER BY title", array($username, $role));
+	}
 }

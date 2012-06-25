@@ -86,27 +86,38 @@ class UserPageController {
 		$topusers = User::getTopUsers();
 
 		// Get the user's projects
-		$projects = $user->getProjects();
-		$projectlist = array();
+		$proofingProjects = $user->getProjectsByRole("proofer");
+		$reviewingProjects = $user->getProjectsByRole("reviewer");
+		$prooflist = array();
+		$reviewlist = array();
 
 		// Add extra info (edit link and slug) to each item
 		foreach ($proofItems as &$item) {
 			$item["editlink"] = $app_url . '/proof/' . $item["project_slug"] . '/' . $item["item_id"];
-			$projectlist[] = $item["project_slug"];
+			$prooflist[] = $item["project_slug"];
 		}	
 
 		foreach ($reviewItems as &$item) {
 			$item["editlink"] = $app_url . '/review/' . $item["project_slug"] . '/' . $item["item_id"];
-			$projectlist[] = $item["project_slug"];
+			$reviewlist[] = $item["project_slug"];
 		}	
 
-		foreach ($projects as &$project) {
-			if (!in_array($project["slug"], $projectlist) && ($project["available_pages"] > 0)) {
+		foreach ($proofingProjects as &$project) {
+			if (!in_array($project["slug"], $prooflist) && ($project["available_pages"] > 0)) {
 				$project["available"] = true;
 			}
 			$project["link"] = $app_url . '/projects/' . $project["slug"];
-			$project["percentage"] = round($project["completed"] / $project["total"] * 100, 0);
-			$project["proof_percentage"] = round($project["proof_percentage"]);
+			/*$project["percentage"] = round($project["completed"] / $project["total"] * 100, 0);*/
+			/*$project["proof_percentage"] = round($project["proof_percentage"]);*/
+		}
+
+		foreach ($reviewingProjects as &$project) {
+			if (!in_array($project["slug"], $reviewlist) && ($project["available_pages"] > 0)) {
+				$project["available"] = true;
+			}
+			$project["link"] = $app_url . '/projects/' . $project["slug"];
+			/*$project["percentage"] = round($project["completed"] / $project["total"] * 100, 0);*/
+			/*$project["proof_percentage"] = round($project["proof_percentage"]);*/
 		}
 
 		foreach ($history as &$event) {
@@ -124,14 +135,15 @@ class UserPageController {
 				),
 			'proofItems' => $proofItems,
 			'reviewItems' => $reviewItems,
-			'projects' => $projects,
+			'proofingProjects' => $proofingProjects,
+			'reviewingProjects' => $reviewingProjects,
 			'history' => $history,
 			'registered_methods' => array(
 				'/users/' . $username,
 				),	
 			'topusers' => $topusers,
 			'item_count' => count($proofItems),
-			'project_count' => count($projects),
+			'project_count' => count($proofingProjects),
 			'history_count' => count($history)
 		);
 
