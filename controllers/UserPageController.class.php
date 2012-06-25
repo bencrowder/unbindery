@@ -62,19 +62,20 @@ class UserPageController {
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();
-
 		$username = $auth->getUsername();
 		$user = new User($username);
+
+		// Get user's stats (score, # proofed, etc.)
 		$user->getStats();
 
-		// Load the user's item proofing queue
+		// Load the user's proofing queue
 		$proofQueue = new Queue("user.proof:$username");
 		$proofItems = array();
 		foreach ($proofQueue->getItems() as $item) {
 			array_push($proofItems, array("title" => $item->title, "status" => $item->status, "project_slug" => $item->project_slug, "item_id" => $item->item_id));
 		}
 
-		// Load the user's item reviewing queue
+		// Load the user's reviewing queue
 		$reviewQueue = new Queue("user.review:$username");
 		$reviewItems = array();
 		foreach ($reviewQueue->getItems() as $item) {
@@ -86,43 +87,64 @@ class UserPageController {
 		$topusers = User::getTopUsers();
 
 		// Get the user's projects
-		$proofingProjects = $user->getProjectsByRole("proofer");
-		$reviewingProjects = $user->getProjectsByRole("reviewer");
-		$prooflist = array();
-		$reviewlist = array();
+		$projects = $user->getProjectSummaries();
 
 		// Add extra info (edit link and slug) to each item
+		$prooflist = array();
 		foreach ($proofItems as &$item) {
 			$item["editlink"] = $app_url . '/proof/' . $item["project_slug"] . '/' . $item["item_id"];
-			$prooflist[] = $item["project_slug"];
+			if (!in_array($item['project_slug'], $prooflist)) {
+				$prooflist[] = $item["project_slug"];
+			}
 		}	
 
+		$reviewlist = array();
 		foreach ($reviewItems as &$item) {
 			$item["editlink"] = $app_url . '/review/' . $item["project_slug"] . '/' . $item["item_id"];
-			$reviewlist[] = $item["project_slug"];
+			if (!in_array($item['project_slug'], $reviewlist)) {
+				$reviewlist[] = $item["project_slug"];
+			}
 		}	
 
-		foreach ($proofingProjects as &$project) {
-			if (!in_array($project["slug"], $prooflist) && ($project["available_pages"] > 0)) {
-				$project["available"] = true;
+		// Add link and percentages to each project
+		$projectSummaries = array();
+
+		foreach ($projects as &$project) {
+			if (!in_array($project["slug"], $prooflist) && ($project["available_to_proof"] > 0)) {
+				$project["available_for_proofing"] = true;
+			} else {
+				$project["available_for_proofing"] = false;
 			}
-			$project["link"] = $app_url . '/projects/' . $project["slug"];
-			/*$project["percentage"] = round($project["completed"] / $project["total"] * 100, 0);*/
-			/*$project["proof_percentage"] = round($project["proof_percentage"]);*/
+
+			if (!in_array($project["slug"], $reviewlist) && ($project["available_to_review"] > 0)) {
+				$project["available_for_review"] = true;
+			} else {
+				$project["available_for_reviewing"] = false;
+			}
+
+			$project['percent_proofed'] = round($project['num_proofed'] / $project['num_items'] * 100, 0);
+			$project['percent_reviewed'] = round($project['num_reviewed'] / $project['num_items'] * 100, 0);
+
+			if ($project['type'] == 'public') {
+				$project["link"] = $app_url . '/projects/' . $project["slug"];
+			} else if ($project['type'] == 'private') {
+				$project["link"] = $app_url . '/users/' . $project['owner'] . '/projects/' . $project["slug"];
+			}
+
+			$projectSummaries[$project['slug']] = $project;
 		}
 
-		foreach ($reviewingProjects as &$project) {
-			if (!in_array($project["slug"], $reviewlist) && ($project["available_pages"] > 0)) {
-				$project["available"] = true;
-			}
-			$project["link"] = $app_url . '/projects/' . $project["slug"];
-			/*$project["percentage"] = round($project["completed"] / $project["total"] * 100, 0);*/
-			/*$project["proof_percentage"] = round($project["proof_percentage"]);*/
-		}
-
+		/* Prepare user history */
 		foreach ($history as &$event) {
 			$event["editlink"] = "$app_url/edit/" . $event["project_slug"] . "/" . $event["item_id"];	
 			$event["title"] = $event["item_title"];
+		}
+
+		/* See if this is a new user */
+		if (count($proofItems) == 0 && count($projectSummaries) == 0) {
+			$blankslate = true;
+		} else {
+			$blankslate = false;
 		}
 
 		$options = array(
@@ -135,15 +157,13 @@ class UserPageController {
 				),
 			'proofItems' => $proofItems,
 			'reviewItems' => $reviewItems,
-			'proofingProjects' => $proofingProjects,
-			'reviewingProjects' => $reviewingProjects,
+			'projects' => $projectSummaries,
 			'history' => $history,
 			'registered_methods' => array(
 				'/users/' . $username,
 				),	
 			'topusers' => $topusers,
-			'item_count' => count($proofItems),
-			'project_count' => count($proofingProjects),
+			'blankslate' => $blankslate,
 			'history_count' => count($history)
 		);
 

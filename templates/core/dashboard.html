@@ -17,7 +17,7 @@
 		<div class="content">
 			<h3>{{ i18n.t('dashboard.proofing_queue') }}</h3>
 			<ul class="action_list">
-				{% if item_count == 0 and project_count == 0 %}
+				{% if blankslate %}
 				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
@@ -26,36 +26,16 @@
 					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.proof') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
 
-					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
-
-					<div class="progress_bar">
-						<div class="capsule">
-							<div class="percent" style="width: {{ project.percentage }}px;"></div>
-							{% if project.num_proofs > 1 %}
-							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
-							{% endif %}
-						</div> 
-						<span>{{ project.percentage }}% ({{ project.available_pages }} left)</span>
-					</div>
+					<div class="sub">{{ projects[item.project_slug].title }}</div>
 				</li>
 				{% endfor %}
 
-				{% for project in proofingProjects %}
-					{% if project.available %}
+				{% for project in projects %}
+					{% if project.available_for_proofing %}
 				<li class="project">
-					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
+					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
-
-					<div class="progress_bar">
-						<div class="capsule">
-							<div class="percent" style="width: {{ project.percentage }}px;"></div>
-							{% if project.num_proofs > 1 %}
-							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
-							{% endif %}
-						</div> 
-						<span>{{ project.percentage }}% ({{ project.available_pages }} left)</span>
-					</div>
 				</li>
 					{% endif %}
 				{% endfor %}
@@ -63,41 +43,54 @@
 
 			<h3>{{ i18n.t('dashboard.reviewing_queue') }}</h3>
 			<ul class="action_list">
-				{% if item_count == 0 %}
+				{% if blankslate %}
 				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
 				{% for item in reviewItems %}
-				<li>
-					<div class="right_button"><a href="{{ item.editlink }}" class="button">{{ i18n.t('dashboard.review') }}</a></div>
+				<li class="item">
+					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.review') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
-					<div class="sub">{{ i18n.t('dashboard.project') }} {{ item.project_title }}</div>
+
+					<div class="sub">{{ projects[item.project_slug].title }}</div>
 				</li>
 				{% endfor %}
 
-				{% for project in reviewingProjects %}
-					{% if project.available %}
+				{% for project in projects %}
+					{% if project.available_for_reviewing %}
 				<li class="project">
-					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_page') }}</span></div>
+					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
-
-					<div class="progress_bar">
-						<div class="capsule">
-							<div class="percent" style="width: {{ project.percentage }}px;"></div>
-							{% if project.num_proofs > 1 %}
-							<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>
-							{% endif %}
-						</div> 
-						<span>{{ project.percentage }}% ({{ project.available_pages }} left)</span>
-					</div>
 				</li>
 					{% endif %}
 				{% endfor %}
 			</ul>
+
 		</div>
 
 		<div class="sidebar">
+			<div class="group">
+				<h3>{{ i18n.t('dashboard.your_projects') }}</h3>
+				<ul class="list">
+					{% for project in projects %}
+					<li>
+						<div class="progress_bar">
+							<div class="capsule">
+								<div class="percent" style="width: {{ project.percent_proofed }}px;"></div>
+							</div> 
+							<span>{{ project.percent_proofed }}% {{ i18n.t('dashboard.proofed') }}</span>
+							<span>{{ project.percent_reviewed }}% {{ i18n.t('dashboard.reviewed') }}</span>
+						</div>
+
+						<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+						{% if project.available_to_proof > 0 %}<div class="sub">{{ project.available_to_proof }} {{ i18n.t('dashboard.items_left_to_proof') }}</div>{% endif %}
+						{% if project.available_to_review > 0 %}<div class="sub">{{ project.available_to_review }} {{ i18n.t('dashboard.items_left_to_review') }}</div>{% endif %}
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+
 			<div class="group leaderboard">
 				<h3>{{ i18n.t('dashboard.top_proofers') }}</h3>
 				<ol id="stats">

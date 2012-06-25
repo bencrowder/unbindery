@@ -74,8 +74,8 @@ class User {
 		return $this->db->getUserProjects($this->username);
 	}
 
-	public function getProjectsByRole($role) {
-		return $this->db->getUserProjectsByRole($this->username, $role);
+	public function getProjectSummaries() {
+		return $this->db->getUserProjectSummaries($this->username);
 	}
 
 	public function isAssigned($item_id, $project_slug) {

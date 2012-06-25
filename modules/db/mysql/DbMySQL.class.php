@@ -651,7 +651,19 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: array of projects
-	public function getUserProjectsByRole($username, $role) {
-		return $this->query("SELECT projects.title AS title, projects.slug AS slug FROM projects JOIN roles ON projects.id = project_id WHERE projects.status = 'active' AND username = ? AND role = ? ORDER BY title", array($username, $role));
+	public function getUserProjectSummaries($username) {
+		$proofString = "user.proof:$username";
+		$reviewString = "user.review:$username";
+
+		$query = "SELECT DISTINCT projects.id, projects.title, projects.slug, projects.type, projects.status, projects.owner, ";
+		$query .= "(SELECT count(items.id) FROM items WHERE items.project_id = projects.id) AS num_items, ";
+		$query .= "(SELECT DISTINCT count(item_id) FROM queues WHERE queues.project_id = projects.id AND queue_name=? AND date_removed IS NOT NULL) AS num_proofed, ";
+		$query .= "(SELECT DISTINCT count(item_id) FROM queues WHERE queues.project_id = projects.id AND queue_name=? AND date_removed IS NOT NULL) AS num_reviewed, ";
+		$query .= "(SELECT count(items.id) FROM items WHERE items.project_id = projects.id AND items.status = 'available' AND items.id NOT IN (SELECT item_id AS id FROM queues WHERE queues.project_id = projects.id AND queue_name=?)) AS available_to_proof, ";
+		$query .= "(SELECT count(items.id) FROM items WHERE items.project_id = projects.id AND items.status = 'proofed' AND items.id NOT IN (SELECT item_id AS id FROM queues WHERE queues.project_id = projects.id AND queue_name=?)) AS available_to_review ";
+		$query .= "FROM projects, roles ";
+		$query .= "WHERE projects.id = roles.project_id;";
+
+		return $this->query($query, array($proofString, $reviewString, $proofString, $reviewString));
 	}
 }
