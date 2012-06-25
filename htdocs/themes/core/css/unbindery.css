@@ -118,7 +118,7 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .group ul								{ padding: 0; list-style: none; margin: 0; margin-bottom: 2em; }
 .group ul li							{ padding: 7px 0; border-bottom: solid 1px #999; overflow: hidden; }
 .group ul li:last-child					{ border-bottom: none; }
-.group ul.list							{ background: #eee; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin-top: 7px; }
+.group ul.list							{ background: #f5f5f5; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin-top: 7px; }
 
 .group ul.list li						{ padding: 6px 5px; font-size: 11px; overflow: hidden; clear: both; }
 .group ul.list li .project_title		{ width: 270px; line-height: 1.4em; }
