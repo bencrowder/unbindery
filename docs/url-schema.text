@@ -55,8 +55,12 @@
 * /projects/[PROJECT]/items/transcripts
 	* POST = upload transcripts
 	* PUT = save transcripts
-* /projects/[PROJECT]/items/[ITEM]
-	* GET = load item page for proofing/reviewing
+* /projects/[PROJECT]/items/[ITEM]/proof
+	* GET = load item page for proofing
+	* PUT = save item info
+	* DELETE = delete item
+* /projects/[PROJECT]/items/[ITEM]/review
+	* GET = load item page for reviewing
 	* PUT = save item info
 	* DELETE = delete item
 * /projects/[PROJECT]/items/[ITEM]/admin

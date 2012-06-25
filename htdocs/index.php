@@ -113,6 +113,8 @@ $routes = array(
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/proof\.?([^/]+)?/?#'		=> 'ItemPageController::itemProof',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/review\.?([^/]+)?/?#'		=> 'ItemPageController::itemReview',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'				=> 'ItemPageController::item',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
 
@@ -134,6 +136,8 @@ $routes = array(
 	'#^/projects/([^/]+)/items/transcripts\.?([^/]+)?/?#'			=> 'ItemPageController::transcripts',
 	'#^/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
 	'#^/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
+	'#^/projects/([^/]+)/items/([^/.]+)/proof\.?([^/]+)?/?#'		=> 'ItemPageController::itemProof',
+	'#^/projects/([^/]+)/items/([^/.]+)/review\.?([^/]+)?/?#'		=> 'ItemPageController::itemReview',
 	'#^/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'				=> 'ItemPageController::item',
 	'#^/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
 
