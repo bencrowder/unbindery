@@ -72,14 +72,14 @@ class UserPageController {
 		$proofQueue = new Queue("user.proof:$username");
 		$proofItems = array();
 		foreach ($proofQueue->getItems() as $item) {
-			array_push($proofItems, array("title" => $item->title, "status" => $item->status, "project_slug" => $item->project_slug, "item_id" => $item->item_id));
+			array_push($proofItems, array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
 		}
 
 		// Load the user's reviewing queue
 		$reviewQueue = new Queue("user.review:$username");
 		$reviewItems = array();
 		foreach ($reviewQueue->getItems() as $item) {
-			array_push($reviewItems, array("title" => $item->title, "status" => $item->status, "project_slug" => $item->project_slug, "item_id" => $item->item_id));
+			array_push($reviewItems, array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
 		}
 
 		// Get the user's history and the top proofers information
@@ -92,15 +92,25 @@ class UserPageController {
 		// Add extra info (edit link and slug) to each item
 		$prooflist = array();
 		foreach ($proofItems as &$item) {
-			$item["editlink"] = $app_url . '/projects/' . $item["project_slug"] . '/items/' . $item["item_id"] . '/proof';
+			if ($item['project_type'] == 'public') {
+				$item['editlink'] = $app_url . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/proof';
+			} else if ($item['project_type'] == 'private') {
+				$item['editlink'] = $app_url . '/users/' . $item['project_owner'] . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/proof';
+			}
+
 			if (!in_array($item['project_slug'], $prooflist)) {
-				$prooflist[] = $item["project_slug"];
+				$prooflist[] = $item['project_slug'];
 			}
 		}	
 
 		$reviewlist = array();
 		foreach ($reviewItems as &$item) {
-			$item["editlink"] = $app_url . '/projects/' . $item["project_slug"] . '/items/' . $item["item_id"] . '/review';
+			if ($item['project_type'] == 'public') {
+				$item['editlink'] = $app_url . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/review';
+			} else if ($item['project_type'] == 'private') {
+				$item['editlink'] = $app_url . '/users/' . $item['project_owner'] . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/review';
+			}
+
 			if (!in_array($item['project_slug'], $reviewlist)) {
 				$reviewlist[] = $item["project_slug"];
 			}

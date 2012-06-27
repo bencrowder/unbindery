@@ -353,7 +353,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItem($item_id, $project_slug) {
-		$query = "SELECT items.id as id, projects.id as project_id, projects.slug as project_slug, items.title as title, items.transcript as transcript, items.status as status, items.type as type, items.href as href FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.slug = ?;";
@@ -365,7 +365,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItemWithProjectID($item_id, $project_id) {
-		$query = "SELECT items.id as id, projects.id as project_id, projects.slug as project_slug, items.title as title, items.transcript as transcript, items.status as status, items.type as type, items.href as href FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.id = ?;";

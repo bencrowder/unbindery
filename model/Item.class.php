@@ -6,6 +6,8 @@ class Item {
 	private $item_id;
 	private $project_id;
 	private $project_slug;
+	private $project_type;
+	private $project_owner;
 	private $title;
 	private $transcript;
 	private $status;
@@ -36,6 +38,8 @@ class Item {
 				$this->item_id = trim($item['id']);
 				$this->project_id = trim($item['project_id']);
 				$this->project_slug = $projectSlug;
+				$this->project_type = trim($item['project_type']);
+				$this->project_owner = trim($item['project_owner']);
 				$this->title = trim($item['title']);
 				$this->transcript = trim($item['transcript']);
 				$this->status = trim($item['status']);
@@ -63,6 +67,8 @@ class Item {
 				$this->item_id = trim($item['id']);
 				$this->project_id = $projectId;
 				$this->project_slug = trim($item['project_slug']);
+				$this->project_type = trim($item['project_type']);
+				$this->project_owner = trim($item['project_owner']);
 				$this->title = trim($item['title']);
 				$this->transcript = trim($item['transcript']);
 				$this->status = trim($item['status']);
@@ -83,7 +89,7 @@ class Item {
 	}
 
 	public function save() {
-		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href);
+		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->project_slug, $this->project_owner, $this->transcript, $this->status, $this->type, $this->href);
 	}
 
 	public function saveText($username, $draft, $review, $review_username, $transcript) {
