@@ -70,6 +70,7 @@ AudioController = function() {
 $(document).ready(function() {
 	$("#transcript").focus();
 
+	/*
 	// Set up SoundManager 2
 	soundManager.setup({
 		url: theme_root + '/js/editor_audio/swf/',
@@ -86,6 +87,7 @@ $(document).ready(function() {
 			});
 		}
 	});
+	*/
 
 	audioController = new AudioController();
 

@@ -58,20 +58,10 @@ class ItemPageController {
 				// Get template type
 				$templateType = $itemObj->type;
 
-				// Set up CSS/JS arrays
-				$css = array("editor_$templateType.css");
-				$js = array("editor_$templateType.js");
-
-				// TODO: figure out a more modular way to specify and prepare these
-				$templateSpecificOptions = array();
-				switch ($templateType) {
-					case 'page':
-						break;
-					case 'audio':
-						array_push($js, 'editor_audio/soundmanager2-nodebug-jsmin.js');
-						break;
-				}
-
+				// Get any editor-specific config settings
+				$editors = Settings::getProtected('editors');
+				$editorOptions = (array_key_exists($templateType, $editors)) ? $editors[$templateType] : array();
+				
 				// Display the template
 				$options = array(
 					'user' => array(
@@ -80,9 +70,9 @@ class ItemPageController {
 						),
 					'item' => $item,
 					'more_to_proof' => $moreToProof,
-					'template_specific_options' => $templateSpecificOptions,
-					'css' => $css,
-					'js' => $js,
+					'editor_options' => $editorOptions,
+					'css' => array("editor_$templateType.css"),
+					'js' => array("editor_$templateType.js"),
 				);
 
 				Template::render("editor_$templateType", $options);

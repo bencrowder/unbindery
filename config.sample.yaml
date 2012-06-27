@@ -48,3 +48,11 @@ devkeys:
   unbindery: 'hash together a dev key and put it here'
 
 google_analytics: UA-YOUR-GA-CODE
+
+editors:
+  page:
+    css: # [custompage.css]             # array of CSS to include for this editor type
+  audio:
+    js: # [customaudio.js]              # ditto
+# xml:
+#   css: # [xml.css]                    # custom editor type
