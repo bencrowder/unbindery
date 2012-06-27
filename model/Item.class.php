@@ -12,11 +12,11 @@ class Item {
 	private $type;
 	private $href;
 
-	public function Item($item_id = "", $project_slug = "", $username = "") {
+	public function Item($itemId = '', $projectSlug = '', $username = '') {
 		$this->db = Settings::getProtected('db');
 
-		if ($item_id && $project_slug) {
-			$this->load($item_id, $project_slug, $username);
+		if ($itemId && $projectSlug) {
+			$this->load($itemId, $projectSlug, $username);
 		}
 	}
 
@@ -28,44 +28,54 @@ class Item {
 		return $this->$key;
 	}
 
-	public function load($item_id, $project_slug, $username = "") {
-		$item = $this->db->loadItem($item_id, $project_slug);
+	public function load($itemId, $projectSlug, $username = '') {
+		$item = $this->db->loadItem($itemId, $projectSlug);
+
 		if (isset($item)) {
-			$this->item_id = trim($item['id']);
-			$this->project_id = trim($item['project_id']);
-			$this->project_slug = $project_slug;
-			$this->title = trim($item['title']);
-			$this->transcript = trim($item['transcript']);
-			$this->status = trim($item['status']);
-			$this->type = trim($item['type']);
-			$this->href = trim($item['href']);
+			if (gettype($item) == 'array') {
+				$this->item_id = trim($item['id']);
+				$this->project_id = trim($item['project_id']);
+				$this->project_slug = $projectSlug;
+				$this->title = trim($item['title']);
+				$this->transcript = trim($item['transcript']);
+				$this->status = trim($item['status']);
+				$this->type = trim($item['type']);
+				$this->href = trim($item['href']);
+			} else {
+				$this->item_id = -1;
+			}
 		}
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$transcript = $this->db->getUserTranscript($item_id, $this->project_id, $username);
-			if ($transcript!= '') {
+			$transcript = $this->db->getUserTranscript($itemId, $this->project_id, $username);
+			if ($transcript != '') {
 				$this->transcript = $transcript;
 			}
 		}
 	}
 
-	public function loadWithProjectID($item_id, $project_id, $username = "") {
-		$item = $this->db->loadItemWithProjectID($item_id, $project_id);
+	public function loadWithProjectID($itemId, $projectId, $username = '') {
+		$item = $this->db->loadItemWithProjectID($itemId, $projectId);
+
 		if (isset($item)) {
-			$this->item_id = trim($item['id']);
-			$this->project_id = $project_id;
-			$this->project_slug = trim($item['project_slug']);
-			$this->title = trim($item['title']);
-			$this->transcript = trim($item['transcript']);
-			$this->status = trim($item['status']);
-			$this->type = trim($item['type']);
-			$this->href = trim($item['href']);
+			if (gettype($item) == 'array') {
+				$this->item_id = trim($item['id']);
+				$this->project_id = $projectId;
+				$this->project_slug = trim($item['project_slug']);
+				$this->title = trim($item['title']);
+				$this->transcript = trim($item['transcript']);
+				$this->status = trim($item['status']);
+				$this->type = trim($item['type']);
+				$this->href = trim($item['href']);
+			} else {
+				$this->item_id = -1;
+			}
 		}
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$transcript = $this->db->getUserTranscript($item_id, $this->project_id, $username);
+			$transcript = $this->db->getUserTranscript($itemId, $this->project_id, $username);
 			if ($transcript != '') {
 				$this->transcript = $transcript;
 			}

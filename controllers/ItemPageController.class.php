@@ -38,12 +38,19 @@ class ItemPageController {
 					return;
 				}
 
+				// Load the item
+				$itemObj = new Item($itemId, $projectSlug, $username);
+
+				// Make sure it exists (if it fails, it'll return a boolean)
+				if ($itemObj->item_id == -1) {
+					// TODO: fail gracefully here
+					echo "Item doesn't exist.";
+					return;
+				}
+
 				// Make sure the user has this item in their queue
 				// TODO: Finish
 				$userQueue = new Queue("user.proof:$username");
-
-				// Load the item
-				$itemObj = new Item($itemId, $projectSlug, $username);
 
 				$item = array();
 				$item['id'] = $itemId;
