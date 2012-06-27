@@ -147,17 +147,17 @@ function save_page_text(is_draft, is_review, slug) {
 
 	var item_id = $("#item_id").val();
 	var project_slug = $("#project_slug").val();
-	var itemtext;
+	var transcript;
 
 	if (editbox == "simple") {
-		itemtext = $("#page_text").val();						// textarea
+		transcript = $("#page_text").val();						// textarea
 	} else {
-		itemtext = editor.session.doc.$lines.join('\n');		// Ace
+		transcript = editor.session.doc.$lines.join('\n');		// Ace
 	}
 	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
-	Unbindery.callAPI("save_item_transcript", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	Unbindery.callAPI("save_item_transcript", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
 		function(data) {
 			if (data.statuscode == "success") {
 				Unbindery.hideSpinner();
@@ -193,7 +193,7 @@ function save_page() {
 	var username = $("nav ul .username").html();
 	var review_username = $("#review_username").html();
 
-	Unbindery.callAPI(app_url + "/unbindery.php?method=save_page", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, itemtext: itemtext },
+	Unbindery.callAPI(app_url + "/unbindery.php?method=save_page", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
 		function(data) {
 			if (data.statuscode == "success") {
 				Unbindery.hideSpinner();

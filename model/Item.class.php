@@ -7,12 +7,12 @@ class Item {
 	private $project_id;
 	private $project_slug;
 	private $title;
-	private $itemtext;
+	private $transcript;
 	private $status;
 	private $type;
 	private $href;
 
-	public function Item($db = '', $item_id = "", $project_slug = "", $username = "") {
+	public function Item($item_id = "", $project_slug = "", $username = "") {
 		$this->db = Settings::getProtected('db');
 
 		if ($item_id && $project_slug) {
@@ -43,9 +43,9 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$itemtext = $this->db->getUserTranscript($item_id, $this->project_id, $username);
-			if ($itemtext != '') {
-				$this->itemtext = $itemtext;
+			$transcript = $this->db->getUserTranscript($item_id, $this->project_id, $username);
+			if ($transcript!= '') {
+				$this->transcript = $transcript;
 			}
 		}
 	}
@@ -65,18 +65,18 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$itemtext = $this->db->getUserTranscript($item_id, $this->project_id, $username);
-			if ($itemtext != '') {
-				$this->itemtext = $itemtext;
+			$transcript = $this->db->getUserTranscript($item_id, $this->project_id, $username);
+			if ($transcript != '') {
+				$this->transcript = $transcript;
 			}
 		}
 	}
 
 	public function save() {
-		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->itemtext, $this->status, $this->type, $this->href);
+		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href);
 	}
 
-	public function saveText($username, $draft, $review, $review_username, $itemtext) {
+	public function saveText($username, $draft, $review, $review_username, $transcript) {
 		$adminemail = Settings::getProtected('adminemail');
 		$emailsubject = Settings::getProtected('emailsubject');
 		$app_url = Settings::getProtected('app_url');
@@ -101,10 +101,10 @@ class Item {
 
 		if ($existing_draft) {
 			// update texts with $draft status
-			$this->db->updateItemTranscriptStatus($this->item_id, $this->project_id, $status, $itemtext, $username);
+			$this->db->updateItemTranscriptStatus($this->item_id, $this->project_id, $status, $transcript, $username);
 		} else {
 			// insert into texts with $draft status
-			$this->db->addItemTranscript($this->item_id, $this->project_id, $status, $itemtext, $username);
+			$this->db->addItemTranscript($this->item_id, $this->project_id, $status, $transcript, $username);
 		}
 
 		// we're finished with this item
@@ -168,6 +168,6 @@ class Item {
 	}
 
 	public function getJSON() {
-		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "itemtext" => $this->itemtext, "status" => $this->status, "type" => $this->type, "href" => $this->href));
+		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "transcript" => $this->transcript, "status" => $this->status, "type" => $this->type, "href" => $this->href));
 	}
 }

@@ -12,7 +12,7 @@ class WebServiceHandlers {
 		$project_slug = (array_key_exists('project_slug', $_POST)) ? $_POST['project_slug'] : '';
 		$username = (array_key_exists('username', $_POST)) ? $_POST['username'] : '';
 		$review_username = (array_key_exists('review_username', $_POST)) ? $_POST['review_username'] : '';
-		$itemtext = (array_key_exists('itemtext', $_POST)) ? $_POST['itemtext'] : '';
+		$transcript = (array_key_exists('transcript', $_POST)) ? $_POST['transcript'] : '';
 
 		// convert to boolean
 		$draft = (array_key_exists('draft', $_POST) && $_POST['draft'] == 'true') ? true : false;
@@ -21,7 +21,7 @@ class WebServiceHandlers {
 		if ($item_id && $project_slug && $username) {
 			$item = new Item();
 			$item->load($item_id, $project_slug, $username);
-			$status = $item->saveText($username, $draft, $review, $review_username, $itemtext);
+			$status = $item->saveText($username, $draft, $review, $review_username, $transcript);
 			echo json_encode(array("statuscode" => $status));
 		} else {
 			echo json_encode(array("statuscode" => "error"));

@@ -2,6 +2,97 @@
 
 class ItemPageController {
 	// --------------------------------------------------
+	// Item proof handler
+	// URL: /projects/PROJECT/items/ITEM/proof
+	// Methods: 
+
+	static public function itemProof($params) {
+		$format = self::getFormat($params['args'], 0, 2);
+		$projectPage = self::getProjectPageType($params['args']);
+
+		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		$itemIndex = ($projectPage == 'system') ? 1 : 3;
+		$itemId = $params['args'][$itemIndex];
+
+		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
+
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		switch ($params['method']) {
+			// GET: Get proof page for this item
+			case 'GET':
+				// Make sure they have access to the project
+				if (!$user->isMember($projectSlug)) {
+					$code = "not-a-member";
+				}
+
+				// Make sure the user has this item in their queue
+				// TODO: Finish
+				$userQueue = new Queue("user.proof:$username");
+
+				// Load the item
+				$itemObj = new Item($itemId, $projectSlug, $username);
+
+				$item = array();
+				$item['id'] = $itemId;
+				$item['title'] = $itemObj->title;
+				$item['href'] = $itemObj->href;
+
+				$stripped = stripslashes($itemObj->transcript);
+				$escaped = str_replace("<", "&lt;", $stripped);
+				$item['transcript'] = str_replace(">", "&gt;", $escaped);
+
+				$item['project_slug'] = $projectSlug;
+
+				// Check to see if there's another item to proof
+				// - Load project proof queue
+				// - Get count > 0
+				// TODO: Finish
+				$moreToProof = true;
+
+				// Get template type
+				$templateType = $itemObj->type;
+
+				// Set up CSS/JS arrays
+				$css = array("editor_$templateType.css");
+				$js = array("editor_$templateType.js");
+
+				// TODO: figure out a more modular way to specify and prepare these
+				$templateSpecificOptions = array();
+				switch ($templateType) {
+					case 'page':
+						break;
+					case 'audio':
+						array_push($js, 'editor_audio/soundmanager2-nodebug-jsmin.js');
+						break;
+				}
+
+				// Display the template
+				$options = array(
+					'user' => array(
+						'loggedin' => true,
+						'admin' => $user->admin,
+						),
+					'item' => $item,
+					'more_to_proof' => $moreToProof,
+					'template_specific_options' => $templateSpecificOptions,
+					'css' => $css,
+					'js' => $js,
+				);
+
+				Template::render("editor_$templateType", $options);
+
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
 	// Item media handler
 	// URL: /projects/PROJECT/items/ITEM/media
 	// Methods: 
@@ -192,7 +283,7 @@ class ItemPageController {
 
 		// Update the values
 		$page->title = $page_title;
-		$page->itemtext = $page_text;
+		$page->transcript = $page_text;
 
 		// Save it to the database
 		$retval = $page->save();
@@ -244,7 +335,7 @@ class ItemPageController {
 		$pageObj->load($page_id, $project_slug);
 		$page = array();
 		$page['id'] = $page_id;
-		$page['stripped_itemtext'] = stripslashes($pageObj->itemtext);
+		$page['stripped_itemtext'] = stripslashes($pageObj->transcript);
 		$page['title'] = $pageObj->title;
 		$page['href'] = $pageObj->href;
 
@@ -305,7 +396,7 @@ class ItemPageController {
 		// get the item from the database
 		$item = new Item($db);
 		$item->load($page_id, $project_slug, $proofer_username);
-		$item->stripped_itemtext = stripslashes($item->itemtext);
+		$item->stripped_itemtext = stripslashes($item->transcript);
 
 		$options = array(
 			'user' => array(
@@ -349,7 +440,7 @@ class ItemPageController {
 		$item['title'] = $itemObj->title;
 		$item['href'] = $itemObj->href;
 
-		$stripped = stripslashes($itemObj->itemtext);
+		$stripped = stripslashes($itemObj->transcript);
 		$escaped = str_replace("<", "&lt;", $stripped);
 		$item['escaped_stripped_itemtext'] = str_replace(">", "&gt;", $escaped);
 
@@ -385,7 +476,7 @@ class ItemPageController {
 
 		// Update the values
 		$page->title = $page_title;
-		$page->itemtext = $page_text;
+		$page->transcript = $page_text;
 
 		// Save it to the database
 		$retval = $page->save();

@@ -1,0 +1,39 @@
+{% include '_header.html' %}
+
+<section id="page">
+	{% include '_editor_controls.html' %}
+
+	<div id="main" class="container">
+
+		<h2>{{ item.title }}</h2>
+
+		<section id="audio_container">
+			<audio id="audio" src="{{ app_url }}/media/{{ item.href }}" controls="true"></audio>
+		</section>	
+
+		<section id="transcript_container">
+			<form id="ub_text">
+				<textarea id="transcript" name="transcript">{{ item.transcript }}</textarea>
+
+				<input type="hidden" name="item_id" id="item_id" value="{{ item.id }}" />
+				<input type="hidden" name="project_slug" id="project_slug" value="{{ item.project_slug }}" />
+			</form>
+		</section>
+
+		<small>
+			<ul>
+				<li><b>Play/pause:</b> shift+space</li>
+				<li><b>Rewind 5 seconds:</b> ctrl+j</li>
+				<li><b>Fast forward 5 seconds:</b> ctrl+k</li>
+				<li><b>Rewind 30 seconds:</b> ctrl+h</li>
+				<li><b>Fast forward 30 seconds:</b> ctrl+l</li>
+				<li><b>Jump to beginning:</b> ctrl+0</li>
+				<li><b>Jump to end:</b> ctrl+9</li>
+				<li><b>Increase volume:</b> ctrl+1</li>
+				<li><b>Decrease volume:</b> ctrl+2</li>
+			</ul>
+		</small>
+	</div>
+</section>
+
+{% include '_footer.html' %}

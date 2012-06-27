@@ -1,0 +1,24 @@
+{% include '_header.html' %}
+
+<section id="page">
+	{% include '_editor_controls.html' %}
+
+	<div id="main" class="container">
+		<h2>{{ item.title }}</h2>
+
+		<section id="image_container">
+			<img src="{{ app_url }}/media/{{ item.href }}" width="850" />
+		</section>
+
+		<section id="transcript_container">
+			<form id="ub_text">
+				<textarea id="transcript">{{ item.transcript }}</textarea>
+
+				<input type="hidden" name="item_id" id="item_id" value="{{ item.id }}" />
+				<input type="hidden" name="project_slug" id="project_slug" value="{{ item.project_slug }}" />
+			</form>
+		</section>
+	</div>
+</section>
+
+{% include '_footer.html' %}

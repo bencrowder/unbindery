@@ -56,7 +56,7 @@ ul#controls_left li						{ display: inline-block; margin-right: 5px; }
 ul#controls_right						{ float: right; list-style: none; padding: 0; margin: 0; }
 ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
-.button									{ padding: 5px 7px 6px; background: #444; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444)); background: -moz-linear-gradient(white, #ccc); -moz-border-radius: 3px; border-radius: 3px; color: #fff; font-weight: bold; text-decoration: none; border: solid 1px #111; text-shadow: 0 1px #000; }
+.button									{ padding: 5px 7px 6px; background: #444; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444)); background: -moz-linear-gradient(#666, #444); -moz-border-radius: 3px; border-radius: 3px; color: #fff; font-weight: bold; text-decoration: none; border: solid 1px #111; text-shadow: 0 1px #000; }
 .button:hover							{ background: #345678; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#547698), to(#345678)); background: -moz-linear-gradient(#547698, #345678); cursor: pointer; }
 
 .button.light							{ background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); background: -moz-linear-gradient(white, #ccc); color: #000; border: solid 1px #999; text-shadow: 0 1px #fff; }
@@ -75,14 +75,6 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
 .content								{ width: 60%; margin-right: 10%; float: left; margin-top: 20px; }
 .sidebar								{ width: 30%; float: left; margin-top: 20px; }
-
-
-/* Page editor */
-/* --------------------------------------------------- */
-
-#image_container						{ width: 100%; height: 300px; overflow: scroll; margin: 1em 0 2em; border: solid 1px #999; }
-
-#text_container							{ width: 70%; height: 200px; margin: 0px auto; }
 
 
 /* Sidebar */
@@ -322,25 +314,6 @@ ul.proofers .username					{ font-size: 11px; }
 
 .sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
 .content h4								{ color: #5d92b1; }
-
-
-/* Editor */
-/* --------------------------------------------------- */
-
-/* General */
-#page_text								{ width: 100%; height: 230px; border: solid 1px #999; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
-
-/* For the textarea ("simple") */
-textarea#page_text						{ height: 200px; font-size: 16px; line-height: 1.4em; font-family: "Lucida Grande", "Lucida Sans Unicode", Monaco, Courier, sans-serif; padding: 10px; }
-
-/* For the Ace editor ("advanced") */
-.ace_editor								{ font-size: 16px !important; font-family: Monaco, Menlo, Courier, monospace !important; }
-
-.ace-unbindery .ace_content				{ padding-left: 10px !important; padding-right: 10px !important; width: 630px !important; }
-.ace-unbindery .ace_scroller			{ overflow-x: hidden !important; }
-.ace-unbindery .ace_gutter				{ color: #999 !important; background: #eee !important; border-right: none !important; width: 30px !important; }
-.ace-unbindery .ace_gutter-layer		{ right: 6px !important; }
-.ace-unbindery .ace_marker-layer .ace_active_line	{ background: #fff !important; }
 
 
 /* New project */

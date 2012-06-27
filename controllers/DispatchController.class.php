@@ -45,10 +45,22 @@ class DispatchController {
 		 */
 
 		// Everything's good, so get the next available item from the database and return it
-		$itemId = $db->getNextAvailableItem($username, $projectSlug);
-		if ($itemId != -1) {
+		//$itemId = $db->getNextAvailableItem($username, $projectSlug);
+
+		// Load the project's proof queue and pop the first item on the stack
+		$queue = new Queue("project.proof:$projectSlug");
+		$nextItem = $queue->getFirstItem();
+
+		if ($nextItem->item_id != -1) {
+			$queue->save();
+
+			// Add it ot the user's queue
+			$userQueue = new Queue("user.proof:$username");
+			$userQueue->add($nextItem);
+			$userQueue->save();
+
 			$success = true;
-			$code = $itemId;
+			$code = $nextItem->item_id;
 		} else {
 			$code = "error-retrieving-item-from-db";
 		}

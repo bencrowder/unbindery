@@ -92,7 +92,7 @@ class UserPageController {
 		// Add extra info (edit link and slug) to each item
 		$prooflist = array();
 		foreach ($proofItems as &$item) {
-			$item["editlink"] = $app_url . '/proof/' . $item["project_slug"] . '/' . $item["item_id"];
+			$item["editlink"] = $app_url . '/projects/' . $item["project_slug"] . '/items/' . $item["item_id"] . '/proof';
 			if (!in_array($item['project_slug'], $prooflist)) {
 				$prooflist[] = $item["project_slug"];
 			}
@@ -100,7 +100,7 @@ class UserPageController {
 
 		$reviewlist = array();
 		foreach ($reviewItems as &$item) {
-			$item["editlink"] = $app_url . '/review/' . $item["project_slug"] . '/' . $item["item_id"];
+			$item["editlink"] = $app_url . '/projects/' . $item["project_slug"] . '/items/' . $item["item_id"] . '/review';
 			if (!in_array($item['project_slug'], $reviewlist)) {
 				$reviewlist[] = $item["project_slug"];
 			}
@@ -136,7 +136,7 @@ class UserPageController {
 
 		/* Prepare user history */
 		foreach ($history as &$event) {
-			$event["editlink"] = "$app_url/edit/" . $event["project_slug"] . "/" . $event["item_id"];	
+			$event["editlink"] = "$app_url/FIXME/" . $event["project_slug"] . "/" . $event["item_id"];	
 			$event["title"] = $event["item_title"];
 		}
 
