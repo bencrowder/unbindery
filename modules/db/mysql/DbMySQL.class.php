@@ -170,8 +170,15 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
-	public function isMember($username, $projectSlug) {
-		$result = $this->query("SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $projectSlug));
+	public function isMember($username, $projectSlug, $owner = '') {
+		$query = "SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?";
+		$args = array($username, $projectSlug);
+		if ($owner != '') {
+			$query .= " AND projects.owner = ?";
+			array_push($owner, $args);
+		}
+
+		$result = $this->query($query, $args);
 
 		return (count($result) > 0) ? true : false;
 	}

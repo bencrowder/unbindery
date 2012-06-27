@@ -82,8 +82,8 @@ class User {
 		return $this->db->isAssigned($this->username, $item_id, $project_slug);
 	}
 
-	public function isMember($projectSlug) {
-		return $this->db->isMember($this->username, $projectSlug);
+	public function isMember($projectSlug, $owner='') {
+		return $this->db->isMember($this->username, $projectSlug, $owner);
 	}
 
 	public function hasProjectItem($projectSlug) {

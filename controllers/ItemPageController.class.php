@@ -3,18 +3,22 @@
 class ItemPageController {
 	// --------------------------------------------------
 	// Item proof handler
-	// URL: /projects/PROJECT/items/ITEM/proof
+	// URL: /projects/PROJECT/items/ITEM/proof OR /users/USER/projects/PROJECT/items/ITEM/proof
 	// Methods: 
 
 	static public function itemProof($params) {
 		$format = self::getFormat($params['args'], 0, 2);
-		$projectPage = self::getProjectPageType($params['args']);
+		$projectType = self::getProjectPageType($params['args']);
 
-		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
-		$itemIndex = ($projectPage == 'system') ? 1 : 3;
+		$itemIndex = ($projectType == 'system') ? 1 : 3;
 		$itemId = $params['args'][$itemIndex];
+
+		if ($projectType == 'user') {
+			$ownerId = $params['args'][0];
+		}
 
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
@@ -29,6 +33,9 @@ class ItemPageController {
 				// Make sure they have access to the project
 				if (!$user->isMember($projectSlug)) {
 					$code = "not-a-member";
+					// TODO: fail gracefully here, redirect to dashboard with error
+					echo "You're not a member of that project. Sorry.";
+					return;
 				}
 
 				// Make sure the user has this item in their queue
