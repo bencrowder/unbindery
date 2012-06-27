@@ -122,8 +122,13 @@ class UserPageController {
 				$project["available_for_reviewing"] = false;
 			}
 
-			$project['percent_proofed'] = round($project['num_proofed'] / $project['num_items'] * 100, 0);
-			$project['percent_reviewed'] = round($project['num_reviewed'] / $project['num_items'] * 100, 0);
+			if ($project['num_items'] == 0) {
+				$project['percent_proofed'] = 0;
+				$project['percent_reviewed'] = 0;
+			} else {
+				$project['percent_proofed'] = round($project['num_proofed'] / $project['num_items'] * 100, 0);
+				$project['percent_reviewed'] = round($project['num_reviewed'] / $project['num_items'] * 100, 0);
+			}
 
 			if ($project['type'] == 'public') {
 				$project["link"] = $app_url . '/projects/' . $project["slug"];

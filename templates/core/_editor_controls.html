@@ -1,8 +1,8 @@
 	<div id="controls_container" class="controls">
 		<div id="controls" class="container">
 			<ul id="controls_left">
-				<li><a href="{{ app_url }}/dashboard" class="button">Back</a></li>
-				<li><a href="{{ app_url }}/projects/{{ project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+				<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
+				<li><a href="{{ app_url }}/projects/{{ item.project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
 			</ul>
 			<ul id="controls_right">
 				<li><img src="{{ theme_root }}/images/spinner.gif" id="spinner" /></li>
