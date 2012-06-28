@@ -11,6 +11,7 @@ nav.logout: 'Logout'
 nav.admin: 'Admin'
 nav.login: 'Login'
 nav.signup: 'Sign Up'
+nav.logged_in_as: 'Logged in as'
 
 # Footer
 footer.text: '<a href="http://bencrowder.net/coding/unbindery/">Unbindery</a> is written by <a href="http://bencrowder.net/">Ben Crowder</a> and <a href="http://chadgh.com/">Chad Hansen</a>.'

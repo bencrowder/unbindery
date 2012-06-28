@@ -655,20 +655,20 @@ class DbMySQL implements DbInterface {
 	public function loadQueue($name, $includeRemoved = false) {
 		$query = "SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?";
 		$query .= (($includeRemoved == true) ? "" : " AND date_removed IS NULL");
-		$query .= " ORDER BY date_added ASC";
+		$query .= " ORDER BY date_added, item_id ASC";
 
 		return $this->query($query, array($name));
 	}
 
 	// Returns: ?
-	public function saveToQueue($queueName, $itemId, $projectId) {
+	public function addToQueue($queueName, $itemId, $projectId) {
 		return $this->execute("INSERT INTO queues (queue_name, item_id, project_id, date_added) values (?, ?, ?, NOW());", array($queueName, $itemId, $projectId));
 	}
 
 	// Returns: ?
 	public function removeFromQueue($queueName, $items) {
 		foreach ($items as $item) {
-			$sql = "UPDATE queues SET date_removed = NOW() WHERE queue_name = ? AND item_id = ? AND project_id = ?";
+			$sql = "UPDATE queues SET date_removed = NOW() WHERE queue_name = ? AND item_id = ? AND project_id = ? AND date_removed IS NULL";
 			$this->execute($sql, array($queueName, $item['item_id'], $item['project_id']));
 		}
 	}

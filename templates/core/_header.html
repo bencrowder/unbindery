@@ -7,8 +7,8 @@
 			<nav>
 				<ul>
 				{% if user.loggedin %}
-					<li>Logged in as <span id="username" class="username">{{ username }}</span></li>
-					<li><a href="{{ app_url }}/dashboard">{{ i18n.translate("nav.dashboard") }}</a></li>
+					<li>{{ i18n.translate("nav.logged_in_as") }} <span id="username" class="username">{{ username }}</span></li>
+					<li><a href="{{ app_url }}/users/{{ username }}/dashboard">{{ i18n.translate("nav.dashboard") }}</a></li>
 					<li><a href="{{ app_url }}/projects">{{ i18n.translate("nav.projects") }}</a></li>
 					{% if user.admin %}
 					<li><a href="{{ app_url }}/admin">{{ i18n.translate("nav.admin") }}</a></li>

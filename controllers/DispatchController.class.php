@@ -48,7 +48,7 @@ class DispatchController {
 		$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
 		$userQueueItems = $userQueue->getItems();
 
-		// Load the project's proof queue and pop the first item on the stack
+		// Load the project's proof queue
 		$queue = new Queue("project.proof:$projectSlug");
 		$queueItems = $queue->getItems();
 
@@ -61,13 +61,13 @@ class DispatchController {
 		}			
 
 		if (isset($nextItem) && $nextItem->item_id != -1) {
-			// Remove it from the project queue
-			$queue->remove($nextItem);
-			$queue->save();
-
 			// Add it to the user's queue
 			$userQueue->add($nextItem);
 			$userQueue->save();
+
+			// Remove it from the project queue
+			$queue->remove($nextItem);
+			$queue->save();
 
 			$success = true;
 			$code = $nextItem->item_id;

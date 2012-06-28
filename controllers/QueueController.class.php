@@ -14,7 +14,7 @@ class QueueController {
 
 		// First load the queue so we can tell what to add and replace
 		$dbList = array();
-		$results = $db->loadQueue($name);
+		$results = $db->loadQueue($name, true);
 
 		// Create a list combining the item and project IDs, since we need both
 		foreach ($results as $result) {
@@ -29,7 +29,7 @@ class QueueController {
 
 			// If it's not in the database, we need to add it
 			if (!in_array($key, $dbList)) {
-				$db->saveToQueue($name, $item->item_id, $item->project_id);
+				$db->addToQueue($name, $item->item_id, $item->project_id);
 			}
 		}
 
@@ -47,6 +47,8 @@ class QueueController {
 
 		// And now remove the rest from the database, since they're no longer in the queue
 		$db->removeFromQueue($name, $removeList);
+
+		return $queueItems;
 	}
 
 
