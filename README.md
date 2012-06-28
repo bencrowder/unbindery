@@ -1,12 +1,13 @@
 ## Unbindery
 
-A book digitization web app written in PHP and JavaScript.
+A transcription web app written in PHP and JavaScript.
 
 ### Dependencies
 
 * Twig (1.6.0 included)
 * sfYaml (included)
 * uploadify (included)
+* MediaElement.js (included)
 
 ### Installation
 
