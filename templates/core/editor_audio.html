@@ -15,8 +15,10 @@
 			<form id="ub_text">
 				<textarea id="transcript" name="transcript">{{ item.transcript }}</textarea>
 
+				<input type="hidden" name="editor_type" id="editor_type" value="audio" />
 				<input type="hidden" name="item_id" id="item_id" value="{{ item.id }}" />
 				<input type="hidden" name="project_slug" id="project_slug" value="{{ item.project_slug }}" />
+				<input type="hidden" name="project_owner" id="project_owner" value="{{ item.project_owner }}" />
 			</form>
 		</section>
 

@@ -16,9 +16,7 @@ class ItemPageController {
 		$itemIndex = ($projectType == 'system') ? 1 : 3;
 		$itemId = $params['args'][$itemIndex];
 
-		if ($projectType == 'user') {
-			$ownerId = $params['args'][0];
-		}
+		$owner = ($projectType == 'user') ? $params['args'][0] : '';
 
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
@@ -62,6 +60,7 @@ class ItemPageController {
 				$item['transcript'] = str_replace(">", "&gt;", $escaped);
 
 				$item['project_slug'] = $projectSlug;
+				$item['project_owner'] = $owner;
 
 				// Check to see if there's another item to proof
 				// - Load project proof queue
@@ -109,12 +108,87 @@ class ItemPageController {
 
 	// --------------------------------------------------
 	// Item transcript handler
-	// URL: /projects/PROJECT/items/ITEM/transcript
+	// URL: /projects/PROJECT/items/ITEM/transcript OR /users/USER/projects/PROJECT/items/ITEM/transcript
 	// Methods: 
 
 	static public function transcript($params) {
-		echo "Item transcript (" . $params['method'] . "): ";
-		print_r($params['args']);
+		$format = self::getFormat($params['args'], 0, 2);
+		$projectType = self::getProjectPageType($params['args']);
+
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		$itemIndex = ($projectType == 'system') ? 1 : 3;
+		$itemId = $params['args'][$itemIndex];
+
+		$owner = ($projectType == 'user') ? $params['args'][0] : '';
+
+		$db = Settings::getProtected('db');
+		$auth = Settings::getProtected('auth');
+
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		switch ($params['method']) {
+			// POST: Post transcript for item
+			case 'POST':
+				// Make sure they have access to the project
+				if (!$user->isMember($projectSlug, $owner)) {
+					$code = "not-a-member";
+					// TODO: fail gracefully here, redirect to dashboard with error
+					echo "You're not a member of that project. Sorry.";
+					return;
+				}
+
+				// Load the item
+				$itemObj = new Item($itemId, $projectSlug, $username);
+
+				// Make sure item exists (if it fails, it'll return a boolean)
+				if ($itemObj->item_id == -1) {
+					// TODO: fail gracefully here
+					echo "Item doesn't exist.";
+					return;
+				}
+
+				// Make sure the user has this item in their queue
+				// TODO: Finish
+
+				// Get the transcript text
+				$transcriptText = Utils::POST('transcript');
+				$transcriptStatus = Utils::POST('status');		// draft, completed, reviewed
+
+				// Save transcript to database
+				$transcript = new Transcript();
+				$transcript->load(array('item' => $itemObj));
+				$transcript->setText($transcriptText);
+				$transcript->save(array('item' => $itemObj, 'status' => $transcriptStatus));
+
+				if ($transcriptStatus == 'completed' || $transcriptStatus == 'reviewed') {
+					// Remove from user's queue
+					$userQueue = new Queue("user.proof:$username");
+					$userQueue->remove($itemObj);
+					$userQueue->save();
+
+					// Increase item's workflow index
+					$itemObj->workflow_index += 1;
+					$itemObj->save();
+
+					// Load the project
+					$project = new Project($itemObj->project_slug);
+
+					// Get next workflow step
+					$workflow = new Workflow($project->workflow);
+					$workflow->setIndex($itemObj->workflow_index);
+
+					// Process next step
+					$workflow->next($itemObj);
+				}
+
+				echo json_encode(array("statuscode" => "success"));
+
+				break;
+		}
 	}
 
 

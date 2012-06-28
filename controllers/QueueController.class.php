@@ -83,7 +83,24 @@ class QueueController {
 	static public function destroyQueue($name) {
 
 	}
+
+
+	// --------------------------------------------------
+	// Compare handler
+
+	static public function compare($item1, $item2) {
+		if (($item1->item_id == $item2->item_id) &&
+			($item1->project_id == $item2->project_id) &&
+			($item1->project_owner == $item2->project_owner)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 Queue::register('save', array('QueueController', 'saveQueue'));
 Queue::register('load', array('QueueController', 'loadQueue'));
+Queue::register('compare', array('QueueController', 'compare'));
+
+?>

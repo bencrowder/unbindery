@@ -68,3 +68,5 @@ class DispatchController {
 		return array('status' => $success, 'code' => $code);
 	}
 }
+
+?>

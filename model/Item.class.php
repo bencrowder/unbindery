@@ -13,6 +13,7 @@ class Item {
 	private $status;
 	private $type;
 	private $href;
+	private $workflow_index;
 
 	public function Item($itemId = '', $projectSlug = '', $username = '') {
 		$this->db = Settings::getProtected('db');
@@ -45,6 +46,7 @@ class Item {
 				$this->status = trim($item['status']);
 				$this->type = trim($item['type']);
 				$this->href = trim($item['href']);
+				$this->workflow_index = trim($item['workflow_index']);
 			} else {
 				$this->item_id = -1;
 			}
@@ -52,7 +54,7 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$transcript = $this->db->getUserTranscript($itemId, $this->project_id, $username);
+			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username);
 			if ($transcript != '') {
 				$this->transcript = $transcript;
 			}
@@ -74,6 +76,7 @@ class Item {
 				$this->status = trim($item['status']);
 				$this->type = trim($item['type']);
 				$this->href = trim($item['href']);
+				$this->workflow_index = trim($item['workflow_index']);
 			} else {
 				$this->item_id = -1;
 			}
@@ -81,7 +84,7 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$transcript = $this->db->getUserTranscript($itemId, $this->project_id, $username);
+			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username);
 			if ($transcript != '') {
 				$this->transcript = $transcript;
 			}
@@ -89,7 +92,7 @@ class Item {
 	}
 
 	public function save() {
-		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->project_slug, $this->project_owner, $this->transcript, $this->status, $this->type, $this->href);
+		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index);
 	}
 
 	public function saveText($username, $draft, $review, $review_username, $transcript) {
@@ -117,7 +120,7 @@ class Item {
 
 		if ($existing_draft) {
 			// update texts with $draft status
-			$this->db->updateItemTranscriptStatus($this->item_id, $this->project_id, $status, $transcript, $username);
+			$this->db->updateItemTranscript($this->item_id, $this->project_id, $status, $transcript, $username);
 		} else {
 			// insert into texts with $draft status
 			$this->db->addItemTranscript($this->item_id, $this->project_id, $status, $transcript, $username);
@@ -177,10 +180,6 @@ class Item {
 		}
 
 		return "success";
-	}
-
-	public function getNextItem() {
-		return $this->db->getNextItem($this->item_id, $this->project_slug);
 	}
 
 	public function getJSON() {

@@ -175,7 +175,7 @@ class DbMySQL implements DbInterface {
 		$args = array($username, $projectSlug);
 		if ($owner != '') {
 			$query .= " AND projects.owner = ?";
-			array_push($owner, $args);
+			array_push($args, $owner);
 		}
 
 		$result = $this->query($query, $args);
@@ -353,7 +353,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItem($item_id, $project_slug) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.slug = ?;";
@@ -365,7 +365,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItemWithProjectID($item_id, $project_id) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.id = ?;";
@@ -376,24 +376,24 @@ class DbMySQL implements DbInterface {
 	}	
 
 	// Returns: transcript
-	public function getUserTranscript($item_id, $project_id, $username) {
+	public function loadItemTranscript($projectId, $itemId, $username) {
 		$query = "SELECT transcript FROM transcripts ";
-		$query .= "WHERE item_id = ? ";
-		$query .= "AND project_id = ? ";
+		$query .= "WHERE project_id = ? ";
+		$query .= "AND item_id = ? ";
 		$query .= "AND user = ?;";
 
-		$results = $this->query($query, array($item_id, $project_id, $username));
+		$results = $this->query($query, array($projectId, $itemId, $username));
 
 		return (count($results) > 0) ? trim($results[0]['transcript']) : '';
 	}
 
 	// Returns: boolean
-	public function saveExistingItem($item_id, $title, $project_id, $transcript, $status, $type, $href, $workflow_index) {
+	public function saveExistingItem($itemId, $title, $projectId, $transcript, $status, $type, $href, $workflowIndex) {
 		$sql = "UPDATE items ";
 		$sql .= "SET title = ?, project_id = ?, transcript = ?, status = ?, type = ?, href = ?, workflow_index = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $project_id, $transcript, $status, $type, $href, $item_id, $workflow_index));
+		return $this->execute($sql, array($title, $projectId, $transcript, $status, $type, $href, $workflowIndex, $itemId));
 	}
 
 	// Returns: boolean
@@ -408,8 +408,8 @@ class DbMySQL implements DbInterface {
 		return (count($results) > 0) ? true : false;
 	}
 
-	// Returns: none
-	public function updateItemTranscriptStatus($item_id, $project_id, $status, $transcript, $username) {
+	// Returns: boolean
+	public function updateItemTranscript($projectId, $itemId, $status, $transcript, $username) {
 		$sql = "UPDATE transcripts SET transcript = ?, ";
 		$sql .= "date = NOW(), ";
 		$sql .= "status = ? ";
@@ -417,15 +417,14 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND project_id = ? ";
 		$sql .= "AND user = ?;";
 
-		return $this->execute($sql, array($transcript, $status, $item_id, $project_id, $username));
+		return $this->execute($sql, array($transcript, $status, $itemId, $projectId, $username));
 	}
 
-	// Returns: none
-	public function addItemTranscript($item_id, $project_id, $status, $transcript, $username) {
-		$sql = "INSERT INTO transcripts (item_id, project_id, user, date, transcript, status) VALUES (?, ?, ?, NOW(), ?, ?);";
+	// Returns: boolean
+	public function addItemTranscript($projectId, $itemId, $status, $transcript, $username) {
+		$sql = "INSERT INTO transcripts (project_id, item_id, user, date, transcript, status) VALUES (?, ?, ?, NOW(), ?, ?);";
 
-		return $this->execute($sql, array($item_id, $project_id, $username, $transcript, $status));
-
+		return $this->execute($sql, array($projectId, $itemId, $username, $transcript, $status));
 	}
 
 	// TODO: Rewrite

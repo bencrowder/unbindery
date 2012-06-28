@@ -16,7 +16,6 @@ class Workflow extends Queue {
 	}
 
 	public function setIndex($input) {
-		print_r($this->workflow);
 		$this->currentIndex = $input;
 		$this->setItems(array_slice($this->workflow, $this->currentIndex));
 	}

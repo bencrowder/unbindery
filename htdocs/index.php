@@ -95,9 +95,32 @@ Role::init(Settings::getProtected('roles'));
 
 
 // Initialize dispatcher
+// --------------------------------------------------
+
 $dispatch = new Dispatch();
 $dispatch->register(array('DispatchController', 'getNextAvailableItem'));
 Settings::setProtected('dispatch', $dispatch);
+
+
+// Initialize event manager
+// --------------------------------------------------
+
+$eventManager = new EventManager();
+Settings::setProtected('eventManager', $eventManager);
+
+
+// Initialize transcript controller
+// --------------------------------------------------
+
+Transcript::setEventManager($eventManager);
+Transcript::register('load', array('TranscriptController', 'load'));
+Transcript::register('save', array('TranscriptController', 'save'));
+
+
+// Initialize workflow controller
+// --------------------------------------------------
+
+Workflow::register('callback', array('WorkflowController', 'parse'));
 
 
 // Parse the routes

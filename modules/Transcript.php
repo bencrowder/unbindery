@@ -64,6 +64,9 @@ class Transcript {
 		// Trigger the save transcript event
 		self::$eventManager->trigger('save', 'transcript', array('transcript' => $this));
 
+		// Populate $params['transcript'] with this so we can access it in the handler
+		$params['transcript'] = $this;
+
 		// Make sure the function's there, then call it with the parameters
 		if (array_key_exists('save', self::$functions)) {
 			$response = call_user_func(self::$functions['save'], $params);

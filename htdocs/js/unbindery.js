@@ -2,6 +2,21 @@
 /* -------------------------------------------------- */
 
 var Unbindery = function() {
+	this.redirectToDashboard = function(message, error, username) {
+		var locStr = app_url + "/users/" + username + "/dashboard";
+
+		if (message || error) locStr += "?";
+
+		if (message) locStr += "message=" + message;
+
+		if (error) {
+			if (message) locStr += "&";
+			locStr += "error=" + error;
+		}
+
+		window.location.href = locStr;
+	};
+
 	this.callAPI = function(call, method, data, callback) {
 		// Prepare the URL
 		switch (call) {
@@ -10,6 +25,13 @@ var Unbindery = function() {
 					url = '/projects/' + data.projectSlug + '/items/get';
 				} else {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/get';
+				}
+				break;
+			case 'save-transcript':
+				if (data.projectType == 'public') {
+					url = '/projects/' + data.projectSlug + '/items/' + data.itemId + '/transcript';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/' + data.itemId + '/transcript';
 				}
 				break;
 		}
@@ -31,7 +53,7 @@ var Unbindery = function() {
 
 	this.getNewItem = function(projectSlug, projectOwner, projectType) {
 		// Get the username
-		var username = $("nav ul .username").html();
+		var username = $("#username").html();
 
 		this.callAPI('get-new-item', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username },
 			function(data) {
@@ -68,7 +90,154 @@ var Unbindery = function() {
 		);
 
 		return false;
+	};
+
+	this.saveTranscript = function(isDraft, isReview, continueSlug) {
+		unbindery.showSpinner();
+
+		var itemId = $("#item_id").val();
+		var projectSlug = $("#project_slug").val();
+		var username = $("#username").html();
+		var reviewUsername = $("#review_username").html();
+		var transcript = $("#transcript").val();
+		var projectOwner = $("#project_owner").val();
+
+		var projectType = 'public';
+		if (projectOwner != '') projectType = 'private';
+
+		var status = 'completed';
+		if (isDraft) status = 'draft';
+		if (isReview) status = 'reviewed';
+
+		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status },
+			function(data) {
+				if (data.statuscode == "success") {
+					unbindery.hideSpinner();
+
+					if (isReview) {
+						var message = "Finished review.";
+					} else {
+						if (isDraft) {
+							var message = "Saved draft.";
+						} else {
+							var message = "Finished item.";
+						}
+					}
+
+					if (continueSlug != '') {
+						console.log("Get new page", continueSlug);
+						//get_new_page(slug);
+					} else {
+						console.log("Redirect to dashboard");
+						unbindery.redirectToDashboard(message, "", username);
+					}
+				} else {
+					console.log("Error");
+					// don't redirect to dashboard here, show error thing
+					// redirect_to_dashboard("", "Error saving page. Try again.");
+				}
+			});
+	};
+}
+
+function save_page_text(is_draft, is_review, slug) {
+	unbindery.showSpinner();
+
+	var item_id = $("#item_id").val();
+	var project_slug = $("#project_slug").val();
+	var transcript;
+
+	if (editbox == "simple") {
+		transcript = $("#page_text").val();						// textarea
+	} else {
+		transcript = editor.session.doc.$lines.join('\n');		// Ace
 	}
+	var username = $("#username").html();
+	var review_username = $("#review_username").html();
+
+	unbindery.callAPI("save_item_transcript", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
+		function(data) {
+			if (data.statuscode == "success") {
+				unbindery.hideSpinner();
+
+				if (is_review) {
+					var message = "Finished review.";
+				} else {
+					if (is_draft) {
+						var message = "Saved draft.";
+					} else {
+						var message = "Finished item.";
+					}
+				}
+				if (slug != '') {
+					get_new_page(slug);
+				} else {
+					redirect_to_dashboard(message, "", username);
+				}
+			} else {
+				// don't redirect to dashboard here, show error thing
+				// redirect_to_dashboard("", "Error saving page. Try again.");
+			}
+		}
+	);
+}
+
+function save_page() {
+	unbindery.showSpinner();
+
+	var item_id = $("#item_id").val();
+	var project_slug = $("#project_slug").val();
+	var pagetext = $("#pagetext").val();
+	var username = $("#username").html();
+	var review_username = $("#review_username").html();
+
+	unbindery.callAPI(app_url + "/unbindery.php?method=save_page", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
+		function(data) {
+			if (data.statuscode == "success") {
+				unbindery.hideSpinner();
+
+				if (is_review) {
+					var message = "Finished review.";
+				} else {
+					if (is_draft) {
+						var message = "Saved draft.";
+					} else {
+						var message = "Finished item.";
+					}
+				}
+				redirect_to_dashboard(message, "", username);
+			} else {
+				redirect_to_dashboard("", "Error saving page. Try again.", username);
+			}
+		}
+	);
+}
+
+function load_items_for_editing(event, data) {
+	var pages = [];
+	var project_slug = $("#project_slug").val();
+
+	pages = '';
+	$("#file_uploadQueue .fileName").each(function() {
+		var filename = $(this).html();
+		// strip up to the space
+		filename = filename.substr(0, filename.indexOf(' '));
+
+		pages += filename + '|';
+	});
+
+	// add them to the database
+	unbindery.callAPI("add_pages", 'POST', { project_slug: project_slug, pages: pages },
+		function(data) {
+			if (data.statuscode == "success") {
+				// load the first page into edit mode
+				var firstpage = data.page_ids[0];
+				window.location.href = app_url + '/admin/new_page/' + project_slug + '/' + firstpage;
+			} else {
+				console.log("error!");
+			}
+		}
+	);
 }
 
 $(document).ready(function() {
@@ -124,145 +293,29 @@ $(document).ready(function() {
 
 		return false;
 	});
-});
 
-function redirect_to_dashboard(message, error, username) {
-	var locstr = app_url + "/users/" + username + "/dashboard";
+	// Focus on the transcript textarea
+	$("textarea#transcript").focus();
 
-	if (message || error) { locstr += "?"; }
-
-	if (message) {
-		locstr += "message=" + message;
-	}
-	if (error) {
-		if (message) { locstr += "&"; }
-		locstr += "error=" + error;
-	}
-
-	window.location.href = locstr;
-}
-
-function save_page_text(is_draft, is_review, slug) {
-	Unbindery.showSpinner();
-
-	var item_id = $("#item_id").val();
-	var project_slug = $("#project_slug").val();
-	var transcript;
-
-	if (editbox == "simple") {
-		transcript = $("#page_text").val();						// textarea
-	} else {
-		transcript = editor.session.doc.$lines.join('\n');		// Ace
-	}
-	var username = $("nav ul .username").html();
-	var review_username = $("#review_username").html();
-
-	Unbindery.callAPI("save_item_transcript", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
-		function(data) {
-			if (data.statuscode == "success") {
-				Unbindery.hideSpinner();
-
-				if (is_review) {
-					var message = "Finished review.";
-				} else {
-					if (is_draft) {
-						var message = "Saved draft.";
-					} else {
-						var message = "Finished item.";
-					}
-				}
-				if (slug != '') {
-					get_new_page(slug);
-				} else {
-					redirect_to_dashboard(message, "", username);
-				}
-			} else {
-				// don't redirect to dashboard here, show error thing
-				// redirect_to_dashboard("", "Error saving page. Try again.");
-			}
-		}
-	);
-}
-
-function save_page() {
-	Unbindery.showSpinner();
-
-	var item_id = $("#item_id").val();
-	var project_slug = $("#project_slug").val();
-	var pagetext = $("#pagetext").val();
-	var username = $("nav ul .username").html();
-	var review_username = $("#review_username").html();
-
-	Unbindery.callAPI(app_url + "/unbindery.php?method=save_page", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
-		function(data) {
-			if (data.statuscode == "success") {
-				Unbindery.hideSpinner();
-
-				if (is_review) {
-					var message = "Finished review.";
-				} else {
-					if (is_draft) {
-						var message = "Saved draft.";
-					} else {
-						var message = "Finished item.";
-					}
-				}
-				redirect_to_dashboard(message, "", username);
-			} else {
-				redirect_to_dashboard("", "Error saving page. Try again.", username);
-			}
-		}
-	);
-}
-
-function load_items_for_editing(event, data) {
-	var pages = [];
-	var project_slug = $("#project_slug").val();
-
-	pages = '';
-	$("#file_uploadQueue .fileName").each(function() {
-		var filename = $(this).html();
-		// strip up to the space
-		filename = filename.substr(0, filename.indexOf(' '));
-
-		pages += filename + '|';
+	// Click handlers for the buttons
+	$("#action-save-draft").click(function() {
+		unbindery.saveTranscript(true, false, '');		// yes draft, no review, don't get another
 	});
 
-	// add them to the database
-	Unbindery.callAPI("add_pages", 'POST', { project_slug: project_slug, pages: pages },
-		function(data) {
-			if (data.statuscode == "success") {
-				// load the first page into edit mode
-				var firstpage = data.page_ids[0];
-				window.location.href = app_url + '/admin/new_page/' + project_slug + '/' + firstpage;
-			} else {
-				console.log("error!");
-			}
-		}
-	);
-}
-
-$(document).ready(function() {
-	$("textarea#page_text").focus();
-
-	$("#save_as_draft_button").click(function() {
-		save_page_text(true, false, ''); // yes draft, no review, no get
+	$("#action-finish").click(function(e) {
+		unbindery.saveTranscript(false, false, '');		// no draft, no review, don't get another
 	});
 
-	$("#finished_button").click(function(e) {
-		save_page_text(false, false, ''); // no draft, no review, no get
-	});
-
-	$("#finish_get_next_button").click(function(e) {
+	$("#action-finish-continue").click(function(e) {
 		var project_slug = $("#project_slug").val();
-		save_page_text(false, false, project_slug); // no draft, no review, do get another one
+		unbindery.saveTranscript(false, false, project_slug); // no draft, no review, do get another one
 	});
 
-	$("#finished_review_button").click(function(e) {
-		save_page_text(false, true, ''); // no draft, yes review
+	$("#action-finish-review").click(function(e) {
+		unbindery.saveTranscript(false, true, '');		// no draft, yes review
 	});
 
-	$("#save_page_button").click(function(e) {
+	$("#action-save-item").click(function(e) {
 		save_page();
 	});
 

@@ -216,6 +216,18 @@ class User {
 		$this->db->updateUserLastLogin($this->username);
 	}
 
+	public function addTranscript($item, $status, $transcript) {
+		return $this->db->addItemTranscript($item->project_id, $item->item_id, $status, $transcript, $this->username);
+	}
+
+	public function updateTranscript($item, $status, $transcript) {
+		return $this->db->updateItemTranscript($item->project_id, $item->item_id, $status, $transcript, $this->username);
+	}
+
+	public function loadTranscript($item) {
+		return $this->db->loadItemTranscript($item->project_id, $item->item_id, $this->username);
+	}
+
 	static public function getTopUsers() {
 		$db = Settings::getProtected('db');
 
