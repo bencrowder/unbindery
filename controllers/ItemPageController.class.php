@@ -103,11 +103,12 @@ class ItemPageController {
 					'item' => $item,
 					'more_to_proof' => $moreToProof,
 					'editor_options' => $editorOptions,
-					'css' => array("editor_$templateType.css"),
-					'js' => array("editor_$templateType.js"),
+					'editor_type' => $templateType,
+					'css' => array("editors/$templateType/$templateType.css"),
+					'js' => array("editors/$templateType/$templateType.js"),
 				);
 
-				Template::render("editor_$templateType", $options);
+				Template::render("editors/$templateType", $options);
 
 				break;
 		}

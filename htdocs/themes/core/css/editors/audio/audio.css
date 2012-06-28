@@ -1,9 +1,12 @@
 /* Editor: Audio */
 /* --------------------------------------------------- */
 
-#audio_container			{ width: 100%; margin: 1em 0 2em; }
+#main h2					{ text-align: center; }
 
-audio#audio 				{ width: 100%; }
+#audio_container			{ width: 100%; margin: 1em 0 2em; text-align: center; }
+#audio_container .mejs-container	{ margin: 0px auto; }
+
+audio#audio 				{ width: 400px; }
 
 #transcript_container		{ width: 70%; height: 200px; margin: 0px auto; }
 

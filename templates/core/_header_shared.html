@@ -13,7 +13,7 @@
 
 	{% if editor_options['css'] %}
 <!-- Custom editor-specific CSS -->
-	{% for cssfile in editor_options['css'] %}<link rel="stylesheet" href="{{ theme_root }}/css/{{ cssfile }}" type="text/css" media="screen" charset="utf-8" />
+	{% for cssfile in editor_options['css'] %}<link rel="stylesheet" href="{{ theme_root }}/css/editors/{{ editor_type }}/{{ cssfile }}" type="text/css" media="screen" charset="utf-8" />
 	{% endfor %}
 <!-- End custom editor-specific CSS -->
 	{% endif %}
@@ -26,7 +26,7 @@
 
 	{% if editor_options['js'] %}
 <!-- Custom editor-specific JS -->
-	{% for jsfile in editor_options['js'] %}<script type="text/javascript" src="{{ theme_root }}/js/{{ jsfile }}"></script>
+	{% for jsfile in editor_options['js'] %}<script type="text/javascript" src="{{ theme_root }}/js/editors/{{ editor_type }}/{{ jsfile }}"></script>
 	{% endfor %}
 <!-- End custom editor-specific JS -->
 	{% endif %}

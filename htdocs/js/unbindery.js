@@ -62,6 +62,8 @@ var Unbindery = function() {
 				} else {
 					unbindery.hideSpinner();
 
+					console.log(data, data.code);
+
 					switch (data.code) {
 						case "not-authenticated-as-correct-user":
 							unbindery.redirectToDashboard("", "You're not the user you say you are.");
