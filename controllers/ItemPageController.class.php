@@ -61,6 +61,7 @@ class ItemPageController {
 
 				$item['project_slug'] = $projectSlug;
 				$item['project_owner'] = $owner;
+				$item['project_type'] = ($owner == '') ? 'public' : 'private';
 
 				// Check to see if there's another item to proof
 				// - Load project proof queue
@@ -486,51 +487,6 @@ class ItemPageController {
 		);
 
 		Template::render('admin_review_page', $options);
-	}
-
-	static public function editPageHandler($args, $next = false) {
-		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
-		$editor = Settings::getProtected('editor');
-		$auth = Settings::getProtected('auth');
-
-		$auth->forceAuthentication();
-
-		$project_slug = $args[0];
-		$page_id = $args[1];
-		if (!$page_id || !$project_slug) {
-			redirectToDashboard("", "Invalid page/project ID");
-		}
-
-		$username = $auth->getUsername();
-		// make sure they're assigned to this page
-		$user = new User($username);
-		if (!$user->isAssigned($page_id, $project_slug)) {
-			redirectToDashboard("", "You're not assigned to that page.");
-		}
-
-		// get the item from the database
-		$itemObj = new Item($db);
-		$itemObj->load($page_id, $project_slug, $username);
-
-		$item = array();
-		$item['id'] = $page_id;
-		$item['title'] = $itemObj->title;
-		$item['href'] = $itemObj->href;
-
-		$stripped = stripslashes($itemObj->transcript);
-		$escaped = str_replace("<", "&lt;", $stripped);
-		$item['escaped_stripped_itemtext'] = str_replace(">", "&gt;", $escaped);
-
-		$options = array(
-			'user' => array(
-				'loggedin' => true,
-				'admin' => $user->admin),
-			'project_slug' => $project_slug,
-			'item' => $item
-		);
-
-		Template::render('edit_page', $options);
 	}
 
 	static public function savePageHandler($args) {

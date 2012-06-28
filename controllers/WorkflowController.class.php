@@ -6,8 +6,6 @@ class WorkflowController {
 	// Parse workflow handler
 
 	static public function parse($item, $action) {
-		error_log("Parsing workflow for " . $item->item_id . ": $action");
-
 		$auth = Settings::getProtected('auth');
 		$auth->forceAuthentication();
 
@@ -27,7 +25,6 @@ class WorkflowController {
 				break;
 		}
 
-		error_log("Sending to $destinationQueue");
 		$queue = new Queue($destinationQueue);
 		$queue->add($item);
 		$queue->save();

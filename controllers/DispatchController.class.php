@@ -51,7 +51,7 @@ class DispatchController {
 		$queue = new Queue("project.proof:$projectSlug");
 		$nextItem = $queue->getFirstItem();
 
-		if ($nextItem->item_id != -1) {
+		if (isset($nextItem) && $nextItem->item_id != -1) {
 			$queue->save();
 
 			// Add it ot the user's queue

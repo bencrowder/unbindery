@@ -92,7 +92,7 @@ var Unbindery = function() {
 		return false;
 	};
 
-	this.saveTranscript = function(isDraft, isReview, continueSlug) {
+	this.saveTranscript = function(isDraft, isReview, getAnother) {
 		unbindery.showSpinner();
 
 		var itemId = $("#item_id").val();
@@ -112,8 +112,6 @@ var Unbindery = function() {
 		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status },
 			function(data) {
 				if (data.statuscode == "success") {
-					unbindery.hideSpinner();
-
 					if (isReview) {
 						var message = "Finished review.";
 					} else {
@@ -124,13 +122,18 @@ var Unbindery = function() {
 						}
 					}
 
-					if (continueSlug != '') {
-						console.log("Get new page", continueSlug);
-						//get_new_page(slug);
+					if (getAnother) {
+						// And get the new item
+						var projectSlug = $('#project_slug').val();
+						var projectOwner = $('#project_owner').val();
+						var projectType = $('#project_type').val();
+
+						unbindery.getNewItem(projectSlug, projectOwner, projectType);
 					} else {
-						console.log("Redirect to dashboard");
 						unbindery.redirectToDashboard(message, "", username);
 					}
+
+					unbindery.hideSpinner();
 				} else {
 					console.log("Error");
 					// don't redirect to dashboard here, show error thing
@@ -299,20 +302,19 @@ $(document).ready(function() {
 
 	// Click handlers for the buttons
 	$("#action-save-draft").click(function() {
-		unbindery.saveTranscript(true, false, '');		// yes draft, no review, don't get another
+		unbindery.saveTranscript(true, false, false);		// yes draft, no review, don't get another
 	});
 
 	$("#action-finish").click(function(e) {
-		unbindery.saveTranscript(false, false, '');		// no draft, no review, don't get another
+		unbindery.saveTranscript(false, false, false);		// no draft, no review, don't get another
 	});
 
 	$("#action-finish-continue").click(function(e) {
-		var project_slug = $("#project_slug").val();
-		unbindery.saveTranscript(false, false, project_slug); // no draft, no review, do get another one
+		unbindery.saveTranscript(false, false, true);		// no draft, no review, do get another one
 	});
 
 	$("#action-finish-review").click(function(e) {
-		unbindery.saveTranscript(false, true, '');		// no draft, yes review
+		unbindery.saveTranscript(false, true, false);		// no draft, yes review
 	});
 
 	$("#action-save-item").click(function(e) {
