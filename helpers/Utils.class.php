@@ -9,9 +9,12 @@ class Utils {
 		return (array_key_exists($field, $_POST)) ? $_POST[$field] : false;
 	}
 
+	static public function SESSION($field) {
+		return (array_key_exists($field, $_SESSION)) ? $_SESSION[$field] : false;
+	}
+
 	static public function redirectToDashboard($message, $error) {
 		$app_url = Settings::getProtected('app_url');
-		$username = Settings::getProtected('username');
 
 		if ($message != '') $_SESSION['ub_message'] = trim($message);
 		if ($error != '') $_SESSION['ub_error'] = trim($error);

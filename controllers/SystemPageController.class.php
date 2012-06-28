@@ -1,6 +1,12 @@
 <?php
 
 class SystemPageController {
+
+	// --------------------------------------------------
+	// Index handler
+	// URL: /
+	// Methods: 
+
 	static public function indexHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
@@ -44,13 +50,19 @@ class SystemPageController {
 		}
 	}
 
+
+	// --------------------------------------------------
+	// Login handler
+	// URL: /login
+	// Methods: 
+
 	static public function loginHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
-		$username = $_POST["username"];
-		$password = $_POST["password"];
+		$username = Utils::POST("username");
+		$password = Utils::POST("password");
 
 		if ($auth->login($username, $password)) {
 			$user = new User($username);
@@ -75,9 +87,9 @@ class SystemPageController {
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
-		$email = $_POST["email_signup"];
-		$username = $_POST["username_signup"];
-		$password = $_POST["password_signup"];
+		$email = Utils::POST("email_signup");
+		$username = Utils::POST("username_signup");
+		$password = Utils::POST("password_signup");
 
 		// Add user to database with "pending" as status
 		$user = new User();
@@ -136,6 +148,19 @@ class SystemPageController {
 
 			Template::render($args[0], $options);
 		}
+	}
+
+	// --------------------------------------------------
+	// Message handler
+	// URL: /messages
+	// Methods: POST
+
+	static public function messageHandler($args) {
+		$message = Utils::POST('message');
+		$error = Utils::POST('error');
+
+		if ($message) $_SESSION['ub_message'] = $message;
+		if ($error) $_SESSION['ub_error'] = $error;
 	}
 
 	static public function fileNotFoundHandler() {

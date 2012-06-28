@@ -18,8 +18,8 @@ class Template {
 		$options['theme_root'] = $options['app_url'] . "/themes/$theme";
 		$options['i18n'] = new I18n("../translations");
 
-		$options['message'] = (array_key_exists('ub_message', $_SESSION)) ? $_SESSION['ub_message'] : '';
-		$options['error'] = (array_key_exists('ub_error', $_SESSION)) ? $_SESSION['ub_error'] : '';
+		$options['message'] = Utils::SESSION('ub_message');
+		$options['error'] = Utils::SESSION('ub_error');
 
 		$auth = Settings::getProtected('auth');
 		if ($auth->authenticated()) {

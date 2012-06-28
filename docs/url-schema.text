@@ -9,6 +9,8 @@
 	* POST = create new signup
 * /signup/activate
 	* POST = activate
+* /messages
+	* POST = put message/error into session variable
 
 
 ### User handler

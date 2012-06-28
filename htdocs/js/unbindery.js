@@ -5,18 +5,10 @@ var Unbindery = function() {
 	this.redirectToDashboard = function(message, error) {
 		var locStr = app_url + "/users/" + username + "/dashboard";
 
-		/*
-		if (message || error) locStr += "?";
-
-		if (message) locStr += "message=" + message;
-
-		if (error) {
-			if (message) locStr += "&";
-			locStr += "error=" + error;
-		}
-		*/
-
-		window.location.href = locStr;
+		// Set the message/error session variables before we redirect
+		$.post(app_url + "/messages", { message: message, error: error }, function() {
+			window.location.href = locStr;
+		});
 	};
 
 	this.callAPI = function(call, method, data, callback) {
@@ -72,20 +64,20 @@ var Unbindery = function() {
 
 					switch (data.code) {
 						case "not-authenticated-as-correct-user":
-							unbindery.redirectTodashboard("", "You're not the user you say you are.");
+							unbindery.redirectToDashboard("", "You're not the user you say you are.");
 							break;
 						case "not-cleared":
-							unbindery.redirectTodashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)");
+							unbindery.redirectToDashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)");
 							break;	
 						case "not-a-member":
-							unbindery.redirectTodashboard("", "You're not a member of that project.");
+							unbindery.redirectToDashboard("", "You're not a member of that project.");
 							break;
 						case "has-unfinished-item":
-							unbindery.redirectTodashboard("", "You already have an item for this project. Finish it and then you'll be able to get a new one.");
+							unbindery.redirectToDashboard("", "You already have an item for this project. Finish it and then you'll be able to get a new one.");
 						case "no-item-available":
-							unbindery.redirectTodashboard("", "There aren't any more items available to you for that project.");
+							unbindery.redirectToDashboard("", "There aren't any more items available to you for that project.");
 						default:
-							unbindery.redirectTodashboard("", "Error getting new page.");
+							unbindery.redirectToDashboard("", "Error getting new page.");
 							break;
 
 					}
