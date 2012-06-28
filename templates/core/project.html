@@ -1,9 +1,9 @@
 {% include '_header.html' %}
 
-{% if message %}<div id="message">{{ message }}</div>{% endif %}
-{% if error %}<div id="error">{{ error }}</div>{% endif %}
-
 <section id="page">
+	{% if message %}<div id="message" class="container sys_message">{{ message }}</div>{% endif %}
+	{% if error %}<div id="error" class="container sys_message">{{ error }}</div>{% endif %}
+
 	<div id="main" class="container">
 	{% if guidelines == true %}
 		<h2>Project Guidelines</h2>

@@ -30,9 +30,7 @@ class ItemPageController {
 			case 'GET':
 				// Make sure they have access to the project
 				if (!$user->isMember($projectSlug)) {
-					$code = "not-a-member";
-					// TODO: fail gracefully here, redirect to dashboard with error
-					echo "You're not a member of that project. Sorry.";
+					Utils::redirectToDashboard("", "You're not a member of that project. Sorry.");
 					return;
 				}
 
@@ -41,8 +39,7 @@ class ItemPageController {
 
 				// Make sure it exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
-					// TODO: fail gracefully here
-					echo "Item doesn't exist.";
+					Utils::redirectToDashboard("", "Item doesn't exist.");
 					return;
 				}
 
@@ -51,7 +48,7 @@ class ItemPageController {
 				$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
 				$userQueueItems = $userQueue->getItems();
 				if (!in_array($itemObj, $userQueueItems)) {
-					echo "You don't have this item in your queue";
+					Utils::redirectToDashboard("", "You don't have that item in your queue.");
 					return;
 				}
 

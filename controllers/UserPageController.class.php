@@ -65,6 +65,9 @@ class UserPageController {
 		$username = $auth->getUsername();
 		$user = new User($username);
 
+		// Put it in the settings cache
+		Settings::setProtected('username', $username);
+
 		// Get user's stats (score, # proofed, etc.)
 		$user->getStats();
 

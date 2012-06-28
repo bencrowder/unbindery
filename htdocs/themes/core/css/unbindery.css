@@ -168,8 +168,9 @@ ul.action_list .project .title a		{ color: #345678; }
 ul.action_list .project .right_button	{ padding-top: 0; }
 ul.action_list .project .button			{ font-size: 1em; display: inline-block; }
 
-#message								{ background: #444; color: #fff; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
-#error									{ background: rgba(255, 0, 0, 0.3); color: #600; border: solid 1px #daa; border-top: none; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+.sys_message							{ padding: 9px 12px 11px; border-radius: 5px; font-size: 1.2em; font-weight: bold; margin-top: 15px; margin-bottom: -1em; }
+#message								{ background: #444; color: #fff; }
+#error									{ background: #ffd7d7; color: #600; }
 
 body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: #fff; padding: 15px; border: solid 2px #000; border-top: none; }
 
