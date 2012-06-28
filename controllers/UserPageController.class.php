@@ -127,7 +127,7 @@ class UserPageController {
 			}
 
 			if (!in_array($project["slug"], $reviewlist) && ($project["available_to_review"] > 0)) {
-				$project["available_for_review"] = true;
+				$project["available_for_reviewing"] = true;
 			} else {
 				$project["available_for_reviewing"] = false;
 			}
