@@ -36,13 +36,9 @@ class DispatchController {
 		}
 
 		// Does this user already have an item from this project?
-		/*
-		// TODO: decide if this is necessary (can users have more than one item in their queue by default?)
 		if ($user->hasProjectItem($projectSlug)) {
-			$errorCode = "has-unfinished-item";
-			return array('status' => $success, 'code' => $errorCode);
+			$code = "has-unfinished-item";
 		}
-		 */
 
 		// Load the user's queue
 		$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));

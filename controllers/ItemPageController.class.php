@@ -403,7 +403,7 @@ class ItemPageController {
 			}
 		} else {
 			// redirect to error page
-			redirectToDashboard("", "Error saving page.");
+			Utils::redirectToDashboard("", "Error saving page.");
 		}
 	}
 
@@ -417,14 +417,14 @@ class ItemPageController {
 		$project_slug = $args[0];
 		$page_id = $args[1];
 		if (!$page_id || !$project_slug) {
-			redirectToDashboard("", "Invalid page/project ID");
+			Utils::redirectToDashboard("", "Invalid page/project ID");
 		}
 
 		$username = $auth->getUsername();
 		$user = new User($username);
 		// make sure they're an admin
 		if (!$user->admin) {
-			redirectToDashboard("", "You're not an administrator.");
+			Utils::redirectToDashboard("", "You're not an administrator.");
 		}
 
 		// get the page from the database
@@ -471,7 +471,7 @@ class ItemPageController {
 		$proofer_username = $args[2];	// the user who proofed the text
 
 		if (!$page_id || !$project_slug || !$proofer_username) {
-			redirectToDashboard("", "Invalid item/project ID or username");
+			Utils::redirectToDashboard("", "Invalid item/project ID or username");
 		}
 
 		// get the current user's role on the project and make sure they're owner or admin
@@ -480,14 +480,14 @@ class ItemPageController {
 		$role = $user->getRoleForProject($project_slug);
 
 		if (!$user->admin && $role != "owner") {
-			redirectToDashboard("", "You don't have rights to review that item.");
+			Utils::redirectToDashboard("", "You don't have rights to review that item.");
 		}
 
 		// get the proofer's user object so we can see their status
 		$proofer = new User($proofer_username);
 
 		if ($proofer->status == "") {
-			redirectToDashboard("", "That user doesn't exist.");
+			Utils::redirectToDashboard("", "That user doesn't exist.");
 		}
 
 		// get the item from the database
@@ -551,7 +551,7 @@ class ItemPageController {
 			}
 		} else {
 			// redirect to error page
-			redirectToDashboard("", "Error saving page.");
+			Utils::redirectToDashboard("", "Error saving page.");
 		}
 	}
 

@@ -226,7 +226,7 @@ class ProjectPageController {
 		$project = new Project($project_slug);
 
 		if ($project->title == '') {
-			redirectToDashboard('', 'Error loading project.');
+			Utils::redirectToDashboard('', 'Error loading project.');
 		}
 
 		// Load the project
@@ -277,7 +277,7 @@ class ProjectPageController {
 		// Load the project (and make sure it exists)
 		$project = new Project($project_slug);
 		if ($project->title == '') {
-			redirectToDashboard('', 'Error loading project.');
+			Utils::redirectToDashboard('', 'Error loading project.');
 		}
 		$project->slug = $project_slug;
 
@@ -494,12 +494,12 @@ class ProjectPageController {
 					header("Location: $app_url/admin/upload/$slug");
 				} else {
 					// redirect to error page
-					redirectToDashboard("", "Error creating media directory. Check your file permissions.");
+					Utils::redirectToDashboard("", "Error creating media directory. Check your file permissions.");
 				}
 
 			} else {
 				// redirect to error page
-				redirectToDashboard("", "Error creating project");
+				Utils::redirectToDashboard("", "Error creating project");
 			}
 		} else {							// editing an existing project
 			$project = new Project($slug);
