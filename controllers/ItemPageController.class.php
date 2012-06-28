@@ -58,13 +58,13 @@ class ItemPageController {
 				// See if there are any items left for us to proof
 				$moreToProof = false;
 				$queue = new Queue("project.proof:$projectSlug");
+
 				foreach ($queue->getItems() as $item) {
-					error_log("Checking " . $item->item_id);
 					if (!in_array($item, $userQueueItems)) {
 						$moreToProof = true;
 						break;
 					}	
-				}			
+				}
 
 				$item = array();
 				$item['id'] = $itemId;
@@ -89,7 +89,6 @@ class ItemPageController {
 				// - Load project proof queue
 				// - Get count > 0
 				// TODO: Finish
-				$moreToProof = true;
 
 				// Get template type
 				$templateType = $itemObj->type;
