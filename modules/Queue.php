@@ -12,11 +12,11 @@ class Queue {
 	//     data source after each change or not (default = false)
 	// --------------------------------------------------
 
-	public function __construct($queueName = '', $saveOnChanges = false) {
+	public function __construct($queueName = '', $saveOnChanges = false, $options = array()) {
 		$this->saveOnChanges = $saveOnChanges;
 		$this->queue = array();
 		$this->queueName = trim($queueName);
-		$this->load($this->queueName);
+		$this->load($this->queueName, $saveOnChanges, $options);
 	}
 
 
@@ -60,7 +60,7 @@ class Queue {
 	//     data source after each change or not (default = false)
 	// --------------------------------------------------
 
-	public function load($queueName, $saveOnChanges = false) {
+	public function load($queueName, $saveOnChanges = false, $options = array()) {
 		$rtn = false;
 
 		if (!array_key_exists('load', self::$functions)) {
@@ -68,7 +68,7 @@ class Queue {
 		}
 
 		if ($queueName != '' && self::$functions['load'] != null) {
-			$this->queue = call_user_func(self::$functions['load'], $queueName);
+			$this->queue = call_user_func(self::$functions['load'], $queueName, $options);
 			$this->saveOnChanges = $saveOnChanges;
 			$rtn = true;
 		}

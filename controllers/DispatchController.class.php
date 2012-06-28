@@ -45,7 +45,7 @@ class DispatchController {
 		 */
 
 		// Load the user's queue
-		$userQueue = new Queue("user.proof:$username");
+		$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
 		$userQueueItems = $userQueue->getItems();
 
 		foreach ($userQueueItems as $item) {
@@ -60,6 +60,7 @@ class DispatchController {
 		foreach ($queueItems as $item) {
 			error_log("Item: " . $item->item_id . " | " . $item->project_id);
 			if (!in_array($item, $userQueueItems)) {
+				error_log("Not in array");
 				$nextItem = $item;
 				break;
 			}	
@@ -77,7 +78,7 @@ class DispatchController {
 			$success = true;
 			$code = $nextItem->item_id;
 		} else {
-			$code = "error-retrieving-item-from-db";
+			$code = "no-item-available";
 		}
 
 		return array('status' => $success, 'code' => $code);

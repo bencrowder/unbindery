@@ -653,9 +653,11 @@ class DbMySQL implements DbInterface {
 
 	// Returns: item_id, project_id, date_added
 	public function loadQueue($name, $includeRemoved = false) {
-		$date_removed = ($includeRemoved) ? "" : " AND date_removed IS NULL";
+		$query = "SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?";
+		$query .= (($includeRemoved == true) ? "" : " AND date_removed IS NULL");
+		$query .= " ORDER BY date_added ASC";
 
-		return $this->query("SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?" . $date_removed . " ORDER BY date_added ASC", array($name));
+		return $this->query($query, array($name));
 	}
 
 	// Returns: ?

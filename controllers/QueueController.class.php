@@ -5,7 +5,7 @@ class QueueController {
 	// --------------------------------------------------
 	// Save queue handler
 
-	static public function saveQueue($name, $queueItems) {
+	static public function save($name, $queueItems) {
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
@@ -53,15 +53,21 @@ class QueueController {
 	// --------------------------------------------------
 	// Load queue handler
 
-	static public function loadQueue($name) {
+	static public function load($name, $options = array()) {
 		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();
 		$username = $auth->getUsername();
 
+		if (array_key_exists('include-removed', $options) && $options['include-removed'] == true) {
+			$includeRemoved = true;
+		} else {
+			$includeRemoved = false;
+		}
+
 		$items = array();
-		$results = $db->loadQueue($name);
+		$results = $db->loadQueue($name, $includeRemoved);
 
 		foreach ($results as $result) {
 			$itemID = $result['item_id'];
@@ -99,8 +105,8 @@ class QueueController {
 	}
 }
 
-Queue::register('save', array('QueueController', 'saveQueue'));
-Queue::register('load', array('QueueController', 'loadQueue'));
+Queue::register('save', array('QueueController', 'save'));
+Queue::register('load', array('QueueController', 'load'));
 Queue::register('compare', array('QueueController', 'compare'));
 
 ?>
