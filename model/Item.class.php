@@ -10,6 +10,7 @@ class Item {
 	private $project_owner;
 	private $title;
 	private $transcript;
+	private $userTranscript;
 	private $status;
 	private $type;
 	private $href;
@@ -56,7 +57,7 @@ class Item {
 		if ($username != '') {
 			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username);
 			if ($transcript != '') {
-				$this->transcript = $transcript;
+				$this->userTranscript = $transcript;
 			}
 		}
 	}
@@ -86,7 +87,7 @@ class Item {
 		if ($username != '') {
 			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username);
 			if ($transcript != '') {
-				$this->transcript = $transcript;
+				$this->userTranscript = $transcript;
 			}
 		}
 	}
@@ -180,9 +181,5 @@ class Item {
 		}
 
 		return "success";
-	}
-
-	public function getJSON() {
-		return json_encode(array("item_id" => $this->item_id, "project_id" => $this->project_id, "title" => $this->title, "transcript" => $this->transcript, "status" => $this->status, "type" => $this->type, "href" => $this->href));
 	}
 }

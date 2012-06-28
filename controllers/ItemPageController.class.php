@@ -55,9 +55,15 @@ class ItemPageController {
 				$item['title'] = $itemObj->title;
 				$item['href'] = $itemObj->href;
 
-				$stripped = stripslashes($itemObj->transcript);
-				$escaped = str_replace("<", "&lt;", $stripped);
-				$item['transcript'] = str_replace(">", "&gt;", $escaped);
+				// If the user has a transcript for this item, load it instead
+				if ($itemObj->userTranscript && trim($itemObj->userTranscript) != '') {
+					$transcript = trim($itemObj->userTranscript);
+				} else {
+					$transcript = trim($itemObj->transcript);
+				}
+
+				// Strip slashes and replace angle brackets
+				$item['transcript'] = str_replace(">", "&gt;", str_replace("<", "&lt;", stripslashes($transcript)));
 
 				$item['project_slug'] = $projectSlug;
 				$item['project_owner'] = $owner;
