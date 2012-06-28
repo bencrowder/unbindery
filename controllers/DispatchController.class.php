@@ -44,18 +44,33 @@ class DispatchController {
 		}
 		 */
 
-		// Everything's good, so get the next available item from the database and return it
-		//$itemId = $db->getNextAvailableItem($username, $projectSlug);
+		// Load the user's queue
+		$userQueue = new Queue("user.proof:$username");
+		$userQueueItems = $userQueue->getItems();
+
+		foreach ($userQueueItems as $item) {
+			error_log("User item: " . $item->item_id . " | " . $item->project_id);
+		}
 
 		// Load the project's proof queue and pop the first item on the stack
 		$queue = new Queue("project.proof:$projectSlug");
-		$nextItem = $queue->getFirstItem();
+		$queueItems = $queue->getItems();
+
+		// Go through the project queue and get the first item the user hasn't yet done
+		foreach ($queueItems as $item) {
+			error_log("Item: " . $item->item_id . " | " . $item->project_id);
+			if (!in_array($item, $userQueueItems)) {
+				$nextItem = $item;
+				break;
+			}	
+		}			
 
 		if (isset($nextItem) && $nextItem->item_id != -1) {
+			// Remove it from the project queue
+			$queue->remove($nextItem);
 			$queue->save();
 
-			// Add it ot the user's queue
-			$userQueue = new Queue("user.proof:$username");
+			// Add it to the user's queue
 			$userQueue->add($nextItem);
 			$userQueue->save();
 
