@@ -48,19 +48,13 @@ class DispatchController {
 		$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
 		$userQueueItems = $userQueue->getItems();
 
-		foreach ($userQueueItems as $item) {
-			error_log("User item: " . $item->item_id . " | " . $item->project_id);
-		}
-
 		// Load the project's proof queue and pop the first item on the stack
 		$queue = new Queue("project.proof:$projectSlug");
 		$queueItems = $queue->getItems();
 
 		// Go through the project queue and get the first item the user hasn't yet done
 		foreach ($queueItems as $item) {
-			error_log("Item: " . $item->item_id . " | " . $item->project_id);
 			if (!in_array($item, $userQueueItems)) {
-				error_log("Not in array");
 				$nextItem = $item;
 				break;
 			}	

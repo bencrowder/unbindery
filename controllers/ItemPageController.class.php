@@ -48,7 +48,23 @@ class ItemPageController {
 
 				// Make sure the user has this item in their queue
 				// TODO: Finish
-				$userQueue = new Queue("user.proof:$username");
+				$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
+				$userQueueItems = $userQueue->getItems();
+				if (!in_array($itemObj, $userQueueItems)) {
+					echo "You don't have this item in your queue";
+					return;
+				}
+
+				// See if there are any items left for us to proof
+				$moreToProof = false;
+				$queue = new Queue("project.proof:$projectSlug");
+				foreach ($queue->getItems() as $item) {
+					error_log("Checking " . $item->item_id);
+					if (!in_array($item, $userQueueItems)) {
+						$moreToProof = true;
+						break;
+					}	
+				}			
 
 				$item = array();
 				$item['id'] = $itemId;

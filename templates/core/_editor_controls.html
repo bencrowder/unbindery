@@ -8,7 +8,7 @@
 				<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
 				<li><span id="action-save-draft" class="button">Save as Draft</span></li>
 				<li><span id="action-finish" class="button">Finish</span></li>
-				<li><span id="action-finish-continue" class="button">Finish &amp; Continue</span></li>
+				{% if more_to_proof %}<li><span id="action-finish-continue" class="button">Finish &amp; Continue</span></li>{% endif %}
 			</ul>
 		</div>
 	</div>
