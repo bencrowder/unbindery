@@ -129,16 +129,16 @@ class DbMySQL implements DbInterface {
 
 	// Returns: ?
 	public function saveUser($user) {
-		$sql = "UPDATE users SET username = ?, password = ?, name = ?, email = ?, score = ?, status = ?, hash = ?,  signup_date = ?, last_login = ?, role = ?, theme = ? WHERE username = ?";
+		$sql = "UPDATE users SET username = ?, password = ?, name = ?, email = ?, score = ?, status = ?, hash = ?,  signup_date = ?, last_login = ?, role = ?, theme = ?, prefs = ? WHERE username = ?";
 
-		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme, $user->username));
+		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme, $user->prefs, $user->username));
 	}
 
 	// Returns: ?
 	public function createUser($user) {
-		$sql = "INSERT INTO users (username, password, name, email, score, status, hash, signup_date, last_login, role, theme) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO users (username, password, name, email, score, status, hash, signup_date, last_login, role, theme, prefs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme));
+		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme, $user->prefs));
 	}
 
 	// TODO: Rewrite

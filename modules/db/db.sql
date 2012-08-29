@@ -123,6 +123,7 @@ CREATE TABLE `users` (
   `last_login` datetime default NULL,
   `role` varchar(255) default NULL,
   `theme` varchar(255) default NULL,
+  `prefs` varchar(4000) default NULL,
   PRIMARY KEY  (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;

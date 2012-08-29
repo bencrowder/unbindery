@@ -14,6 +14,8 @@ class User {
 	private $last_login;
 	private $role;
 	private $theme;
+	private $prefs;
+	private $admin;
 
 	private $in_db;			// Whether we have a db entry yet
 
@@ -41,7 +43,7 @@ class User {
 	public function load($username) {
 		$user = $this->db->loadUser($username);
 
-		if (isset($user) && array_key_exists('name', $user) && array_key_exists('email', $user) && array_key_exists('status', $user)) {
+		if (isset($user) && array_key_exists('username', $user) && array_key_exists('email', $user) && array_key_exists('status', $user)) {
 			$this->password = trim($user["password"]);
 			$this->name = trim($user["name"]);
 			$this->email = trim($user["email"]);
@@ -52,6 +54,7 @@ class User {
 			$this->last_login = $user["last_login"];
 			$this->hash = $user["hash"];
 			$this->theme = $user["theme"];
+			$this->prefs = json_decode($user["prefs"]);
 			$this->in_db = true;
 		}
 		$this->username = $username;

@@ -99,6 +99,7 @@ class ItemPageController {
 					'user' => array(
 						'loggedin' => true,
 						'admin' => $user->admin,
+						'prefs' => $user->prefs,
 						),
 					'item' => $item,
 					'more_to_proof' => $moreToProof,

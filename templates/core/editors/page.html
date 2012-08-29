@@ -5,7 +5,9 @@
 
 	<div id="main" class="container">
 		<h2>{{ item.title }}</h2>
-
+		{% if user.prefs.sidebyside %}
+		<div class="sidebyside">
+		{% endif %}
 		<section id="image_container">
 			<div class="highlight"></div>
 			<img src="{{ app_url }}/media/{{ item.href }}" />
@@ -18,6 +20,9 @@
 				<input type="hidden" name="editor_type" id="editor_type" value="page" />
 			</form>
 		</section>
+		{% if user.prefs.sidebyside %}
+		</div>
+		{% endif %}
 	</div>
 </section>
 

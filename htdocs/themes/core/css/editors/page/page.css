@@ -9,3 +9,14 @@
 textarea#transcript						{ width: 100%; height: 200px; font-size: 16px; line-height: 1.4em; font-family: "Lucida Grande", "Lucida Sans Unicode", Monaco, Courier, sans-serif; padding: 10px; border: solid 1px #999; border-radius: 3px; }
 
 #image_container .highlight				{ background: rgba(0, 30, 80, 0.5); width: 100%; height: 10px; position: relative; z-index: 500; top: 455px; display: none; }
+
+
+/* Side-by-side mode */
+/* --------------------------------------------------- */
+
+.sidebyside								{ overflow: hidden; }
+
+.sidebyside #image_container			{ width: 48%; height: 600px; float: left; margin-right: 4%; }
+
+.sidebyside #transcript_container		{ width: 48%; height: 600px; float: left; margin: 1em 0 2em; }
+.sidebyside textarea#transcript			{ height: 600px; }
