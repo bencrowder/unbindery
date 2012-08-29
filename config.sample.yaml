@@ -1,5 +1,5 @@
-db: mysql                   # database engine to use (in db/)
-auth: alibaba               # authentication engine to use (in auth/)
+db: MySQL                   # database engine to use (in db/)
+auth: Alibaba               # authentication engine to use (in auth/)
 
 database:
   host: localhost           # hostname
@@ -48,6 +48,10 @@ devkeys:
   unbindery: 'hash together a dev key and put it here'
 
 google_analytics: UA-YOUR-GA-CODE
+
+scoring:
+  proof: 5                              # how many points proofing an item is worth
+  review: 5                             # how many points reviewing an item is worth
 
 editors:
   page:

@@ -182,4 +182,8 @@ class Item {
 
 		return "success";
 	}
+
+	public function setStatus($status) {
+		return $this->db->setItemStatus($this->item_id, $this->project_id, $status);
+	}
 }

@@ -40,7 +40,7 @@ class Alibaba {
 	}
 
 	public static function authenticated() {
-		if (isset($_COOKIE["alibaba_" . self::$app_name . "_username"])) {
+		if (isset($_SESSION["alibaba_" . self::$app_name . "_username"])) {
 			return true;
 		} else {
 			return false;
@@ -60,13 +60,13 @@ class Alibaba {
 		$result = mysql_query($query) or die("Couldn't run: $query");
 
 		if (mysql_numrows($result)) { 
-			// We're logged in, set the cookie
+			// We're logged in, set the session variable
 			$logged_in = true;
-			setcookie("alibaba_" . self::$app_name . "_username", $username, time() + 60 * 60 * 24 * self::$cookie_expiration, "/");
+			$_SESSION['alibaba_' . self::$app_name . '_username'] = $username;
 		} else {
-			// Login failed
+			// Login failed, wipe the session variable
 			$logged_in = false;
-			setcookie("alibaba_" . self::$app_name . "_username", "", time() - 3600, "/");
+			$_SESSION['alibaba_' . self::$app_name . '_username'] = '';
 		}
 
 		self::db_close($db);
@@ -84,7 +84,7 @@ class Alibaba {
 	}
 
 	public static function getUsername() {
-		return $_COOKIE["alibaba_" . self::$app_name . "_username"];
+		return $_SESSION["alibaba_" . self::$app_name . "_username"];
 	}
 
 	public static function logout($url = '') {

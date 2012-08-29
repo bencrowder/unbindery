@@ -247,9 +247,9 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function setItemStatus($item_id, $status) {
-		$sql = "UPDATE items SET status = ? WHERE id = ?";
-		return $this->execute($sql, array($status, $item_id));
+	public function setItemStatus($itemId, $projectId, $status) {
+		$sql = "UPDATE items SET status = ? WHERE id = ? AND project_id = ?";
+		return $this->execute($sql, array($status, $itemId, $projectId));
 	}
 
 	// Returns: none
@@ -439,16 +439,16 @@ class DbMySQL implements DbInterface {
 		return $this->execute($sql, array($username, $item_id, $project_id));
 	}
 
-	// TODO: Rewrite
 	// Returns: none
-	public function updateUserScoreForItem($username, $item_id, $project_id, $score) {
-		$sql = "UPDATE users, assignments SET score = score + ? ";
+	public function updateUserScoreForItem($username, $itemId, $projectId, $score) {
+		$sql = "UPDATE users, queues SET score = score + ? ";
 		$sql .= "WHERE users.username = ? ";
+		$sql .= "AND queue_name = ? ";
 		$sql .= "AND item_id = ? ";
 		$sql .= "AND project_id = ? ";
-		$sql .= "AND date_completed IS NULL;";
+		$sql .= "AND date_removed IS NULL;";
 
-		return $this->execute($sql, array($score, $username, $item_id, $project_id));
+		return $this->execute($sql, array($score, $username, "user.proof:$username", $itemId, $projectId));
 	}
 
 	// TODO: Rewrite

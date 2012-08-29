@@ -23,6 +23,10 @@ class Workflow extends Queue {
 	public function getIndex() {
 		return $this->currentIndex;
 	}
+
+	public function getWorkflow() {
+		return $this->workflow;
+	}
 	
 
 	static public function register($action, $function) {

@@ -185,6 +185,33 @@ class ItemPageController {
 				$transcript->save(array('item' => $itemObj, 'status' => $transcriptStatus));
 
 				if ($transcriptStatus == 'completed' || $transcriptStatus == 'reviewed') {
+					$scoring = Settings::getProtected('scoring');
+
+					// Notifications
+					if ($transcriptStatus == 'reviewed') {
+						// Bump user's score up if they haven't already reviewed this page
+						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['review']);
+
+						// Notify project owner that review is complete
+
+						// Training mode
+						if ($user->status == 'training') {
+							// Clear the user for proofing
+							$user->setStatus('clear');
+
+							// Notify user of clearance
+
+							// Notify admin of clearance
+						}
+					} else {
+						// Bump user's score up if they haven't already proofed this page
+						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['proof']);
+
+						if ($user->status == 'training') {
+							// Notify project owner with link to review for clearance
+						}
+					}
+
 					// Remove from user's queue
 					$userQueue = new Queue("user.proof:$username");
 					$userQueue->remove($itemObj);
@@ -201,8 +228,15 @@ class ItemPageController {
 					$workflow = new Workflow($project->workflow);
 					$workflow->setIndex($itemObj->workflow_index);
 
-					// Process next step
-					$workflow->next($itemObj);
+					$workflowQueue = $workflow->getWorkflow();
+
+					if ($itemObj->workflow_index < count($workflowQueue) - 1) {
+						// Process next step
+						$workflow->next($itemObj);
+					} else {
+						// The item is complete
+						$itemObj->setStatus("completed");
+					}
 				}
 
 				echo json_encode(array("statuscode" => "success"));

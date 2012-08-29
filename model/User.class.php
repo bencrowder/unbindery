@@ -228,6 +228,14 @@ class User {
 		return $this->db->loadItemTranscript($item->project_id, $item->item_id, $this->username);
 	}
 
+	public function setStatus($status) {
+		return $this->db->setUserStatus($this->username, $status);
+	}
+
+	public function updateScoreForItem($itemId, $projectId, $scoreInc) {
+		return $this->db->updateUserScoreForItem($this->username, $itemId, $projectId, $scoreInc);
+	}
+
 	static public function getTopUsers() {
 		$db = Settings::getProtected('db');
 
