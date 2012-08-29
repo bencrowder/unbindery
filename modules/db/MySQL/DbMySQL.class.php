@@ -440,7 +440,7 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function updateUserScoreForItem($username, $itemId, $projectId, $score) {
+	public function updateUserScoreForItem($username, $itemId, $projectId, $score, $queueType) {
 		$sql = "UPDATE users, queues SET score = score + ? ";
 		$sql .= "WHERE users.username = ? ";
 		$sql .= "AND queue_name = ? ";
@@ -448,7 +448,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND project_id = ? ";
 		$sql .= "AND date_removed IS NULL;";
 
-		return $this->execute($sql, array($score, $username, "user.proof:$username", $itemId, $projectId));
+		return $this->execute($sql, array($score, $username, "user.$queueType:$username", $itemId, $projectId));
 	}
 
 	// TODO: Rewrite
@@ -653,9 +653,9 @@ class DbMySQL implements DbInterface {
 
 	// Returns: item_id, project_id, date_added
 	public function loadQueue($name, $includeRemoved = false) {
-		$query = "SELECT item_id, project_id, date_added FROM queues WHERE queue_name = ?";
+		$query = "SELECT item_id, project_id, date_added, date_removed FROM queues WHERE queue_name = ?";
 		$query .= (($includeRemoved == true) ? "" : " AND date_removed IS NULL");
-		$query .= " ORDER BY date_added, item_id ASC";
+		$query .= " ORDER BY item_id, date_added";
 
 		return $this->query($query, array($name));
 	}
@@ -685,8 +685,8 @@ class DbMySQL implements DbInterface {
 		$query .= "(SELECT count(items.id) FROM items WHERE items.project_id = projects.id AND items.status = 'available' AND items.id NOT IN (SELECT item_id AS id FROM queues WHERE queues.project_id = projects.id AND queue_name=?)) AS available_to_proof, ";
 		$query .= "(SELECT count(items.id) FROM items WHERE items.project_id = projects.id AND items.status = 'proofed' AND items.id NOT IN (SELECT item_id AS id FROM queues WHERE queues.project_id = projects.id AND queue_name=?)) AS available_to_review ";
 		$query .= "FROM projects, roles ";
-		$query .= "WHERE projects.id = roles.project_id;";
+		$query .= "WHERE projects.id = roles.project_id AND username = ?;";
 
-		return $this->query($query, array($proofString, $reviewString, $proofString, $reviewString));
+		return $this->query($query, array($proofString, $reviewString, $proofString, $reviewString, $username));
 	}
 }

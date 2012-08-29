@@ -191,7 +191,7 @@ class ItemPageController {
 					// Notifications
 					if ($transcriptStatus == 'reviewed') {
 						// Bump user's score up if they haven't already reviewed this page
-						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['review']);
+						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['review'], 'review');
 
 						// Notify project owner that review is complete
 
@@ -206,7 +206,7 @@ class ItemPageController {
 						}
 					} else {
 						// Bump user's score up if they haven't already proofed this page
-						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['proof']);
+						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['proof'], 'proof');
 
 						if ($user->status == 'training') {
 							// Notify project owner with link to review for clearance
@@ -231,7 +231,7 @@ class ItemPageController {
 
 					$workflowQueue = $workflow->getWorkflow();
 
-					if ($itemObj->workflow_index < count($workflowQueue) - 1) {
+					if ($itemObj->workflow_index < count($workflowQueue)) {
 						// Process next step
 						$workflow->next($itemObj);
 					} else {

@@ -18,7 +18,9 @@ class QueueController {
 
 		// Create a list combining the item and project IDs, since we need both
 		foreach ($results as $result) {
-			$dbList[] = $result['item_id'] . '|' . $result['project_id'];
+			if ($result['date_removed'] == "") {
+				$dbList[] = $result['item_id'] . '|' . $result['project_id'];
+			}
 		}
 
 		// Go through our queue

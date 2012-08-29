@@ -235,8 +235,8 @@ class User {
 		return $this->db->setUserStatus($this->username, $status);
 	}
 
-	public function updateScoreForItem($itemId, $projectId, $scoreInc) {
-		return $this->db->updateUserScoreForItem($this->username, $itemId, $projectId, $scoreInc);
+	public function updateScoreForItem($itemId, $projectId, $scoreInc, $queueType) {
+		return $this->db->updateUserScoreForItem($this->username, $itemId, $projectId, $scoreInc, $queueType);
 	}
 
 	static public function getTopUsers() {
