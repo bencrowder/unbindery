@@ -141,13 +141,10 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .content h3:first-child					{ margin-top: 0; }
 
 ul.action_list							{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; }
-ul.action_list li						{ border-bottom: solid 1px #ddd; padding: 6px 0; clear: both; overflow: hidden; }
+ul.action_list li						{ border-bottom: solid 1px #ddd; padding: 6px; clear: both; overflow: hidden; }
 ul.action_list li:last-child			{ border-bottom: none; }
 ul.action_list li .title				{ font-size: 1.2em; font-weight: bold; }
 ul.action_list li .title a				{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; line-height: 1.4em; }
-ul.action_list li .deadline				{ font-size: .6em; color: #999; margin-left: 5px; }
-ul.action_list li .impending			{ color: #f99; }
-ul.action_list li .overdue				{ color: #f00; font-weight: bold; font-size: .9em; }
 
 ul.action_list li .right_button			{ float: right; padding-top: 8px; }
 ul.action_list li .button				{ font-size: 1.2em; }
