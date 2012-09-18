@@ -1,8 +1,8 @@
-{% include '_header.html' %}
+{% extends '_base.html' %}
 
-<section id="page">
-	{% include '_editor_controls.html' %}
+{% block controls %}{% include '_editor_controls.html' %}{% endblock %}
 
+{% block main %}
 	<div id="main" class="container">
 		<h2>{{ item.title }}</h2>
 		{% if user.prefs.sidebyside %}
@@ -24,6 +24,4 @@
 		</div>
 		{% endif %}
 	</div>
-</section>
-
-{% include '_footer.html' %}
+{% endblock %}

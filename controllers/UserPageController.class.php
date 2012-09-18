@@ -46,8 +46,17 @@ class UserPageController {
 	// Methods: GET = get user settings
 
 	static public function userSettings($params) {
-		echo "Settings page (" . $params['method'] . "): ";
-		print_r($params['args']);
+		$user = self::authenticate();
+
+		$options = array(
+			'user' => array(
+				'loggedin' => true,
+				'admin' => $user->admin,
+				'name' => $user->name,
+				'email' => $user->email),
+		);
+
+		Template::render('settings', $options);
 	}
 
 
@@ -188,55 +197,18 @@ class UserPageController {
 		Template::render('dashboard', $options);
 	}
 
-	static public function userSettingsHandler($args) {
-		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
 
+	// --------------------------------------------------
+	// Helper function to check authentication
+
+	static public function authenticate() {
+		$auth = Settings::getProtected('auth');
 		$auth->forceAuthentication();
 
 		$username = $auth->getUsername();
 		$user = new User($username);
 
-		$options = array(
-			'user' => array(
-				'loggedin' => true,
-				'admin' => $user->admin,
-				'name' => $user->name,
-				'email' => $user->email),
-		);
-
-		Template::render('settings', $options);
-	}
-
-	/* MOVE TO PUT */
-	static public function userSaveSettingsHandler($args) {
-		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
-
-		$auth->forceAuthentication();
-
-		$username = (array_key_exists('username', $_POST)) ? stripslashes($_POST['username']) : '';
-		$user_name = (array_key_exists('user_name', $_POST)) ? stripslashes($_POST['user_name']) : '';
-		$user_email = (array_key_exists('user_email', $_POST)) ? stripslashes($_POST['user_email']) : '';
-		$user_oldpassword = (array_key_exists('user_oldpassword', $_POST)) ? stripslashes($_POST['user_oldpassword']) : '';
-		$user_newpassword1 = (array_key_exists('user_newpassword1', $_POST)) ? stripslashes($_POST['user_newpassword1']) : '';
-		$user_newpassword2 = (array_key_exists('user_newpassword2', $_POST)) ? stripslashes($_POST['user_newpassword2']) : '';
-
-		if ($user_newpassword1 != "" && $user_newpassword1 == $user_newpassword2) {
-			// verify that md5(oldpassword) == the password in the database
-			$change_password = true;
-
-			// else redirect to settings with an error
-			//header("Location: $app_url/settings?message=Passwords didn't match. Try again.");
-		}
-
-		$db->updateUserSettings($username, $user_name, $user_email, $user_newpassword1);
-
-		$_SESSION['ub_message'] = "Settings saved.";
-
-		header("Location: $app_url/settings");
+		return $user;
 	}
 }
 

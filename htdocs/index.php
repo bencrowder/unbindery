@@ -41,7 +41,6 @@ require_once '../controllers/UserPageController.class.php';
 require_once '../controllers/ProjectPageController.class.php';
 require_once '../controllers/AdminPageController.class.php';
 require_once '../controllers/ItemPageController.class.php';
-require_once '../controllers/WebServiceHandlers.class.php'; // TODO: remove
 
 // Object models
 require_once '../model/User.class.php';

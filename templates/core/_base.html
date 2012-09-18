@@ -64,7 +64,7 @@ methods['{{ method.name }}'] = '{{ method.value }}';
 					{% if user.admin %}
 					<li><a href="{{ app_url }}/admin">{{ i18n.translate("nav.admin") }}</a></li>
 					{% endif %}
-					<li><a href="{{ app_url }}/settings">{{ i18n.translate("nav.settings") }}</a></li>
+					<li><a href="{{ app_url }}/users/{{ username }}/settings">{{ i18n.translate("nav.settings") }}</a></li>
 					<li><a href="{{ app_url }}/logout">{{ i18n.translate("nav.logout") }}</a></li>
 				{% else %}
 					<li><a href="{{ app_url }}/signup">{{ i18n.translate("nav.signup") }}</a></li>
@@ -78,7 +78,7 @@ methods['{{ method.name }}'] = '{{ method.value }}';
 
 	{% block page %}
 	<section id="page">
-		{% block scoreboard %}
+		{% block controls %}
 		<div id="scoreboard" class="controls">
 			<ul class="container">
 				<li><label>{{ i18n.t('dashboard.score') }}</label> <span class="stat">{{ user.score }}</span></li>
