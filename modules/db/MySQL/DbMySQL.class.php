@@ -308,19 +308,17 @@ class DbMySQL implements DbInterface {
 		return $user;
 	}
 
-	// TODO: Rewrite
 	// Returns: history row
 	public function getUserHistory($username) {
-		$query = "SELECT items.title AS item_title, projects.title AS project_title, assignments.date_completed AS date_comp, ";
-		$query .= "DATE_FORMAT(assignments.date_completed, '%e %b %Y') AS date_completed, ";
-		$query .= "items.id as item_id, projects.slug as project_slug ";
-		$query .= "FROM assignments JOIN items ON item_id = items.id ";
-		$query .= "JOIN projects ON assignments.project_id = projects.id ";
-		$query .= "WHERE username = ? ";
-		$query .= "AND assignments.date_completed IS NOT null ";
-		$query .= "ORDER BY assignments.date_completed DESC LIMIT 5;";
+		$query = "SELECT items.id AS item_id, items.title AS item_title, projects.title AS project_title, queues.date_removed AS date_comp, DATE_FORMAT(queues.date_removed, '%e %b %Y') AS date_completed, projects.slug AS project_slug ";
+		$query .= "FROM queues JOIN items ON item_id = items.id ";
+		$query .= "JOIN projects ON queues.project_id = projects.id ";
+		$query .= "WHERE queue_name = ? ";
+		$query .= "AND queues.date_removed IS NOT null ";
+		$query .= "GROUP BY item_id ";
+		$query .= "ORDER BY queues.date_removed DESC LIMIT 5;";
 
-		$history = $this->query($query, array($username));
+		$history = $this->query($query, array("user.proof:$username"));
 
 		return $history;
 	}

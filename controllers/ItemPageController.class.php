@@ -82,11 +82,6 @@ class ItemPageController {
 				$item['project_owner'] = $owner;
 				$item['project_type'] = ($owner == '') ? 'public' : 'private';
 
-				// Check to see if there's another item to proof
-				// - Load project proof queue
-				// - Get count > 0
-				// TODO: Finish
-
 				// Get template type
 				$templateType = $itemObj->type;
 
