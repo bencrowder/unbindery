@@ -4,7 +4,7 @@ A transcription web app written in PHP and JavaScript.
 
 ### Dependencies
 
-* Twig (1.6.0 included)
+* Twig (1.9.2 included)
 * sfYaml (included)
 * uploadify (included)
 * MediaElement.js (included)
