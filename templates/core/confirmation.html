@@ -1,5 +1,10 @@
-{% include '_header_index.html' %}
+{% extends '_base.html' %}
 
+{% block bodyid %} id="index"{% endblock %}
+{% block banner %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block page %}
 <div class="container">
 	<div id="logo_box"><img src="{{ theme_root }}/images/logo_white.png" /></div>
 
@@ -9,6 +14,4 @@
 		<div id="thankyou">{{ i18n.t('signup.conf_link_sent') }}</div>
 	</div>
 </div>
-
-</body>
-</html>
+{% endblock %}

@@ -1,9 +1,9 @@
-{% include '_header.html' %}
+{% extends '_base.html' %}
 
-<section id="page" class="add">
-	<div id="scoreboard" class="controls"></div>
+{% block scoreboard %}<div id="scoreboard" class="controls"></div>{% endblock %}
 
-	<div id="main" class="container">
+{% block main %}
+	<div id="main" class="container add">
 		<h2>Edit Project</h2>
 
 		<form id="new_project_form" name="new_project_form" action="{{ app_url }}/projects" method="POST">
@@ -77,6 +77,4 @@
 			</div>
 		</form>
 	</div>
-</section>
-
-{% include '_footer.html' %}
+{% endblock %}

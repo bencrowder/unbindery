@@ -317,27 +317,27 @@ ul.proofers .username					{ font-size: 11px; }
 /* New project */
 /* --------------------------------------------------- */
 
-#page.add .step							{ border-bottom: dotted 1px #999; padding-top: 2.5em; padding-bottom: 2.5em; overflow: hidden; clear: both; }
+#main.add .step							{ border-bottom: dotted 1px #999; padding-top: 2.5em; padding-bottom: 2.5em; overflow: hidden; clear: both; }
 
-#page.add .step h3						{ font-size: 1.3em; margin-bottom: 1em; }
+#main.add .step h3						{ font-size: 1.3em; margin-bottom: 1em; }
 
-#page.add .step label,
-	#page.add .step select,
-	#page.add .step input				{ display: block; }
+#main.add .step label,
+	#main.add .step select,
+	#main.add .step input				{ display: block; }
 
-#page.add .step label					{ margin-top: 1em; }
-#page.add .step textarea				{ width: 100%; height: 75px; font-size: 1em; padding: 3px; }
+#main.add .step label					{ margin-top: 1em; }
+#main.add .step textarea				{ width: 100%; height: 75px; font-size: 1em; padding: 3px; }
 
-#page.add .step ul.fields				{ list-type: none; padding-left: 0; font-size: .9em; }
-#page.add .step ul.fields li			{ padding: 5px 8px; -moz-border-radius: 1em; border-radius: 1em; background: #eee; margin-bottom: 5px; border: dotted 1px #ccc; }
+#main.add .step ul.fields				{ list-type: none; padding-left: 0; font-size: .9em; }
+#main.add .step ul.fields li			{ padding: 5px 8px; -moz-border-radius: 1em; border-radius: 1em; background: #eee; margin-bottom: 5px; border: dotted 1px #ccc; }
 
-#page.add .step ul.fields li label		{ display: inline-block; margin-right: 15px; }
-#page.add .step ul.fields li input		{ display: inline-block; }
+#main.add .step ul.fields li label		{ display: inline-block; margin-right: 15px; }
+#main.add .step ul.fields li input		{ display: inline-block; }
 
-#page.add .step a.delete				{ float: right; color: #999; }
-#page.add .step a.delete:hover			{ cursor: pointer; color: #000; }
+#main.add .step a.delete				{ float: right; color: #999; }
+#main.add .step a.delete:hover			{ cursor: pointer; color: #000; }
 
-#page.add .step ul.draggable			{ list-type: none; padding-left: 0; }
-#page.add .step ul.draggable li			{ padding: 5px 8px; font-weight: bold; background: #eee; border: dotted 1px #ccc; margin-bottom: 5px; -moz-border-radius: 1em; border-radius: 1em; }
+#main.add .step ul.draggable			{ list-type: none; padding-left: 0; }
+#main.add .step ul.draggable li			{ padding: 5px 8px; font-weight: bold; background: #eee; border: dotted 1px #ccc; margin-bottom: 5px; -moz-border-radius: 1em; border-radius: 1em; }
 
 p.small									{ font-size: .95em; color: #999; }

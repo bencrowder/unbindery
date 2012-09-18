@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% block head %}
+	<meta charset="utf-8" />
+
+	<title>{% block title %}{{ title }}{% endblock %}</title>
+
+	<link rel="shortcut icon" href="{{ theme_root }}/images/favicon.png" />
+
+	<link rel="stylesheet" href="{{ theme_root }}/css/style.css" type="text/css" media="screen" charset="utf-8" />
+	{% if css %}{% for cssfile in css %}<link rel="stylesheet" href="{{ theme_root }}/css/{{ cssfile }}" type="text/css" media="screen" charset="utf-8" />
+	{% endfor %}{% endif %}
+
+	{% if editor_options['css'] %}
+<!-- Custom editor-specific CSS -->
+	{% for cssfile in editor_options['css'] %}<link rel="stylesheet" href="{{ theme_root }}/css/editors/{{ editor_type }}/{{ cssfile }}" type="text/css" media="screen" charset="utf-8" />
+	{% endfor %}
+<!-- End custom editor-specific CSS -->
+	{% endif %}
+
+	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript" charset="utf-8"></script><![endif]-->
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script type="text/javascript" src="{{ app_url }}/js/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="{{ app_url }}/js/core.js"></script>
+
+	{% if js %}{% for jsfile in js %}<script type="text/javascript" src="{{ theme_root }}/js/{{ jsfile }}"></script>
+	{% endfor %}{% endif %}
+
+	{% if editor_options['js'] %}
+<!-- Custom editor-specific JS -->
+	{% for jsfile in editor_options['js'] %}<script type="text/javascript" src="{{ theme_root }}/js/editors/{{ editor_type }}/{{ jsfile }}"></script>
+	{% endfor %}
+<!-- End custom editor-specific JS -->
+	{% endif %}
+
+	{% if includes %}{% autoescape false %}{{ includes }}{% endautoescape %}{% endif %}
+
+	<script type="text/javascript">
+		var app_url = "{{ app_url }}";
+		var theme_root = "{{ theme_root }}";
+		{% if username %}var username = "{{ username }}";{% endif %}
+{% if methods %}
+		var methods = {};
+		{% for method in methods %}
+methods['{{ method.name }}'] = '{{ method.value }}';
+		{% endfor %}
+{% endif %}
+	</script>
+	{% endblock %}
+</head>
+
+<body{% block bodyid %}{% endblock %}>
+	{% block banner %}
+	<header>
+		<div class="container">
+			{% block logo %}<div id="logo"><a href="{{ app_url }}/"><img src="{{ theme_root }}/images/logo.jpg" alt="Unbindery" /></a></div>{% endblock %}
+			{% block nav %}<nav>
+				<ul>
+				{% if user.loggedin %}
+					<li>{{ i18n.translate("nav.logged_in_as") }} <span id="username" class="username">{{ username }}</span></li>
+					<li><a href="{{ app_url }}/users/{{ username }}/dashboard">{{ i18n.translate("nav.dashboard") }}</a></li>
+					<li><a href="{{ app_url }}/projects">{{ i18n.translate("nav.projects") }}</a></li>
+					{% if user.admin %}
+					<li><a href="{{ app_url }}/admin">{{ i18n.translate("nav.admin") }}</a></li>
+					{% endif %}
+					<li><a href="{{ app_url }}/settings">{{ i18n.translate("nav.settings") }}</a></li>
+					<li><a href="{{ app_url }}/logout">{{ i18n.translate("nav.logout") }}</a></li>
+				{% else %}
+					<li><a href="{{ app_url }}/signup">{{ i18n.translate("nav.signup") }}</a></li>
+					<li><a href="{{ app_url }}/login">{{ i18n.translate("nav.login") }}</a></li>
+				{% endif %}
+				</ul>
+			</nav>{% endblock %}
+		</div>
+	</header>
+	{% endblock %}
+
+	{% block page %}
+	<section id="page">
+		{% block scoreboard %}
+		<div id="scoreboard" class="controls">
+			<ul class="container">
+				<li><label>{{ i18n.t('dashboard.score') }}</label> <span class="stat">{{ user.score }}</span></li>
+				<li><label>{{ i18n.t('dashboard.proofed') }}</label> <span class="stat">{{ user.proofed }}</span></li>
+				<li><label>{{ i18n.t('dashboard.proofed_past_week') }}</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
+			</ul>
+		</div>
+		{% endblock %}
+
+		{% block messages %}
+		{% if message %}<div id="message" class="container sys_message">{{ message }}</div>{% endif %}
+		{% if error %}<div id="error" class="container sys_message">{{ error }}</div>{% endif %}
+		{% endblock %}
+
+		{% block main %}{% endblock %}
+	</section>
+	{% endblock %}
+
+	{% block footer %}
+	<footer>
+		<div class="container">{{ i18n.t('footer.text')|raw }}</div>
+	</footer>
+	{% endblock %}
+
+	{% block analytics %}
+	{% if google_analytics %}
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', '{{ google_analytics }}']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+	{% endif %}
+	{% endblock %}
+</body>
+</html>

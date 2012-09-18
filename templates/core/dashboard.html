@@ -1,16 +1,6 @@
-{% include '_header.html' %}
+{% extends '_base.html' %}
 
-<section id="page">
-	<div id="scoreboard" class="controls">
-		<ul class="container">
-			<li><label>{{ i18n.t('dashboard.score') }}</label> <span class="stat">{{ user.score }}</span></li>
-			<li><label>{{ i18n.t('dashboard.proofed') }}</label> <span class="stat">{{ user.proofed }}</span></li>
-			<li><label>{{ i18n.t('dashboard.proofed_past_week') }}</label> <span class="stat">{{ user.proofed_past_week }}</span></li>
-		</ul>
-	</div>
-	{% if message %}<div id="message" class="container sys_message">{{ message }}</div>{% endif %}
-	{% if error %}<div id="error" class="container sys_message">{{ error }}</div>{% endif %}
-
+{% block main %}
 	<div id="main" class="dashboard container">
 		<h2>{{ i18n.t('dashboard.title') }}</h2>
 
@@ -117,6 +107,4 @@
 			</div>
 		</div>
 	</div>
-</section>
-
-{% include '_footer.html' %}
+{% endblock %}

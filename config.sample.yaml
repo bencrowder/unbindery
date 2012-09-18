@@ -5,15 +5,16 @@ database:
   host: localhost           # hostname
   database: mydatabase      # database name
   username: dbuser          # database username
-  password: dbpass           # database user's password
+  password: dbpass          # database user's password
 
+title: Site Title           # site title
 app_url: &SITEROOT http://path/to/unbindery
 sys_path: /filesystem/path/to/unbindery
 language: en                # default language
 admin_email: administrator@email.com        # site admin's email
 email_subject: [unbindery]  # prepended to notification emails
 theme_cached: false
-
+theme: core                 # if you add a new system-wide theme, change this
 external_login: false       # whether to call Auth::redirectToLogin on index page
 allow_signup: true          # whether to show link to sign up
 

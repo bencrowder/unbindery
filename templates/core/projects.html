@@ -1,6 +1,6 @@
-{% include '_header.html' %}
+{% extends '_base.html' %}
 
-<section id="page">
+{% block main %}
 	<div id="main" class="container">
 		<h2>Projects</h2>
 
@@ -36,6 +36,4 @@
 			</ul>	
 		</div>
 	</div>
-</section>
-
-{% include '_footer.html' %}
+{% endblock %}

@@ -1,9 +1,6 @@
-{% include '_header.html' %}
+{% extends '_base.html' %}
 
-<section id="page">
-	{% if message %}<div id="message" class="container sys_message">{{ message }}</div>{% endif %}
-	{% if error %}<div id="error" class="container sys_message">{{ error }}</div>{% endif %}
-
+{% block main %}
 	<div id="main" class="container">
 	{% if guidelines == true %}
 		<h2>Project Guidelines</h2>
@@ -82,6 +79,4 @@
 		</div>
 	{% endif %}
 	</div>
-</section>
-
-{% include '_footer.html' %}
+{% endblock %}

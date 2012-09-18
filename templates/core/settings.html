@@ -1,8 +1,6 @@
-{% include '_header.html' %}
+{% extends '_base.html' %}
 
-{% if message %}<div id="message">{{ message }}</div>{% endif %}
-
-<section id="page">
+{% block main %}
 	<div id="main" class="container">
 		<h2>Settings</h2>
 
@@ -31,6 +29,4 @@
 			<input type="hidden" name="username" id="username" value="{{ username }}" />
 		</form>
 	</div>
-</section>
-
-{% include '_footer.html' %}
+{% endblock %}

@@ -4,15 +4,22 @@ class Template {
 	static public function render($page, $options, $theme = 'core') {
 		$cached = Settings::getProtected('theme_cached');
 
+		// If there's a system-wide theme in config.yaml, use it as the default instead
+		$settingsTheme = Settings::getProtected('theme');
+		if ($settingsTheme != 'core' && $theme == 'core') {
+			$theme = $settingsTheme;
+		}
+
 		if ($cached) {
 			$twig_opts = array('cache' => '../templates/cache');
 		} else {
 			$twig_opts = array();
 		}
 
-		$loader = new Twig_Loader_Filesystem("../templates/$theme", "../templates/core");
+		$loader = new Twig_Loader_Filesystem(array("../templates/$theme", "../templates/core"));
 		$twig = new Twig_Environment($loader, $twig_opts);
 
+		$options['title'] = Settings::getProtected('title');
 		$options['app_url'] = Settings::getProtected('app_url');
 		$options['google_analytics'] = Settings::getProtected('google_analytics');
 		$options['theme_root'] = $options['app_url'] . "/themes/$theme";
