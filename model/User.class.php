@@ -93,9 +93,16 @@ class User {
 		return $this->db->userHasProjectItem($this->username, $projectSlug);
 	}
 
-	public function getRoleForProject($project_slug) {
-		$role = $this->db->getRoleForProject($this->username, $project_slug);
-		return $role;
+	public function getRolesForProject($project_slug) {
+		$dbRoles = $this->db->getRolesForProject($this->username, $project_slug);
+
+		// Parse it into a cleaner array
+		$roles = array();
+		foreach ($dbRoles as $role) {
+			$roles[] = $role['role'];
+		}
+
+		return $roles;
 	}
 
 	public function assignToProject($projectSlug) {

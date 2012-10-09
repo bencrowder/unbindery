@@ -194,13 +194,10 @@ class DbMySQL implements DbInterface {
 		return $this->execute($sql, array($name, $email, md5($password), $username));
 	}
 
-	// Returns: role (string)
-	public function getRoleForProject($username, $project_slug) {
+	// Returns: roles (array of strings)
+	public function getRolesForProject($username, $project_slug) {
 		$results = $this->query("SELECT role FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
-		$result = $results[0];
-		$role = $result['role'];
-
-		return $role;
+		return $results;
 	}
 
 	// Returns: status
