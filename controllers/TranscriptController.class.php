@@ -97,9 +97,9 @@ class TranscriptController {
 		if ($maxlen == 0) return array(array('d' => $old, 'i' => $new));
 
 		return array_merge(
-			__diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+			self::__diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
 			array_slice($new, $nmax, $maxlen),
-			__diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
+			self::__diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
 	}
 
 }

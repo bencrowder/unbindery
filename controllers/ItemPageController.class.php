@@ -2,8 +2,9 @@
 
 class ItemPageController {
 	// --------------------------------------------------
-	// Item proof handler
+	// Item proof/review handler
 	// URL: /projects/PROJECT/items/ITEM/proof OR /users/USER/projects/PROJECT/items/ITEM/proof
+	// URL: /projects/PROJECT/items/ITEM/review OR /users/USER/projects/PROJECT/items/ITEM/review
 	// Methods: 
 
 	static public function itemProof($params) {
@@ -16,6 +17,9 @@ class ItemPageController {
 		$itemIndex = ($projectType == 'system') ? 1 : 3;
 		$itemId = $params['args'][$itemIndex];
 
+		$proofTypeIndex = ($projectType == 'system') ? 2 : 4;
+		$proofType = $params['args'][$proofTypeIndex];
+
 		$owner = ($projectType == 'user') ? $params['args'][0] : '';
 
 		$db = Settings::getProtected('db');
@@ -26,7 +30,7 @@ class ItemPageController {
 		$user = new User($username);
 
 		switch ($params['method']) {
-			// GET: Get proof page for this item
+			// GET: Get proof/review page for this item
 			case 'GET':
 				// Make sure they have access to the project
 				if (!$user->isMember($projectSlug)) {
@@ -35,7 +39,7 @@ class ItemPageController {
 				}
 
 				// Load the item
-				$itemObj = new Item($itemId, $projectSlug, $username, 'proof');
+				$itemObj = new Item($itemId, $projectSlug, $username, $proofType);
 
 				// Make sure it exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
@@ -46,14 +50,14 @@ class ItemPageController {
 				// If it's not in their current queue, they're editing it after finishing it
 				// TODO: Make this part more elegant
 				$alreadyFinished = false;
-				$userCurrentQueue = new Queue("user.proof:$username", false);
+				$userCurrentQueue = new Queue("user.$proofType:$username", false);
 				$userCurrentQueueItems = $userCurrentQueue->getItems();
 				if (!in_array($itemObj, $userCurrentQueueItems)) {
 					$alreadyFinished = true;
 				}
 
 				// And if it's not in their full queue, they never had it and shouldn't be allowed to proof it
-				$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
+				$userQueue = new Queue("user.$proofType:$username", false, array('include-removed' => true));
 				$userQueueItems = $userQueue->getItems();
 				if (!in_array($itemObj, $userQueueItems)) {
 					Utils::redirectToDashboard("", "You don't have that item in your queue.");
@@ -62,7 +66,7 @@ class ItemPageController {
 
 				// See if there are any items left for us to proof
 				$moreToProof = false;
-				$queue = new Queue("project.proof:$projectSlug");
+				$queue = new Queue("project.$proofType:$projectSlug");
 
 				foreach ($queue->getItems() as $item) {
 					if (!in_array($item, $userQueueItems)) {
@@ -106,127 +110,7 @@ class ItemPageController {
 						'prefs' => $user->prefs,
 						),
 					'item' => $item,
-					'transcript_type' => 'proof',
-					'more_to_proof' => $moreToProof,
-					'already_finished' => $alreadyFinished,
-					'editor_options' => $editorOptions,
-					'editor_type' => $templateType,
-					'css' => array("editors/$templateType/$templateType.css"),
-					'js' => array("editors/$templateType/$templateType.js"),
-				);
-
-				Template::render("editors/$templateType", $options);
-
-				break;
-		}
-	}
-
-
-	// --------------------------------------------------
-	// Item review handler
-	// URL: /projects/PROJECT/items/ITEM/review OR /users/USER/projects/PROJECT/items/ITEM/review
-	// Methods: 
-
-	static public function itemReview($params) {
-		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectPageType($params['args']);
-
-		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
-		$projectSlug = $params['args'][$projectSlugIndex];
-
-		$itemIndex = ($projectType == 'system') ? 1 : 3;
-		$itemId = $params['args'][$itemIndex];
-
-		$owner = ($projectType == 'user') ? $params['args'][0] : '';
-
-		$db = Settings::getProtected('db');
-		$auth = Settings::getProtected('auth');
-
-		$auth->forceAuthentication();
-		$username = $auth->getUsername();
-		$user = new User($username);
-
-		switch ($params['method']) {
-			// GET: Get review page for this item
-			case 'GET':
-				// Make sure they have access to the project
-				if (!$user->isMember($projectSlug)) {
-					Utils::redirectToDashboard("", "You're not a member of that project. Sorry.");
-					return;
-				}
-
-				// Load the item
-				$itemObj = new Item($itemId, $projectSlug, $username, 'review');
-
-				// Make sure it exists (if it fails, it'll return a boolean)
-				if ($itemObj->item_id == -1) {
-					Utils::redirectToDashboard("", "Item doesn't exist.");
-					return;
-				}
-
-				// If it's not in their current queue, they're editing it after finishing it
-				// TODO: Make this part more elegant
-				$alreadyFinished = false;
-				$userCurrentQueue = new Queue("user.review:$username", false);
-				$userCurrentQueueItems = $userCurrentQueue->getItems();
-				if (!in_array($itemObj, $userCurrentQueueItems)) {
-					$alreadyFinished = true;
-				}
-
-				// And if it's not in their full queue, they never had it and shouldn't be allowed to review it
-				$userQueue = new Queue("user.review:$username", false, array('include-removed' => true));
-				$userQueueItems = $userQueue->getItems();
-				if (!in_array($itemObj, $userQueueItems)) {
-					Utils::redirectToDashboard("", "You don't have that item in your queue.");
-					return;
-				}
-
-				// See if there are any items left for us to review 
-				$moreToProof = false;
-				$queue = new Queue("project.review:$projectSlug");
-
-				foreach ($queue->getItems() as $item) {
-					if (!in_array($item, $userQueueItems)) {
-						$moreToProof = true;
-						break;
-					}	
-				}
-
-				$item = array();
-				$item['id'] = $itemId;
-				$item['title'] = $itemObj->title;
-				$item['href'] = $itemObj->href;
-
-				// If the user has a transcript for this item, load it instead
-				if ($itemObj->userTranscript && trim($itemObj->userTranscript) != '') {
-					$transcript = trim($itemObj->userTranscript);
-				} else {
-					$transcript = trim($itemObj->transcript);
-				}
-
-				// Strip slashes and replace angle brackets
-				$item['transcript'] = str_replace(">", "&gt;", str_replace("<", "&lt;", stripslashes($transcript)));
-
-				$item['project_slug'] = $projectSlug;
-				$item['project_owner'] = $owner;
-				$item['project_type'] = ($owner == '') ? 'public' : 'private';
-
-				// Get template type
-				$templateType = $itemObj->type;
-
-				// Get any editor-specific config settings
-				$editors = Settings::getProtected('editors');
-				$editorOptions = (array_key_exists($templateType, $editors)) ? $editors[$templateType] : array();
-				
-				// Display the template
-				$options = array(
-					'user' => array(
-						'loggedin' => true,
-						'admin' => $user->admin,
-						'prefs' => $user->prefs,
-						),
-					'item' => $item,
-					'transcript_type' => 'review',
+					'transcript_type' => $proofType,
 					'more_to_proof' => $moreToProof,
 					'already_finished' => $alreadyFinished,
 					'editor_options' => $editorOptions,
