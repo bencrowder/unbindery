@@ -49,7 +49,6 @@ class ItemPageController {
 				$userCurrentQueue = new Queue("user.proof:$username", false);
 				$userCurrentQueueItems = $userCurrentQueue->getItems();
 				if (!in_array($itemObj, $userCurrentQueueItems)) {
-					error_log("Already finished");
 					$alreadyFinished = true;
 				}
 

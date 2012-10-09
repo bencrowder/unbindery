@@ -62,8 +62,6 @@ var Unbindery = function() {
 				} else {
 					unbindery.hideSpinner();
 
-					console.log(data, data.code);
-
 					switch (data.code) {
 						case "not-authenticated-as-correct-user":
 							unbindery.redirectToDashboard("", "You're not the user you say you are.");
@@ -214,8 +212,6 @@ $(document).ready(function() {
 	$("form#new_project_form #step_2 input[type=button]").on("click", function() {
 		newFieldName = $(this).siblings("#new_field_name").val().trim();
 		newFieldType = $(this).siblings("#new_field_type").val().trim();
-
-		console.log("Here", newFieldName, newFieldType);
 
 		if (newFieldName != '' && newFieldType != '') {
 			newFieldHTML = "<li><a class='delete'>x</a><label>";

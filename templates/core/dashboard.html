@@ -7,11 +7,11 @@
 		<div class="content">
 			<h3>{{ i18n.t('dashboard.proofing_queue') }}</h3>
 			<ul class="action_list">
-				{% if blankslate %}
+				{% if proofing.blankslate %}
 				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
 				{% endif %}
 
-				{% for item in proofItems %}
+				{% for item in proofing.items %}
 				<li class="item">
 					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.proof') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
@@ -20,24 +20,19 @@
 				</li>
 				{% endfor %}
 
-				{% for project in projects %}
-					{% if project.available_for_proofing %}
+				{% for project in proofing.projects %}
 				<li class="project">
-				<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-type="{{ project.type }}" data-project-owner="{{ project.owner }}" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
+				<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-type="{{ projects[project].type }}" data-project-owner="{{ projects[project].owner }}" data-project-slug="{{ projects[project].slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
 
-					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+					<div class="title"><a href="{{ projects[project].link }}">{{ projects[project].title }}</a></div>
 				</li>
-					{% endif %}
 				{% endfor %}
 			</ul>
 
+			{% if reviewing.items|length > 0 or reviewing.projects|length > 0 %}
 			<h3>{{ i18n.t('dashboard.reviewing_queue') }}</h3>
 			<ul class="action_list">
-				{% if blankslate %}
-				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
-				{% endif %}
-
-				{% for item in reviewItems %}
+				{% for item in reviewing.items %}
 				<li class="item">
 					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.review') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
@@ -46,17 +41,15 @@
 				</li>
 				{% endfor %}
 
-				{% for project in projects %}
-					{% if project.available_for_reviewing %}
+				{% for project in reviewing.projects %}
 				<li class="project">
-					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ project.slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
+					<div class="right_button"><img src="{{ theme_root }}/images/spinner.gif" class="spinner" /> <span class="button light getnewitem" data-project-slug="{{ projects[project].slug }}">{{ i18n.t('dashboard.get_new_item') }}</span></div>
 
-					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+					<div class="title"><a href="{{ projects[project].link }}">{{ projects[project].title }}</a></div>
 				</li>
-					{% endif %}
 				{% endfor %}
 			</ul>
-
+			{% endif %}
 		</div>
 
 		<div class="sidebar">

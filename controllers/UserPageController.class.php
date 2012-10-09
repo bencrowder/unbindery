@@ -80,26 +80,27 @@ class UserPageController {
 		// Get user's stats (score, # proofed, etc.)
 		$user->getStats();
 
+		// Set up proofing and reviewing objects
+		$proofing = array();
+		$reviewing = array();
+
 		// Load the user's proofing queue
 		$proofQueue = new Queue("user.proof:$username");
-		$proofItems = array();
+		$proofing['items'] = array();
 		foreach ($proofQueue->getItems() as $item) {
-			array_push($proofItems, array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
+			array_push($proofing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
 		}
 
 		// Load the user's reviewing queue
 		$reviewQueue = new Queue("user.review:$username");
-		$reviewItems = array();
+		$reviewing['items'] = array();
 		foreach ($reviewQueue->getItems() as $item) {
-			array_push($reviewItems, array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
+			array_push($reviewing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
 		}
-
-		// Get the user's projects
-		$projects = $user->getProjectSummaries();
 
 		// Add extra info (edit link and slug) to each item
 		$prooflist = array();
-		foreach ($proofItems as &$item) {
+		foreach ($proofing['items'] as &$item) {
 			if ($item['project_type'] == 'public') {
 				$item['editlink'] = $app_url . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/proof';
 			} else if ($item['project_type'] == 'private') {
@@ -112,7 +113,7 @@ class UserPageController {
 		}	
 
 		$reviewlist = array();
-		foreach ($reviewItems as &$item) {
+		foreach ($reviewing['items'] as &$item) {
 			if ($item['project_type'] == 'public') {
 				$item['editlink'] = $app_url . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/review';
 			} else if ($item['project_type'] == 'private') {
@@ -125,21 +126,23 @@ class UserPageController {
 		}	
 
 		// Add link and percentages to each project
-		$projectSummaries = array();
+		$projects = $user->getProjectSummaries();
+		$projectInfo = array();
+		$proofing['projects'] = array();
+		$reviewing['projects'] = array();
 
 		foreach ($projects as &$project) {
+			// If the project is available for proofing or reviewing (with no items already claimed),
+			// then add it to the appropriate list
 			if (!in_array($project["slug"], $prooflist) && ($project["available_to_proof"] > 0)) {
-				$project["available_for_proofing"] = true;
-			} else {
-				$project["available_for_proofing"] = false;
+				array_push($proofing['projects'], $project['slug']);
 			}
 
 			if (!in_array($project["slug"], $reviewlist) && ($project["available_to_review"] > 0)) {
-				$project["available_for_reviewing"] = true;
-			} else {
-				$project["available_for_reviewing"] = false;
+				array_push($reviewing['projects'], $project['slug']);
 			}
 
+			// Set up percentage bars
 			if ($project['num_items'] == 0) {
 				$project['percent_proofed'] = 0;
 				$project['percent_reviewed'] = 0;
@@ -148,20 +151,25 @@ class UserPageController {
 				$project['percent_reviewed'] = round($project['num_reviewed'] / $project['num_items'] * 100, 0);
 			}
 
+			// And the project link
 			if ($project['type'] == 'public') {
 				$project["link"] = $app_url . '/projects/' . $project["slug"];
 			} else if ($project['type'] == 'private') {
 				$project["link"] = $app_url . '/users/' . $project['owner'] . '/projects/' . $project["slug"];
 			}
 
-			$projectSummaries[$project['slug']] = $project;
+			$projectInfo[$project['slug']] = $project;
 		}
+
+		// Blank slate condition if there are no items and no projects
+		$proofing['blankslate'] = (count($proofing['items']) == 0 && count($proofing['projects']) == 0) ? true : false;
+		$reviewing['blankslate'] = (count($reviewing['items']) == 0 && count($reviewing['projects']) == 0) ? true : false;
 
 		// Get the user's history and the top proofers information
 		$history = $user->getHistory();
 		$topusers = User::getTopUsers();
 
-		/* Prepare user history */
+		// Prepare user history
 		foreach ($history as &$event) {
 			if ($event['project_type'] == 'public') {
 				$event['editlink'] = "$app_url/projects/" . $event['project_slug'] . '/items/' . $event['item_id'] . '/proof';
@@ -172,13 +180,6 @@ class UserPageController {
 			$event['title'] = $event['item_title'];
 		}
 
-		/* See if this is a new user */
-		if (count($proofItems) == 0 && count($projectSummaries) == 0) {
-			$blankslate = true;
-		} else {
-			$blankslate = false;
-		}
-
 		$options = array(
 			'user' => array(
 				'loggedin' => true,
@@ -187,16 +188,23 @@ class UserPageController {
 				'proofed' => $user->proofed,
 				'proofed_past_week' => $user->proofed_past_week,
 				),
-			'proofItems' => $proofItems,
-			'reviewItems' => $reviewItems,
-			'projects' => $projectSummaries,
+			'projects' => $projectInfo,
+			'proofing' => array(
+				'items' => $proofing['items'],
+				'projects' => $proofing['projects'],
+				'blankslate' => $proofing['blankslate'],
+				),
+			'reviewing' => array(
+				'items' => $reviewing['items'],
+				'projects' => $reviewing['projects'],
+				'blankslate' => $reviewing['blankslate'],
+				),
 			'history' => $history,
+			'history_count' => count($history),
 			'registered_methods' => array(
 				'/users/' . $username,
 				),	
 			'topusers' => $topusers,
-			'blankslate' => $blankslate,
-			'history_count' => count($history)
 		);
 
 		Template::render('dashboard', $options);
