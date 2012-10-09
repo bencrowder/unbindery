@@ -7,6 +7,7 @@ class DispatchController {
 	static public function getNextAvailableItem($params) {
 		$username = $params['username'];
 		$projectSlug = $params['projectSlug'];
+		$type = $params['type'];
 
 		$success = false;
 		$errorCode = '';
@@ -41,11 +42,11 @@ class DispatchController {
 		}
 
 		// Load the user's queue
-		$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
+		$userQueue = new Queue("user.$type:$username", false, array('include-removed' => true));
 		$userQueueItems = $userQueue->getItems();
 
-		// Load the project's proof queue
-		$queue = new Queue("project.proof:$projectSlug");
+		// Load the project's queue
+		$queue = new Queue("project.$type:$projectSlug");
 		$queueItems = $queue->getItems();
 
 		// Go through the project queue and get the first item the user hasn't yet done
@@ -57,9 +58,26 @@ class DispatchController {
 		}			
 
 		if (isset($nextItem) && $nextItem->item_id != -1) {
+			if ($type == 'review') {
+				// Get proofed transcripts for the new item
+				$transcripts = $db->loadItemTranscripts($nextItem->project_id, $nextItem->item_id, 'proof');
+
+				// Only diff them if there's more than one
+				if (count($transcripts) > 1) {
+					$transcriptText = Transcript::diff(array('transcripts' => $transcripts));
+				} else {
+					$transcriptText = $transcripts[0]['transcript'];
+				}
+
+				// Create transcript and add to the database
+				$transcript = new Transcript();
+				$transcript->setText($transcriptText);
+				$transcript->save(array('item' => $nextItem, 'status' => 'draft', 'type' => 'review'));
+			}
+
 			// Reload the user's queue, this time ignoring items they've already done
 			// Add it to the user's queue
-			$userQueue = new Queue("user.proof:$username", false);
+			$userQueue = new Queue("user.$type:$username", false);
 			$userQueue->add($nextItem);
 			$userQueue->save();
 

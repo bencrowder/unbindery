@@ -73,12 +73,18 @@ class QueueController {
 		$items = array();
 		$results = $db->loadQueue($name, $includeRemoved);
 
+		if (strpos($name, 'proof') != false) {
+			$type = 'proof';
+		} else if (strpos($name, 'review') != false) {
+			$type = 'review';
+		}
+
 		foreach ($results as $result) {
 			$itemID = $result['item_id'];
 			$projectID = $result['project_id'];
 		
 			$item = new Item($db);
-			$item->loadWithProjectID($itemID, $projectID, $username);
+			$item->loadWithProjectID($itemID, $projectID, $username, $type);
 
 			array_push($items, $item);
 		}

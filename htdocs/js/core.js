@@ -45,17 +45,17 @@ var Unbindery = function() {
 		$("#spinner").hide();
 	}
 
-	this.getNewItem = function(projectSlug, projectOwner, projectType) {
+	this.getNewItem = function(projectSlug, projectOwner, projectType, actionType) {
 		// Get the username
 		var username = $("#username").html();
 
-		this.callAPI('get-new-item', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username },
+		this.callAPI('get-new-item', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, type: actionType },
 			function(data) {
 				if (data.status == true) {
 					if (projectType == 'public') {
-						var locStr = app_url + '/projects/' + projectSlug + '/items/' + data.code + '/proof';
+						var locStr = app_url + '/projects/' + projectSlug + '/items/' + data.code + '/' + actionType;
 					} else {
-						var locStr = app_url + '/users/' + projectOwner + '/projects/' + projectSlug + '/items/' + data.code + '/proof';
+						var locStr = app_url + '/users/' + projectOwner + '/projects/' + projectSlug + '/items/' + data.code + '/' + actionType;
 					}
 
 					window.location.href = locStr;
@@ -67,7 +67,7 @@ var Unbindery = function() {
 							unbindery.redirectToDashboard("", "You're not the user you say you are.");
 							break;
 						case "not-cleared":
-							unbindery.redirectToDashboard("", "Your first page has to be approved before you can proof more pages. (Just this once, though.)");
+							unbindery.redirectToDashboard("", "Your first item has to be approved before you can proof more items. (Just this once, though.)");
 							break;	
 						case "not-a-member":
 							unbindery.redirectToDashboard("", "You're not a member of that project.");
@@ -77,7 +77,7 @@ var Unbindery = function() {
 						case "no-item-available":
 							unbindery.redirectToDashboard("", "There aren't any more items available to you for that project.");
 						default:
-							unbindery.redirectToDashboard("", "Error getting new page.");
+							unbindery.redirectToDashboard("", "Error getting new item.");
 							break;
 
 					}
@@ -105,7 +105,9 @@ var Unbindery = function() {
 		if (isDraft) status = 'draft';
 		if (isReview) status = 'reviewed';
 
-		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status },
+		var type = (isReview) ? 'review' : 'proof';
+
+		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status, type: type },
 			function(data) {
 				if (data.statuscode == "success") {
 					if (getAnother) {
@@ -114,7 +116,7 @@ var Unbindery = function() {
 						var projectOwner = $('#project_owner').val();
 						var projectType = $('#project_type').val();
 
-						unbindery.getNewItem(projectSlug, projectOwner, projectType);
+						unbindery.getNewItem(projectSlug, projectOwner, projectType, type);
 					} else {
 						unbindery.redirectToDashboard("", "");
 					}
@@ -242,27 +244,20 @@ $(document).ready(function() {
 
 	// Click handlers for the buttons
 	$("#action-save-draft").click(function() {
-		unbindery.saveTranscript(true, false, false);		// yes draft, no review, don't get another
+		isReview = ($("#transcript_type").val() == 'review') ? true : false;
+		unbindery.saveTranscript(true, isReview, false);		// yes draft, review depends, don't get another
 		return false;
 	});
 
-	$("#action-finish").click(function(e) {
-		unbindery.saveTranscript(false, false, false);		// no draft, no review, don't get another
-		return false;
-	});
-
-	$("#action-save-changes").click(function() {
-		unbindery.saveTranscript(false, false, false);		// no draft, no review, don't get another
+	$("#action-finish, #action-save-changes").click(function(e) {
+		isReview = ($("#transcript_type").val() == 'review') ? true : false;
+		unbindery.saveTranscript(false, isReview, false);		// no draft, review depends, don't get another
 		return false;
 	});
 
 	$("#action-finish-continue").click(function(e) {
-		unbindery.saveTranscript(false, false, true);		// no draft, no review, do get another one
-		return false;
-	});
-
-	$("#action-finish-review").click(function(e) {
-		unbindery.saveTranscript(false, true, false);		// no draft, yes review
+		isReview = ($("#transcript_type").val() == 'review') ? true : false;
+		unbindery.saveTranscript(false, isReview, true);		// no draft, review depends, do get another one
 		return false;
 	});
 
@@ -283,7 +278,8 @@ $(document).ready(function() {
 		var projectSlug = this.getAttribute('data-project-slug');
 		var projectOwner = this.getAttribute('data-project-owner');
 		var projectType = this.getAttribute('data-project-type');
+		var actionType = ($(this).parents("ul.action_list").hasClass("proof")) ? 'proof' : 'review';
 
-		unbindery.getNewItem(projectSlug, projectOwner, projectType);
+		unbindery.getNewItem(projectSlug, projectOwner, projectType, actionType);
 	});
 });

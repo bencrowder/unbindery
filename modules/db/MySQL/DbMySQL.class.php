@@ -374,15 +374,29 @@ class DbMySQL implements DbInterface {
 	}	
 
 	// Returns: transcript
-	public function loadItemTranscript($projectId, $itemId, $username) {
+	public function loadItemTranscript($projectId, $itemId, $username, $type) {
 		$query = "SELECT transcript FROM transcripts ";
 		$query .= "WHERE project_id = ? ";
 		$query .= "AND item_id = ? ";
-		$query .= "AND user = ?;";
+		$query .= "AND user = ? ";
+		$query .= "AND type = ?;";
 
-		$results = $this->query($query, array($projectId, $itemId, $username));
+		$results = $this->query($query, array($projectId, $itemId, $username, $type));
 
 		return (count($results) > 0) ? trim($results[0]['transcript']) : '';
+	}
+
+	// Returns: array of [transcript, user]
+	public function loadItemTranscripts($projectId, $itemId, $type) {
+		$query = "SELECT transcript, user FROM transcripts ";
+		$query .= "WHERE project_id = ? ";
+		$query .= "AND item_id = ? ";
+		$query .= "AND type = ? ";
+		$query .= "AND status = 'completed' OR status = 'reviewed';";
+
+		$transcripts = $this->query($query, array($projectId, $itemId, $type));
+
+		return $transcripts;
 	}
 
 	// Returns: boolean
@@ -395,34 +409,36 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
-	public function userHasTranscriptDraft($username, $item_id, $project_id) {
+	public function userHasTranscriptDraft($username, $item_id, $project_id, $type) {
 		$query = "SELECT transcript FROM transcripts ";
 		$query .= "WHERE item_id = ? ";
 		$query .= "AND project_id = ? ";
+		$query .= "AND type = ? ";
 		$query .= "AND user = ?;";
 
-		$results = $this->query($query, array($item_id, $project_id, $username));
+		$results = $this->query($query, array($item_id, $project_id, $type, $username));
 
 		return (count($results) > 0) ? true : false;
 	}
 
 	// Returns: boolean
-	public function updateItemTranscript($projectId, $itemId, $status, $transcript, $username) {
+	public function updateItemTranscript($projectId, $itemId, $status, $transcript, $username, $type) {
 		$sql = "UPDATE transcripts SET transcript = ?, ";
 		$sql .= "date = NOW(), ";
 		$sql .= "status = ? ";
 		$sql .= "WHERE item_id = ? ";
 		$sql .= "AND project_id = ? ";
+		$sql .= "AND type = ? ";
 		$sql .= "AND user = ?;";
 
-		return $this->execute($sql, array($transcript, $status, $itemId, $projectId, $username));
+		return $this->execute($sql, array($transcript, $status, $itemId, $projectId, $type, $username));
 	}
 
 	// Returns: boolean
-	public function addItemTranscript($projectId, $itemId, $status, $transcript, $username) {
-		$sql = "INSERT INTO transcripts (project_id, item_id, user, date, transcript, status) VALUES (?, ?, ?, NOW(), ?, ?);";
+	public function addItemTranscript($projectId, $itemId, $status, $transcript, $username, $type) {
+		$sql = "INSERT INTO transcripts (project_id, item_id, user, date, transcript, status, type) VALUES (?, ?, ?, NOW(), ?, ?, ?);";
 
-		return $this->execute($sql, array($projectId, $itemId, $username, $transcript, $status));
+		return $this->execute($sql, array($projectId, $itemId, $username, $transcript, $status, $type));
 	}
 
 	// TODO: Rewrite

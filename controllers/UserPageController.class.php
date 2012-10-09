@@ -153,9 +153,9 @@ class UserPageController {
 
 			// And the project link
 			if ($project['type'] == 'public') {
-				$project["link"] = $app_url . '/projects/' . $project["slug"];
+				$project['link'] = $app_url . '/projects/' . $project['slug'];
 			} else if ($project['type'] == 'private') {
-				$project["link"] = $app_url . '/users/' . $project['owner'] . '/projects/' . $project["slug"];
+				$project['link'] = $app_url . '/users/' . $project['owner'] . '/projects/' . $project['slug'];
 			}
 
 			$projectInfo[$project['slug']] = $project;

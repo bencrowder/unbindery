@@ -114,6 +114,7 @@ Settings::setProtected('eventManager', $eventManager);
 Transcript::setEventManager($eventManager);
 Transcript::register('load', array('TranscriptController', 'load'));
 Transcript::register('save', array('TranscriptController', 'save'));
+Transcript::register('diff', array('TranscriptController', 'diff'));
 
 
 // Initialize workflow controller

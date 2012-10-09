@@ -16,11 +16,11 @@ class Item {
 	private $href;
 	private $workflow_index;
 
-	public function Item($itemId = '', $projectSlug = '', $username = '') {
+	public function Item($itemId = '', $projectSlug = '', $username = '', $type = 'proof') {
 		$this->db = Settings::getProtected('db');
 
 		if ($itemId && $projectSlug) {
-			$this->load($itemId, $projectSlug, $username);
+			$this->load($itemId, $projectSlug, $username, $type);
 		}
 	}
 
@@ -32,7 +32,7 @@ class Item {
 		return $this->$key;
 	}
 
-	public function load($itemId, $projectSlug, $username = '') {
+	public function load($itemId, $projectSlug, $username = '', $type = 'proof') {
 		$item = $this->db->loadItem($itemId, $projectSlug);
 
 		if (isset($item)) {
@@ -55,14 +55,14 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username);
+			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username, $type);
 			if ($transcript != '') {
 				$this->userTranscript = $transcript;
 			}
 		}
 	}
 
-	public function loadWithProjectID($itemId, $projectId, $username = '') {
+	public function loadWithProjectID($itemId, $projectId, $username = '', $type) {
 		$item = $this->db->loadItemWithProjectID($itemId, $projectId);
 
 		if (isset($item)) {
@@ -85,7 +85,7 @@ class Item {
 
 		// Update the item text with the user's revision, if available
 		if ($username != '') {
-			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username);
+			$transcript = $this->db->loadItemTranscript($this->project_id, $itemId, $username, $type);
 			if ($transcript != '') {
 				$this->userTranscript = $transcript;
 			}
@@ -96,6 +96,7 @@ class Item {
 		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index);
 	}
 
+	// TODO: remove?
 	public function saveText($username, $draft, $review, $review_username, $transcript) {
 		$adminemail = Settings::getProtected('adminemail');
 		$emailsubject = Settings::getProtected('emailsubject');

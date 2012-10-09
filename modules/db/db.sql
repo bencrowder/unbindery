@@ -99,6 +99,7 @@ CREATE TABLE `transcripts` (
   `date` datetime default NULL,
   `transcript` text,
   `status` varchar(255) default NULL,
+  `type` varchar(255) default NULL,
   `fields` varchar(8000) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

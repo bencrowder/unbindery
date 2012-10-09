@@ -76,17 +76,21 @@ class Transcript {
 	}
 
 
-	// Diff (TODO)
+	// Diff function
 	// --------------------------------------------------
 
-	static public function diff($transcripts) {
-		$str = '';
+	static public function diff($params) {
+		// Trigger the diff transcript event
+		self::$eventManager->trigger('diff', 'transcript');
 
-		foreach ($transcripts as $transcript) {
-			// TODO: finish this
+		// Expects $params['transcripts'] to have an array of transcripts
+
+		// Make sure the function's there, then call it with the parameters
+		if (array_key_exists('diff', self::$functions)) {
+			$response = call_user_func(self::$functions['diff'], $params);
 		}
 
-		return $str;
+		return $response;
 	}
 
 
