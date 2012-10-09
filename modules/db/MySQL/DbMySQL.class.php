@@ -310,7 +310,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: history row
 	public function getUserHistory($username) {
-		$query = "SELECT items.id AS item_id, items.title AS item_title, projects.title AS project_title, queues.date_removed AS date_comp, DATE_FORMAT(queues.date_removed, '%e %b %Y') AS date_completed, projects.slug AS project_slug ";
+		$query = "SELECT items.id AS item_id, items.title AS item_title, projects.title AS project_title, queues.date_removed AS date_comp, DATE_FORMAT(queues.date_removed, '%e %b %Y') AS date_completed, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner ";
 		$query .= "FROM queues JOIN items ON item_id = items.id ";
 		$query .= "JOIN projects ON queues.project_id = projects.id ";
 		$query .= "WHERE queue_name = ? ";

@@ -255,6 +255,11 @@ $(document).ready(function() {
 		return false;
 	});
 
+	$("#action-save-changes").click(function() {
+		unbindery.saveTranscript(false, false, false);		// no draft, no review, don't get another
+		return false;
+	});
+
 	$("#action-finish-continue").click(function(e) {
 		unbindery.saveTranscript(false, false, true);		// no draft, no review, do get another one
 		return false;

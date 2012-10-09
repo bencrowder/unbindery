@@ -94,10 +94,6 @@ class UserPageController {
 			array_push($reviewItems, array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
 		}
 
-		// Get the user's history and the top proofers information
-		$history = $user->getHistory();
-		$topusers = User::getTopUsers();
-
 		// Get the user's projects
 		$projects = $user->getProjectSummaries();
 
@@ -161,10 +157,19 @@ class UserPageController {
 			$projectSummaries[$project['slug']] = $project;
 		}
 
+		// Get the user's history and the top proofers information
+		$history = $user->getHistory();
+		$topusers = User::getTopUsers();
+
 		/* Prepare user history */
 		foreach ($history as &$event) {
-			$event["editlink"] = "$app_url/FIXME/" . $event["project_slug"] . "/" . $event["item_id"];	
-			$event["title"] = $event["item_title"];
+			if ($event['project_type'] == 'public') {
+				$event['editlink'] = "$app_url/projects/" . $event['project_slug'] . '/items/' . $event['item_id'] . '/proof';
+			} else if ($project['type'] == 'private') {
+				$event['editlink'] = "$app_url/users/" . $event['project_owner'] . '/projects/' . $event['project_slug'] . '/items/' . $event['item_id'] . '/proof';
+			}
+
+			$event['title'] = $event['item_title'];
 		}
 
 		/* See if this is a new user */

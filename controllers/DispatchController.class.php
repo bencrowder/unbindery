@@ -44,26 +44,49 @@ class DispatchController {
 		$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
 		$userQueueItems = $userQueue->getItems();
 
+		foreach ($userQueueItems as $item) {
+			error_log("User queue: " . $item->item_id . " | " . $item->title);
+		}
+
 		// Load the project's proof queue
 		$queue = new Queue("project.proof:$projectSlug");
 		$queueItems = $queue->getItems();
 
+		foreach ($queueItems as $item) {
+			error_log("Project queue: " . $item->item_id . " | " . $item->title);
+		}
+
 		// Go through the project queue and get the first item the user hasn't yet done
 		foreach ($queueItems as $item) {
 			if (!in_array($item, $userQueueItems)) {
+				error_log("Next item: " . $item->item_id . " | " . $item->title);
 				$nextItem = $item;
 				break;
 			}	
 		}			
 
 		if (isset($nextItem) && $nextItem->item_id != -1) {
+			error_log("Adding to user queue");
+			// Reload the user's queue, this time ignoring items they've already done
 			// Add it to the user's queue
+			$userQueue = new Queue("user.proof:$username", false);
 			$userQueue->add($nextItem);
 			$userQueue->save();
 
+			$userQueueItems = $userQueue->getItems();
+			foreach ($userQueueItems as $item) {
+				error_log("User queue: " . $item->item_id . " | " . $item->title);
+			}
+
+			error_log("Removing from project queue");
 			// Remove it from the project queue
 			$queue->remove($nextItem);
 			$queue->save();
+
+			$queueItems = $queue->getItems();
+			foreach ($queueItems as $item) {
+				error_log("Project queue: " . $item->item_id . " | " . $item->title);
+			}
 
 			$success = true;
 			$code = $nextItem->item_id;
@@ -71,6 +94,7 @@ class DispatchController {
 			$code = "no-item-available";
 		}
 
+		error_log("returning status $success and code $code");
 		return array('status' => $success, 'code' => $code);
 	}
 }

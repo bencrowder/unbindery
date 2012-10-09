@@ -6,9 +6,13 @@
 			</ul>
 			<ul id="controls_right">
 				<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
+				{% if already_finished %}
+				<li><span id="action-save-changes" class="button">Save Changes</span></li>
+				{% else %}
 				<li><span id="action-save-draft" class="button">Save as Draft</span></li>
 				<li><span id="action-finish" class="button">Finish</span></li>
 				{% if more_to_proof %}<li><span id="action-finish-continue" class="button">Finish &amp; Continue</span></li>{% endif %}
+				{% endif %}
 			</ul>
 		</div>
 	</div>

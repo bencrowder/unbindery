@@ -43,8 +43,17 @@ class ItemPageController {
 					return;
 				}
 
-				// Make sure the user has this item in their queue
-				// TODO: Finish
+				// If it's not in their current queue, they're editing it after finishing it
+				// TODO: Make this part more elegant
+				$alreadyFinished = false;
+				$userCurrentQueue = new Queue("user.proof:$username", false);
+				$userCurrentQueueItems = $userCurrentQueue->getItems();
+				if (!in_array($itemObj, $userCurrentQueueItems)) {
+					error_log("Already finished");
+					$alreadyFinished = true;
+				}
+
+				// And if it's not in their full queue, they never had it and shouldn't be allowed to proof it
 				$userQueue = new Queue("user.proof:$username", false, array('include-removed' => true));
 				$userQueueItems = $userQueue->getItems();
 				if (!in_array($itemObj, $userQueueItems)) {
@@ -98,6 +107,7 @@ class ItemPageController {
 						),
 					'item' => $item,
 					'more_to_proof' => $moreToProof,
+					'already_finished' => $alreadyFinished,
 					'editor_options' => $editorOptions,
 					'editor_type' => $templateType,
 					'css' => array("editors/$templateType/$templateType.css"),
