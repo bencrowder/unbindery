@@ -295,11 +295,12 @@ class DbMySQL implements DbInterface {
 		return (count($results) > 0) ? $results[0]['id'] : -1;
 	}
 
-	// TODO: Rewrite
 	// Returns: user row
 	public function getUserStats($username) {
-		// $users = $this->query("SELECT score, (SELECT COUNT(*) FROM assignments WHERE username = ? AND date_completed IS NOT NULL) AS proofed, (SELECT COUNT(*) FROM assignments WHERE username = ? AND date_completed IS NOT NULL AND DATE_COMPLETED > DATE_SUB(NOW(), INTERVAL 7 DAY)) AS proofed_past_week FROM users WHERE username = ?", array($username, $username, $username));
-		$users = $this->query("SELECT score, 0 AS proofed, 0 AS proofed_past_week FROM users WHERE username = ?", array($username));
+		$userString = "user.proof:$username";
+
+		$users = $this->query("SELECT score, COUNT(DISTINCT item_id) AS proofed, (SELECT COUNT(DISTINCT item_id) FROM queues WHERE queue_name = ? AND date_removed IS NOT NULL AND date_removed > DATE_SUB(NOW(), INTERVAL 7 DAY)) AS proofed_past_week FROM queues, users WHERE queue_name = ? AND date_removed IS NOT NULL AND username = ?;", array($userString, $userString, $username));
+
 		$user = $users[0];
 
 		return $user;
