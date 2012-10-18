@@ -21,8 +21,9 @@ Twig_Autoloader::register();
 
 // Modules
 require_once '../modules/Dispatch.php';
-require_once '../modules/Event.php';
+require_once '../modules/EventManager.php';
 require_once '../modules/I18n.php';
+require_once '../modules/NotificationManager.php';
 require_once '../modules/Queue.php';
 require_once '../modules/Role.php';
 require_once '../modules/Transcript.php';
