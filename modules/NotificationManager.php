@@ -2,6 +2,7 @@
 
 class NotificationManager {
 	static protected $functions = array();
+	static private $eventManager;
 
 
 	// Constructor: loads the specified queue
@@ -9,6 +10,14 @@ class NotificationManager {
 
 	public function __construct() {
 
+	}
+
+
+	// Set event manager
+	// --------------------------------------------------
+
+	static public function setEventManager($eventManager) {
+		self::$eventManager = $eventManager;
 	}
 
 
