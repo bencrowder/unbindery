@@ -5,11 +5,21 @@ class NotificationManager {
 	static private $eventManager;
 
 
-	// Constructor: loads the specified queue
+	// Constructor: nothing
 	// --------------------------------------------------
 
 	public function __construct() {
 
+	}
+
+
+	// Register notifications with the events 
+	// --------------------------------------------------
+
+	static public function registerNotifications($notifications, $handler) {
+		foreach ($notifications as $notification) {
+			self::$eventManager->register($notification, "notification", $handler);
+		}
 	}
 
 
@@ -37,22 +47,26 @@ class NotificationManager {
 	}
 
 
-	// send: delegates to the send function specified
+	// trigger: delegates to the trigger function specified
 	// --------------------------------------------------
 
-	public function send($notification, $params) {
+	static public function trigger($notification, $params) {
+		self::$eventManager->trigger($notification, "notification", array_merge(array('notification' => $notification), $params));
+
+		/*
 		$rtn = false;
 
-		if (!array_key_exists('send', self::$functions)) {
+		if (!array_key_exists('trigger', self::$functions)) {
 			return $rtn;
 		}
 
-		if (self::$functions['send'] != null) {
-			call_user_func(self::$functions['send'], $notification, $params);
+		if (self::$functions['trigger'] != null) {
+			call_user_func(self::$functions['trigger'], $notification, $params);
 			$rtn = true;
 		}
 
 		return $rtn;
+		 */
 	}
 
 
