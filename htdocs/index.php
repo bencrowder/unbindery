@@ -31,6 +31,7 @@ require_once '../modules/Workflow.php';
 
 // Module controllers
 require_once '../controllers/DispatchController.class.php';
+require_once '../controllers/NotificationController.class.php';
 require_once '../controllers/QueueController.class.php';
 require_once '../controllers/RoleController.class.php';
 require_once '../controllers/TranscriptController.class.php';
@@ -122,6 +123,20 @@ Transcript::register('diff', array('TranscriptController', 'diff'));
 // --------------------------------------------------
 
 Workflow::register('callback', array('WorkflowController', 'parse'));
+
+
+// Initialize notifications controller
+// --------------------------------------------------
+
+$notifications = Settings::getProtected('notifications');
+$notificationsList = array();
+foreach ($notifications as $key=>$value) {			// Get an array of just the keys
+	array_push($notificationsList, $key);	
+}
+$notify = new NotificationManager();
+$notify->setEventManager($eventManager);
+$notify->registerNotifications($notificationsList, array('NotificationController', 'send'));
+Settings::setProtected('notify', $notify);
 
 
 // Parse the routes

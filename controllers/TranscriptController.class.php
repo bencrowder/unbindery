@@ -27,6 +27,16 @@ class TranscriptController {
 		} else {
 			$user->addTranscript($item, $status, $transcript->getText(), $type);
 		}
+
+		// Load the project
+		$project = new Project($item->project_slug);
+		$projectOwner = new User($project->owner);
+		// TODO: load any users who have admin rights
+
+		// Trigger notifications
+		$notify = Settings::getProtected('notify');
+		$notify->trigger("user_save_transcript_$status", array('user' => $user, 'username' => $user->username, 'item' => $item->title));
+		$notify->trigger("admin_save_transcript_$status", array('admins' => array($projectOwner), 'username' => $user->username, 'item' => $item->title));
 	}
 
 

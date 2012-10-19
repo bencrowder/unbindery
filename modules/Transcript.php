@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Event.php';
+require_once 'EventManager.php';
 
 class Transcript {
 	static private $functions = array();

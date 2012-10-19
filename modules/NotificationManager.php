@@ -1,5 +1,7 @@
 <?php
 
+require_once 'EventManager.php';
+
 class NotificationManager {
 	static protected $functions = array();
 	static private $eventManager;
