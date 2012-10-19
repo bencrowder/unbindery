@@ -12,8 +12,13 @@ class SystemPageController {
 		$auth = Settings::getProtected('auth');
 		$externalLogin = Settings::getProtected('external_login');
 		$allowSignup = Settings::getProtected('allow_signup');
+		$db = Settings::getProtected('db');
 
-		if ($auth->authenticated()) {
+		if (!$db->installed()) {
+			header("Location: $app_url/install");
+		}
+
+		if ($auth->authenticated() && ($auth->getUsername() != '')) {
 			$username = $auth->getUsername();
 
 			// Check to see if they have an account
@@ -58,7 +63,6 @@ class SystemPageController {
 
 	static public function loginHandler($args) {
 		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$username = Utils::POST("username");
@@ -84,7 +88,6 @@ class SystemPageController {
 	/* POST */
 	static public function signupHandler($args) {
 		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$email = Utils::POST("email_signup");
@@ -113,7 +116,6 @@ class SystemPageController {
 	/* POST */
 	static public function activateHandler($args) {
 		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
 		$i18n = new I18n(Settings::getProtected('language'));
 
 		$hash = $args[0];
@@ -162,6 +164,59 @@ class SystemPageController {
 		if ($message) $_SESSION['ub_message'] = $message;
 		if ($error) $_SESSION['ub_error'] = $error;
 	}
+
+
+	// --------------------------------------------------
+	// Install handler
+	// URL: /install
+	// Methods: GET, POST
+
+	static public function installHandler($params) {
+		// Load database
+		$db = Settings::getProtected('db');		
+		$installed = $db->installed();
+
+		// Make sure we haven't already installed
+		if ($installed) {
+			// Already installed
+			Utils::redirectToDashboard('Already installed.', '');
+		} else {
+			// We haven't, so install
+			switch ($params['method']) {
+				// GET: Show install form
+				case 'GET':
+					Template::render('install', array('external_login' => Settings::getProtected('external_login')));
+					break;
+
+				// POST: Run install script
+				case 'POST':
+					// And install
+					if ($db->install()) {
+						// Add admin user
+						$user = new User();
+						$user->username = Utils::POST('username');
+						if (Utils::POST('password')) {
+							$user->password = md5(Utils::POST('password')); // TODO: make this better
+						} else {
+							$user->password = '';
+						}
+						$user->role = "admin";
+						$user->status = "active";
+						$user->in_db = false;
+						$user->save();
+
+						// Redirect to admin login page
+						$auth = Settings::getProtected('auth');
+						$auth->redirectToLogin();
+					} else {
+						Template::render('install', array('status' => 'failed'));
+					}	
+
+					break;
+			}
+		}	
+	}
+
 
 	static public function fileNotFoundHandler() {
 		echo "File not found.";

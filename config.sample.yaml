@@ -1,3 +1,5 @@
+### Installation
+
 db: MySQL                   # database engine to use (in db/)
 auth: Alibaba               # authentication engine to use (in auth/)
 
@@ -10,9 +12,13 @@ database:
 title: Site Title           # site title
 app_url: &SITEROOT http://path/to/unbindery
 sys_path: /filesystem/path/to/unbindery
-language: en                # default language
 admin_email: administrator@email.com        # site admin's email
-email_subject: [unbindery]  # prepended to notification emails
+
+
+### Configuration
+
+language: en                # default language
+email_subject: "[unbindery]"  # prepended to notification emails
 theme_cached: false
 theme: core                 # if you add a new system-wide theme, change this
 external_login: false       # whether to call Auth::redirectToLogin on index page
@@ -29,10 +35,8 @@ alibaba:
 
 system_guidelines: |
     <i>Questions? Email your administrator (your@email.com)</i>
-
     <h3>General</h3>
-
-    <p>Follow <a href='http://www.gutenberg.org/wiki/Gutenberg:Volunteers%27_FAQ#About_the_formatting_of_a_text_file'>the Project Gutenberg guidelines</a>.</p>
+    <p>Fix typos.</p>
 
 roles:
   'user:user': 10

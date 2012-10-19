@@ -153,6 +153,7 @@ $routes = array(
 	'#^/signup\.?([^/]+)?/?$#'					=> 'SystemPageController::signupHandler',
 	'#^/signup/activate/(.*)/\.?([^/]+)?/?$#'	=> 'SystemPageController::activateHandler',
 	'#^/messages/?$#'							=> 'SystemPageController::messageHandler',
+	'#^/install/?$#'							=> 'SystemPageController::installHandler',
 	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
 
 	// User project item pages

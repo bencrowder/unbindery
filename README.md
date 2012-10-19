@@ -1,6 +1,6 @@
 ## Unbindery
 
-A transcription web app written in PHP and JavaScript.
+A web app for crowdsourcing transcription, written in PHP and JavaScript.
 
 ### Dependencies
 
@@ -11,14 +11,11 @@ A transcription web app written in PHP and JavaScript.
 
 ### Installation
 
-1. Create a MySQL database and a user for it.
-2. Copy `modules/db/db.sql` to `import.sql` and edit it to reference that database.
-3. Run `import.sql` (`mysql -u root -p < import.sql`).
-4. Copy `config.sample.yaml` to `config.yaml` and customize it.
-5. Copy `scripts/config.sample.py` to `scripts/config.py` and customize it.
-6. Create a directory `htdocs/media/`.
-7. Give Apache rights to write to `htdocs/media/` (`chgrp apache htdocs/media`, `chmod g+w htdocs/media`).
-8. Set Apache to point to the `htdocs` directory as root.
+1. Create a database and user in MySQL.
+2. Copy `config.sample.yaml` to `config.yaml` and edit it.
+3. Create the directory `htdocs/media` and give Apache write rights to it.
+4. Set Apache to point to `htdocs` for the site's `DocumentRoot`.
+5. Go to `/install` in your browser.
 
 ### Customization
 
@@ -34,3 +31,7 @@ A transcription web app written in PHP and JavaScript.
 
 * Page
 * Audio
+
+### Acknowledgments
+
+* Thanks to [Ryan Martinsen](http://twitter.com/popthestack) for his [fork](https://github.com/popthestack/PHP-FineDiff) of Raymond Hill's [FineDiff](https://github.com/gorhill/PHP-FineDiff).

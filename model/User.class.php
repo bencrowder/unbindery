@@ -8,7 +8,7 @@ class User {
 	private $name;
 	private $email;
 	private $status;
-	private $score;
+	private $score = 0;
 	private $hash;
 	private $signup_date;
 	private $last_login;
@@ -203,7 +203,7 @@ class User {
 		$user = $this->db->getUserStats($this->username);
 
 		if (isset($user)) {
-			$this->score = $user["score"];
+			$this->score = ($user["score"] == "") ? 0 : $user["score"];
 			$this->proofed = $user["proofed"];
 			$this->proofed_past_week = $user["proofed_past_week"];
 		}

@@ -22,7 +22,6 @@ class ItemPageController {
 
 		$owner = ($projectType == 'user') ? $params['args'][0] : '';
 
-		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();
@@ -154,7 +153,6 @@ class ItemPageController {
 
 		$owner = ($projectType == 'user') ? $params['args'][0] : '';
 
-		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();
@@ -309,7 +307,6 @@ class ItemPageController {
 		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
-		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();

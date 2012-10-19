@@ -1,0 +1,43 @@
+{% extends '_base.html' %}
+
+{% block bodyid %} id="install"{% endblock %}
+{% block banner %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block page %}
+<div class="container">
+	<div id="install_box" class="box">
+		{% if status != 'failed' %}
+		<h2>Unbindery Installation Instructions</h2>
+
+		<ol>
+			<li>Create a database and user in MySQL.</li>
+			<li>Copy <code>config.sample.yaml</code> to <code>config.yaml</code> and edit it.</li>
+			<li>Create the directory <code>htdocs/media</code> and give Apache write rights to it.</li>
+			<li>Set Apache to point to <code>htdocs</code> for the site&rsquo;s DocumentRoot.</li>
+			<li>Fill out the initial admin username{% if not external_login %}/password{% endif %} and click the Install button:</li>
+		</ol>
+
+		<form id="install_form" action="{{ app_url }}/install" method="post" accept-charset="utf-8">
+			<label>Admin Username:</label>
+			<input type="text" id="username" name="username" autocomplete="off" />
+
+			{% if not external_login %}
+			<label>Admin Password:</label>
+			<input type="password" id="password" name="password" autocomplete="off" />
+			{% endif %}
+
+			<input type="submit" value="Install Unbindery" class="button" />
+		</form>
+		{% else %}
+		<h2>Installation Failed</h2>
+
+		<ol>
+			<li>Make sure the database is set up correctly.</li>
+			<li>Make sure <code>config.yaml</code> is set up correctly.</li>
+			<li>Reload this page and try again.</li>
+		</ol>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

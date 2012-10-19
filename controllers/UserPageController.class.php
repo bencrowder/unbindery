@@ -67,7 +67,6 @@ class UserPageController {
 
 	static public function userDashboard($params) {
 		$app_url = Settings::getProtected('app_url');
-		$db = Settings::getProtected('db');
 		$auth = Settings::getProtected('auth');
 
 		$auth->forceAuthentication();

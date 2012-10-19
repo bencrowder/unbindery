@@ -4,7 +4,7 @@
 *										{ -moz-box-sizing: border-box; box-sizing: border-box; }
 
 body									{ margin: 0; padding: 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; font-size: 12px; }
-body#index								{ background: #22435f url(../images/indexbg.jpg) 50% 0 no-repeat; }
+body#index, body#install				{ background: #22435f url(../images/indexbg.jpg) 50% 0 no-repeat; }
 body.dark								{ background: #111; color: #fff; }
 
 .container								{ max-width: 950px; width: 92%; margin: 0px auto; overflow: hidden; clear: both; }
@@ -216,6 +216,25 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .box span:hover							{ cursor: pointer; }
 
 .box #thankyou							{ color: #fff; line-height: 1.4em; }
+
+
+/* Install page */
+/* --------------------------------------------------- */
+
+#install .container						{ width: 850px; margin: 70px auto; }
+
+#install_box h2							{ color: #7291a3; }
+#install_box ol							{ color: #fff; padding-left: 30px; }
+#install_box ol li						{ padding: 8px 0; font-size: 1.8em; border-top: solid 1px rgba(0, 0, 0, 0.2); font-family: Georgia, "Lucida Grande", Helvetica, Arial, sans-serif; line-height: 1.3em; }
+#install_box ol li code					{ color: #99b67f; }
+
+#install_box form						{ margin: .75em auto; width: 450px; font-size: 1.8em; }
+#install_box form label					{ font-family: "Lucida Grande", Helvetica, Arial, sans-serif; text-transform: none; font-size: .7em; color: #5e96b1; }
+#install_box form input[type=text],
+#install_box form input[type=password]	{ background: rgba(0, 0, 0, 0.3) !important; border: solid 1px #2c445e; width: 450px; color: #fff; font-family: Georgia, "Lucida Grande", Helvetica, Arial, sans-serif; font-weight: normal; padding: 8px 12px; }
+#install_box form input[type=submit]	{ font-size: .8em; padding: 5px 17px 6px; }
+
+#install_box form .button				{ background: #2b4f68; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6987a7), to(#2b4f68)); background: -moz-linear-gradient(#6987a7, #2b4f68); border: solid 1px #3d6394; }
 
 
 /* Settings page */
