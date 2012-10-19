@@ -71,7 +71,7 @@ class DbMySQL implements DbInterface {
 		}
 
 		if ($this->db->error) {
-			error_log("SQL error on: $sql");
+			error_log("SQL error on: $query");
 			error_log("Error: " . $this->db->error);
 		}
 
@@ -299,11 +299,11 @@ class DbMySQL implements DbInterface {
 		$query = "SELECT queues.id ";
 		$query .= "FROM queues ";
 		$query .= "JOIN projects ON queues.project_id = projects.id ";
-		$query .= "WHERE username = ? ";
+		$query .= "WHERE queues.name = ? ";
 		$query .= "AND projects.slug = ? ";
 		$query .= "AND queues.date_removed IS NULL";
 
-		$results = $this->query($query, array($username, $projectSlug));
+		$results = $this->query($query, array("user.proof:$username", $projectSlug));
 
 		return (count($results) > 0) ? true : false;
 	}

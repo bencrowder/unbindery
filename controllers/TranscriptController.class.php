@@ -63,12 +63,11 @@ class TranscriptController {
 	// --------------------------------------------------
 	// Diff transcript handler
 
-	static public function diff($params) {
-		$transcripts = $params['transcripts'];
+	static public function diff($transcripts) {
 		$str = '';
 
-		$transcriptA = $params['transcripts'][0];
-		$transcriptB = $params['transcripts'][1];
+		$transcriptA = $transcripts[0]['transcript'];
+		$transcriptB = $transcripts[1]['transcript'];
 
 		$opcodes = FineDiff::getDiffOpcodes($transcriptA, $transcriptB, FineDiff::$characterGranularity);
 		$str = FineDiff::renderDiffToUnbinderyFromOpcodes($transcriptA, $opcodes);

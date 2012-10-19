@@ -22,7 +22,6 @@ class AuthAlibaba implements AuthInterface {
 		$params['user_table_name'] = $alibaba['users_table'];
 		$params['username_field'] = $alibaba['username_field'];
 		$params['password_field'] = $alibaba['password_field'];
-		$params['cookie_expiration'] = $alibaba['cookie_expiration'];
 		$params['hash_function'] = $alibaba['hash_function'];
 		$params['login_page_url'] = $alibaba['login_page_url'];
 

@@ -64,7 +64,7 @@ class DispatchController {
 
 				// Only diff them if there's more than one
 				if (count($transcripts) > 1) {
-					$transcriptText = Transcript::diff(array('transcripts' => $transcripts));
+					$transcriptText = Transcript::diff($transcripts);
 				} else {
 					$transcriptText = $transcripts[0]['transcript'];
 				}
