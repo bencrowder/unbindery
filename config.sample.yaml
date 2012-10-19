@@ -29,7 +29,6 @@ alibaba:
   users_table: users        # which table the user info is stored in
   username_field: username
   password_field: password
-  cookie_expiration: 30     # in days
   hash_function: md5        # or sha1 or md5sha1 or sha1md5
   login_page_url: *SITEROOT
 

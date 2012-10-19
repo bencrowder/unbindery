@@ -13,7 +13,6 @@ class Alibaba {
 	private static $user_table_name = '';
 	private static $username_field = '';
 	private static $password_field = '';
-	private static $cookie_expiration = '';
 	private static $hash_function = '';
 	private static $login_page_url = '';
 
@@ -26,7 +25,6 @@ class Alibaba {
 		self::$user_table_name = $params['user_table_name'];
 		self::$username_field = $params['username_field'];
 		self::$password_field = $params['password_field'];
-		self::$cookie_expiration = $params['cookie_expiration'];
 		self::$hash_function = $params['hash_function'];
 		self::$login_page_url = $params['login_page_url'];
 	}
@@ -88,7 +86,7 @@ class Alibaba {
 	}
 
 	public static function logout($url = '') {
-		setcookie("alibaba_" . self::$app_name . "_username", "", time() - 3600, "/");
+		unset($_SESSION["alibaba_" . self::$app_name . "_username"]);
 
 		if ($url == '') { $url = self::$login_page_url; }
 
