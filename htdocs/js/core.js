@@ -282,4 +282,20 @@ $(document).ready(function() {
 
 		unbindery.getNewItem(projectSlug, projectOwner, projectType, actionType);
 	});
+
+
+	/* Install page */
+	/* -------------------------------------------------- */
+
+	$("#install_form input[type=submit]").click(function() {
+		if ($(this).siblings("#username").val().trim() == '') {
+			$(this).siblings("#error").show();
+			return false;
+		}
+
+		if ($(this).siblings("#password").length > 0 && $(this).siblings("#password").val().trim() == '') {
+			$(this).siblings("#error").show();
+			return false;
+		}
+	});
 });

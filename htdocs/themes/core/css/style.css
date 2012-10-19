@@ -234,6 +234,8 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #install_box form input[type=password]	{ background: rgba(0, 0, 0, 0.3) !important; border: solid 1px #2c445e; width: 450px; color: #fff; font-family: Georgia, "Lucida Grande", Helvetica, Arial, sans-serif; font-weight: normal; padding: 8px 12px; }
 #install_box form input[type=submit]	{ font-size: .8em; padding: 5px 17px 6px; }
 
+#install_box form #error				{ font-size: .7em; padding: 12px; background: #4b1b1b; color: #fff; -moz-border-radius: 5px; border-radius: 5px; margin-bottom: 1em; display: none; }
+
 #install_box form .button				{ background: #2b4f68; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6987a7), to(#2b4f68)); background: -moz-linear-gradient(#6987a7, #2b4f68); border: solid 1px #3d6394; }
 
 
