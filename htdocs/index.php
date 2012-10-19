@@ -16,6 +16,7 @@ Settings::loadFromYAML();
 // External libraries
 require_once '../lib/Alibaba.class.php';
 require_once '../lib/Router.class.php';
+require_once '../lib/PHP-FineDiff/finediff.php';
 require_once '../lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
