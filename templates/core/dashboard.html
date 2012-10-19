@@ -51,6 +51,7 @@
 		</div>
 
 		<div class="sidebar">
+			{% if projects|length > 0 %}
 			<div class="group">
 				<h3>{{ i18n.t('dashboard.your_projects') }}</h3>
 				<ul class="list">
@@ -71,7 +72,9 @@
 					{% endfor %}
 				</ul>
 			</div>
+			{% endif %}
 
+			{% if topusers|length > 0 %}
 			<div class="group leaderboard">
 				<h3>{{ i18n.t('dashboard.top_proofers') }}</h3>
 				<ol id="stats">
@@ -80,6 +83,7 @@
 				{% endfor %}
 				</ol>
 			</div>
+			{% endif %}
 
 			<div class="group">
 				<h3>{{ i18n.t('dashboard.recent_history') }}</h3>
