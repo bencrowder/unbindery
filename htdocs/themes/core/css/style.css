@@ -16,8 +16,8 @@ body.dark								{ background: #111; color: #fff; }
 body > header							{ background: url(../images/bannerbg.jpg); color: #fff; height: 63px; overflow: hidden; border-bottom: solid 10px #000; }
 
 #logo									{ float: left; }
-#logo img								{ border: none; }
-#logo h1								{ font-size: 16px; color: #666; line-height: 1em; margin-top: 8px; text-indent: -1000em; }
+#logo a									{ text-decoration: none; position: relative; bottom: 0; }
+#logo h1								{ font-size: 24px; color: #fff; line-height: 1em; margin: 20px 0 0; }
 
 
 /* Nav */
@@ -210,6 +210,7 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .box label								{ color: #5d92b1; font-size: 11px; text-transform: uppercase; }
 .box input[type="text"]					{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 7px; }
 .box input[type="password"]				{ display: block; font-size: 1.3em; font-weight: bold; background: #fff; border: solid 1px #999; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 5px; width: 230px; margin: 3px 0 15px; }
+.box input[type=text]:focus, .box input[type=password]:focus { outline: none; }
 .box input[type="submit"]				{ font-size: 1.2em; }
 
 .box span								{ color: #7db2d1; margin-left: 10px; border-bottom: dotted 1px #5d92b1; }

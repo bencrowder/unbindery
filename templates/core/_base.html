@@ -54,7 +54,7 @@ methods['{{ method.name }}'] = '{{ method.value }}';
 	{% block banner %}
 	<header>
 		<div class="container">
-			{% block logo %}<div id="logo"><a href="{{ app_url }}/"><img src="{{ theme_root }}/images/logo.jpg" alt="Unbindery" /></a></div>{% endblock %}
+			{% block logo %}<div id="logo"><a href="{{ app_url }}/"><h1>{{ title }}</h1></a></div>{% endblock %}
 			{% block nav %}<nav>
 				<ul>
 				{% if user.loggedin %}
