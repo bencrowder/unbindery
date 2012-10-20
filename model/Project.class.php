@@ -7,6 +7,7 @@ class Project {
 
 	private $title;
 	private $type;
+	private $public;
 	private $slug;
 	private $language;
 	private $description;
@@ -43,6 +44,7 @@ class Project {
 			$this->project_id = stripslashes(trim($project['id']));
 			$this->title = stripslashes(trim($project['title']));
 			$this->type = stripslashes(trim($project['type']));
+			$this->public = trim($project['public']);
 			$this->slug = stripslashes(trim($project['slug']));
 			$this->language = stripslashes(trim($project['language']));
 			$this->description = stripslashes(trim($project['description']));
@@ -71,9 +73,9 @@ class Project {
 		$whitelist = implode(",", $this->whitelist);
 
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 		}
 
 		return $status;

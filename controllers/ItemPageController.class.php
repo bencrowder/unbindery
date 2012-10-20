@@ -92,7 +92,8 @@ class ItemPageController {
 
 				$item['project_slug'] = $projectSlug;
 				$item['project_owner'] = $owner;
-				$item['project_type'] = ($owner == '') ? 'public' : 'private';
+				$item['project_type'] = $itemObj->project_type;
+				$item['project_public'] = $itemObj->public;
 
 				// Get template type
 				$templateType = $itemObj->type;

@@ -10,6 +10,7 @@ class ProjectPageController {
 
 	static public function projects($params) {
 		$format = self::getFormat($params['args'], 0, 2);
+		$pageType = self::getProjectPageType($params['args']);
 
 		switch ($params['method']) {
 			// GET: Get list of projects
@@ -19,10 +20,10 @@ class ProjectPageController {
 
 				// Verify user access to the list
 
-				if ($projectPage == 'system') {
+				if ($pageType == 'system') {
 					$projects = Project::getProjects();
 				} else {
-					// get user projects
+					// get user's available projects
 				}
 
 				switch ($format) {

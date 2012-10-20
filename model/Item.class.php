@@ -7,6 +7,7 @@ class Item {
 	private $project_id;
 	private $project_slug;
 	private $project_type;
+	private $project_public;
 	private $project_owner;
 	private $title;
 	private $transcript;
@@ -41,6 +42,7 @@ class Item {
 				$this->project_id = trim($item['project_id']);
 				$this->project_slug = $projectSlug;
 				$this->project_type = trim($item['project_type']);
+				$this->project_public = trim($item['project_public']);
 				$this->project_owner = trim($item['project_owner']);
 				$this->title = trim($item['title']);
 				$this->transcript = trim($item['transcript']);
@@ -71,6 +73,7 @@ class Item {
 				$this->project_id = $projectId;
 				$this->project_slug = trim($item['project_slug']);
 				$this->project_type = trim($item['project_type']);
+				$this->project_public = trim($item['project_public']);
 				$this->project_owner = trim($item['project_owner']);
 				$this->title = trim($item['title']);
 				$this->transcript = trim($item['transcript']);

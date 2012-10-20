@@ -379,7 +379,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItem($item_id, $project_slug) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.slug = ?;";
@@ -391,7 +391,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItemWithProjectID($item_id, $project_id) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.id = ?;";
@@ -546,10 +546,11 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $type, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields) {
+	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
 		$sql .= "type = ?, ";
+		$sql .= "public = ?, ";
 		$sql .= "slug = ?, ";
 		$sql .= "description = ?, ";
 		$sql .= "owner = ?, ";
@@ -562,13 +563,13 @@ class DbMySQL implements DbInterface {
 		$sql .= "fields  = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $type, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $project_id));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $project_id));
 	}
 
-	public function addProject($title, $type, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields) {
+	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, type, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
 		return $this->execute($sql, array($title, $type, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields));
 	}
@@ -743,7 +744,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `name` varchar(255) default NULL,
   `email` varchar(255) default NULL,
-  `score` int(11) default NULL,
+  `score` int(11) default 0,
   `status` varchar(50) default NULL,
   `hash` varchar(32) default NULL,
   `signup_date` date default NULL,
@@ -804,6 +805,7 @@ CREATE TABLE `projects` (
   `id` int(11) NOT NULL auto_increment,
   `title` varchar(255) NOT NULL,
   `type` varchar(255) default NULL,
+  `public` tinyint(1) DEFAULT '1',
   `slug` varchar(255) default NULL,
   `description` varchar(4000) default NULL,
   `owner` varchar(255) default NULL,
