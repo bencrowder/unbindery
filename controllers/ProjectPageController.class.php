@@ -12,26 +12,61 @@ class ProjectPageController {
 		$format = self::getFormat($params['args'], 0, 2);
 		$pageType = self::getProjectPageType($params['args']);
 
+		$auth = Settings::getProtected('auth');
+		$auth->forceAuthentication();
+		$username = $auth->getUsername();
+		$user = new User($username);
+
+		// Get user's stats (score, # proofed, etc.)
+		$user->getStats();
+
 		switch ($params['method']) {
 			// GET: Get list of projects
 			case 'GET':
-				echo "<h2>Getting list of projects</h2>";
-				echo "(" . $format . ")";
+				$userProjects = Project::getActiveProjectsForUser($username);
+				$userProjectSlugList = array();
+				foreach ($userProjects as $project) {
+					array_push($userProjectSlugList, $project['slug']);
+				}
 
-				// Verify user access to the list
-
+				// Get availalbe projects
+				$owner = '';
 				if ($pageType == 'system') {
-					$projects = Project::getProjects();
+					$projectsList = Project::getPublicActiveProjects();
 				} else {
-					// get user's available projects
+					// Get specified user's available projects
+					$owner = $params['args'][1];
+					$projectsList = Project::getPublicActiveProjects($owner);
+				}
+
+				// If it's in the userProjects list, don't include it in the available list
+				$availableProjects = array();
+				foreach ($projectsList as $project) {
+					if (!in_array($project['slug'], $userProjectSlugList)) {
+						array_push($availableProjects, $project);
+					}
 				}
 
 				switch ($format) {
 					case 'json':
-						echo json_encode($projects);
+						echo json_encode(array('projects' => $projects, 'userprojects' => $userProjects));
 						break;
 					case 'html':
-						print_r($projects);
+						$options = array(
+							'user' => array(
+								'loggedin' => true,
+								'admin' => $user->admin,
+								'score' => $user->score,
+								'proofed' => $user->proofed,
+								'proofed_past_week' => $user->proofed_past_week,
+								),
+							'projects' => $availableProjects,
+							'userprojects' => $userProjects,
+							'type' => $pageType,
+							'owner' => $owner,
+						);
+
+						Template::render('projects', $options);
 						break;
 				}
 

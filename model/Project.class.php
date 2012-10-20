@@ -194,12 +194,44 @@ class Project {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "type" => $this->type, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
 
-	static public function getProjects() {
+	static public function getPublicActiveProjects($user = '') {
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		$projects = $db->getProjects();
+
+		$projects = $db->getPublicActiveProjects($user);
 
 		foreach ($projects as &$project) {
 			$project["title"] = stripslashes($project["title"]);
+
+			if ($project["type"] == "system") {
+				$project["link"] = "$app_url/projects/{$project["slug"]}";
+			} else if ($project["type"] == "user") {
+				$project["link"] = "$app_url/users/{$project["owner"]}/projects/{$project["slug"]}";
+			}
+
+			$project["percentage"] = round($project["percentage"], 0);
+		}
+
+		return $projects;
+	}
+
+	// TODO: refactor since this function is largely identical to the previous one
+	static public function getActiveProjectsForUser($username) {
+		$app_url = Settings::getProtected('app_url');
+		$db = Settings::getProtected('db');
+
+		$projects = $db->getActiveProjectsForUser($username);
+
+		foreach ($projects as &$project) {
+			$project["title"] = stripslashes($project["title"]);
+
+			if ($project["type"] == "system") {
+				$project["link"] = "$app_url/projects/{$project["slug"]}";
+			} else if ($project["type"] == "user") {
+				$project["link"] = "$app_url/users/{$project["owner"]}/projects/{$project["slug"]}";
+			}
+
+			$project["percentage"] = round($project["percentage"], 0);
 		}
 
 		return $projects;

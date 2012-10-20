@@ -100,9 +100,9 @@ class UserPageController {
 		// Add extra info (edit link and slug) to each item
 		$prooflist = array();
 		foreach ($proofing['items'] as &$item) {
-			if ($item['project_type'] == 'public') {
+			if ($item['project_type'] == 'system') {
 				$item['editlink'] = $app_url . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/proof';
-			} else if ($item['project_type'] == 'private') {
+			} else if ($item['project_type'] == 'user') {
 				$item['editlink'] = $app_url . '/users/' . $item['project_owner'] . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/proof';
 			}
 
@@ -113,9 +113,9 @@ class UserPageController {
 
 		$reviewlist = array();
 		foreach ($reviewing['items'] as &$item) {
-			if ($item['project_type'] == 'public') {
+			if ($item['project_type'] == 'system') {
 				$item['editlink'] = $app_url . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/review';
-			} else if ($item['project_type'] == 'private') {
+			} else if ($item['project_type'] == 'user') {
 				$item['editlink'] = $app_url . '/users/' . $item['project_owner'] . '/projects/' . $item['project_slug'] . '/items/' . $item['item_id'] . '/review';
 			}
 
@@ -172,9 +172,9 @@ class UserPageController {
 
 		// Prepare user history
 		foreach ($history as &$event) {
-			if ($event['project_type'] == 'public') {
+			if ($event['project_type'] == 'system') {
 				$event['editlink'] = "$app_url/projects/" . $event['project_slug'] . '/items/' . $event['item_id'] . '/proof';
-			} else if ($project['type'] == 'private') {
+			} else if ($project['type'] == 'user') {
 				$event['editlink'] = "$app_url/users/" . $event['project_owner'] . '/projects/' . $event['project_slug'] . '/items/' . $event['item_id'] . '/proof';
 			}
 

@@ -2,28 +2,47 @@
 
 {% block main %}
 	<div id="main" class="container">
-		<h2>Projects</h2>
+		<h2>Projects{% if type == 'user' %} owned by {{ owner }}{% endif %}</h2>
 
 		<div class="content">
+			{% if type == 'system' %}
+			<h3 class="action_header projects">Your Projects</h3>
+			<ul class="action_list projects">
+				{% for project in userprojects %}
+				<li class="project">
+					<div class="progress_bar">
+						<div class="capsule">
+							<div class="percent" style="width: {{ project.percentage }}px;"></div>
+						</div> 
+						<span>{{ project.percentage }}%</span>
+					</div>
+
+					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
+					<div class="owner">Owner: {{ project.owner }}</div>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+
 			<h3 class="action_header projects">Available Projects</h3>
 			<ul class="action_list projects">
 				{% for project in projects %}
-				<li>
-					<div class="percentage">
-						<div class="percentage_container">
+				<li class="project">
+					<div class="progress_bar">
+						<div class="capsule">
 							<div class="percent" style="width: {{ project.percentage }}px;"></div>
-							{% if project.num_proofs > 1 %}<div class="percent_proofs" style="width: {{ project.proof_percentage }}px;"></div>{% endif %}
 						</div> 
-						<p>{{ project.percentage_rounded }}% ({{ project.available_pages }} left)</p>
+						<span>{{ project.percentage }}%</span>
 					</div>
+
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
-					<div class="sub">Author: {{ project.author }}</div>
+					<div class="owner">Owner: {{ project.owner }}</div>
 				</li>
 				{% endfor %}
-				<li></li>
 			</ul>
 		</div>
 
+		{% if completedprojects|length > 0 %}
 		<div class="sidebar">
 			<h3>Completed Projects</h3>
 			<ul class="projects">
@@ -35,5 +54,6 @@
 			{% endfor %}
 			</ul>	
 		</div>
+		{% endif %}
 	</div>
 {% endblock %}

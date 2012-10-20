@@ -151,8 +151,6 @@ ul.action_list li .button				{ font-size: 1.2em; }
 
 ul.action_list li.blankslate a			{ color: #000; text-decoration: none; border-bottom: dotted 1px #999; font-weight: bold; }
 
-ul.action_list.projects li:last-child	{ background: #345; }
-
 ul.action_list.projects .percentage		{ margin-top: 3px; }
 
 .sub									{ margin-top: 4px; font-size: .9em; color: #666; }
@@ -164,6 +162,8 @@ ul.action_list .project .title			{ font-size: 1.1em; }
 ul.action_list .project .title a		{ color: #345678; }
 ul.action_list .project .right_button	{ padding-top: 0; }
 ul.action_list .project .button			{ font-size: 1em; display: inline-block; }
+
+ul.action_list .project .owner			{ font-size: .9em; margin-top: 2px; }
 
 .sys_message							{ padding: 9px 12px 11px; border-radius: 5px; font-size: 1.2em; font-weight: bold; margin-top: 15px; margin-bottom: -1em; }
 #message								{ background: #444; color: #fff; }

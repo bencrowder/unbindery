@@ -657,10 +657,136 @@ class DbMySQL implements DbInterface {
 		return $this->query("SELECT item_id, username, date_completed FROM assignments WHERE project_id = ? ORDER BY item_id ASC;", array($projectId));
 	}
 
-	// TODO: Rewrite
 	// Returns: array of projects
-	public function getProjects() {
-		return $this->query("SELECT projects.title AS title, projects.author AS author, projects.slug AS slug, projects.num_proofs AS num_proofs, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id WHERE items.status = 'available' AND assignments.date_assigned IS NULL AND items.project_id = projects.id) AS available_pages FROM projects WHERE projects.status = 'active' ORDER BY percentage DESC", array());
+	public function getPublicActiveProjects($user = '') {
+		$query = "";
+
+		$query = "SELECT projects.title AS title, ";
+		$query .= "projects.owner AS owner, ";
+		$query .= "projects.slug AS slug, ";
+		$query .= "projects.type AS type, ";
+
+		// Number of people volunteering on the project
+		$query .= "(SELECT COUNT(DISTINCT username) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE project_id = projects.id";
+		$query .= ") AS num_people, ";
+
+		// Number of items available for proofing
+		$query .= "(SELECT COUNT(DISTINCT item_id) ";
+		$query .=     "FROM queues ";
+		$query .=     "WHERE queue_name = CONCAT('project.proof:', projects.slug) ";
+		$query .=     "AND date_removed IS NULL";
+		$query .= ") AS num_available_for_proofing, ";
+
+		// Total number of items
+		$query .= "(SELECT COUNT(DISTINCT id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE project_id = projects.id";
+		$query .= ") AS total_items, ";
+
+		// Number of items marked as completed
+		$query .= "(SELECT COUNT(DISTINCT id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE project_id = projects.id ";
+		$query .=     "AND items.status = 'completed'";
+		$query .= ") AS completed_items, ";
+
+		// Percentage of items completed
+		$query .= "(";
+		$query .=    "(SELECT COUNT(DISTINCT id) ";
+		$query .=        "FROM items ";
+		$query .=        "WHERE project_id = projects.id ";
+		$query .=        "AND items.status = 'completed'";
+		$query .=    ") ";
+		$query .=    "/ ";
+		$query .=    "(SELECT COUNT(DISTINCT id) ";
+		$query .=        "FROM items ";
+		$query .=        "WHERE project_id = projects.id";
+		$query .=    ")";
+		$query .= ") * 100 AS percentage ";
+
+		$query .= "FROM projects ";
+		$query .= "WHERE projects.status = 'active' ";
+		$query .= "AND projects.public = 1 ";
+		if ($user) $query .= "AND projects.owner = ? ";
+		$query .= "ORDER BY percentage DESC, ";
+		$query .=     "projects.date_started DESC;";
+
+		$params = array();
+		if ($user) array_push($params, $user);
+
+		return $this->query($query, $params);
+	}
+
+	// TODO: refactor, since this function is largely identical to the previous one
+	// Parameter: $username
+	// Returns: array of projects
+	public function getActiveProjectsForUser($username) {
+		$query = "";
+
+		$query = "SELECT projects.title AS title, ";
+		$query .= "projects.owner AS owner, ";
+		$query .= "projects.slug AS slug, ";
+		$query .= "projects.type AS type, ";
+
+		// Number of people volunteering on the project
+		$query .= "(SELECT COUNT(DISTINCT username) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE project_id = projects.id";
+		$query .= ") AS num_people, ";
+
+		// Number of items available for proofing
+		$query .= "(SELECT COUNT(DISTINCT item_id) ";
+		$query .=     "FROM queues ";
+		$query .=     "WHERE queue_name = CONCAT('project.proof:', projects.slug) ";
+		$query .=     "AND date_removed IS NULL";
+		$query .= ") AS num_available_for_proofing, ";
+
+		// Total number of items
+		$query .= "(SELECT COUNT(DISTINCT id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE project_id = projects.id";
+		$query .= ") AS total_items, ";
+
+		// Number of items marked as completed
+		$query .= "(SELECT COUNT(DISTINCT id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE project_id = projects.id ";
+		$query .=     "AND items.status = 'completed'";
+		$query .= ") AS completed_items, ";
+
+		// Percentage of items completed
+		$query .= "(";
+		$query .=    "(SELECT COUNT(DISTINCT id) ";
+		$query .=        "FROM items ";
+		$query .=        "WHERE project_id = projects.id ";
+		$query .=        "AND items.status = 'completed'";
+		$query .=    ") ";
+		$query .=    "/ ";
+		$query .=    "(SELECT COUNT(DISTINCT id) ";
+		$query .=        "FROM items ";
+		$query .=        "WHERE project_id = projects.id";
+		$query .=    ")";
+		$query .= ") * 100 AS percentage ";
+
+		$query .= "FROM projects ";
+		$query .= "WHERE projects.status = 'active' ";
+
+		// Where user is owner
+		$query .= "AND projects.owner = ? ";
+
+		// Or user is a member
+		$query .= "OR (SELECT COUNT(id) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE username = ? ";
+		$query .=     "AND project_id = projects.id";
+		$query .= ") > 0 ";
+
+		$query .= "ORDER BY percentage DESC, ";
+		$query .=     "projects.date_started DESC;";
+
+		return $this->query($query, array($username, $username));
 	}
 
 	// TODO: Rewrite
