@@ -164,6 +164,7 @@ ul.action_list .project .right_button	{ padding-top: 0; }
 ul.action_list .project .button			{ font-size: 1em; display: inline-block; }
 
 ul.action_list .project .owner			{ font-size: .9em; margin-top: 2px; }
+ul.action_list .project.private			{ background: #fdf7e8; }
 
 .sys_message							{ padding: 9px 12px 11px; border-radius: 5px; font-size: 1.2em; font-weight: bold; margin-top: 15px; margin-bottom: -1em; }
 #message								{ background: #444; color: #fff; }

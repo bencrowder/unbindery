@@ -32,24 +32,30 @@ class ProjectPageController {
 				// Get availalbe projects
 				$owner = '';
 				if ($pageType == 'system') {
-					$projectsList = Project::getPublicActiveProjects();
+					$projectsList = Project::getAvailableProjects($username);
+					$completedProjects = Project::getPublicCompletedProjects('', true);
 				} else {
 					// Get specified user's available projects
 					$owner = $params['args'][1];
-					$projectsList = Project::getPublicActiveProjects($owner);
+					$projectsList = Project::getAvailableProjects($username, $owner);
+					$completedProjects = Project::getPublicCompletedProjects($owner, true);
 				}
 
 				// If it's in the userProjects list, don't include it in the available list
 				$availableProjects = array();
 				foreach ($projectsList as $project) {
-					if (!in_array($project['slug'], $userProjectSlugList)) {
+					if ($pageType == 'system') {
+						if (!in_array($project['slug'], $userProjectSlugList)) {
+							array_push($availableProjects, $project);
+						}
+					} else {
 						array_push($availableProjects, $project);
 					}
 				}
 
 				switch ($format) {
 					case 'json':
-						echo json_encode(array('projects' => $projects, 'userprojects' => $userProjects));
+						echo json_encode(array('user_projects' => $userProjects, 'available_projects' => $availableProjects, 'completed_projects' => $completedProjects));
 						break;
 					case 'html':
 						$options = array(
@@ -62,6 +68,7 @@ class ProjectPageController {
 								),
 							'projects' => $availableProjects,
 							'userprojects' => $userProjects,
+							'completedprojects' => $completedProjects,
 							'type' => $pageType,
 							'owner' => $owner,
 						);

@@ -9,7 +9,7 @@
 			<h3 class="action_header projects">Your Projects</h3>
 			<ul class="action_list projects">
 				{% for project in userprojects %}
-				<li class="project">
+				<li class="project{% if project.public == 0 %} private{% endif%}">
 					<div class="progress_bar">
 						<div class="capsule">
 							<div class="percent" style="width: {{ project.percentage }}px;"></div>
@@ -27,7 +27,7 @@
 			<h3 class="action_header projects">Available Projects</h3>
 			<ul class="action_list projects">
 				{% for project in projects %}
-				<li class="project">
+				<li class="project{% if project.public == 0 %} private{% endif%}">
 					<div class="progress_bar">
 						<div class="capsule">
 							<div class="percent" style="width: {{ project.percentage }}px;"></div>

@@ -657,14 +657,17 @@ class DbMySQL implements DbInterface {
 		return $this->query("SELECT item_id, username, date_completed FROM assignments WHERE project_id = ? ORDER BY item_id ASC;", array($projectId));
 	}
 
-	// Returns: array of projects
-	public function getPublicActiveProjects($user = '') {
+	// Returns: array of projects available to user
+	// (project is public OR user is owner OR user is in whitelist)
+	// or, if $owner is specified, then (project is public OR user is in whitelist)
+	public function getAvailableProjects($username, $owner) {
 		$query = "";
 
 		$query = "SELECT projects.title AS title, ";
 		$query .= "projects.owner AS owner, ";
 		$query .= "projects.slug AS slug, ";
 		$query .= "projects.type AS type, ";
+		$query .= "projects.public AS public, ";
 
 		// Number of people volunteering on the project
 		$query .= "(SELECT COUNT(DISTINCT username) ";
@@ -708,13 +711,40 @@ class DbMySQL implements DbInterface {
 
 		$query .= "FROM projects ";
 		$query .= "WHERE projects.status = 'active' ";
-		$query .= "AND projects.public = 1 ";
-		if ($user) $query .= "AND projects.owner = ? ";
+
+		if ($owner) {
+			$query .= "AND projects.owner = ? ";
+
+			$query .= "AND (";
+
+			// Where the project is public
+			$query .=     "projects.public = 1 ";
+
+			// Or the user is in the whitelist
+			$query .=     "OR projects.whitelist LIKE ? ";
+
+			$query .= ")";
+
+			$params = array($owner, "%[$username]%");
+		} else {
+
+			$query .= "AND (";
+			// Where the project is public
+			$query .=     "projects.public = 1 ";
+
+			// Or the user is the owner
+			$query .=     "OR projects.owner = ? ";
+
+			// Or the user is in the whitelist
+			$query .=     "OR projects.whitelist LIKE ? ";
+
+			$query .= ")";
+
+			$params = array($username, "%[$username]%");
+		}
+
 		$query .= "ORDER BY percentage DESC, ";
 		$query .=     "projects.date_started DESC;";
-
-		$params = array();
-		if ($user) array_push($params, $user);
 
 		return $this->query($query, $params);
 	}
@@ -729,6 +759,7 @@ class DbMySQL implements DbInterface {
 		$query .= "projects.owner AS owner, ";
 		$query .= "projects.slug AS slug, ";
 		$query .= "projects.type AS type, ";
+		$query .= "projects.public AS public, ";
 
 		// Number of people volunteering on the project
 		$query .= "(SELECT COUNT(DISTINCT username) ";
@@ -774,19 +805,58 @@ class DbMySQL implements DbInterface {
 		$query .= "WHERE projects.status = 'active' ";
 
 		// Where user is owner
-		$query .= "AND projects.owner = ? ";
+		$query .= "AND (";
+		$query .=     "projects.owner = ? ";
 
 		// Or user is a member
-		$query .= "OR (SELECT COUNT(id) ";
-		$query .=     "FROM roles ";
-		$query .=     "WHERE username = ? ";
-		$query .=     "AND project_id = projects.id";
-		$query .= ") > 0 ";
+		$query .=     "OR (SELECT COUNT(id) ";
+		$query .=         "FROM roles ";
+		$query .=         "WHERE username = ? ";
+		$query .=         "AND project_id = projects.id";
+		$query .=     ") > 0 ";
+		$query .= ")";
 
 		$query .= "ORDER BY percentage DESC, ";
 		$query .=     "projects.date_started DESC;";
 
 		return $this->query($query, array($username, $username));
+	}
+
+	// Returns: array of projects
+	public function getPublicCompletedProjects($user = '', $limit = true) {
+		$query = "";
+
+		$query = "SELECT projects.title AS title, ";
+		$query .= "projects.owner AS owner, ";
+		$query .= "projects.slug AS slug, ";
+		$query .= "projects.type AS type, ";
+		$query .= "projects.date_started AS date_started, ";
+		$query .= "projects.date_completed AS date_completed, ";
+		$query .= "DATE_FORMAT(projects.date_completed, '%e %b %Y') AS date_completed_formatted, ";
+
+		// Number of people volunteering on the project
+		$query .= "(SELECT COUNT(DISTINCT username) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE project_id = projects.id";
+		$query .= ") AS num_people, ";
+
+		// Total number of items
+		$query .= "(SELECT COUNT(DISTINCT id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE project_id = projects.id";
+		$query .= ") AS total_items ";
+
+		$query .= "FROM projects ";
+		$query .= "WHERE projects.status = 'completed' ";
+		$query .= "AND projects.public = 1 ";
+		if ($user) $query .= "AND projects.owner = ? ";
+		$query .= "ORDER BY projects.date_completed DESC ";
+		if ($limit) $query .= "LIMIT 5";
+
+		$params = array();
+		if ($user) array_push($params, $user);
+
+		return $this->query($query, $params);
 	}
 
 	// TODO: Rewrite

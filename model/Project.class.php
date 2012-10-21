@@ -194,11 +194,11 @@ class Project {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "type" => $this->type, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
 
-	static public function getPublicActiveProjects($user = '') {
+	static public function getAvailableProjects($username, $owner = '') {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
-		$projects = $db->getPublicActiveProjects($user);
+		$projects = $db->getAvailableProjects($username, $owner);
 
 		foreach ($projects as &$project) {
 			$project["title"] = stripslashes($project["title"]);
@@ -237,8 +237,22 @@ class Project {
 		return $projects;
 	}
 
-	static public function getCompletedProjects() {
+	static public function getPublicCompletedProjects($user = '', $limit = true) {
+		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
-		return $db->getCompletedProjects();
+
+		$projects = $db->getPublicCompletedProjects($user, $limit);
+
+		foreach ($projects as &$project) {
+			$project["title"] = stripslashes($project["title"]);
+
+			if ($project["type"] == "system") {
+				$project["link"] = "$app_url/projects/{$project["slug"]}";
+			} else if ($project["type"] == "user") {
+				$project["link"] = "$app_url/users/{$project["owner"]}/projects/{$project["slug"]}";
+			}
+		}
+
+		return $projects;
 	}
 }
