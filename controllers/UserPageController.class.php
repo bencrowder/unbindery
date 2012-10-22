@@ -66,6 +66,8 @@ class UserPageController {
 	// Methods: GET = get user dashboard info
 
 	static public function userDashboard($params) {
+		$format = $params['args'][1] != '' ? $params['args'][1] : 'html';
+
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -181,7 +183,7 @@ class UserPageController {
 			$event['title'] = $event['item_title'];
 		}
 
-		$options = array(
+		$response = array(
 			'user' => array(
 				'loggedin' => true,
 				'admin' => $user->admin,
@@ -208,7 +210,14 @@ class UserPageController {
 			'topusers' => $topusers,
 		);
 
-		Template::render('dashboard', $options);
+		switch ($format) {
+			case 'json':
+				echo json_encode($response);
+				break;
+			case 'html':
+				Template::render('dashboard', $response);
+				break;
+		}
 	}
 
 
