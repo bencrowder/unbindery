@@ -8,7 +8,9 @@
 			<div class="project_title">{{ project.title }}{% if not project.public %} (private){% endif %}</div>
 
 			<ul class="metadata">
-				<li><label>Owner:</label> <div>{{ project.owner }}{% if user.is_owner %} (you){% endif %}</li>
+				<li><label>Owner:</label> <div>{{ project.owner }}{% if user.is_owner %} (you){% endif %}</div></li>
+				{% if project.num_items %}<li><label># Items:</label> <div>{{ project.num_items }}</div></li>{% endif %}
+
 				{% if project.description %}<li><label>Description:</label> <div>{{ project.description }}</div></li>{% endif %}
 				{% if project.language %}<li><label>Language:</label> <div>{{ project.language }}</div></li>{% endif %}
 
@@ -44,20 +46,43 @@
 				<p>Completed: {{ project.percentage_rounded }}% ({{ project.completed }}/{{ project.total }})</p>
 			</div>
 
-			<h3>Proofers on This Project</h3>
-			<ul class="proofers">
-			{% for proofer in proofers %}
-				<li>
-					<div class="progress_bar">
-						<div class="capsule">
-							<div class="percent" style="width: {{ proofer.percentage }}px;"></div>
-						</div> 
-						<p>{{ proofer.percentage_rounded }}% ({{ proofer.pages }})</p>
-					</div>
-					<div class="username">{{ proofer.username }}</div>
-				</li>
-			{% endfor %}
-			</ul>
+			{% if proofers|length > 0 %}
+				<div class="volunteers">
+					<h3>Proofers on This Project</h3>
+					<ul class="proofers">
+					{% for proofer in proofers %}
+						<li>
+							<div class="progress_bar">
+								<div class="capsule">
+									<div class="percent" style="width: {{ proofer.percentage }}px;"></div>
+								</div> 
+								<p>{{ proofer.percentage }}% ({{ proofer.items }} items)</p>
+							</div>
+							<div class="username">{{ proofer.username }}</div>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+
+			{% if reviewers|length > 0 %}
+				<div class="volunteers">
+					<h3>Reviewers on This Project</h3>
+					<ul class="reviewers">
+					{% for reviewer in reviewers %}
+						<li>
+							<div class="progress_bar">
+								<div class="capsule">
+									<div class="percent" style="width: {{ reviewer.percentage }}px;"></div>
+								</div> 
+								<p>{{ reviewer.percentage }}% ({{ reviewer.items }} items)</p>
+							</div>
+							<div class="username">{{ reviewer.username }}</div>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

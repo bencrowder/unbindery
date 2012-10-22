@@ -23,7 +23,7 @@ class ProjectPageController {
 					array_push($userProjectSlugList, $project['slug']);
 				}
 
-				// Get availalbe projects
+				// Get available projects
 				$owner = '';
 				if ($pageType == 'system') {
 					$projectsList = Project::getAvailableProjects($user->username);
@@ -85,6 +85,7 @@ class ProjectPageController {
 				$project = new Project();
 				$project->title = Utils::POST('project_name');
 				$project->type = Utils::POST('project_type');
+				$project->public = Utils::POST('project_public');
 				$project->description = Utils::POST('project_desc');
 				$project->language = Utils::POST('project_lang');
 				$project->workflow = Utils::POST('project_workflow');
@@ -94,6 +95,7 @@ class ProjectPageController {
 				$project->owner = Utils::POST('project_owner');
 				$project->status = 'pending';
 
+				// Convert to lowercase and strip out punctuation
 				$project->slug = str_replace(' ', '-', strtolower($project->title));
 				$project->slug = preg_replace('/[^a-z0-9-]+/i', '', $project->slug);
 
@@ -102,11 +104,11 @@ class ProjectPageController {
 
 				if ($status == true) {
 					switch ($project->type) {
-						case 'public':
+						case 'system':
 							$project->url = "projects/" . $project->slug;
 							$project->admin_url = "projects/" . $project->slug . "/admin";
 							break;
-						case 'private':
+						case 'user':
 							$project->url = "users/" . $project->owner . "/projects/" . $project->slug;
 							$project->admin_url = "users/" . $project->owner . "/projects/" . $project->slug . "/admin";
 							break;
@@ -115,7 +117,10 @@ class ProjectPageController {
 
 				$response = array(
 					"code" => $status,
-					"project" => array("url" => $project->url, "admin_url" => $project->admin_url)
+					"project" => array(
+						"url" => $project->url,
+						"admin_url" => $project->admin_url
+					)
 				);
 
 				switch ($format) {
@@ -125,6 +130,7 @@ class ProjectPageController {
 						$response["project"]["admin_url"] .= ".json";
 						echo json_encode($response);
 						break;
+
 					case 'html':
 						// Return HTML
 
@@ -212,7 +218,11 @@ class ProjectPageController {
 						'date_started' => $project->date_started,
 						'date_completed' => $project->date_completed,
 						'days_spent' => $project->days_spent,
+						'num_items' => $project->num_items,
+						'items_completed' => $project->items_completed,
 					),
+					'proofers' => $project->getProoferStats('proof'),
+					'reviewers' => $project->getProoferStats('review'),
 				);
 
 				switch ($format) {

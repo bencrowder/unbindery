@@ -340,8 +340,11 @@ ul.items li a.assignment.done			{ color: #fff; background: #444; }
 /* Project Details */
 /* --------------------------------------------------- */
 
+.proj_details .volunteers				{ overflow: hidden; clear: both; margin-top: 1em; }
+
 ul.proofers li							{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
 ul.proofers .username					{ font-size: 11px; }
+ul.proofers .progress_bar p				{ margin: 0; }
 
 .sidebar ul.projects li a						{ font-size: 11px; color: #000; text-decoration: none; border-bottom: dotted 1px #666; font-weight: bold; }
 

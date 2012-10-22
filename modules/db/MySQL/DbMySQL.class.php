@@ -299,7 +299,7 @@ class DbMySQL implements DbInterface {
 		$query = "SELECT queues.id ";
 		$query .= "FROM queues ";
 		$query .= "JOIN projects ON queues.project_id = projects.id ";
-		$query .= "WHERE queues.name = ? ";
+		$query .= "WHERE queues.queue_name = ? ";
 		$query .= "AND projects.slug = ? ";
 		$query .= "AND queues.date_removed IS NULL";
 
@@ -537,8 +537,18 @@ class DbMySQL implements DbInterface {
 		$query = "SELECT *, ";
 		$query .= "DATE_FORMAT(date_started, '%e %b %Y') AS datestarted, ";
 		$query .= "DATE_FORMAT(date_completed, '%e %b %Y') AS datecompleted, ";
-		$query .= "DATEDIFF(date_completed, date_started) AS days_spent ";
-		$query .= "FROM projects WHERE slug = ?;";
+		$query .= "DATEDIFF(date_completed, date_started) AS days_spent, ";
+		$query .= "(SELECT COUNT(id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE items.project_id = projects.id";
+		$query .= ") AS num_items, ";
+		$query .= "(SELECT COUNT(id) ";
+		$query .=     "FROM items ";
+		$query .=     "WHERE items.project_id = projects.id ";
+		$query .=     "AND items.status = 'completed'";
+		$query .= ") AS items_completed ";
+		$query .= "FROM projects ";
+		$query .= "WHERE slug = ?;";
 		$results = $this->query($query, array($project_slug));
 		$result = $results[0];
 
@@ -632,18 +642,35 @@ class DbMySQL implements DbInterface {
 		return $results;
 	}
 
-	// TODO: Rewrite
 	// Returns: array of proofers
-	public function getProoferStats($projectId) {
+	public function getProoferStats($projectId, $type = 'proof') {
 		$query = "SELECT username, ";
-		$query .= "COUNT(username) AS pages, ";
-		$query .= "COUNT(username) / ((SELECT COUNT(*) FROM items WHERE items.project_id = assignments.project_id) * projects.num_proofs) * 100 AS percentage ";
-		$query .= "FROM assignments ";
-		$query .= "JOIN projects ON assignments.project_id = projects.id ";
+		$query .= "(";
+		$query .=     "SELECT COUNT(DISTINCT item_id) ";
+		$query .=     "FROM queues ";
+		$query .=     "WHERE queue_name = CONCAT('user.$type:', username) ";
+		$query .=     "AND date_removed IS NOT NULL";
+		$query .= ") AS items, ";
+		$query .= "ROUND(";
+		$query .=     "(";
+		$query .=         "SELECT COUNT(DISTINCT item_id) ";
+		$query .=         "FROM queues ";
+		$query .=         "WHERE queue_name = CONCAT('user.$type:', username) ";
+		$query .=         "AND date_removed IS NOT NULL";
+		$query .=     ") ";
+		$query .= "/ ";
+		$query .=     "(";
+		$query .=         "SELECT COUNT(DISTINCT id) ";
+		$query .=         "FROM items ";
+		$query .=         "WHERE project_id = ?";
+		$query .=     ") ";
+		$query .= "* 100, 0) AS percentage ";
+		$query .= "FROM roles ";
 		$query .= "WHERE project_id = ? ";
-		$query .= "GROUP BY username ORDER BY pages DESC;";
+		$query .= "AND role = ? ";
+		$query .= "ORDER BY items DESC;";
 
-		return $this->query($query, array($projectId));
+		return $this->query($query, array($projectId, $projectId, "{$type}er"));
 	}
 
 	// Returns: array of items

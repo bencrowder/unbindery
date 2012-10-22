@@ -77,7 +77,6 @@ class UserPageController {
 		// Put it in the settings cache
 		Settings::setProtected('username', $username);
 
-
 		// Set up proofing and reviewing objects
 		$proofing = array();
 		$reviewing = array();

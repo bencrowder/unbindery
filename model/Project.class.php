@@ -57,6 +57,8 @@ class Project {
 			$this->date_started = trim($project['datestarted']);
 			$this->date_completed = trim($project['datecompleted']);
 			$this->days_spent = trim($project['days_spent']);
+			$this->num_items = trim($project['num_items']);
+			$this->items_completed = trim($project['items_completed']);
 
 			// Put the whitelist into an array
 			if ($this->whitelist != '') {
@@ -158,8 +160,8 @@ class Project {
 		return $this->db->getItems($this->project_id);
 	}
 
-	public function getProoferStats() {
-		return $this->db->getProoferStats($this->project_id);
+	public function getProoferStats($type = 'proof') {
+		return $this->db->getProoferStats($this->project_id, $type);
 	}
 
 	public function getItemsAndAssignments() {

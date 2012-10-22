@@ -9,6 +9,10 @@ class Utils {
 		return (array_key_exists($field, $_POST)) ? $_POST[$field] : false;
 	}
 
+	static public function PUT($field) {
+		return (array_key_exists($field, $_PUT)) ? $_PUT[$field] : false;
+	}
+
 	static public function SESSION($field) {
 		return (array_key_exists($field, $_SESSION)) ? $_SESSION[$field] : false;
 	}
