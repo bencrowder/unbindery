@@ -60,7 +60,7 @@ class Project {
 
 			// Put the whitelist into an array
 			if ($this->whitelist != '') {
-			   	$this->whitelist = explode(",", $this->whitelist);
+			   	$this->whitelist = explode("][", trim($this->whitelist, "[]"));
 			} else {
 				$this->whitelist = array();
 			}

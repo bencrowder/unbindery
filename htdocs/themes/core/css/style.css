@@ -267,11 +267,16 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .proj_details .adminlink a:hover		{ text-decoration: underline; }
 
 .proj_details .membership				{ margin-bottom: 3em; }
-.proj_details .membership a				{ display: block; }
-.proj_details .membership a:hover		{ text-decoration: underline; }
+.proj_details .membership a				{ display: block; text-decoration: none; }
 
-.proj_details .join						{ font-size: 1.3em; padding: 5px 9px 6px; }
-.proj_details .leave					{ color: #999; text-align: right; text-decoration: none; }
+.proj_details .membership .join			{ font-size: 1.3em; padding: 5px 9px 6px; }
+.proj_details .membership .leave		{ color: #999; text-align: right; }
+.proj_details .membership .leave:hover	{ text-decoration: underline; }
+
+.proj_details .membership div			{ padding: 5px 7px; -moz-border-radius: 3px; border-radius: 3px; }
+.proj_details .membership .success		{ background: #dff0df; color: #198019; font-weight: bold; }
+.proj_details .membership .error		{ background: #f0dfdf; color: #801919; font-weight: bold; }
+.proj_details .membership .access-denied	{ background: #f0dfdf; color: #801919; font-weight: bold; }
 
 
 /* Project Guidelines */

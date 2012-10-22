@@ -298,4 +298,37 @@ $(document).ready(function() {
 			return false;
 		}
 	});
+
+
+	/* Project page (joining/leaving) */
+	/* -------------------------------------------------- */
+
+	$('.proj_details .membership a').click(function() {
+		// Find out whether we're joining or leaving the project
+		var action = ($(this).hasClass('join')) ? 'POST' : 'DELETE';
+
+		// And the URL to call (same for joining/leaving)
+		var url = $(this).attr('href');
+
+		var message = (action == 'POST') ? 'You are now a member of this project.' : 'You have left this project.';
+
+		// call URL with appropriate method
+		$.ajax({
+			url: url,
+			type: action,
+			dataType: 'json',
+			success: function(data) {
+				$(".proj_details .membership a").slideUp(50, function() {
+					$("<div class='" + data.status + "'>" + message + "</div>").appendTo(".proj_details .membership");	
+				});
+			},
+			error: function(data) {
+				$(".proj_details .membership a").slideUp(50, function() {
+					$("<div class='error'>Error connecting to web service. Contact the administrator.</div>").appendTo(".proj_details .membership");	
+				});
+			}
+		});
+
+		return false;
+	});
 });
