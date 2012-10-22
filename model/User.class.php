@@ -58,6 +58,8 @@ class User {
 			$this->in_db = true;
 		}
 		$this->username = $username;
+
+		$this->getStats();
 	}
 
 	public function save() {
@@ -250,5 +252,43 @@ class User {
 		$db = Settings::getProtected('db');
 
 		return $db->getTopUsers();
+	}
+
+	public function getResponse($projectSlug = '') {
+		$this->getStats();
+
+		$response = array(
+			'loggedin' => true,
+			'username' => $this->username,
+			'name' => $this->name,
+			'email' => $this->email,
+			'status' => $this->status,
+			'score' => $this->score,
+			'signup_date' => $this->signup_date,
+			'last_login' => $this->last_login,
+			'admin' => $this->admin,
+			'prefs' => $this->prefs,
+			'theme' => $this->theme,
+			'proofed' => $this->proofed,
+			'proofed_past_week' => $this->proofed_past_week
+		);
+
+		if ($projectSlug) {
+			$project = new Project($projectSlug);
+
+			$response['is_member'] = $this->isMember($projectSlug);
+			$response['is_owner'] = ($this->username == $project->owner);
+			$response['project_roles'] = join('|', $this->getRolesForProject($projectSlug));
+		}
+
+		return $response;
+	}
+
+	static public function getAuthenticatedUser() {
+		$auth = Settings::getProtected('auth');
+
+		$auth->forceAuthentication();
+
+		return new User($auth->getUsername());
 	}
 }

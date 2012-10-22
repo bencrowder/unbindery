@@ -4,7 +4,7 @@
 	{% block head %}
 	<meta charset="utf-8" />
 
-	<title>{% block title %}{{ title }}{% endblock %}</title>
+	<title>{% block title %}{% if page_title %}{{ page_title }} | {% endif %}{{ title }}{% endblock %}</title>
 
 	<link rel="shortcut icon" href="{{ theme_root }}/images/favicon.png" />
 

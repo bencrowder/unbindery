@@ -2,63 +2,47 @@
 
 {% block main %}
 	<div id="main" class="container">
-	{% if guidelines == true %}
-		<h2>Project Guidelines</h2>
-		
-		<div class="content proj_guidelines">
-			<div class="project_title">{{ project.title }}</div>
-
-			<h2>Project-specific Guidelines</h2>
-
-			{% if project.guidelines != '' %}{{ project.guidelines }}{% else %}Nothing specific to this project.{% endif %}
-
-			<h2>System-wide Guidelines</h2>
-
-			{% autoescape false%}{{ systemguidelines }}{% endautoescape %}
-		</div>
-	{% else %}
-		<h2>Project Details</h2>
+		<h2>{% if project.type == 'user' %}User {% endif %}Project Details</h2>
 
 		<div class="content proj_details">
-			<div class="project_title">{{ project.title }}</div>
-			<div class="project_author">Author: {{ project.author }}</div>
-			<div class="project_desc">{{ project.language }}. {{ project.description }}</div>
+			<div class="project_title">{{ project.title }}{% if not project.public %} (private){% endif %}</div>
 
-			<ul class="project_dates">
-				<li>Started: <label>{{ project.date_started }}</label></li>
-				{% if project.status == 'completed' or project.status == 'posted' %}
-				<li>Completed: <label>{{ project.date_completed }} ({{ project.days_spent }})</label></li>
-					{% if project.status == 'posted' %}
-				<li>Posted: <label>{{ project.date_posted }}</label></li>
-					{% endif %}
-				{% endif %}
+			<ul class="metadata">
+				<li><label>Owner:</label> <div>{{ project.owner }}{% if user.is_owner %} (you){% endif %}</li>
+				{% if project.description %}<li><label>Description:</label> <div>{{ project.description }}</div></li>{% endif %}
+				{% if project.language %}<li><label>Language:</label> <div>{{ project.language }}</div></li>{% endif %}
+
+				{% if project.date_started %}<li><label>Started:</label> <div>{{ project.date_started }}</div></li>{% endif %}
+				{% if project.date_completed and project.days_spent %}<li><label>Completed:</label> <div>{{ project.date_completed }} ({{ project.days_spent }} days)</div></li>{% endif %}
+				{% if project.date_posted %}<li><label>Posted:</label> <div>{{ project.date_posted }}</div></li>{% endif %}
+				{% if project.thumbnails %}<li>
+					<label>Preview:</label>
+					<div>
+						<ul class="thumbnails">
+							{% for thumbnail in project.thumbnails %}
+							<li><img src="{{ app_url }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</li>{% endif %}
 			</ul>
 
-			<a class="guidelines_link" target="_blank" href="{{ project.slug }}/guidelines/">Project Guidelines</a>
-
-			{% if project.thumbnails %}
-				<h4>Preview</h4>
-				<ul class="thumbnails">
-				{% for thumbnail in project.thumbnails %}
-				<li><img src="{{ app_url }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
-				{% endfor %}
-				</ul>
-			{% endif %}
+			{% if project.guidelines %}<div class="guidelines"><h2>Guidelines</h2> <div>{{ project.guidelines|raw }}</div></div>{% endif %}
 		</div>
 
 		<div class="sidebar proj_details">
+			{% if user.is_owner %}<div class="adminlink"><a href="">Admin page for this project</a></div>{% endif %}
+
 			<div class="progress_bar big">
 				<div class="capsule">
 					<div class="percent" style="width: {{ project.percentage * 2 }}px;"></div>
 					<div class="percent_proofs" style="width: {{ project.proof_percentage * 2 }}px;"></div>
 				</div> 
-				{% if project.num_proofs > 1 %}
 				<p>Proofed: {{ project.proof_percentage_rounded }}% ({{ project.proofed }}/{{ project.total_proofs }})</p>
-				{% endif %}
 				<p>Completed: {{ project.percentage_rounded }}% ({{ project.completed }}/{{ project.total }})</p>
 			</div>
 
-			{% if not user.ismember %}
+			{% if not user.is_member and not user.is_owner %}
 			<div class="join_button"><a href="{{ app_url }}/projects/{{ project.slug }}/join" class="right_button join button">Join this project</a></div>
 			{% endif %}
 
@@ -77,6 +61,5 @@
 			{% endfor %}
 			</ul>
 		</div>
-	{% endif %}
 	</div>
 {% endblock %}

@@ -924,7 +924,9 @@ class DbMySQL implements DbInterface {
 		$query .= "(SELECT count(item_id) FROM queues WHERE queue_name = CONCAT('project.proof:', slug) AND date_removed IS NULL AND item_id NOT IN (SELECT item_id FROM queues WHERE queue_name = ?)) AS available_to_proof, ";
 		$query .= "(SELECT count(item_id) FROM queues WHERE queue_name = CONCAT('project.review:', slug) AND date_removed IS NULL AND item_id NOT IN (SELECT item_id FROM queues WHERE queue_name = ?)) AS available_to_review ";
 		$query .= "FROM projects, roles ";
-		$query .= "WHERE projects.id = roles.project_id AND username = ?;";
+		$query .= "WHERE projects.id = roles.project_id ";
+		$query .= "AND projects.status = 'active' ";
+		$query .= "AND username = ?;";
 
 		return $this->query($query, array($userProofString, $userReviewString, $username));
 	}

@@ -12,18 +12,12 @@ class ProjectPageController {
 		$format = self::getFormat($params['args'], 0, 2);
 		$pageType = self::getProjectPageType($params['args']);
 
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
-		$username = $auth->getUsername();
-		$user = new User($username);
-
-		// Get user's stats (score, # proofed, etc.)
-		$user->getStats();
+		$user = User::getAuthenticatedUser();
 
 		switch ($params['method']) {
 			// GET: Get list of projects
 			case 'GET':
-				$userProjects = Project::getActiveProjectsForUser($username);
+				$userProjects = Project::getActiveProjectsForUser($user->username);
 				$userProjectSlugList = array();
 				foreach ($userProjects as $project) {
 					array_push($userProjectSlugList, $project['slug']);
@@ -32,12 +26,12 @@ class ProjectPageController {
 				// Get availalbe projects
 				$owner = '';
 				if ($pageType == 'system') {
-					$projectsList = Project::getAvailableProjects($username);
+					$projectsList = Project::getAvailableProjects($user->username);
 					$completedProjects = Project::getPublicCompletedProjects('', true);
 				} else {
 					// Get specified user's available projects
 					$owner = $params['args'][1];
-					$projectsList = Project::getAvailableProjects($username, $owner);
+					$projectsList = Project::getAvailableProjects($user->username, $owner);
 					$completedProjects = Project::getPublicCompletedProjects($owner, true);
 				}
 
@@ -53,27 +47,22 @@ class ProjectPageController {
 					}
 				}
 
+				$response = array(
+					'page_title' => 'Projects',
+					'user' => $user->getResponse(),
+					'user_projects' => $userProjects,
+					'available_projects' => $availableProjects,
+					'completed_projects' => $completedProjects,
+					'type' => $pageType,
+					'owner' => $owner,
+				);
+
 				switch ($format) {
 					case 'json':
-						echo json_encode(array('user_projects' => $userProjects, 'available_projects' => $availableProjects, 'completed_projects' => $completedProjects));
+						echo json_encode($response);
 						break;
 					case 'html':
-						$options = array(
-							'user' => array(
-								'loggedin' => true,
-								'admin' => $user->admin,
-								'score' => $user->score,
-								'proofed' => $user->proofed,
-								'proofed_past_week' => $user->proofed_past_week,
-								),
-							'projects' => $availableProjects,
-							'userprojects' => $userProjects,
-							'completedprojects' => $completedProjects,
-							'type' => $pageType,
-							'owner' => $owner,
-						);
-
-						Template::render('projects', $options);
+						Template::render('projects', $response);
 						break;
 				}
 
@@ -124,7 +113,10 @@ class ProjectPageController {
 					}
 				}
 
-				$response = array("code" => $status, "project" => array("url" => $project->url, "admin_url" => $project->admin_url));
+				$response = array(
+					"code" => $status,
+					"project" => array("url" => $project->url, "admin_url" => $project->admin_url)
+				);
 
 				switch ($format) {
 					case 'json':
@@ -162,7 +154,7 @@ class ProjectPageController {
 		$format = self::getFormat($params['args'], 0, 1);
 
 		// Authenticate
-		$user = self::authenticate();
+		$user = User::getAuthenticatedUser();
 
 		// Verify clearance
 		// TODO: add this
@@ -173,10 +165,7 @@ class ProjectPageController {
 			// GET: Get new project page
 			case 'GET':
 				$options = array(
-					'user' => array(
-						'loggedin' => true,
-						'admin' => $user->admin,
-					),
+					'user' => $user->getResponse(),
 				);
 
 				Template::render('new_project', $options);
@@ -193,10 +182,48 @@ class ProjectPageController {
 	//          DELETE = delete project
 
 	static public function projectPage($params) {
-		$format = self::getFormat($params['args'], 0, 2);
+		$format = self::getFormat($params['args'], 1, 3);
+		$projectSlug = (self::getProjectPageType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
+
+		$project = new Project($projectSlug);
+
+		$user = User::getAuthenticatedUser();
+
+		$isMember = $user->isMember($projectSlug);
+
+		// TODO: make sure current user has access to see this project
 
 		switch ($params['method']) {
 			case 'GET':
+				$response = array(
+					'page_title' => $project->title,
+					'user' => $user->getResponse($projectSlug),
+					'project' => array(
+						'id' => $project->project_id,
+						'slug' => $project->slug,
+						'title' => $project->title,
+						'owner' => $project->owner,
+						'type' => $project->type,
+						'language' => $project->language,
+						'status' => $project->status,
+						'guidelines' => $project->guidelines,
+						'description' => $project->description,
+						'thumbnails' => $project->thumbnails,
+						'date_started' => $project->date_started,
+						'date_completed' => $project->date_completed,
+						'days_spent' => $project->days_spent,
+					),
+				);
+
+				switch ($format) {
+					case 'json':
+						echo json_encode($response);
+						break;
+					case 'html':
+						Template::render('project', $response);
+						break;
+				}
+
 				break;
 
 			case 'PUT':
@@ -205,9 +232,6 @@ class ProjectPageController {
 			case 'DELETE':
 				break;
 		}
-
-		echo "Project page (" . $params['method'] . "): ";
-		print_r($params['args']);
 	}
 
 

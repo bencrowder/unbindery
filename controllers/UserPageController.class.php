@@ -71,15 +71,12 @@ class UserPageController {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
-		$auth->forceAuthentication();
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = User::getAuthenticatedUser();
+		$username = $user->username;
 
 		// Put it in the settings cache
 		Settings::setProtected('username', $username);
 
-		// Get user's stats (score, # proofed, etc.)
-		$user->getStats();
 
 		// Set up proofing and reviewing objects
 		$proofing = array();
@@ -155,9 +152,9 @@ class UserPageController {
 			}
 
 			// And the project link
-			if ($project['type'] == 'public') {
+			if ($project['type'] == 'system') {
 				$project['link'] = $app_url . '/projects/' . $project['slug'];
-			} else if ($project['type'] == 'private') {
+			} else if ($project['type'] == 'user') {
 				$project['link'] = $app_url . '/users/' . $project['owner'] . '/projects/' . $project['slug'];
 			}
 
@@ -184,13 +181,8 @@ class UserPageController {
 		}
 
 		$response = array(
-			'user' => array(
-				'loggedin' => true,
-				'admin' => $user->admin,
-				'score' => $user->score,
-				'proofed' => $user->proofed,
-				'proofed_past_week' => $user->proofed_past_week,
-				),
+			'page_title' => 'Dashboard',
+			'user' => $user->getResponse(),
 			'projects' => $projectInfo,
 			'proofing' => array(
 				'items' => $proofing['items'],
