@@ -262,9 +262,16 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .proj_details ul.metadata > li label	{ float: left; width: 110px; margin-right: 15px; }
 .proj_details ul.metadata > li div		{ margin-left: 125px; }
 
-.proj_details .join						{ font-size: 1.1em; }
-.proj_details div.join_button			{ clear: both; overflow: hidden; margin-bottom: 3em; }
-.proj_details .right_button				{ float: right; }
+.proj_details .adminlink				{ margin-bottom: 1em; }
+.proj_details .adminlink a				{ text-decoration: none; font-size: .9em; text-align: right; color: #ad9a77; display: block; }
+.proj_details .adminlink a:hover		{ text-decoration: underline; }
+
+.proj_details .membership				{ margin-bottom: 3em; }
+.proj_details .membership a				{ display: block; }
+.proj_details .membership a:hover		{ text-decoration: underline; }
+
+.proj_details .join						{ font-size: 1.3em; padding: 5px 9px 6px; }
+.proj_details .leave					{ color: #999; text-align: right; text-decoration: none; }
 
 
 /* Project Guidelines */
@@ -272,7 +279,7 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 
 .guidelines								{ margin-top: 1.5em; }
 
-#main .guidelines h2					{ color: #3d7291 !important; margin-top: 1.5em; text-transform: none !important; font-size: 14px !important; margin-bottom: .5em; }
+#main .guidelines h2					{ color: #3d7291; margin-top: 1.5em; font-size: 14px; margin-bottom: .5em; }
 
 .guidelines h3							{ color: #3d7291; margin: 1.5em 0 0 0; padding: .5em 0 0 0; border-top: dotted 1px #999; font-size: 12px; }
 .guidelines pre,
@@ -299,7 +306,7 @@ body > footer a:hover					{ text-decoration: underline; }
 /* Admin */
 /* --------------------------------------------------- */
 
-#main label								{ font-weight: bold; color: #345678; }
+#main label								{ font-weight: bold; color: #3d7291; }
 #main input[type="text"], input[type="password"]	{ width: 250px; border: solid 1px #bbb; padding: 3px; font-weight: bold; font-size: 1.2em; -moz-border-radius: 3px; border-radius: 3px; }
 #main textarea							{ border: solid 1px #bbb; -moz-border-radius: 5px; border-radius: 5px; padding: 3px; }
 

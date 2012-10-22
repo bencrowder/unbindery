@@ -248,8 +248,7 @@ class ProjectPageController {
 		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
-		//$user = self::authenticate();
-		$user = new User("bencrowder");
+		$user = User::getAuthenticatedUser();
 
 		switch ($params['method']) {
 			// POST: join project
@@ -258,18 +257,21 @@ class ProjectPageController {
 				$project = new Project($projectSlug);
 
 				// If the project is public OR the user is on the whitelist, let them join
-				if ($project->type == 'public' || $project->allowedToJoin($user->username)) {
+				if ($project->public || $project->allowedToJoin($user->username)) {
 					$status = ($user->assignToProject($projectSlug)) ? 'success' : 'error';
 				} else {
 					$status = 'access-denied';
 				}
 
 				echo json_encode(array('status' => $status));
+
 				break;
+
 			case 'DELETE':
 				$status = ($user->removeFromProject($projectSlug)) ? 'success' : 'error';
 
 				echo json_encode(array('status' => $status));
+
 				break;
 		}
 	}

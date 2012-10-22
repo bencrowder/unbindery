@@ -31,7 +31,9 @@
 		</div>
 
 		<div class="sidebar proj_details">
-			{% if user.is_owner %}<div class="adminlink"><a href="">Admin page for this project</a></div>{% endif %}
+			{% if user.is_owner %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">Edit project &rarr;</a></div>{% endif %}
+
+			<div class="membership"><a class="{% if user.is_member %}leave{% else %}join button{% endif %}" href="{{ app_url }}/projects/{{ project.slug }}/membership">{% if user.is_member %}Leave this project{% else %}Join this project{% endif %}</a></div>
 
 			<div class="progress_bar big">
 				<div class="capsule">
@@ -42,12 +44,8 @@
 				<p>Completed: {{ project.percentage_rounded }}% ({{ project.completed }}/{{ project.total }})</p>
 			</div>
 
-			{% if not user.is_member and not user.is_owner %}
-			<div class="join_button"><a href="{{ app_url }}/projects/{{ project.slug }}/join" class="right_button join button">Join this project</a></div>
-			{% endif %}
-
-			<ul class="proofers">
 			<h3>Proofers on This Project</h3>
+			<ul class="proofers">
 			{% for proofer in proofers %}
 				<li>
 					<div class="progress_bar">
