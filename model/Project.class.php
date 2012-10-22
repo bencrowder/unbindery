@@ -54,11 +54,13 @@ class Project {
 			$this->thumbnails = trim($project['thumbnails']);
 			$this->workflow = trim($project['workflow']);
 			$this->whitelist = trim($project['whitelist']);
-			$this->date_started = trim($project['datestarted']);
-			$this->date_completed = trim($project['datecompleted']);
-			$this->days_spent = trim($project['days_spent']);
-			$this->num_items = trim($project['num_items']);
-			$this->items_completed = trim($project['items_completed']);
+			$this->dateStarted = trim($project['datestarted']);
+			$this->dateCompleted = trim($project['datecompleted']);
+			$this->daysSpent = trim($project['days_spent']);
+			$this->numItems = trim($project['num_items']);
+			$this->itemsCompleted = trim($project['items_completed']);
+			$this->numProofers = trim($project['num_proofers']);
+			$this->numReviewers = trim($project['num_reviewers']);
 
 			// Put the whitelist into an array
 			if ($this->whitelist != '') {

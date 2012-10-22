@@ -546,7 +546,17 @@ class DbMySQL implements DbInterface {
 		$query .=     "FROM items ";
 		$query .=     "WHERE items.project_id = projects.id ";
 		$query .=     "AND items.status = 'completed'";
-		$query .= ") AS items_completed ";
+		$query .= ") AS items_completed, ";
+		$query .= "(SELECT COUNT(username) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE roles.project_id = projects.id ";
+		$query .=     "AND roles.role = 'proofer'";
+		$query .= ") AS num_proofers, ";
+		$query .= "(SELECT COUNT(username) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE roles.project_id = projects.id ";
+		$query .=     "AND roles.role = 'reviewer'";
+		$query .= ") AS num_reviewers ";
 		$query .= "FROM projects ";
 		$query .= "WHERE slug = ?;";
 		$results = $this->query($query, array($project_slug));
@@ -644,18 +654,18 @@ class DbMySQL implements DbInterface {
 
 	// Returns: array of proofers
 	public function getProoferStats($projectId, $type = 'proof') {
-		$query = "SELECT username, ";
+		$query = "SELECT users.username, ";
 		$query .= "(";
 		$query .=     "SELECT COUNT(DISTINCT item_id) ";
 		$query .=     "FROM queues ";
-		$query .=     "WHERE queue_name = CONCAT('user.$type:', username) ";
+		$query .=     "WHERE queue_name = CONCAT('user.$type:', users.username) ";
 		$query .=     "AND date_removed IS NOT NULL";
 		$query .= ") AS items, ";
 		$query .= "ROUND(";
 		$query .=     "(";
 		$query .=         "SELECT COUNT(DISTINCT item_id) ";
 		$query .=         "FROM queues ";
-		$query .=         "WHERE queue_name = CONCAT('user.$type:', username) ";
+		$query .=         "WHERE queue_name = CONCAT('user.$type:', users.username) ";
 		$query .=         "AND date_removed IS NOT NULL";
 		$query .=     ") ";
 		$query .= "/ ";
@@ -665,12 +675,13 @@ class DbMySQL implements DbInterface {
 		$query .=         "WHERE project_id = ?";
 		$query .=     ") ";
 		$query .= "* 100, 0) AS percentage ";
-		$query .= "FROM roles ";
-		$query .= "WHERE project_id = ? ";
-		$query .= "AND role = ? ";
+		$query .= "FROM users ";
+		$query .= "INNER JOIN queues ";
+		$query .= "ON queues.queue_name = CONCAT('user.$type:', users.username) ";
+		$query .= "AND queues.project_id = ? ";
 		$query .= "ORDER BY items DESC;";
 
-		return $this->query($query, array($projectId, $projectId, "{$type}er"));
+		return $this->query($query, array($projectId, $projectId)); //, "{$type}er"));
 	}
 
 	// Returns: array of items

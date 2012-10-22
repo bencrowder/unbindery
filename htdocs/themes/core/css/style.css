@@ -90,6 +90,7 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
 .progress_bar							{ font-size: 10px; color: #666; clear: both; float: right; }
 .progress_bar span						{ line-height: 1em; vertical-align: top; display: block; text-align: right; margin-top: 2px; }
+.progress_bar p							{ margin: 0; }
 
 .capsule								{ width: 100px; border: solid 1px #666; -moz-border-radius: 3px; border-radius: 3px; height: 12px; display: inline-block; }
 
@@ -263,14 +264,14 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .proj_details ul.metadata > li div		{ margin-left: 125px; }
 
 .proj_details .adminlink				{ margin-bottom: 1em; }
-.proj_details .adminlink a				{ text-decoration: none; font-size: .9em; text-align: right; color: #ad9a77; display: block; }
+.proj_details .adminlink a				{ text-decoration: none; font-size: .9em; color: #ad9a77; display: block; }
 .proj_details .adminlink a:hover		{ text-decoration: underline; }
 
-.proj_details .membership				{ margin-bottom: 3em; }
+.proj_details .membership				{ margin-bottom: 2em; }
 .proj_details .membership a				{ display: block; text-decoration: none; }
 
 .proj_details .membership .join			{ font-size: 1.3em; padding: 5px 9px 6px; }
-.proj_details .membership .leave		{ color: #999; text-align: right; }
+.proj_details .membership .leave		{ color: #999; }
 .proj_details .membership .leave:hover	{ text-decoration: underline; }
 
 .proj_details .membership div			{ padding: 5px 7px; -moz-border-radius: 3px; border-radius: 3px; }
@@ -342,9 +343,11 @@ ul.items li a.assignment.done			{ color: #fff; background: #444; }
 
 .proj_details .volunteers				{ overflow: hidden; clear: both; margin-top: 1em; }
 
-ul.proofers li							{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
-ul.proofers .username					{ font-size: 11px; }
-ul.proofers .progress_bar p				{ margin: 0; }
+.proj_details .progress_bar.big			{ float: none; }
+
+.volunteers ul li						{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
+.volunteers ul li .username				{ font-size: 11px; }
+.volunteers ul li .progress_bar p		{ margin: 0; }
 
 .sidebar ul.projects li a						{ font-size: 11px; color: #000; text-decoration: none; border-bottom: dotted 1px #666; font-weight: bold; }
 

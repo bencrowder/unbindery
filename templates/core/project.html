@@ -10,6 +10,8 @@
 			<ul class="metadata">
 				<li><label>Owner:</label> <div>{{ project.owner }}{% if user.is_owner %} (you){% endif %}</div></li>
 				{% if project.num_items %}<li><label># Items:</label> <div>{{ project.num_items }}</div></li>{% endif %}
+				{% if project.num_proofers %}<li><label># Proofers:</label> <div>{{ project.num_proofers }}</div></li>{% endif %}
+				{% if project.num_reviewers %}<li><label># Reviewers:</label> <div>{{ project.num_reviewers }}</div></li>{% endif %}
 
 				{% if project.description %}<li><label>Description:</label> <div>{{ project.description }}</div></li>{% endif %}
 				{% if project.language %}<li><label>Language:</label> <div>{{ project.language }}</div></li>{% endif %}
@@ -39,11 +41,9 @@
 
 			<div class="progress_bar big">
 				<div class="capsule">
-					<div class="percent" style="width: {{ project.percentage * 2 }}px;"></div>
-					<div class="percent_proofs" style="width: {{ project.proof_percentage * 2 }}px;"></div>
+					<div class="percent" style="width: {{ project.percent_complete * 2 }}px;"></div>
 				</div> 
-				<p>Proofed: {{ project.proof_percentage_rounded }}% ({{ project.proofed }}/{{ project.total_proofs }})</p>
-				<p>Completed: {{ project.percentage_rounded }}% ({{ project.completed }}/{{ project.total }})</p>
+				<p>Completed: {{ project.percent_complete }}% ({{ project.items_completed }}/{{ project.num_items }})</p>
 			</div>
 
 			{% if proofers|length > 0 %}
