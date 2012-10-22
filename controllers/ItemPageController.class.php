@@ -22,11 +22,7 @@ class ItemPageController {
 
 		$owner = ($projectType == 'user') ? $params['args'][0] : '';
 
-		$auth = Settings::getProtected('auth');
-
-		$auth->forceAuthentication();
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = User::getAuthenticatedUser();
 
 		switch ($params['method']) {
 			// GET: Get proof/review page for this item
@@ -38,7 +34,7 @@ class ItemPageController {
 				}
 
 				// Load the item
-				$itemObj = new Item($itemId, $projectSlug, $username, $proofType);
+				$itemObj = new Item($itemId, $projectSlug, $user->username, $proofType);
 
 				// Make sure it exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
@@ -49,14 +45,14 @@ class ItemPageController {
 				// If it's not in their current queue, they're editing it after finishing it
 				// TODO: Make this part more elegant
 				$alreadyFinished = false;
-				$userCurrentQueue = new Queue("user.$proofType:$username", false);
+				$userCurrentQueue = new Queue("user.$proofType:{$user->username}", false);
 				$userCurrentQueueItems = $userCurrentQueue->getItems();
 				if (!in_array($itemObj, $userCurrentQueueItems)) {
 					$alreadyFinished = true;
 				}
 
 				// And if it's not in their full queue, they never had it and shouldn't be allowed to proof it
-				$userQueue = new Queue("user.$proofType:$username", false, array('include-removed' => true));
+				$userQueue = new Queue("user.$proofType:{$user->username}", false, array('include-removed' => true));
 				$userQueueItems = $userQueue->getItems();
 				if (!in_array($itemObj, $userQueueItems)) {
 					Utils::redirectToDashboard("", "You don't have that item in your queue.");
@@ -154,13 +150,10 @@ class ItemPageController {
 		$itemIndex = ($projectType == 'system') ? 1 : 3;
 		$itemId = $params['args'][$itemIndex];
 
-		$owner = ($projectType == 'user') ? $params['args'][0] : '';
+		error_log("$projectType, " . print_r($params, true));
+		$owner = ($projectType == 'user') ? $params['args'][1] : '';
 
-		$auth = Settings::getProtected('auth');
-
-		$auth->forceAuthentication();
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = User::getAuthenticatedUser();
 
 		switch ($params['method']) {
 			// POST: Post transcript for item
@@ -171,17 +164,17 @@ class ItemPageController {
 				if (!$user->isMember($projectSlug, $owner)) {
 					$code = "not-a-member";
 					// TODO: fail gracefully here, redirect to dashboard with error
-					echo "You're not a member of that project. Sorry.";
+					error_log("You're not a member of that project. Sorry.");
 					return;
 				}
 
 				// Load the item
-				$itemObj = new Item($itemId, $projectSlug, $username, $transcriptType);
+				$itemObj = new Item($itemId, $projectSlug, $user->username, $transcriptType);
 
 				// Make sure item exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
 					// TODO: fail gracefully here
-					echo "Item doesn't exist.";
+					error_log("Item doesn't exist.");
 					return;
 				}
 
@@ -227,7 +220,7 @@ class ItemPageController {
 					}
 
 					// Remove from user's queue
-					$userQueue = new Queue("user.$transcriptType:$username");
+					$userQueue = new Queue("user.$transcriptType:{$user->username}");
 					$userQueue->remove($itemObj);
 					$userQueue->save();
 
@@ -310,11 +303,7 @@ class ItemPageController {
 		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
-		$auth = Settings::getProtected('auth');
-
-		$auth->forceAuthentication();
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = User::getAuthenticatedUser();
 
 		switch ($params['method']) {
 			// POST: Get next available item
@@ -322,19 +311,19 @@ class ItemPageController {
 				$type = Utils::POST('type');		// proof or review
 
 				$dispatch = Settings::getProtected('dispatch');
-				$dispatch->init(array('username' => $username, 'projectSlug' => $projectSlug, 'type' => $type));
+				$dispatch->init(array('username' => $user->username, 'projectSlug' => $projectSlug, 'type' => $type));
 				$response = $dispatch->next();
 
 				if ($response['status'] == true) {
 					$itemId = $response['code'];
 
 					// Load the item to make sure it's real
-					$item = new Item('', $itemId, $projectSlug, $username, $type);
+					$item = new Item('', $itemId, $projectSlug, $user->username, $type);
 
 					// Verification check
 					if ($item->status == 'available') {
 						// Put it in the user's queue
-						$queue = new Queue("user.$type:$username", true);
+						$queue = new Queue("user.$type:{$user->username}", true);
 						$queue->add($item);
 						$queue->save();
 					}

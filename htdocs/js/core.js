@@ -15,20 +15,22 @@ var Unbindery = function() {
 		// Prepare the URL
 		switch (call) {
 			case 'get-new-item':
-				if (data.projectType == 'public') {
+				if (data.projectType == 'system') {
 					url = '/projects/' + data.projectSlug + '/items/get';
 				} else {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/get';
 				}
 				break;
 			case 'save-transcript':
-				if (data.projectType == 'public') {
+				if (data.projectType == 'system') {
 					url = '/projects/' + data.projectSlug + '/items/' + data.itemId + '/transcript';
 				} else {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/' + data.itemId + '/transcript';
 				}
 				break;
 		}
+
+		console.log(url, data);
 
 		if (method == 'POST') { 
 			$.post(app_url + url, data, callback, 'json');
@@ -98,8 +100,8 @@ var Unbindery = function() {
 		var transcript = $("#transcript").val();
 		var projectOwner = $("#project_owner").val();
 
-		var projectType = 'public';
-		if (projectOwner != '') projectType = 'private';
+		var projectType = 'system';
+		if (projectOwner != '') projectType = 'user';
 
 		var status = 'completed';
 		if (isDraft) status = 'draft';
@@ -109,6 +111,7 @@ var Unbindery = function() {
 
 		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status, type: type },
 			function(data) {
+				console.log(data);
 				if (data.statuscode == "success") {
 					if (getAnother) {
 						// And get the new item
