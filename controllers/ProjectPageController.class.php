@@ -220,7 +220,7 @@ class ProjectPageController {
 						'days_spent' => $project->daysSpent,
 						'num_items' => $project->numItems,
 						'items_completed' => $project->itemsCompleted,
-						'percent_complete' => round($project->itemsCompleted / $project->numItems, 0),
+						'percent_complete' => round($project->itemsCompleted / $project->numItems * 100, 0),
 						'num_proofers' => $project->numProofers,
 						'num_reviewers' => $project->numReviewers,
 					),
