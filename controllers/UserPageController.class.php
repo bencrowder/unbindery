@@ -130,12 +130,6 @@ class UserPageController {
 		foreach ($projects as &$project) {
 			$roles = $user->getRolesForProject($project['slug']);
 
-			echo "<p><h2>Project:</h2>";
-			print_r($project);
-			echo "</p><p><h2>Roles:</h2>";
-			print_r($roles);
-			echo "</p>";
-
 			// If the project is available for proofing or reviewing (with no items already claimed),
 			// then add it to the appropriate list
 			if (!in_array($project["slug"], $prooflist) && ($project["available_to_proof"] > 0) && (in_array('proofer', $roles))) {
