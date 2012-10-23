@@ -1,9 +1,22 @@
 {% extends '_base.html' %}
 
 {% block main %}
-	<div id="main" class="container">
-		<h2>Admin</h2>
+	<div id="main" class="dashboard container">
+		<h2>{{ i18n.t('admin.dashboard.title') }}</h2>
 
-		Coming soon...
+		<div class="content">
+			Projects and users lists coming here soon.
+		</div>
+
+		<div class="sidebar">
+			<div class="newproject">
+				{% if user.role == 'creator' %}
+				<a href="{{ app_url }}/projects/new-project" class="button">Create new project</a>
+				{% elseif user.role == 'admin' %}
+					<a href="{{ app_url }}/projects/new-project" class="button">Create new system project</a>
+					<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">Create new user project</a>
+				{% endif %}
+			</div>
+		</div>
 	</div>
 {% endblock %}

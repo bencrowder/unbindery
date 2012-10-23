@@ -55,3 +55,6 @@ signup.invalid_code: "Invalid confirmation code."
 
 # Role/clearance
 role.insufficient: "Sorry, you have insufficient clearance to do that."
+
+# Admin dashboard
+admin.dashboard.title: 'Admin Dashboard'

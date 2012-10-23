@@ -197,6 +197,12 @@ class ProjectPageController {
 
 		$isMember = $user->isMember($projectSlug);
 
+		if ($project->numItems > 0) {
+			$percentComplete = round($project->itemsCompleted / $project->numItems * 100, 0);
+		} else {
+			$percentComplete = 0;
+		}
+
 		// TODO: make sure current user has access to see this project
 
 		switch ($params['method']) {
@@ -210,6 +216,7 @@ class ProjectPageController {
 						'title' => $project->title,
 						'owner' => $project->owner,
 						'type' => $project->type,
+						'public' => $project->public,
 						'language' => $project->language,
 						'status' => $project->status,
 						'guidelines' => $project->guidelines,
@@ -220,7 +227,7 @@ class ProjectPageController {
 						'days_spent' => $project->daysSpent,
 						'num_items' => $project->numItems,
 						'items_completed' => $project->itemsCompleted,
-						'percent_complete' => round($project->itemsCompleted / $project->numItems * 100, 0),
+						'percent_complete' => $percentComplete,
 						'num_proofers' => $project->numProofers,
 						'num_reviewers' => $project->numReviewers,
 					),
@@ -297,35 +304,30 @@ class ProjectPageController {
 
 	static public function admin($params) {
 		$format = self::getFormat($params['args'], 1, 3);
+		$projectSlug = (self::getProjectPageType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
 
-		$user = self::authenticate();
+		$user = User::getAuthenticatedUser();
 
-		// Verify clearance
-		// TODO: add this
+		// TODO: Verify clearance
 
 		// Load the project
-		$project_slug = (self::getProjectPageType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
-		$project = new Project($project_slug);
+		$project = new Project($projectSlug);
 
 		if ($project->title == '') {
 			Utils::redirectToDashboard('', 'Error loading project.');
 		}
 
-		// Load the project
-
 		switch ($params['method']) {
 			// GET: Get new project page
 			case 'GET':
-				$options = array(
-					'user' => array(
-						'loggedin' => true,
-						'admin' => $user->admin,
-					),
+				$response = array(
+					'user' => $user->getResponse(),
 					'project' => array(
 						'title' => $project->title,
 						'id' => $project->project_id,
 						'slug' => $project->slug,
-						'type' => 'public',
+						'type' => $project->type,
+						'public' => $project->public,
 						'language' => $project->language,
 						'description' => $project->description,
 						'owner' => $project->owner,
@@ -336,7 +338,16 @@ class ProjectPageController {
 					),
 				);
 
-				Template::render('project_admin', $options);
+				switch ($format) {
+					case 'json':
+						echo json_encode($response);
+						break;
+
+					case 'html':
+						Template::render('project_admin', $response);
+						break;
+				}
+
 				break;
 		}
 	}

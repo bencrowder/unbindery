@@ -18,9 +18,14 @@
 
 					<label>Type</label>
 					<select id="project_type" name="project_type">
-						<option></option>
-						<option{% if project.type == 'public' %}selected{% endif %} value="public">Public</option>
-						<option{% if project.type == 'private' %}selected{% endif %} value="private">Private</option>
+						<option{% if project.type == 'user' %} selected{% endif %} value="user">User</option>
+						<option{% if project.type == 'system' %} selected{% endif %} value="system">System</option>
+					</select>
+
+					<label>Visibility</label>
+					<select id="project_public" name="project_public">
+						<option{% if project.public %} selected{% endif %} value="public">Public</option>
+						<option{% if not project.public %} selected{% endif %} value="private">Private</option>
 					</select>
 
 					<label>Description</label>

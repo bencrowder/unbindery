@@ -12,6 +12,7 @@ class AdminPageController {
 		$roleManager->forceClearance(array('role' => 'user:creator', 'user' => $user));
 	
 		$options = array(
+			'page_title' => 'Admin Dashboard',
 			'user' => $user->getResponse(),
 		);
 
