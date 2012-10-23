@@ -13,6 +13,10 @@ class Utils {
 		return (array_key_exists($field, $_PUT)) ? $_PUT[$field] : false;
 	}
 
+	static public function REQUEST($field) {
+		return (array_key_exists($field, $_REQUEST)) ? $_REQUEST[$field] : false;
+	}
+
 	static public function SESSION($field) {
 		return (array_key_exists($field, $_SESSION)) ? $_SESSION[$field] : false;
 	}

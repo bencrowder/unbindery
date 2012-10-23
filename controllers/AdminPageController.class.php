@@ -5,23 +5,17 @@ class AdminPageController {
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
+		$user = User::getAuthenticatedUser();
 
-		$username = $auth->getUsername();
-		$user = new User($username);
-
-		// Get the current user's role on the project and make sure they're owner or admin
+		// Get the current user's role and make sure they're at least creator or admin
 		$roleManager = new Role();
-		if ($roleManager->forceClearance(array('role' => 'user:creator', 'user' => $user))) {
-			$options = array(
-				'user' => array(
-					'loggedin' => true,
-					'admin' => $user->admin),
-			);
+		$roleManager->forceClearance(array('role' => 'user:creator', 'user' => $user));
+	
+		$options = array(
+			'user' => $user->getResponse(),
+		);
 
-			Template::render('admin_dashboard', $options);
-		}
+		Template::render('admin_dashboard', $options);
 	}
 }
 

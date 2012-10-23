@@ -46,12 +46,10 @@ class RoleController {
 
 	static public function forceClearance($params) {
 		$app_url = Settings::getProtected('app_url');
-		$i18n = new I18n("translations", Settings::getProtected('language'));
+		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
 		if (!self::verify($params)) {
-			$_SESSION['ub_error'] = $i18n->t("role.insufficient");
-
-			header("Location: $app_url/dashboard");
+			Utils::redirectToDashboard('', $i18n->t("role.insufficient"));
 
 			return false;
 		}
