@@ -30,8 +30,6 @@ var Unbindery = function() {
 				break;
 		}
 
-		console.log(url, data);
-
 		if (method == 'POST') { 
 			$.post(app_url + url, data, callback, 'json');
 		} else if (method == 'GET') {
@@ -54,7 +52,7 @@ var Unbindery = function() {
 		this.callAPI('get-new-item', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, type: actionType },
 			function(data) {
 				if (data.status == true) {
-					if (projectType == 'public') {
+					if (projectType == 'system') {
 						var locStr = app_url + '/projects/' + projectSlug + '/items/' + data.code + '/' + actionType;
 					} else {
 						var locStr = app_url + '/users/' + projectOwner + '/projects/' + projectSlug + '/items/' + data.code + '/' + actionType;
@@ -111,7 +109,6 @@ var Unbindery = function() {
 
 		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status, type: type },
 			function(data) {
-				console.log(data);
 				if (data.statuscode == "success") {
 					if (getAnother) {
 						// And get the new item

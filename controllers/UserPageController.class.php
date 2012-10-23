@@ -72,24 +72,23 @@ class UserPageController {
 		$auth = Settings::getProtected('auth');
 
 		$user = User::getAuthenticatedUser();
-		$username = $user->username;
 
 		// Put it in the settings cache
-		Settings::setProtected('username', $username);
+		Settings::setProtected('username', $user->username);
 
 		// Set up proofing and reviewing objects
 		$proofing = array();
 		$reviewing = array();
 
 		// Load the user's proofing queue
-		$proofQueue = new Queue("user.proof:$username");
+		$proofQueue = new Queue("user.proof:{$user->username}");
 		$proofing['items'] = array();
 		foreach ($proofQueue->getItems() as $item) {
 			array_push($proofing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
 		}
 
 		// Load the user's reviewing queue
-		$reviewQueue = new Queue("user.review:$username");
+		$reviewQueue = new Queue("user.review:{$user->username}");
 		$reviewing['items'] = array();
 		foreach ($reviewQueue->getItems() as $item) {
 			array_push($reviewing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
@@ -130,6 +129,12 @@ class UserPageController {
 
 		foreach ($projects as &$project) {
 			$roles = $user->getRolesForProject($project['slug']);
+
+			echo "<p><h2>Project:</h2>";
+			print_r($project);
+			echo "</p><p><h2>Roles:</h2>";
+			print_r($roles);
+			echo "</p>";
 
 			// If the project is available for proofing or reviewing (with no items already claimed),
 			// then add it to the appropriate list
@@ -196,7 +201,7 @@ class UserPageController {
 			'history' => $history,
 			'history_count' => count($history),
 			'registered_methods' => array(
-				'/users/' . $username,
+				'/users/' . $user->username,
 				),	
 			'topusers' => $topusers,
 		);

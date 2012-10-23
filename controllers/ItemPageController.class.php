@@ -20,7 +20,7 @@ class ItemPageController {
 		$proofTypeIndex = ($projectType == 'system') ? 2 : 4;
 		$proofType = $params['args'][$proofTypeIndex];
 
-		$owner = ($projectType == 'user') ? $params['args'][0] : '';
+		$owner = ($projectType == 'user') ? $params['args'][1] : '';
 
 		$user = User::getAuthenticatedUser();
 
@@ -150,7 +150,6 @@ class ItemPageController {
 		$itemIndex = ($projectType == 'system') ? 1 : 3;
 		$itemId = $params['args'][$itemIndex];
 
-		error_log("$projectType, " . print_r($params, true));
 		$owner = ($projectType == 'user') ? $params['args'][1] : '';
 
 		$user = User::getAuthenticatedUser();

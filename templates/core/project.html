@@ -2,6 +2,8 @@
 
 {% block main %}
 	<div id="main" class="container">
+		{% if user.is_owner %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">Edit project &rarr;</a></div>{% endif %}
+
 		<h2>{% if project.type == 'user' %}User {% endif %}Project Details</h2>
 
 		<div class="content proj_details">
@@ -35,8 +37,6 @@
 		</div>
 
 		<div class="sidebar proj_details">
-			{% if user.is_owner %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">Edit project &rarr;</a></div>{% endif %}
-
 			<div class="membership"><a class="{% if user.is_member %}leave{% else %}join button{% endif %}" href="{{ app_url }}/projects/{{ project.slug }}/membership">{% if user.is_member %}Leave this project{% else %}Join this project{% endif %}</a></div>
 
 			<div class="progress_bar big">
