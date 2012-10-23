@@ -74,7 +74,11 @@ class Project {
 	public function save() {
 		$status = false;
 
-		$whitelist = implode(",", $this->whitelist);
+		if ($this->whitelist && $this->whitelist != '') {
+			$whitelist = "[" . join("][", $this->whitelist) . "]";
+		} else {
+			$whitelist = '';
+		}
 
 		if ($this->project_id) {
 			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
@@ -85,9 +89,11 @@ class Project {
 		return $status;
 	}
 
-	public function create($title, $type, $slug, $language, $description, $owner, $guidelines, $deadline_days, $num_proofs, $thumbnails) {
+	// TODO: are we even using this function anywhere? save() does the same thing
+	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $thumbnails, $workflow, $whitelist, $fields) {
 		$this->title = $title;
 		$this->type = $type;
+		$this->public = $public;
 		$this->slug = $slug;
 		$this->language = $language;
 		$this->description = $description;
@@ -97,11 +103,16 @@ class Project {
 		$this->thumbnails = $thumbnails;
 		$this->workflow = $workflow;
 		$this->whitelist = $whitelist;
+		$this->fields = $fields;
 
 		if ($title != "" && $slug != "") {
-			$this->db->addProject($this->title, $this->type, $this->slug, $this->language, $this->description, $this->owner, $this->status, $this->guidelines, $this->deadline_days, $this->num_proofs, $this->thumbnails);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
 
-			return "success";
+			if ($status) {
+				return "success";
+			} else {
+				return "error";
+			}
 		} else {
 			return "missing title/slug";
 		}

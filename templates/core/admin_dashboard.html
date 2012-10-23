@@ -11,7 +11,7 @@
 		<div class="sidebar">
 			<div class="newproject">
 				{% if user.role == 'creator' %}
-				<a href="{{ app_url }}/projects/new-project" class="button">Create new project</a>
+				<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">Create new project</a>
 				{% elseif user.role == 'admin' %}
 					<a href="{{ app_url }}/projects/new-project" class="button">Create new system project</a>
 					<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">Create new user project</a>

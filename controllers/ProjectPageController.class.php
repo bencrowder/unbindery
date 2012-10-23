@@ -158,20 +158,27 @@ class ProjectPageController {
 	static public function newProject($params) {
 		// Parse parameters
 		$format = self::getFormat($params['args'], 0, 1);
+		$projectType = self::getProjectPageType($params['args']);
 
 		// Authenticate
 		$user = User::getAuthenticatedUser();
 
-		// Verify clearance
-		// TODO: add this
+		// Creators can add user projects; admins can add both user and system projects
+		$requiredRole = ($projectType == 'system') ? 'admin' : 'creator';
+
+		// Get the current user's role and make sure they can access this page
+		$roleManager = new Role();
+		$roleManager->forceClearance(array('role' => "user:$requiredRole", 'user' => $user));
 
 		// Output data
-
 		switch ($params['method']) {
 			// GET: Get new project page
 			case 'GET':
 				$options = array(
 					'user' => $user->getResponse(),
+					'project' => array(
+						'type' => $projectType,
+					),
 				);
 
 				Template::render('new_project', $options);

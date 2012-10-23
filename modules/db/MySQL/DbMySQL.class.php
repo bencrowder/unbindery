@@ -591,7 +591,7 @@ class DbMySQL implements DbInterface {
 		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, date_started) ";
 		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $type, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields));
 	}
 
 	// TODO: Rewrite
