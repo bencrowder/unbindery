@@ -17,17 +17,15 @@ class Media {
 		// Make sure the destination directory exists and is a directory
 		if (!$destDir || !file_exists($targetDir) || !is_dir($targetDir)) return false;
 
-		// Make sure it's writable
+		// Make sure it's writeable
 		if (!is_writable($targetDir)) return false;
-			
+
 		// Go through the files and move them
 		foreach ($files as $file) {
 			// Make sure it's a file
 			if (is_file($file)) {
 				// Get the base filename
 				$basename = basename($file);
-
-				error_log("Moving $file to $targetDir/$basename");
 
 				// Move it
 				$status = rename($file, "$targetDir/$basename");
@@ -46,7 +44,7 @@ class Media {
 	// $files = array of filenames (relative paths), defaults to everything in $sysPath/htdocs/media/temp/$slug
 
 	static public function moveFilesForProject($project, $files = array()) {
-		// Get slug, type
+		$sysPath = Settings::getProtected('sys_path');
 
 		$tempDir = "$sysPath/htdocs/media/temp/{$project->slug}";
 
@@ -59,12 +57,12 @@ class Media {
 
 		// Make sure the directory exists, and if it doesn't, create it
 		if (!file_exists($targetDir)) {
-			mkdir($targetDir, 0777, true);
-		}
+			mkdir($targetDir, 0775, true);
 
-		error_log("Moving files for project {$project->slug}, array = " . print_r($files, true));
-		error_log("Temp dir: $tempDir");
-		error_log("Target dir: $targetDir");
+			// Change permissions (drwxrwxr-x)
+			// For some reason mkdir's permissions don't actually work
+			chmod($targetDir, 0775);
+		}
 
 		// Set up the array
 		$filesToMove = array();
@@ -87,10 +85,13 @@ class Media {
 			}
 		}
 
-		error_log("Files to move: " . print_r($filesToMove, true));
-
 		// Finally, move the files
-		Media::moveFiles($filesToMove, $targetDir);
+		Media::moveFiles($filesToMove, str_replace("$sysPath/htdocs/media/", "", $targetDir));
+
+		// If the temporary project directory is now empty, remove it
+		if (is_readable($tempDir) && count(scandir($tempDir)) == 2) {
+			rmdir($tempDir);
+		}
 
 		return true;
 	}
@@ -111,7 +112,11 @@ class Media {
 
 			// If the directory doesn't exist, create it
 			if (!file_exists($targetDir)) {
-				mkdir($targetDir, 0777, true);
+				mkdir($targetDir, 0775, true);
+
+				// Change permissions (drwxrwxr-x)
+				// For some reason mkdir's permissions don't actually work
+				chmod($targetDir, 0775);
 			}
 
 			// And the target filename with path
