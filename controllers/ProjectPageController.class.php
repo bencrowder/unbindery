@@ -85,7 +85,7 @@ class ProjectPageController {
 				$project = new Project();
 				$project->title = Utils::POST('project_name');
 				$project->type = Utils::POST('project_type');
-				$project->public = Utils::POST('project_public');
+				$project->public = (Utils::POST('project_public') == 'public') ? true : false;
 				$project->description = Utils::POST('project_desc');
 				$project->language = Utils::POST('project_lang');
 				$project->workflow = Utils::POST('project_workflow');
