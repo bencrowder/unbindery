@@ -69,7 +69,6 @@ class UserPageController {
 		$format = $params['args'][1] != '' ? $params['args'][1] : 'html';
 
 		$app_url = Settings::getProtected('app_url');
-		$auth = Settings::getProtected('auth');
 
 		$user = User::getAuthenticatedUser();
 

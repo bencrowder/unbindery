@@ -266,7 +266,7 @@ class User {
 			'score' => $this->score,
 			'signup_date' => $this->signup_date,
 			'last_login' => $this->last_login,
-			'admin' => $this->admin,
+			'role' => $this->role,
 			'prefs' => $this->prefs,
 			'theme' => $this->theme,
 			'proofed' => $this->proofed,

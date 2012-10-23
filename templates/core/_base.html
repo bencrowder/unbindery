@@ -61,7 +61,7 @@ methods['{{ method.name }}'] = '{{ method.value }}';
 					<li>{{ i18n.translate("nav.logged_in_as") }} <span id="username" class="username">{{ username }}</span></li>
 					<li><a href="{{ app_url }}/users/{{ username }}/dashboard">{{ i18n.translate("nav.dashboard") }}</a></li>
 					<li><a href="{{ app_url }}/projects">{{ i18n.translate("nav.projects") }}</a></li>
-					{% if user.admin %}
+					{% if user.role == 'creator' or user.role == 'admin' %}
 					<li><a href="{{ app_url }}/admin">{{ i18n.translate("nav.admin") }}</a></li>
 					{% endif %}
 					<li><a href="{{ app_url }}/users/{{ username }}/settings">{{ i18n.translate("nav.settings") }}</a></li>
