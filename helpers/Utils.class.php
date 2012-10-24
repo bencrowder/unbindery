@@ -9,10 +9,6 @@ class Utils {
 		return (array_key_exists($field, $_POST)) ? $_POST[$field] : false;
 	}
 
-	static public function PUT($field) {
-		return (array_key_exists($field, $_PUT)) ? $_PUT[$field] : false;
-	}
-
 	static public function REQUEST($field) {
 		return (array_key_exists($field, $_REQUEST)) ? $_REQUEST[$field] : false;
 	}

@@ -559,10 +559,10 @@ class DbMySQL implements DbInterface {
 		$query .= ") AS num_reviewers ";
 		$query .= "FROM projects ";
 		$query .= "WHERE slug = ?;";
-		$results = $this->query($query, array($project_slug));
-		$result = $results[0];
 
-		return (isset($result)) ? $result : false;
+		$results = $this->query($query, array($project_slug));
+
+		return (count($results) > 0 && isset($results[0])) ? $results[0] : false;
 	}
 
 	// Returns: none
@@ -579,8 +579,8 @@ class DbMySQL implements DbInterface {
 		$sql .= "whitelist = ?, ";
 		$sql .= "guidelines = ?, ";
 		$sql .= "language = ?, ";
-		$sql .= "thumbnails = ? ";
-		$sql .= "fields  = ? ";
+		$sql .= "thumbnails = ?, ";
+		$sql .= "fields = ? ";
 		$sql .= "WHERE id = ?;";
 
 		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $project_id));

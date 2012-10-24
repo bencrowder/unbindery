@@ -1,26 +1,30 @@
 {% extends '_base.html' %}
 
-{% block controls %}<div id="scoreboard" class="controls"></div>{% endblock %}
+{% block controls %}
+<div id="controls_container" class="controls">
+	<div id="controls" class="container">
+		<ul id="controls_right">
+			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
+			<li><span id="action-save-project" href="" class="button">Save Project</span></li>
+		</ul>
+	</div>
+</div>{% endblock %}
 
 {% block main %}
 	<div id="main" class="container add">
-		<h2>Edit Project</h2>
+		<h2>Project Admin</h2>
 
-		<form id="new_project_form" name="new_project_form" action="{{ app_url }}/projects" method="POST">
-			<input id="project_owner" name="project_owner" type="hidden" value="{{ username }}" />
+		<form id="project_admin_form" name="project_admin_form" action="{{ project.url }}" method="PUT">
+			<input id="project_owner" name="project_owner" type="hidden" value="{{ project.owner }}" />
+			<input id="project_slug" name="project_slug" type="hidden" value="{{ project.slug }}" />
+			<input id="project_type" name="project_type" type="hidden" value="{{ project.type }}" />
 
 			<div class="content">
-				<section id="step_1" class="step active">
-					<h3>Step 1: Basic information</h3>
+				<section>
+					<h3>Basic Information</h3>
 
 					<label>Title</label>
 					<input id="project_name" name="project_name" type="text" value="{{ project.title }}" />
-
-					<label>Type</label>
-					<select id="project_type" name="project_type">
-						<option{% if project.type == 'user' %} selected{% endif %} value="user">User</option>
-						<option{% if project.type == 'system' %} selected{% endif %} value="system">System</option>
-					</select>
 
 					<label>Visibility</label>
 					<select id="project_public" name="project_public">
@@ -33,12 +37,10 @@
 
 					<label>Language</label>
 					<input id="project_lang" name="project_lang" type="text" value="{{ project.language }}" />
-
-					Metadata goes here
 				</section>
 
-				<section id="step_2" class="step active">
-					<h3>Step 2: Proofing fields</h3>
+				<section class="hidden">
+					<h3>Proofing fields</h3>
 
 					<p>These are fields users will fill in while proofing items for this project.</p>
 
@@ -57,28 +59,25 @@
 
 					<p class="small">Possible values: "text", "dropdown('option1', option2')"</p>
 				</section>
+			</div>
 
-				<section id="step_3" class="step">
-					<h3>Step 3: Workflow</h3>
+			<div class="sidebar">
+				{% if not project.public %}
+				<section>
+					<h3>Whitelist (if applicable)</h3>
+
+					<label>One username per line.</label>
+					<textarea id="project_whitelist" name="project_whitelist">{% for entry in project.whitelist %}{{ entry }}
+{% endfor %}</textarea>
+				</section>
+				{% endif %}
+
+				<section>
+					<h3>Workflow</h3>
 
 					<label>Workflow string</label>
 					<input id="project_workflow" name="project_workflow" type="text" value="{{ project.workflow }}"/>
 				</section>
-
-				<section id="step_4" class="step">
-					<h3>Step 4: User whitelist (if applicable)</h3>
-
-					<label>One username per line.</label>
-					<textarea id="project_whitelist" name="project_whitelist">{{ project.whitelist }}</textarea>
-				</section>
-
-				<section class="step">
-					<input type="submit" value="Save Project" class="button light" />
-				</section>
-			</div>
-
-			<div class="sidebar">
-				<input type="submit" value="Save Project" class="button light" />
 			</div>
 		</form>
 	</div>

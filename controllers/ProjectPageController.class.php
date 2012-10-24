@@ -253,7 +253,53 @@ class ProjectPageController {
 
 				break;
 
-			case 'PUT':
+			case 'POST':
+				$project = new Project(Utils::POST('projectSlug'));
+
+				$project->title = Utils::POST('projectName');
+				$project->type = Utils::POST('projectType');
+				$project->public = Utils::POST('projectPublic');
+				$project->description = Utils::POST('projectDesc');
+				$project->language = Utils::POST('projectLang');
+				$project->workflow = Utils::POST('projectWorkflow');
+				$project->fields = Utils::POST('projectFields');
+				$project->whitelist = Utils::POST('projectWhitelist');
+				$project->guidelines = Utils::POST('projectGuidelines');
+				$project->owner = Utils::POST('projectOwner');
+				$project->status = 'pending';
+
+				// Save the changes to the database
+				$status = $project->save();
+
+				if ($status == true) {
+					switch ($project->type) {
+						case 'system':
+							$project->url = "projects/" . $project->slug;
+							$project->admin_url = "projects/" . $project->slug . "/admin";
+							break;
+						case 'user':
+							$project->url = "users/" . $project->owner . "/projects/" . $project->slug;
+							$project->admin_url = "users/" . $project->owner . "/projects/" . $project->slug . "/admin";
+							break;
+					}
+				}
+
+				$statusCode = ($status) ? 'success' : 'error';
+
+				$response = array(
+					"statuscode" => $statusCode,
+					"project" => array(
+						"url" => $project->url,
+						"admin_url" => $project->admin_url
+					)
+				);
+
+				$response["project"]["url"] .= ".json";
+				$response["project"]["admin_url"] .= ".json";
+
+				// Always return JSON
+				echo json_encode($response);
+
 				break;
 
 			case 'DELETE':
@@ -328,6 +374,7 @@ class ProjectPageController {
 			// GET: Get new project page
 			case 'GET':
 				$response = array(
+					'page_title' => 'Project Admin',
 					'user' => $user->getResponse(),
 					'project' => array(
 						'title' => $project->title,

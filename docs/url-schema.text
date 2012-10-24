@@ -21,7 +21,7 @@
 * /users/admin (?)
 * /users/[USERNAME]
 	* GET = get user info
-	* PUT = save user info
+	* POST = save user info
 	* DELETE = delete user
 * /users/[USERNAME]/dashboard
 * /users/[USERNAME]/settings
@@ -37,7 +37,7 @@
 	* GET = get new project page (since it has to go somewhere)
 * /projects/[PROJECT]
 	* GET = get project info
-	* PUT = save project info
+	* POST = save project info
 	* DELETE = delete project
 * /projects/[PROJECT]/guidelines (?)
 	* GET = list guidelines
@@ -61,11 +61,11 @@
 	* PUT = save transcripts
 * /projects/[PROJECT]/items/[ITEM]/proof
 	* GET = load item page for proofing
-	* PUT = save item info
+	* POST = save item info
 	* DELETE = delete item
 * /projects/[PROJECT]/items/[ITEM]/review
 	* GET = load item page for reviewing
-	* PUT = save item info
+	* POST = save item info
 	* DELETE = delete item
 * /projects/[PROJECT]/items/[ITEM]/admin
 * /projects/[PROJECT]/items/[ITEM]/transcript

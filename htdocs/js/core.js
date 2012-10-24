@@ -21,6 +21,7 @@ var Unbindery = function() {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/get';
 				}
 				break;
+
 			case 'save-transcript':
 				if (data.projectType == 'system') {
 					url = '/projects/' + data.projectSlug + '/items/' + data.itemId + '/transcript';
@@ -28,22 +29,34 @@ var Unbindery = function() {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/' + data.itemId + '/transcript';
 				}
 				break;
+
+			case 'save-project':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug;
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug;
+				}
+				break;
 		}
 
-		if (method == 'POST') { 
-			$.post(app_url + url, data, callback, 'json');
-		} else if (method == 'GET') {
-			$.get(app_url + url, data, callback, 'json');
+		switch (method) {
+			case 'POST':
+				$.post(app_url + url, data, callback, 'json');
+				break;
+
+			case 'GET':
+				$.get(app_url + url, data, callback, 'json');
+				break;
 		}
-	}
+	};
 
 	this.showSpinner = function() {
 		$("#spinner").show();
-	}
+	};
 
 	this.hideSpinner = function() {
 		$("#spinner").hide();
-	}
+	};
 
 	this.getNewItem = function(projectSlug, projectOwner, projectType, actionType) {
 		// Get the username
@@ -121,6 +134,31 @@ var Unbindery = function() {
 						unbindery.redirectToDashboard("", "");
 					}
 
+					unbindery.hideSpinner();
+				} else {
+					unbindery.redirectToDashboard("", "Error saving transcript. Try again.");
+				}
+			});
+	};
+
+	this.saveProject = function() {
+		unbindery.showSpinner();
+
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+		var projectOwner = $("#project_owner").val().trim();
+		var projectName = $("#project_name").val().trim();
+		var projectPublic = ($("#project_public").val() == 'public') ? true : false;
+		var projectDesc = $("#project_desc").val().trim();
+		var projectLang = $("#project_lang").val().trim();
+		var projectWhitelist = ($("#project_whitelist").length > 0) ? $("#project_whitelist").val().trim() : '';
+		var projectWorkflow = $("#project_workflow").val().trim();
+		
+		// TODO: add fields
+
+		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectName: projectName, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow },
+			function(data) {
+				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
 				} else {
 					unbindery.redirectToDashboard("", "Error saving transcript. Try again.");
@@ -264,6 +302,11 @@ $(document).ready(function() {
 	$("#action-save-item").click(function(e) {
 		save_page();
 		return false;
+	});
+
+	// Project admin form
+	$("#action-save-project").click(function(e) {
+		unbindery.saveProject();
 	});
 
 	// Set up click handler for getting a new item

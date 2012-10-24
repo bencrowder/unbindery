@@ -9,6 +9,8 @@ body.dark								{ background: #111; color: #fff; }
 
 .container								{ max-width: 950px; width: 92%; margin: 0px auto; overflow: hidden; clear: both; }
 
+.hidden									{ display: none; }
+
 
 /* Header */
 /* --------------------------------------------------- */
@@ -358,6 +360,9 @@ ul.items li a.assignment.done			{ color: #fff; background: #444; }
 
 /* New project */
 /* --------------------------------------------------- */
+
+#main.add section						{ margin-bottom: 2em; }
+#main.add section h3					{ font-size: 1.2em; }
 
 #main.add label,
 	#main.add select,

@@ -17,6 +17,7 @@ class Project {
 	private $thumbnails;
 	private $workflow;
 	private $whitelist;
+	private $fields;
 
 	private $url;
 	private $admin_url;
@@ -54,6 +55,7 @@ class Project {
 			$this->thumbnails = trim($project['thumbnails']);
 			$this->workflow = trim($project['workflow']);
 			$this->whitelist = trim($project['whitelist']);
+			$this->fields = trim($project['fields']);
 			$this->dateStarted = trim($project['datestarted']);
 			$this->dateCompleted = trim($project['datecompleted']);
 			$this->daysSpent = trim($project['days_spent']);
@@ -63,7 +65,7 @@ class Project {
 			$this->numReviewers = trim($project['num_reviewers']);
 
 			// Put the whitelist into an array
-			if ($this->whitelist != '') {
+			if (trim($this->whitelist, "[]") != '') {
 			   	$this->whitelist = explode("][", trim($this->whitelist, "[]"));
 			} else {
 				$this->whitelist = array();
@@ -74,8 +76,10 @@ class Project {
 	public function save() {
 		$status = false;
 
+		// Turn the whitelist from a newline-delimited list to something like
+		// this: [username][username]
 		if ($this->whitelist && $this->whitelist != '') {
-			$whitelist = "[" . join("][", $this->whitelist) . "]";
+			$whitelist = "[" . join("][", explode("\n", $this->whitelist)) . "]";
 		} else {
 			$whitelist = '';
 		}
@@ -269,5 +273,26 @@ class Project {
 		}
 
 		return $projects;
+	}
+
+	public function describe() {
+		$str = "[pid={$this->project_id}]";
+		$str .= " | [title={$this->title}]";
+		$str .= " | [type={$this->type}]";
+		$str .= " | [public={$this->public}]";
+		$str .= " | [slug={$this->slug}]";
+		$str .= " | [language={$this->language}]";
+		$str .= " | [description={$this->description}]";
+		$str .= " | [owner={$this->owner}]";
+		$str .= " | [status={$this->status}]";
+		$str .= " | [guidelines={$this->guidelines}]";
+		$str .= " | [thumbnails={$this->thumbnails}]";
+		$str .= " | [workflow={$this->workflow}]";
+		$str .= " | [whitelist={$this->whitelist}]";
+		$str .= " | [fields={$this->fields}]";
+		$str .= " | [url={$this->url}]";
+		$str .= " | [admin_url={$this->admin_url}]";
+
+		return $str;
 	}
 }
