@@ -37,6 +37,14 @@ var Unbindery = function() {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug;
 				}
 				break;
+
+			case 'add-items':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug + '/items';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items';
+				}
+				break;
 		}
 
 		switch (method) {
@@ -164,6 +172,32 @@ var Unbindery = function() {
 					unbindery.redirectToDashboard("", "Error saving transcript. Try again.");
 				}
 			});
+	};
+
+	this.addItemsToProject = function(fileList) {
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+
+		/*
+		var items = [];
+
+		items = '';
+		$("#file_uploadQueue .fileName").each(function() {
+			var filename = $(this).html();
+			// strip up to the space
+			filename = filename.substr(0, filename.indexOf(' '));
+
+			items += filename + '|';
+		});
+		console.log("items", items);
+		*/
+
+		this.callAPI('add-items', 'POST', { projectSlug: projectSlug, projectType: projectType, fileList: fileList },
+			function(data) {
+				console.log("data", data);
+				// if success, add items to item list
+			}
+		);
 	};
 }
 

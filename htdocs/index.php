@@ -171,6 +171,7 @@ $routes = array(
 	// User projects
 	'#^/(users)/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
 	'#^/(users)/([^/]+)/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
+	'#^/(users)/([^/]+)/projects/([^/]+)/upload\.?([^/]+)?/?#'		=> 'ProjectPageController::upload',
 	'#^/(users)/([^/]+)/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
 	'#^/(users)/([^/]+)/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
 	'#^/(users)/([^/]+)/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
@@ -195,12 +196,13 @@ $routes = array(
 	// Project pages
 	'#^/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
 	'#^/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
+	'#^/projects/([^/]+)/upload\.?([^/]+)?/?#'		=> 'ProjectPageController::upload',
 	'#^/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
 	'#^/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
 	'#^/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
 
 	// Admin pages
-	'#^/admin\.?([^/]+)?/?$#'					=> 'AdminPageController::adminHandler',
+	'#^/admin\.?([^/]+)?/?$#'						=> 'AdminPageController::adminHandler',
 );
 
 $router = new Router('SystemPageController::fileNotFoundHandler');

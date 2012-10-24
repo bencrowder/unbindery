@@ -336,7 +336,7 @@ class ItemPageController {
 
 
 	// --------------------------------------------------
-	// General items handler
+	// Items handler
 	// URL: /projects/PROJECT/items or /users/USER/projects/PROJECT/items
 	// Methods: POST
 
@@ -348,9 +348,20 @@ class ItemPageController {
 		$projectSlug = $params['args'][$projectSlugIndex];
 
 		switch ($params['method']) {
-			// POST: Upload file handler
+			// POST: Run uploaded files through source file uploader modules
 			case 'POST':
-				Media::moveUploadedFilesToTempDir($projectSlug);
+				$fileList = Utils::POST('fileList');
+
+				foreach ($fileList as $file) {
+					error_log("Item file: " . $file);
+
+					// Get the source file uploader for this extension
+					// Run it
+				}
+
+				// TODO: make this return something useful like the items generated
+				echo json_encode(array('status' => 'success', 'items' => array()));
+
 				break;
 		}
 	}

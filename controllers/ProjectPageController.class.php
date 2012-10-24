@@ -10,7 +10,7 @@ class ProjectPageController {
 
 	static public function projects($params) {
 		$format = self::getFormat($params['args'], 0, 2);
-		$pageType = self::getProjectPageType($params['args']);
+		$pageType = self::getProjectType($params['args']);
 
 		$user = User::getAuthenticatedUser();
 
@@ -158,7 +158,7 @@ class ProjectPageController {
 	static public function newProject($params) {
 		// Parse parameters
 		$format = self::getFormat($params['args'], 0, 1);
-		$projectType = self::getProjectPageType($params['args']);
+		$projectType = self::getProjectType($params['args']);
 
 		// Authenticate
 		$user = User::getAuthenticatedUser();
@@ -196,7 +196,7 @@ class ProjectPageController {
 
 	static public function projectPage($params) {
 		$format = self::getFormat($params['args'], 1, 3);
-		$projectSlug = (self::getProjectPageType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
+		$projectSlug = (self::getProjectType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
 
 		$project = new Project($projectSlug);
 
@@ -317,7 +317,7 @@ class ProjectPageController {
 	static public function membership($params) {
 		// Parse parameters
 		$format = self::getFormat($params['args'], 1, 3);
-		$projectPage = self::getProjectPageType($params['args']);
+		$projectPage = self::getProjectType($params['args']);
 		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
@@ -359,7 +359,7 @@ class ProjectPageController {
 		$appUrl = Settings::getProtected('app_url');
 		$themeRoot = Settings::getProtected('theme_root');
 
-		$projectType = self::getProjectPageType($params['args']);
+		$projectType = self::getProjectType($params['args']);
 		$format = self::getFormat($params['args'], 1, 3);
 		$projectSlug = ($projectType == 'system') ? $params['args'][0] : $params['args'][2];
 
@@ -408,18 +408,20 @@ class ProjectPageController {
 						'uploadify/jquery.uploadify.v2.1.4.min.js'
 					),
 					'jsinclude' => "$(document).ready(function() {
+							var fileList = [];
 							$('#file_upload').uploadify({
 								'uploader'  : '$appUrl/js/uploadify/uploadify.swf',
 								'cancelImg' : '$appUrl/js/uploadify/cancel.png',
-								'script'    : '$appUrl/$projectUrl/items',
+								'script'    : '$appUrl/$projectUrl/upload',
 								'fileDataName' : 'items',
 								'removeCompleted' : false,
 								'multi'     : true,
 								'auto'      : true,
+								'onComplete' : function(event, ID, fileObj, response, data) {
+									fileList.push(fileObj.name);
+								},
 								'onAllComplete' : function(event, data) {
-									console.log('$appUrl/$projectUrl/items');
-									console.log(event, data);
-									//load_items_for_editing(event, data);
+									unbindery.addItemsToProject(fileList);
 								}
 							});
 						});",
@@ -441,9 +443,30 @@ class ProjectPageController {
 	
 
 	// --------------------------------------------------
+	// Upload items handler
+	// URL: /projects/PROJECT/upload or /users/USER/projects/PROJECT/upload
+	// Methods: POST
+
+	static public function upload($params) {
+		$format = self::getFormat($params['args'], 0, 2);
+		$projectType = self::getProjectType($params['args']);
+
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		switch ($params['method']) {
+			// POST: Upload file handler
+			case 'POST':
+				Media::moveUploadedFilesToTempDir($projectSlug);
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
 	// Helper function to parse project page type
 
-	static public function getProjectPageType($args) {
+	static public function getProjectType($args) {
 		if ($args[0] == 'users') {
 			return 'user';
 		} else {
@@ -456,7 +479,7 @@ class ProjectPageController {
 	// Helper function to parse return format type
 
 	static public function getFormat($args, $systemIndex, $userIndex) {
-		$projectPage = self::getProjectPageType($args);
+		$projectPage = self::getProjectType($args);
 		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
 		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
