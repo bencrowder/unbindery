@@ -101,14 +101,15 @@ class Media {
 	// Media::moveUploadedFilesToTempDir()
 	// Does what the name says it does
 
-	static public function moveUploadedFilesToTempDir() {
+	static public function moveUploadedFilesToTempDir($projectSlug) {
+		$sysPath = Settings::getProtected('sys_path');
+
 		if (!empty($_FILES)) {
 			// Get the filename and project slug
 			$tempFile = $_FILES['items']['tmp_name'];
-			$projectSlug = Utils::REQUEST('project');
 
 			// Set the target directory
-			$targetDir = "$sysPath/htdocs/media/temp/$projectSlug";
+			$targetDir = "$sysPath/htdocs/media/temp/$projectSlug/";
 
 			// If the directory doesn't exist, create it
 			if (!file_exists($targetDir)) {

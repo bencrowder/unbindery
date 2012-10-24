@@ -9,7 +9,7 @@ class ItemPageController {
 
 	static public function itemProof($params) {
 		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectPageType($params['args']);
+		$projectType = self::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -142,7 +142,7 @@ class ItemPageController {
 
 	static public function transcript($params) {
 		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectPageType($params['args']);
+		$projectType = self::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -298,7 +298,7 @@ class ItemPageController {
 
 	static public function getNewItem($params) {
 		$format = self::getFormat($params['args'], 0, 2);
-		$projectPage = self::getProjectPageType($params['args']);
+		$projectPage = self::getProjectType($params['args']);
 		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
@@ -337,19 +337,29 @@ class ItemPageController {
 
 	// --------------------------------------------------
 	// General items handler
-	// URL: /projects/PROJECT/items
-	// Methods: 
+	// URL: /projects/PROJECT/items or /users/USER/projects/PROJECT/items
+	// Methods: POST
 
 	static public function items($params) {
-		echo "Items (" . $params['method'] . "): ";
-		print_r($params['args']);
+		$format = self::getFormat($params['args'], 0, 2);
+		$projectType = self::getProjectType($params['args']);
+
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		switch ($params['method']) {
+			// POST: Upload file handler
+			case 'POST':
+				Media::moveUploadedFilesToTempDir($projectSlug);
+				break;
+		}
 	}
 
 
 	// --------------------------------------------------
 	// Helper function to parse a project page type
 
-	static public function getProjectPageType($args) {
+	static public function getProjectType($args) {
 		if ($args[0] == 'users') {
 			return 'user';
 		} else {
@@ -362,7 +372,7 @@ class ItemPageController {
 	// Helper function to parse the return format type based on the URL
 
 	static public function getFormat($args, $systemIndex, $userIndex) {
-		$projectPage = self::getProjectPageType($args);
+		$projectPage = self::getProjectType($args);
 		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
 		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}

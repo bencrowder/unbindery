@@ -356,8 +356,12 @@ class ProjectPageController {
 	// Methods: GET = show admin page
 
 	static public function admin($params) {
+		$appUrl = Settings::getProtected('app_url');
+		$themeRoot = Settings::getProtected('theme_root');
+
+		$projectType = self::getProjectPageType($params['args']);
 		$format = self::getFormat($params['args'], 1, 3);
-		$projectSlug = (self::getProjectPageType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
+		$projectSlug = ($projectType == 'system') ? $params['args'][0] : $params['args'][2];
 
 		$user = User::getAuthenticatedUser();
 
@@ -368,6 +372,12 @@ class ProjectPageController {
 
 		if ($project->title == '') {
 			Utils::redirectToDashboard('', 'Error loading project.');
+		}
+
+		if ($project->type == 'system') {
+			$projectUrl = "projects/" . $project->slug;
+		} else if ($project->type == 'user') {
+			$projectUrl = "users/" . $project->owner . "/projects/" . $project->slug;
 		}
 
 		switch ($params['method']) {
@@ -390,6 +400,29 @@ class ProjectPageController {
 						'workflow' => $project->workflow,
 						'whitelist' => $project->whitelist,
 					),
+					'css' => array(
+						'uploadify.css'
+					),
+					'sysjs' => array(
+						'uploadify/swfobject.js',
+						'uploadify/jquery.uploadify.v2.1.4.min.js'
+					),
+					'jsinclude' => "$(document).ready(function() {
+							$('#file_upload').uploadify({
+								'uploader'  : '$appUrl/js/uploadify/uploadify.swf',
+								'cancelImg' : '$appUrl/js/uploadify/cancel.png',
+								'script'    : '$appUrl/$projectUrl/items',
+								'fileDataName' : 'items',
+								'removeCompleted' : false,
+								'multi'     : true,
+								'auto'      : true,
+								'onAllComplete' : function(event, data) {
+									console.log('$appUrl/$projectUrl/items');
+									console.log(event, data);
+									//load_items_for_editing(event, data);
+								}
+							});
+						});",
 				);
 
 				switch ($format) {

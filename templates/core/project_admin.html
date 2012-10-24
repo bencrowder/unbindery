@@ -14,7 +14,7 @@
 	<div id="main" class="container add">
 		<h2>Project Admin</h2>
 
-		<form id="project_admin_form" name="project_admin_form" action="{{ project.url }}" method="PUT">
+		<form id="project_admin_form" name="project_admin_form" action="{{ project.url }}" method="POST">
 			<input id="project_owner" name="project_owner" type="hidden" value="{{ project.owner }}" />
 			<input id="project_slug" name="project_slug" type="hidden" value="{{ project.slug }}" />
 			<input id="project_type" name="project_type" type="hidden" value="{{ project.type }}" />
@@ -80,5 +80,19 @@
 				</section>
 			</div>
 		</form>
+
+		<section class="items">
+			<div class="content">
+				<h3>Items</h3>
+
+				No items.
+			</div>
+
+			<div class="sidebar">
+				<section id="uploadarea">
+					<input id="file_upload" name="file_upload" type="file" />
+				</section>
+			</div>
+		</section>
 	</div>
 {% endblock %}

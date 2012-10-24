@@ -24,8 +24,11 @@
 	<script type="text/javascript" src="{{ app_url }}/js/jquery.hotkeys.js"></script>
 	<script type="text/javascript" src="{{ app_url }}/js/core.js"></script>
 
+	{% if sysjs %}{% for jsfile in sysjs %}<script type="text/javascript" src="{{ app_url }}/js/{{ jsfile }}"></script>
+	{% endfor %}{% endif %}
 	{% if js %}{% for jsfile in js %}<script type="text/javascript" src="{{ theme_root }}/js/{{ jsfile }}"></script>
 	{% endfor %}{% endif %}
+	{% if jsinclude %}<script type="text/javascript">{{ jsinclude|raw }}</script>{% endif %}
 
 	{% if editor_options['js'] %}
 <!-- Custom editor-specific JS -->

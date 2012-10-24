@@ -361,6 +361,8 @@ ul.items li a.assignment.done			{ color: #fff; background: #444; }
 /* New project */
 /* --------------------------------------------------- */
 
+#main.add form							{ overflow: hidden; }
+
 #main.add section						{ margin-bottom: 2em; }
 #main.add section h3					{ font-size: 1.2em; }
 
@@ -388,3 +390,9 @@ ul.items li a.assignment.done			{ color: #fff; background: #444; }
 #main.add p.instructions				{ color: #999; line-height: 1.5em; }
 
 p.small									{ font-size: .95em; color: #999; }
+
+
+/* Project items display */
+/* --------------------------------------------------- */
+
+#main.add section.items					{ overflow: hidden; margin-top: 1.5em; padding-top: 1.5em; border-top: dotted 1px #999; }
