@@ -29,6 +29,7 @@ require_once '../modules/Queue.php';
 require_once '../modules/Role.php';
 require_once '../modules/Transcript.php';
 require_once '../modules/Workflow.php';
+require_once '../modules/uploaders/ItemTypeUploader.class.php';
 
 // Module controllers
 require_once '../controllers/DispatchController.class.php';

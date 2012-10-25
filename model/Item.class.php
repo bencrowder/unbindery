@@ -96,7 +96,12 @@ class Item {
 	}
 
 	public function save() {
-		return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index);
+		if ($this->item_id) {
+			return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index);
+		} else {
+			// Create a new item
+			return $this->db->addItem($this->title, $this->project_id, $this->transcript, $this->type, $this->href);
+		}
 	}
 
 	// TODO: remove?

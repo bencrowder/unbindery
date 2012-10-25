@@ -107,6 +107,7 @@ class Media {
 		if (!empty($_FILES)) {
 			// Get the filename and project slug
 			$tempFile = $_FILES['items']['tmp_name'];
+			error_log("files: " . $tempFile);
 
 			// Set the target directory
 			$targetDir = "$sysPath/htdocs/media/temp/$projectSlug/";

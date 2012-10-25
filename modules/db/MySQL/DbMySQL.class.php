@@ -606,10 +606,10 @@ class DbMySQL implements DbInterface {
 		}
 	}
 
-	// Returns: ?
-	public function addPage($projectId, $pageTitle, $href) {
-		$sql = "INSERT INTO items (project_id, title, transcript, status, type, href, workflow_index) VALUES (?, ?, NULL, 'available', 'image', ?, 0); ";
-		return $this->execute($sql, array($projectId, $pageTitle, $href));
+	// Returns: boolean
+	public function addItem($title, $projectId, $transcript, $type, $href) {
+		$sql = "INSERT INTO items (title, project_id, transcript, status, type, href, workflow_index) VALUES (?, ?, ?, 'available', ?, ?, 0); ";
+		return $this->execute($sql, array($title, $projectId, $transcript, $type, $href));
 	}
 
 	// Returns: ?

@@ -415,6 +415,7 @@ class ProjectPageController {
 								'script'    : '$appUrl/$projectUrl/upload',
 								'fileDataName' : 'items',
 								'removeCompleted' : false,
+								'fileTypeExts'  : '*.jpg; *.jpeg; *.gif; *.png; *.mp3; *.mp4; *.wav;',
 								'multi'     : true,
 								'auto'      : true,
 								'onComplete' : function(event, ID, fileObj, response, data) {

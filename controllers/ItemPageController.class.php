@@ -352,15 +352,41 @@ class ItemPageController {
 			case 'POST':
 				$fileList = Utils::POST('fileList');
 
-				foreach ($fileList as $file) {
-					error_log("Item file: " . $file);
+				$items = array();
 
-					// Get the source file uploader for this extension
-					// Run it
+				foreach ($fileList as $file) {
+					// Get extension
+					$ext = pathinfo($file, PATHINFO_EXTENSION);
+
+					// Default uploader type 
+					$uploaderType = "Page";
+
+					// Get the uploader type from the settings
+					$uploaders = Settings::getProtected('uploaders');
+					foreach ($uploaders as $type=>$data) {
+						if (in_array($ext, $data['extensions'])) {
+							$uploaderType = $type;
+							break;
+						}
+					}
+
+					// Load the appropriate class
+					require_once "../modules/uploaders/{$uploaderType}Uploader.class.php";
+
+					$uploaderClass = "{$uploaderType}Uploader";
+					$uploader = new $uploaderClass($projectSlug);
+
+					// Call the uploader (it takes an array)
+					$returnedItems = $uploader->upload(array($file));
+
+					// Merge the arrays
+					$items = array_merge($items, $returnedItems);
 				}
 
+				error_log("Items: " . count($items));
+
 				// TODO: make this return something useful like the items generated
-				echo json_encode(array('status' => 'success', 'items' => array()));
+				echo json_encode(array('status' => 'success', 'items' => $items));
 
 				break;
 		}
