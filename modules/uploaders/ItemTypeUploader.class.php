@@ -9,24 +9,28 @@ class ItemTypeUploader {
 
 	protected $projectSlug;
 	protected $projectId;
+	protected $tempDir;
 
 	// Constructor that takes projectSlug
 	public function ItemTypeUploader($projectSlug) {
 		$this->itemData = array();
 		$this->items = array();
+		$this->files = array();
 
 		$this->projectSlug = $projectSlug;
+
+		$sysPath = Settings::getProtected('sys_path');
+		$this->tempDir = "$sysPath/htdocs/media/temp/{$this->projectSlug}";
 
 		$project = new Project($projectSlug);
 		$this->projectId = $project->project_id;
 	}
 
-	// The function that does it all
+	// The main function
 	public function upload($filenames) {
 		$this->preprocess($filenames);
 		$this->createItems();
 		$this->process();
-		$this->cleanup();
 
 		return $this->items;
 	}
@@ -82,9 +86,15 @@ class ItemTypeUploader {
 		Media::moveFilesForProject($project, $this->files);
 	}
 
-	// Cleanup (if necessary)
+	// Cleanup (run this manually after everything has been processed)
 	public function cleanup() {
-		// Remove everything in the temp dir (most of which should have already moved when moveFilesForProject was called)
+		// Remove all remaining files in the temp dir
+		foreach (glob($this->tempDir . "/*") as $file) {
+			unlink($file);
+		}
+
+		// Remove the temp dir since we no longer need it
+		rmdir($this->tempDir);
 	}
 }
 

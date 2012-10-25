@@ -348,7 +348,7 @@ class ItemPageController {
 		$projectSlug = $params['args'][$projectSlugIndex];
 
 		switch ($params['method']) {
-			// POST: Run uploaded files through source file uploader modules
+			// POST: Run uploaded files through item type uploader modules
 			case 'POST':
 				$fileList = Utils::POST('fileList');
 
@@ -383,7 +383,8 @@ class ItemPageController {
 					$items = array_merge($items, $returnedItems);
 				}
 
-				error_log("Items: " . count($items));
+				$uploader = new ItemTypeUploader($projectSlug);
+				$uploader->cleanup();
 
 				// TODO: make this return something useful like the items generated
 				echo json_encode(array('status' => 'success', 'items' => $items));

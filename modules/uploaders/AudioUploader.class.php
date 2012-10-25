@@ -3,16 +3,16 @@
 
 class AudioUploader extends ItemTypeUploader {
 	public function preprocess($filenames) {
+		// Get settings
+		$sysPath = Settings::getProtected('sys_path');
 		$uploaders = Settings::getProtected('uploaders');
 		$chunkSize = $uploaders['Audio']['chunksize'];
+		$chunkOverlap = $uploaders['Audio']['chunkoverlap'];
 		$ffmpegPath = $uploaders['Audio']['ffmpeg'];
-
-		$sysPath = Settings::getProtected('sys_path');
-		$tempDir = "$sysPath/htdocs/media/temp/{$this->projectSlug}";
 
 		// Chunk each MP3 into smaller segments
 		foreach ($filenames as $file) {
-			$path = $tempDir . "/" . $file;
+			$path = "{$this->tempDir}/$file";
 
 			// These four lines from http://stackoverflow.com/questions/3069574/get-the-length-of-an-audio-file-php
 			$execStr = $ffmpegPath . " -i $path 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//";
@@ -32,47 +32,42 @@ class AudioUploader extends ItemTypeUploader {
 				$filename = pathinfo($file, PATHINFO_FILENAME);
 				$ext = pathinfo($file, PATHINFO_EXTENSION);
 
+				// Get the size of the chunks, including the overlap
+				$chunkSeconds = $chunkSize + $chunkOverlap;
+
 				for ($start = 0; $start < $totalSeconds; $start += $chunkSize) {
 					// Prep output filename
-					$outputFilename = sprintf("$tempDir/$filename-%03d.$ext", $count);
-
-					// Move forward by $chunkSize
-					$endSeconds = $chunkSize * $count;
+					$outputFilename = sprintf("$filename-%03d.$ext", $count);
+					$outputPath = "{$this->tempDir}/$outputFilename";
 
 					// And chunk the file
-					$execStr = $ffmpegPath . " -ss $start -i $path -t $endSeconds -acodec copy $outputFilename";
+					$execStr = $ffmpegPath . " -ss $start -i $path -t $chunkSeconds -acodec copy $outputPath";
+					error_log($execStr);
 					exec($execStr);
+
+					// Add to files array
+					array_push($this->files, $outputFilename);
 
 					$count++;
 				}
 			}
-
-			// if length > 1 minute
-				// calculate # segments?
-				// call ffmpeg to create chunks
-
-			// Foreach chunk
-				// Push new filenames to $this->files
-				// array_push($filename, $this->files)
-
-				// And push the item data
-				// Strip off the extension for the title
-				$title = pathinfo($file, PATHINFO_FILENAME);
-
-				$item = array(
-					"title" => $title,
-					"project_id" => $this->projectId,
-					"transcript" => "",
-					"type" => "audio",
-					"href" => $file
-				);
-				
-				array_push($this->itemData, $item);
 		}
-	}
 
-	// TODO: remove the original files
-	public function cleanup() {
+		// And create the item info array
+		foreach ($this->files as $file) {
+			// Strip off the extension for the title
+			$title = pathinfo($file, PATHINFO_FILENAME);
+
+			$item = array(
+				"title" => $title,
+				"project_id" => $this->projectId,
+				"transcript" => "",
+				"type" => "audio",
+				"href" => $file,
+			);
+			
+			array_push($this->itemData, $item);
+		}
 	}
 }
 
