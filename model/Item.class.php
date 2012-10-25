@@ -100,7 +100,8 @@ class Item {
 			return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index);
 		} else {
 			// Create a new item
-			return $this->db->addItem($this->title, $this->project_id, $this->transcript, $this->type, $this->href);
+			$this->item_id = $this->db->addItem($this->title, $this->project_id, $this->transcript, $this->type, $this->href);
+			return $this->item_id;
 		}
 	}
 

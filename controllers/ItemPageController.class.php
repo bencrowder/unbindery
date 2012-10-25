@@ -73,7 +73,6 @@ class ItemPageController {
 				$item = array();
 				$item['id'] = $itemId;
 				$item['title'] = $itemObj->title;
-				$item['href'] = $itemObj->href;
 
 				// If the user has a transcript for this item, load it instead
 				if ($itemObj->userTranscript && trim($itemObj->userTranscript) != '') {
@@ -92,6 +91,18 @@ class ItemPageController {
 
 				$project = new Project($projectSlug);
 				$item['project_public'] = $project->public;
+
+				// Prepare the URL
+				$appUrl = Settings::getProtected('app_url');
+				switch ($projectType) {
+					case 'system':
+						$projectUrl = "projects/$projectSlug";
+						break;
+					case 'user':
+						$projectUrl = "users/$owner/projects/$projectSlug";
+						break;
+				}
+				$item['href'] = $projectUrl . "/" . $itemObj->href;
 
 				// Get template type
 				$templateType = $itemObj->type;

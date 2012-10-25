@@ -370,13 +370,9 @@ class ProjectPageController {
 		// Load the project
 		$project = new Project($projectSlug);
 
-		error_log("Project: " . $project->describe());
-
 		if ($project->title == '') {
 			Utils::redirectToDashboard('', 'Error loading project.');
 		}
-
-		error_log("Slug: " . $projectSlug);
 
 		if ($project->type == 'system') {
 			$projectUrl = "projects/" . $project->slug;

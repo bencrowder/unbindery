@@ -116,6 +116,10 @@ class DbMySQL implements DbInterface {
 			error_log("Error: " . $this->db->error);
 		}
 
+		if ($this->db->insert_id) {
+			$status = $this->db->insert_id;
+		}
+
 		$this->close();
 
 		return $status;
@@ -609,6 +613,7 @@ class DbMySQL implements DbInterface {
 	// Returns: boolean
 	public function addItem($title, $projectId, $transcript, $type, $href) {
 		$sql = "INSERT INTO items (title, project_id, transcript, status, type, href, workflow_index) VALUES (?, ?, ?, 'available', ?, ?, 0); ";
+
 		return $this->execute($sql, array($title, $projectId, $transcript, $type, $href));
 	}
 

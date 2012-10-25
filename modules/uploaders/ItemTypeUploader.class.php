@@ -61,6 +61,10 @@ class ItemTypeUploader {
 
 	// Create the items in the database
 	public function createItems() {
+		// Load the queue
+		$projectQueue = new Queue("project.proof:{$this->projectSlug}", false);
+
+		// Now go through the item info array
 		foreach ($this->itemData as $itemInfo) {
 			// Create a new item
 			$item = new Item();
@@ -77,7 +81,13 @@ class ItemTypeUploader {
 
 			// Save it to our $this->items array
 			array_push($this->items, $item);
+
+			// Add it to the queue
+			$projectQueue->add($item);
 		}
+
+		// Save the project queue
+		$projectQueue->save();
 	}
 
 	// Process files (move from temp dir to destination dir)
