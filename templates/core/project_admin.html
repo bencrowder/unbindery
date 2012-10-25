@@ -37,6 +37,13 @@
 
 					<label>Language</label>
 					<input id="project_lang" name="project_lang" type="text" value="{{ project.language }}" />
+
+					<label>Status</label>
+					<select id="project_status" name="project_status">
+						<option{% if project.status == 'pending' %} selected{% endif %} value="pending">Pending</option>
+						<option{% if project.status == 'active' %} selected{% endif %} value="active">Active</option>
+						<option{% if project.status == 'completed' %} selected{% endif %} value="completed">Completed</option>
+					</select>
 				</section>
 
 				<section class="hidden">

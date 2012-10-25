@@ -42,7 +42,6 @@ class AudioUploader extends ItemTypeUploader {
 
 					// And chunk the file
 					$execStr = $ffmpegPath . " -ss $start -i $path -t $chunkSeconds -acodec copy $outputPath";
-					error_log($execStr);
 					exec($execStr);
 
 					// Add to files array

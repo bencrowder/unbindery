@@ -191,7 +191,7 @@ class ProjectPageController {
 	// Project page handler
 	// URL: /projects/[PROJECT] or /users/[USER]/projects/[PROJECT]
 	// Methods: GET = get project info
-	//          PUT = save project info
+	//          POST = save project info
 	//          DELETE = delete project
 
 	static public function projectPage($params) {
@@ -266,7 +266,7 @@ class ProjectPageController {
 				$project->whitelist = Utils::POST('projectWhitelist');
 				$project->guidelines = Utils::POST('projectGuidelines');
 				$project->owner = Utils::POST('projectOwner');
-				$project->status = 'pending';
+				$project->status = Utils::POST('projectStatus');
 
 				// Save the changes to the database
 				$status = $project->save();
@@ -370,9 +370,13 @@ class ProjectPageController {
 		// Load the project
 		$project = new Project($projectSlug);
 
+		error_log("Project: " . $project->describe());
+
 		if ($project->title == '') {
 			Utils::redirectToDashboard('', 'Error loading project.');
 		}
+
+		error_log("Slug: " . $projectSlug);
 
 		if ($project->type == 'system') {
 			$projectUrl = "projects/" . $project->slug;

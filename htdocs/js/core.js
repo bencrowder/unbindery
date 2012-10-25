@@ -156,6 +156,7 @@ var Unbindery = function() {
 		var projectType = $("#project_type").val();
 		var projectOwner = $("#project_owner").val().trim();
 		var projectName = $("#project_name").val().trim();
+		var projectStatus = $("#project_status").val().trim();
 		var projectPublic = ($("#project_public").val() == 'public') ? true : false;
 		var projectDesc = $("#project_desc").val().trim();
 		var projectLang = $("#project_lang").val().trim();
@@ -164,7 +165,7 @@ var Unbindery = function() {
 		
 		// TODO: add fields
 
-		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectOwner: projectOwner, projectName: projectName, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow },
+		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow },
 			function(data) {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
