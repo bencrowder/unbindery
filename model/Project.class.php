@@ -174,7 +174,30 @@ class Project {
 	}
 
 	public function getItems() {
-		return $this->db->getItems($this->project_id);
+		$itemIds = $this->db->getItemsForProject($this->project_id);
+		$this->items = array();
+
+		foreach ($itemIds as $id) {
+			$item = new Item($id, $this->slug);
+
+			// If we were able to load it (which should always be the case), add it to the array
+			if ($item) {
+				$newItem = array(
+					"id" => $item->item_id,
+					"title" => $item->title,
+					"project_id" => $item->project_id,
+					"transcript" => $item->transcript,
+					"status" => $item->status,
+					"type" => $item->type,
+					"href" => $item->href,
+					"workflow_index" => $item->workflow_index,
+				);
+
+				array_push($this->items, $newItem);
+			}
+		}
+
+		return $this->items;
 	}
 
 	public function getProoferStats($type = 'proof') {

@@ -82,6 +82,8 @@ class ItemTypeUploader {
 			// Save it to our $this->items array
 			array_push($this->items, $item);
 
+			error_log("Item: " . $item->item_id . "|" . $item->project_id . "|" . $item->title . "|" . $item->type);
+
 			// Add it to the queue
 			$projectQueue->add($item);
 		}

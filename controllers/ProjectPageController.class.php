@@ -380,6 +380,8 @@ class ProjectPageController {
 			$projectUrl = "users/" . $project->owner . "/projects/" . $project->slug;
 		}
 
+		$project->getItems();
+
 		switch ($params['method']) {
 			// GET: Get new project page
 			case 'GET':
@@ -399,6 +401,7 @@ class ProjectPageController {
 						'thumbnails' => $project->thumbnails,
 						'workflow' => $project->workflow,
 						'whitelist' => $project->whitelist,
+						'items' => $project->items,
 					),
 					'css' => array(
 						'uploadify.css'

@@ -92,11 +92,16 @@
 			<div class="content">
 				<h3>Items</h3>
 
-				No items.
+				<ul class="items">
+					{% for item in project.items %}
+					<li class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="/items/{{ item.id }}">{{ item.title }}</a> {{ item.status }}</li>
+					{% endfor %}
+				</ul>
 			</div>
 
 			<div class="sidebar">
 				<section id="uploadarea">
+					<img src="{{ theme_root }}/images/spinner.gif" id="uploadspinner" class="spinner" />
 					<input id="file_upload" name="file_upload" type="file" />
 				</section>
 			</div>

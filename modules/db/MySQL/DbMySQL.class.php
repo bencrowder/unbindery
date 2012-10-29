@@ -651,10 +651,16 @@ class DbMySQL implements DbInterface {
 
 	// TODO: Rewrite
 	// Returns: array of items
-	public function getItems($projectId) {
-		$results = $this->query("SELECT title, status, type, href, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id) AS assignments, (SELECT COUNT(*) FROM assignments WHERE assignments.item_id = items.id AND date_completed IS NOT NULL) AS completed FROM items WHERE project_id = ? ORDER BY items.id ASC;", array($projectId));
+	public function getItemsForProject($projectId) {
+		$results = $this->query("SELECT id FROM items WHERE project_id = ? ORDER BY id ASC;", array($projectId));
 
-		return $results;
+		$ids = array();
+
+		foreach ($results as $row) {
+			array_push($ids, $row['id']);
+		}
+
+		return $ids;
 	}
 
 	// Returns: array of proofers

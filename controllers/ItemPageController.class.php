@@ -394,11 +394,25 @@ class ItemPageController {
 					$items = array_merge($items, $returnedItems);
 				}
 
+				// Create a JSON-ready version
+				$finalItems = array();
+				foreach ($items as $item) {
+					$newItem = array(
+						"id" => $item->item_id,
+						"title" => $item->title,
+						"project_id" => $item->projectId,
+						"transcript" => $item->transcript,
+						"type" => $item->type,
+						"href" => $item->href
+					);
+
+					array_push($finalItems, $newItem);
+				}
+
 				$uploader = new ItemTypeUploader($projectSlug);
 				$uploader->cleanup();
 
-				// TODO: make this return something useful like the items generated
-				echo json_encode(array('status' => 'success', 'items' => $items));
+				echo json_encode(array('status' => 'success', 'items' => $finalItems));
 
 				break;
 		}

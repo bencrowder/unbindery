@@ -58,12 +58,16 @@ var Unbindery = function() {
 		}
 	};
 
-	this.showSpinner = function() {
-		$("#spinner").show();
+	this.showSpinner = function(id) {
+		if (typeof id === 'undefined') id = '#spinner';
+
+		$(id).show();
 	};
 
-	this.hideSpinner = function() {
-		$("#spinner").hide();
+	this.hideSpinner = function(id) {
+		if (typeof id === 'undefined') id = '#spinner';
+
+		$(id).hide();
 	};
 
 	this.getNewItem = function(projectSlug, projectOwner, projectType, actionType) {
@@ -179,24 +183,20 @@ var Unbindery = function() {
 		var projectSlug = $("#project_slug").val();
 		var projectType = $("#project_type").val();
 
-		/*
-		var items = [];
-
-		items = '';
-		$("#file_uploadQueue .fileName").each(function() {
-			var filename = $(this).html();
-			// strip up to the space
-			filename = filename.substr(0, filename.indexOf(' '));
-
-			items += filename + '|';
-		});
-		console.log("items", items);
-		*/
+		unbindery.showSpinner('#uploadspinner');
 
 		this.callAPI('add-items', 'POST', { projectSlug: projectSlug, projectType: projectType, fileList: fileList },
 			function(data) {
-				console.log("data", data);
-				// if success, add items to item list
+				if (data.status == 'success') {
+					unbindery.hideSpinner('#uploadspinner');
+
+					// if success, add items to item list
+					for (item in data.items) {
+						item = data.items[item];
+						console.log(item, item.id, item.title, item.type);
+					}
+
+				}
 			}
 		);
 	};
