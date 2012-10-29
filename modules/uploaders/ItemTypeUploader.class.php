@@ -82,8 +82,6 @@ class ItemTypeUploader {
 			// Save it to our $this->items array
 			array_push($this->items, $item);
 
-			error_log("Item: " . $item->item_id . "|" . $item->project_id . "|" . $item->title . "|" . $item->type);
-
 			// Add it to the queue
 			$projectQueue->add($item);
 		}
@@ -100,13 +98,15 @@ class ItemTypeUploader {
 
 	// Cleanup (run this manually after everything has been processed)
 	public function cleanup() {
-		// Remove all remaining files in the temp dir
-		foreach (glob($this->tempDir . "/*") as $file) {
-			unlink($file);
-		}
+		if (file_exists($this->tempDir)) {
+			// Remove all remaining files in the temp dir
+			foreach (glob($this->tempDir . "/*") as $file) {
+				unlink($file);
+			}
 
-		// Remove the temp dir since we no longer need it
-		rmdir($this->tempDir);
+			// Remove the temp dir since we no longer need it
+			rmdir($this->tempDir);
+		}
 	}
 }
 

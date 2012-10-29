@@ -182,6 +182,10 @@ class Project {
 
 			// If we were able to load it (which should always be the case), add it to the array
 			if ($item) {
+				// Load proofs and reviews for the item
+				$response = $this->db->getStatsForItem($id);
+
+				// And populate the array
 				$newItem = array(
 					"id" => $item->item_id,
 					"title" => $item->title,
@@ -191,6 +195,8 @@ class Project {
 					"type" => $item->type,
 					"href" => $item->href,
 					"workflow_index" => $item->workflow_index,
+					"proofs" => $response['proofs'],
+					"reviews" => $response['reviews'],
 				);
 
 				array_push($this->items, $newItem);

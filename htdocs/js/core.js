@@ -193,9 +193,17 @@ var Unbindery = function() {
 					// if success, add items to item list
 					for (item in data.items) {
 						item = data.items[item];
-						console.log(item, item.id, item.title, item.type);
-					}
 
+						html = "<li class='available " + item.type + "' data-id='" + item.id + "'>";
+						html += "<span class='itemcontrols'>";
+						html +=		"<a href='' class='delete'>×</a>";
+						html += "</span>";
+						html += "<a href='/items/" + item.id + "'>" + item.title + "</a>";
+						html += " available";
+						html += "</li>";
+
+						$(html).appendTo($("section.items ul.items"));
+					}
 				}
 			}
 		);

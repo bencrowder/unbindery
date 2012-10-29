@@ -94,7 +94,14 @@
 
 				<ul class="items">
 					{% for item in project.items %}
-					<li class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="/items/{{ item.id }}">{{ item.title }}</a> {{ item.status }}</li>
+					<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="/items/{{ item.id }}">{{ item.title }}</a> {{ item.status }}
+						{% for proof in item.proofs %}
+						<p>Proof: {{ proof.user }} {{ proof.date_assigned }} {{ proof.date_completed }}</p>
+						{% endfor %}
+						{% for review in item.reviews %}
+						<p>review: {{ review.user }} {{ review.date_assigned }} {{ review.date_completed }}</p>
+						{% endfor %}
+					</li>
 					{% endfor %}
 				</ul>
 			</div>

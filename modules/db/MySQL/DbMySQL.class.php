@@ -525,17 +525,6 @@ class DbMySQL implements DbInterface {
 		}
 	}
 
-	// Returns: item_id
-	public function getNextItem($item_id, $project_slug) {
-		$results = $this->query("SELECT items.id FROM items JOIN projects ON items.project_id = projects.id WHERE items.id > ? AND projects.slug = ? LIMIT 1", array($item_id, $project_slug));
-
-		if (count($results) > 0) {
-			$next_item_id = trim($results[0]['id']);
-		} else {
-			$next_item_id = -1;
-		}
-	}
-
 	// Returns: project array
 	public function loadProject($project_slug) {
 		$query = "SELECT *, ";
@@ -649,7 +638,6 @@ class DbMySQL implements DbInterface {
 		}
 	}
 
-	// TODO: Rewrite
 	// Returns: array of items
 	public function getItemsForProject($projectId) {
 		$results = $this->query("SELECT id FROM items WHERE project_id = ? ORDER BY id ASC;", array($projectId));
@@ -661,6 +649,39 @@ class DbMySQL implements DbInterface {
 		}
 
 		return $ids;
+	}
+
+	// Returns: array of proof and review information
+	public function getStatsForItem($itemId) {
+		$response = array();
+		$response['proofs'] = array();
+		$response['reviews'] = array();
+
+		// Get the proofs
+		$results = $this->query("SELECT * FROM queues WHERE item_id = ? AND queue_name LIKE 'user.proof:%' ORDER BY id ASC;", array($itemId));
+
+		foreach ($results as $row) {
+			array_push($response['proofs'], array(
+					"user" => substr($row['queue_name'], strpos($row['queue_name'], ':') + 1),
+					"date_assigned" => $row['date_added'],
+					"date_completed" => $row['date_removed'],
+				)
+			);
+		}
+
+		// Get the reviews 
+		$results = $this->query("SELECT * FROM queues WHERE item_id = ? AND queue_name LIKE 'user.review:%' ORDER BY id ASC;", array($itemId));
+
+		foreach ($results as $row) {
+			array_push($response['reviews'], array(
+					"user" => substr($row, strpos($row['queue_name'], ':')),
+					"date_assigned" => $row['date_assigned'],
+					"date_completed" => $row['date_completed'],
+				)
+			);
+		}
+
+		return $response;
 	}
 
 	// Returns: array of proofers

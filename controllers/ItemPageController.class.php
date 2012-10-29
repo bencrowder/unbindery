@@ -400,7 +400,7 @@ class ItemPageController {
 					$newItem = array(
 						"id" => $item->item_id,
 						"title" => $item->title,
-						"project_id" => $item->projectId,
+						"project_id" => $item->project_id,
 						"transcript" => $item->transcript,
 						"type" => $item->type,
 						"href" => $item->href
