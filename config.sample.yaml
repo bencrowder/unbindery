@@ -23,7 +23,7 @@ theme_cached: false
 theme: core                 # if you add a new system-wide theme, change this
 external_login: false       # whether to call Auth::redirectToLogin on index page
 allow_signup: true          # whether to show link to sign up
-download_template: "<page item-id='{{ item.id }}' proofers='{{ proofers }}'>{{ transcript }}</page>\n\n" # default download template
+download_template: "<item item-title='{{ item.title }}' item-id='{{ item.id }}' item-type='{{ item.type }}' proofers='{{ proofers }}' reviewers='{{ reviewers }}'>{{ transcript }}</item>\n\n"  # default download template
 
 alibaba:
   app_name: unbindery       # for Alibaba session variable

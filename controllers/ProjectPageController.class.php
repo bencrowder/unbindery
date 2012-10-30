@@ -95,6 +95,9 @@ class ProjectPageController {
 				$project->owner = Utils::POST('project_owner');
 				$project->status = 'pending';
 
+				// Import the system download template
+				$project->downloadTemplate = Settings::getProtected('download_template');
+
 				// Convert to lowercase and strip out punctuation
 				$project->slug = str_replace(' ', '-', strtolower($project->title));
 				$project->slug = preg_replace('/[^a-z0-9-]+/i', '', $project->slug);
@@ -267,6 +270,7 @@ class ProjectPageController {
 				$project->guidelines = Utils::POST('projectGuidelines');
 				$project->owner = Utils::POST('projectOwner');
 				$project->status = Utils::POST('projectStatus');
+				$project->downloadTemplate = Utils::POST('projectDownloadTemplate');
 
 				// Save the changes to the database
 				$status = $project->save();
