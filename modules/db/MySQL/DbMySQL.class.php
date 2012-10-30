@@ -401,7 +401,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItemWithProjectID($item_id, $project_id) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index, items.order AS order FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index, items.order AS `order` FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.id = ?;";
@@ -440,7 +440,7 @@ class DbMySQL implements DbInterface {
 	// Returns: boolean
 	public function saveExistingItem($itemId, $title, $projectId, $transcript, $status, $type, $href, $workflowIndex, $order) {
 		$sql = "UPDATE items ";
-		$sql .= "SET title = ?, project_id = ?, transcript = ?, status = ?, type = ?, href = ?, workflow_index = ?, order = ? ";
+		$sql .= "SET title = ?, project_id = ?, transcript = ?, status = ?, type = ?, href = ?, workflow_index = ?, `order` = ? ";
 		$sql .= "WHERE id = ?;";
 
 		return $this->execute($sql, array($title, $projectId, $transcript, $status, $type, $href, $workflowIndex, $order, $itemId));
@@ -608,7 +608,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: boolean
 	public function addItem($title, $projectId, $transcript, $type, $href) {
-		$sql = "INSERT INTO items (title, project_id, transcript, status, type, href, workflow_index, order) VALUES (?, ?, ?, 'available', ?, ?, 0, 9999); ";
+		$sql = "INSERT INTO items (title, project_id, transcript, status, type, href, workflow_index, `order`) VALUES (?, ?, ?, 'available', ?, ?, 0, 9999); ";
 
 		return $this->execute($sql, array($title, $projectId, $transcript, $type, $href));
 	}

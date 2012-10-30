@@ -332,7 +332,7 @@ body > footer a:hover					{ text-decoration: underline; }
 #controls input.button					{ font-size: 1em; margin-top: -6px; display: inline !important; }
 
 ul.items								{ list-style: none; padding-left: 0; }
-ul.items li								{ padding: 10px 0px; border-top: solid 1px #ddd; }
+ul.items li								{ padding: 10px 5px; border-top: solid 1px #ddd; }
 
 ul.items li > a							{ margin: 0; margin-right: 15px; font-weight: bold; color: #345678; display: inline-block; text-decoration: none; width: 450px; }
 ul.items li > a:hover					{ text-decoration: underline; }
@@ -341,14 +341,10 @@ ul.items li .status						{ display: inline-block; font-size: .9em; }
 ul.items li.completed .status			{ color: #999; }
 ul.items li.available .status			{ color: #090; }
 
+ul.items li.new							{ background: #ffd; }
+
 ul.items li .itemcontrols				{ float: right; }
 ul.items li .itemcontrols a				{ text-decoration: none; }
-
-/*
-ul.items li a.assignment				{ background: #ddd; font-size: 10px; font-weight: bold; padding: 3px 8px; -moz-border-radius: 1em; border-radius: 1em; text-decoration: none; }
-ul.items li a.assignment:hover			{ text-decoration: underline; }
-ul.items li a.assignment.done			{ color: #fff; background: #444; }
-*/
 
 ul.items li p.transcript				{ margin-left: 15px; font-size: .9em; margin-bottom: 0; margin-top: 3px; color: #999; }
 ul.items li p.transcript a				{ color: #345678; font-weight: bold; text-decoration: none; }

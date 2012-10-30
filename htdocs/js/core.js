@@ -203,12 +203,12 @@ var Unbindery = function() {
 					for (item in data.items) {
 						item = data.items[item];
 
-						html = "<li class='available " + item.type + "' data-id='" + item.id + "'>";
+						html = "<li class='new available " + item.type + "' data-id='" + item.id + "'>";
 						html += "<span class='itemcontrols'>";
 						html +=		"<a href='' class='delete'>×</a>";
 						html += "</span>";
 						html += "<a href='/items/" + item.id + "'>" + item.title + "</a>";
-						html += " available";
+						html += " <span class='status'>available</span>";
 						html += "</li>";
 
 						$(html).appendTo($("section.items ul.items"));
@@ -230,37 +230,6 @@ var Unbindery = function() {
 			}
 		);
 	};
-}
-
-function save_page() {
-	unbindery.showSpinner();
-
-	var item_id = $("#item_id").val();
-	var project_slug = $("#project_slug").val();
-	var pagetext = $("#pagetext").val();
-	var username = $("#username").html();
-	var review_username = $("#review_username").html();
-
-	unbindery.callAPI(app_url + "/unbindery.php?method=save_page", 'POST', { item_id: item_id, project_slug: project_slug, username: username, draft: is_draft, review: is_review, review_username: review_username, transcript: transcript },
-		function(data) {
-			if (data.statuscode == "success") {
-				unbindery.hideSpinner();
-
-				if (is_review) {
-					var message = "Finished review.";
-				} else {
-					if (is_draft) {
-						var message = "Saved draft.";
-					} else {
-						var message = "Finished item.";
-					}
-				}
-				redirect_to_dashboard(message, "", username);
-			} else {
-				redirect_to_dashboard("", "Error saving page. Try again.", username);
-			}
-		}
-	);
 }
 
 function load_items_for_editing(event, data) {
