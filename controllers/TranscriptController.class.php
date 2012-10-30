@@ -129,8 +129,6 @@ class TranscriptController {
 			$template = preg_replace("/{{ $match }}/", $replacement, $template);
 		}
 
-		error_log("Template now: $template");
-
 		return $template;
 	}
 }

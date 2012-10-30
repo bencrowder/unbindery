@@ -433,19 +433,18 @@ class ProjectPageController {
 					);
 				}
 
-				error_log("$finalText");
-
 				switch ($format) {
 					case 'json':
 						echo json_encode(array('transcript' => htmlentities($finalText)));
 						break;
+
 					case 'html':
 						$filename = "{$project->slug}.txt";
 
 						header("Content-Type: text/html");
 						header("Content-Disposition: attachment; filename=$filename");
 
-						echo trim($finalText);
+						echo trim(str_replace('\n', "\n", $finalText));
 
 						break;
 				}
