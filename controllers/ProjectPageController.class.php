@@ -317,8 +317,8 @@ class ProjectPageController {
 	static public function membership($params) {
 		// Parse parameters
 		$format = self::getFormat($params['args'], 1, 3);
-		$projectPage = self::getProjectType($params['args']);
-		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
+		$projectType = self::getProjectType($params['args']);
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
 		$user = User::getAuthenticatedUser();
@@ -344,6 +344,65 @@ class ProjectPageController {
 				$status = ($user->removeFromProject($projectSlug)) ? 'success' : 'error';
 
 				echo json_encode(array('status' => $status));
+
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
+	// Project transcript handler
+	// URL: /projects/[PROJECT]/transcript OR /users/[USER]/projects/[PROJECT]/transcript
+	// Methods: GET = download project transcript
+
+	static public function transcript($params) {
+		$db = Settings::getProtected('db');
+
+		// Parse parameters
+		$format = self::getFormat($params['args'], 1, 3);
+		$projectType = self::getProjectType($params['args']);
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		$user = User::getAuthenticatedUser();
+
+		switch ($params['method']) {
+			// GET: download project transcript
+			case 'GET':
+				// Load project
+				$project = new Project($projectSlug);
+
+				$finalTranscripts = array();
+
+				$project->getItems();
+
+				foreach ($project->items as $item) {
+					$proofTranscripts = $db->loadItemTranscripts($item['project_id'], $item['id'], "proof");
+					$reviewTranscripts = $db->loadItemTranscripts($item['project_id'], $item['id'], "review");
+
+					if (count($reviewTranscripts) > 0) {
+						if (count($reviewTranscripts) > 1) {
+							$text = Transcript::diff($reviewTranscripts);
+						} else {
+							$text = $reviewTranscripts[0]['transcript'];
+						}
+					} else if (count($proofTranscripts) > 0) {
+						if (count($proofTranscripts) > 1) {
+							$text = Transcript::diff($proofTranscripts);
+						} else {
+							$text = $proofTranscripts[0]['transcript'];
+						}
+					} else {
+						$text = $item->transcript;
+					}
+
+					array_push($finalTranscripts, $text);
+				}
+
+				$delimiter = Settings::getProtected("delimiter");
+				$finalText = join($delimiter, $finalTranscripts);
+
+				echo json_encode(array('transcript' => $finalText));
 
 				break;
 		}
@@ -484,8 +543,8 @@ class ProjectPageController {
 	// Helper function to parse return format type
 
 	static public function getFormat($args, $systemIndex, $userIndex) {
-		$projectPage = self::getProjectType($args);
-		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
+		$projectType = self::getProjectType($args);
+		$formatIndex = ($projectType == 'system') ? $systemIndex : $userIndex;
 		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }

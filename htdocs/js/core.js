@@ -140,7 +140,7 @@ var Unbindery = function() {
 						var projectOwner = $('#project_owner').val();
 						var projectType = $('#project_type').val();
 
-						unbindery.getNewItem(projectSlug, projectOwner, projectType, type);
+						unbindery.getNewItem(projectSlug, projectOwner, projectType, proofType);
 					} else {
 						unbindery.redirectToDashboard("", "");
 					}

@@ -324,17 +324,6 @@ class ItemPageController {
 
 
 	// --------------------------------------------------
-	// General items transcripts handler
-	// URL: /projects/PROJECT/items/transcripts
-	// Methods: 
-
-	static public function transcripts($params) {
-		echo "Item transcripts (" . $params['method'] . "): ";
-		print_r($params['args']);
-	}
-
-
-	// --------------------------------------------------
 	// Get new item handler
 	// URL: /projects/PROJECT/items/get OR /users/USER/projects/PROJECT/items/get
 	// Methods: POST = get next available item

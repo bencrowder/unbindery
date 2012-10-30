@@ -44,6 +44,8 @@
 * /projects/[PROJECT]/membership
 	* POST = join project
 	* DELETE = leave project
+* /projects/[PROJECT]/transcript
+	* GET = get concatenated transcript for project
 * /projects/[PROJECT]/admin
 
 

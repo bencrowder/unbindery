@@ -424,7 +424,7 @@ class DbMySQL implements DbInterface {
 		$query .= "WHERE project_id = ? ";
 		$query .= "AND item_id = ? ";
 		$query .= "AND type = ? ";
-		$query .= "AND status = 'completed' OR status = 'reviewed';";
+		$query .= "AND (status = 'completed' OR status = 'reviewed');";
 
 		$transcripts = $this->query($query, array($projectId, $itemId, $type));
 
@@ -674,7 +674,7 @@ class DbMySQL implements DbInterface {
 
 		foreach ($results as $row) {
 			array_push($response['reviews'], array(
-					"user" => substr($row, strpos($row['queue_name'], ':')),
+					"user" => substr($row['queue_name'], strpos($row['queue_name'], ':')),
 					"date_assigned" => $row['date_assigned'],
 					"date_completed" => $row['date_completed'],
 				)
