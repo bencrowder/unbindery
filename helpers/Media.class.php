@@ -131,6 +131,36 @@ class Media {
 			echo str_replace($targetDir, '', $targetFile);
 		}
 	}
+
+
+	// --------------------------------------------------
+	// Media::removeFileForItem
+	// Removes the file for an item
+	// $item = item object
+
+	static public function removeFileForItem($item) {
+		$sysPath = Settings::getProtected('sys_path');
+
+		// Load the project
+		$project = new Project($item->project_slug);
+
+		// Set up the target dir
+		if ($project->type == 'system') {
+			$projectDir = "$sysPath/htdocs/media/projects/{$project->slug}";
+		} else if ($project->type == 'user') {
+			$projectDir = "$sysPath/htdocs/media/users/{$project->owner}/{$project->slug}";
+		}
+
+		// File path
+		$filePath = "$projectDir/{$item->href}";
+
+		// Remove the file
+		if ($projectDir != '' && file_exists($filePath)) {
+			return unlink($filePath);
+		}
+
+		return false;
+	}
 }
 
 ?>

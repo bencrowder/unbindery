@@ -199,4 +199,8 @@ class Item {
 	public function setStatus($status) {
 		return $this->db->setItemStatus($this->item_id, $this->project_id, $status);
 	}
+
+	public function deleteFromDatabase() {
+		return $this->db->deleteItemFromDatabase($this->item_id);
+	}
 }

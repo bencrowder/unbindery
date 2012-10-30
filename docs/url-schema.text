@@ -61,15 +61,21 @@
 * /projects/[PROJECT]/items/transcripts
 	* POST = upload transcripts
 	* PUT = save transcripts
+* /projects/[PROJECT]/items/[ITEM]
+	* POST = save item info
+* /projects/[PROJECT]/items/[ITEM]/delete
+	* POST = delete item
+* /projects/[PROJECT]/items/[ITEM]/proof/[USERNAME]
+	* GET = load item page for proofing
 * /projects/[PROJECT]/items/[ITEM]/proof
 	* GET = load item page for proofing
-	* POST = save item info
-	* DELETE = delete item
+* /projects/[PROJECT]/items/[ITEM]/review/[USERNAME]
+	* GET = load item page for reviewing
 * /projects/[PROJECT]/items/[ITEM]/review
 	* GET = load item page for reviewing
+* /projects/[PROJECT]/items/[ITEM]/edit
+	* GET = load item page for reviewing
 	* POST = save item info
-	* DELETE = delete item
-* /projects/[PROJECT]/items/[ITEM]/admin
 * /projects/[PROJECT]/items/[ITEM]/transcript
 	* POST = save transcript
 

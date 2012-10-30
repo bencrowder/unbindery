@@ -311,15 +311,73 @@ class ItemPageController {
 	}
 
 
-
 	// --------------------------------------------------
 	// Item handler
 	// URL: /projects/PROJECT/items/ITEM
 	// Methods: 
 
 	static public function item($params) {
-		echo "Item (" . $params['method'] . "): ";
-		print_r($params['args']);
+		// TODO: write
+	}
+
+
+	// --------------------------------------------------
+	// Item delete handler
+	// URL: /projects/PROJECT/items/ITEM/delete
+	// Methods: 
+
+	static public function deleteItem($params) {
+		$format = self::getFormat($params['args'], 2, 4);
+		$projectType = self::getProjectType($params['args']);
+
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+		$project = new Project($projectSlug);
+
+		$itemIndex = ($projectType == 'system') ? 1 : 3;
+		$itemId = $params['args'][$itemIndex];
+
+		$user = User::getAuthenticatedUser();
+
+		switch ($params['method']) {
+			// POST: Delete an item
+			case 'POST':
+				$status = 'success';
+				$message = '';
+
+				// Make sure the user is project admin or site admin
+				$roles = $user->getRolesForProject($projectSlug);
+				$isProjectAdmin = (in_array("admin", $roles));
+				$isSiteAdmin = ($user->role == 'admin');
+				// TODO: check to see if user is project owner as well
+
+				if (!$isProjectAdmin && !$isSiteAdmin) {
+					Utils::redirectToDashboard("", "You don't have rights to delete that item. Sorry.");
+					return;
+				}
+
+				// Load item to make sure it exists
+				$item = new Item($itemId, $projectSlug);
+
+				// Delete the file
+				Media::removeFileForItem($item);
+
+				// Delete from project proof queue
+				// TODO: remove from review queue as well?
+				$queue = new Queue("project.proof:{$project->slug}", false);
+				$queue->remove($item);
+				$queue->save();
+
+				// Delete from database
+				if (!$item->deleteFromDatabase()) {
+					$status = 'error';
+					$message = 'Error deleting item from database';
+				}
+
+				echo json_encode(array('status' => $status, 'message' => $message));
+
+				break;
+		}
 	}
 
 

@@ -45,6 +45,15 @@ var Unbindery = function() {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items';
 				}
 				break;
+
+			case 'delete-item':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug + '/items/' + data.itemId + '/delete';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/' + data.itemId + '/delete';
+				}
+
+				break;
 		}
 
 		switch (method) {
@@ -204,6 +213,19 @@ var Unbindery = function() {
 
 						$(html).appendTo($("section.items ul.items"));
 					}
+				}
+			}
+		);
+	};
+
+	this.deleteItem = function(itemId) {
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+
+		this.callAPI('delete-item', 'POST', { projectSlug: projectSlug, projectType: projectType, itemId: itemId },
+			function(data) {
+				if (data.status == 'success') {
+					$("ul.items li[data-id=" + itemId + "]").remove();
 				}
 			}
 		);
@@ -415,6 +437,18 @@ $(document).ready(function() {
 			}
 		});
 
+		return false;
+	});
+
+
+	/* Item deletion (project admin page) */
+	/* -------------------------------------------------- */
+
+	$("ul.items").on("click", "a.delete", function() {
+		var itemId = $(this).parents("li:first").attr("data-id");
+
+		unbindery.deleteItem(itemId);
+		
 		return false;
 	});
 });

@@ -283,6 +283,12 @@ class DbMySQL implements DbInterface {
 		return $this->execute($sql, array($status, $itemId, $projectId));
 	}
 
+	// Returns: boolean
+	public function deleteItemFromDatabase($itemId) {
+		$sql = "DELETE FROM items WHERE id = ?";
+		return $this->execute($sql, array($itemId));
+	}
+
 	// Returns: none
 	public function setUserStatus($username, $status) {
 		$sql = "UPDATE users SET status = ? WHERE username = ?";
