@@ -502,6 +502,7 @@ class ProjectPageController {
 						'thumbnails' => $project->thumbnails,
 						'workflow' => $project->workflow,
 						'whitelist' => $project->whitelist,
+						'download_template' => $project->downloadTemplate,
 						'url' => "$appUrl/$projectUrl",
 						'items' => $project->items,
 					),
