@@ -49,11 +49,7 @@ class UserPageController {
 		$user = self::authenticate();
 
 		$options = array(
-			'user' => array(
-				'loggedin' => true,
-				'admin' => $user->admin,
-				'name' => $user->name,
-				'email' => $user->email),
+			'user' => $user->getResponse(),
 		);
 
 		Template::render('settings', $options);

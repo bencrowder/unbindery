@@ -4,7 +4,7 @@
 
 {% block main %}
 	<div id="main" class="container">
-		<h2>{{ item.title }}</h2>
+		<h2>{% if proof_type == 'edit' %}Edit {% endif %}{{ item.title }}{% if proof_user %} (@{{ proof_user }}){% endif %}</h2>
 		{% if user.prefs.sidebyside %}
 		<div class="sidebyside">
 		{% endif %}

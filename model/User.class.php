@@ -15,7 +15,6 @@ class User {
 	private $role;
 	private $theme;
 	private $prefs;
-	private $admin;
 
 	private $in_db;			// Whether we have a db entry yet
 
@@ -24,7 +23,6 @@ class User {
 
 		// Defaults
 		$this->status = 'pending';
-		$this->admin = false;
 		$this->role = "user";
 
 		if ($username != "") { 
@@ -95,8 +93,8 @@ class User {
 		return $this->db->userHasProjectItem($this->username, $projectSlug);
 	}
 
-	public function getRolesForProject($project_slug) {
-		$dbRoles = $this->db->getRolesForProject($this->username, $project_slug);
+	public function getRolesForProject($projectSlug) {
+		$dbRoles = $this->db->getRolesForProject($this->username, $projectSlug);
 
 		// Parse it into a cleaner array
 		$roles = array();

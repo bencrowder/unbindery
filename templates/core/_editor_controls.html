@@ -1,12 +1,12 @@
-<div id="controls_container" class="controls">
+<div id="controls_container" class="controls {{ proof_type }}{% if proof_user != '' %} existing{% endif %}">
 	<div id="controls" class="container">
 		<ul id="controls_left">
-			<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
-			<li><a href="{{ app_url }}/projects/{{ item.project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+		<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
+		<li><a href="{{ app_url }}/projects/{{ item.project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
 		</ul>
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
-			{% if already_finished %}
+			{% if already_finished or proof_type == 'edit' or proof_user != '' %}
 			<li><span id="action-save-changes" class="button">Save Changes</span></li>
 			{% else %}
 			<li><span id="action-save-draft" class="button">Save as Draft</span></li>

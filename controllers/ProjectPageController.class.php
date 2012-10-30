@@ -401,6 +401,7 @@ class ProjectPageController {
 						'thumbnails' => $project->thumbnails,
 						'workflow' => $project->workflow,
 						'whitelist' => $project->whitelist,
+						'url' => "$appUrl/$projectUrl",
 						'items' => $project->items,
 					),
 					'css' => array(
@@ -486,20 +487,6 @@ class ProjectPageController {
 		$projectPage = self::getProjectType($args);
 		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
 		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to check authentication
-
-	static public function authenticate() {
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
-
-		return $user;
 	}
 }
 
