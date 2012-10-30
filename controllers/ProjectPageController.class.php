@@ -366,20 +366,23 @@ class ProjectPageController {
 
 		$user = User::getAuthenticatedUser();
 
+		// TODO: make sure user has access to download this
+
 		switch ($params['method']) {
 			// GET: download project transcript
 			case 'GET':
 				// Load project
 				$project = new Project($projectSlug);
-
-				$finalTranscripts = array();
-
 				$project->getItems();
 
+				$finalText = "";
+
+				// Go through each item and get the relevant transcript
 				foreach ($project->items as $item) {
 					$proofTranscripts = $db->loadItemTranscripts($item['project_id'], $item['id'], "proof");
 					$reviewTranscripts = $db->loadItemTranscripts($item['project_id'], $item['id'], "review");
 
+					// If there are reviewed transcripts, get the diff of those
 					if (count($reviewTranscripts) > 0) {
 						if (count($reviewTranscripts) > 1) {
 							$text = Transcript::diff($reviewTranscripts);
@@ -387,22 +390,61 @@ class ProjectPageController {
 							$text = $reviewTranscripts[0]['transcript'];
 						}
 					} else if (count($proofTranscripts) > 0) {
+						// If there are proofed transcripts, get the diff of those
 						if (count($proofTranscripts) > 1) {
 							$text = Transcript::diff($proofTranscripts);
 						} else {
 							$text = $proofTranscripts[0]['transcript'];
 						}
 					} else {
+						// Otherwise just get the item's original transcript
 						$text = $item['transcript'];
 					}
 
-					array_push($finalTranscripts, $text);
+					// Get the list of proofers/reviewers as comma-separated usernames
+					$stats = $db->getStatsForItem($item['id']);
+					$proofers = array();
+					$reviewers = array();
+					foreach ($stats['proofs'] as $stat) {
+						array_push($proofers, $stat['user']);
+					}
+					foreach ($stats['reviews'] as $stat) {
+						array_push($reviewers, $stat['user']);
+					}
+					$proofers = join(',', $proofers);
+					$reviewers = join(',', $reviewers);
+					
+					// If there's a project template, use it, otherwise use default from config
+					$defaultTemplate = Settings::getProtected("download_template");
+					$template = ($project->downloadTemplate != '') ? $project->downloadTemplate : $defaultTemplate;
+
+					// Apply the download template
+					$finalText .= TranscriptController::replaceVariables($template, array(
+							'transcript' => $text,
+							'project' => $project,
+							'item' => $item,
+							'proofers' => $proofers,
+							'reviewers' => $reviewers,
+						)
+					);
 				}
 
-				$delimiter = Settings::getProtected("delimiter");
-				$finalText = join($delimiter, $finalTranscripts);
+				error_log("$finalText");
 
-				echo json_encode(array('transcript' => $finalText));
+				switch ($format) {
+					case 'json':
+						echo json_encode(array('transcript' => htmlentities($finalText)));
+						break;
+					case 'html':
+						$filename = "{$project->slug}.txt";
+
+						header("Content-Type: text/html");
+						header("Content-Disposition: attachment; filename=$filename");
+
+						echo trim($finalText);
+
+						break;
+				}
 
 				break;
 		}

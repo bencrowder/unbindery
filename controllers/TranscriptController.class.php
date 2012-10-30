@@ -74,6 +74,65 @@ class TranscriptController {
 
 		return $str;
 	}
+
+
+	// --------------------------------------------------
+	// Variable substitution helper function
+
+	static public function replaceVariables($template, $vars) {
+		// Go through the template and swap out variables
+
+		$matches = array();
+		preg_match_all("/{{ (.+?) }}/", $template, $matches);
+
+		foreach ($matches[1] as $match) {
+			// Get the first part (up to the first period)
+			if (strpos($match, ".") > 0) {
+				$head = (strpos($match, ".") != -1) ? substr($match, 0, strpos($match, ".")) : $match;
+				$tail = substr($match, strpos($match, ".") + 1);
+			} else {
+				$head = $match;
+				$tail = '';
+			}
+
+			$replacement = '';
+
+			switch ($head) {
+				case 'transcript':
+					$replacement = $vars['transcript'];
+					break;
+
+				case 'proofers':
+					$replacement = $vars['proofers'];
+					break;
+
+				case 'reviewers':
+					$replacement = $vars['reviewers'];
+					break;
+
+				case 'user':
+					$user = $vars['user'];
+					$replacement = $user[$tail];
+					break;
+
+				case 'project':
+					$project = $vars['project'];
+					$replacement = $project[$tail];
+					break;
+
+				case 'item':
+					$item = $vars['item'];
+					$replacement = $item[$tail];
+					break;
+			}
+
+			$template = preg_replace("/{{ $match }}/", $replacement, $template);
+		}
+
+		error_log("Template now: $template");
+
+		return $template;
+	}
 }
 
 ?>

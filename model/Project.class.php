@@ -18,6 +18,7 @@ class Project {
 	private $workflow;
 	private $whitelist;
 	private $fields;
+	private $downloadTemplate;
 
 	private $url;
 	private $admin_url;
@@ -56,6 +57,7 @@ class Project {
 			$this->workflow = trim($project['workflow']);
 			$this->whitelist = trim($project['whitelist']);
 			$this->fields = trim($project['fields']);
+			$this->downloadTemplate = trim($project['download_template']);
 			$this->dateStarted = trim($project['datestarted']);
 			$this->dateCompleted = trim($project['datecompleted']);
 			$this->daysSpent = trim($project['days_spent']);
@@ -85,16 +87,16 @@ class Project {
 		}
 
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate);
 		}
 
 		return $status;
 	}
 
 	// TODO: are we even using this function anywhere? save() does the same thing
-	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $thumbnails, $workflow, $whitelist, $fields) {
+	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $thumbnails, $workflow, $whitelist, $fields, $downloadTemplate) {
 		$this->title = $title;
 		$this->type = $type;
 		$this->public = $public;
@@ -108,9 +110,10 @@ class Project {
 		$this->workflow = $workflow;
 		$this->whitelist = $whitelist;
 		$this->fields = $fields;
+		$this->downloadTemplate = $downloadTemplate;
 
 		if ($title != "" && $slug != "") {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate);
 
 			if ($status) {
 				return "success";
@@ -319,6 +322,7 @@ class Project {
 		$str .= " | [workflow={$this->workflow}]";
 		$str .= " | [whitelist={$this->whitelist}]";
 		$str .= " | [fields={$this->fields}]";
+		$str .= " | [downloadTemplate={$this->downloadTemplate}]";
 		$str .= " | [url={$this->url}]";
 		$str .= " | [admin_url={$this->admin_url}]";
 

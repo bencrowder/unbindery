@@ -383,7 +383,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItem($item_id, $project_slug) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index, items.order AS `order` FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.slug = ?;";
@@ -395,7 +395,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: id, project_id, title, transcript, status, type
 	public function loadItemWithProjectID($item_id, $project_id) {
-		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index FROM items ";
+		$query = "SELECT items.id AS id, projects.id AS project_id, projects.slug AS project_slug, projects.type AS project_type, projects.public AS project_public, projects.owner AS project_owner, items.title AS title, items.transcript AS transcript, items.status AS status, items.type AS type, items.href AS href, items.workflow_index AS workflow_index, items.order AS order FROM items ";
 		$query .= "JOIN projects ON items.project_id = projects.id ";
 		$query .= "WHERE items.id = ? ";
 		$query .= "AND projects.id = ?;";
@@ -432,12 +432,12 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
-	public function saveExistingItem($itemId, $title, $projectId, $transcript, $status, $type, $href, $workflowIndex) {
+	public function saveExistingItem($itemId, $title, $projectId, $transcript, $status, $type, $href, $workflowIndex, $order) {
 		$sql = "UPDATE items ";
-		$sql .= "SET title = ?, project_id = ?, transcript = ?, status = ?, type = ?, href = ?, workflow_index = ? ";
+		$sql .= "SET title = ?, project_id = ?, transcript = ?, status = ?, type = ?, href = ?, workflow_index = ?, order = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $projectId, $transcript, $status, $type, $href, $workflowIndex, $itemId));
+		return $this->execute($sql, array($title, $projectId, $transcript, $status, $type, $href, $workflowIndex, $order, $itemId));
 	}
 
 	// Returns: boolean
@@ -559,7 +559,7 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields) {
+	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
 		$sql .= "type = ?, ";
@@ -573,18 +573,19 @@ class DbMySQL implements DbInterface {
 		$sql .= "guidelines = ?, ";
 		$sql .= "language = ?, ";
 		$sql .= "thumbnails = ?, ";
-		$sql .= "fields = ? ";
+		$sql .= "fields = ?, ";
+		$sql .= "download_template = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $project_id));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $project_id));
 	}
 
-	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields) {
+	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, download_template, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate));
 	}
 
 	// TODO: Rewrite
@@ -601,7 +602,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: boolean
 	public function addItem($title, $projectId, $transcript, $type, $href) {
-		$sql = "INSERT INTO items (title, project_id, transcript, status, type, href, workflow_index) VALUES (?, ?, ?, 'available', ?, ?, 0); ";
+		$sql = "INSERT INTO items (title, project_id, transcript, status, type, href, workflow_index, order) VALUES (?, ?, ?, 'available', ?, ?, 0, 9999); ";
 
 		return $this->execute($sql, array($title, $projectId, $transcript, $type, $href));
 	}
@@ -1050,6 +1051,7 @@ CREATE TABLE `items` (
   `type` varchar(255) NOT NULL,
   `href` varchar(1000) default NULL,
   `workflow_index` int(11) NOT NULL,
+  `order` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
@@ -1086,6 +1088,7 @@ CREATE TABLE `projects` (
   `date_started` date default NULL,
   `date_completed` date default NULL,
   `fields` varchar(4000) default NULL,
+  `download_template` varchar(2000) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;

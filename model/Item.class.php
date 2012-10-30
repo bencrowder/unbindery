@@ -16,6 +16,7 @@ class Item {
 	private $type;
 	private $href;
 	private $workflow_index;
+	private $order;
 
 	public function Item($itemId = '', $projectSlug = '', $username = '', $type = 'proof') {
 		$this->db = Settings::getProtected('db');
@@ -38,18 +39,19 @@ class Item {
 
 		if (isset($item)) {
 			if (gettype($item) == 'array') {
-				$this->item_id = trim($item['id']);
-				$this->project_id = trim($item['project_id']);
+				$this->item_id = $item['id'];
+				$this->project_id = $item['project_id'];
 				$this->project_slug = $projectSlug;
 				$this->project_type = trim($item['project_type']);
-				$this->project_public = trim($item['project_public']);
+				$this->project_public = $item['project_public'];
 				$this->project_owner = trim($item['project_owner']);
 				$this->title = trim($item['title']);
 				$this->transcript = trim($item['transcript']);
 				$this->status = trim($item['status']);
 				$this->type = trim($item['type']);
 				$this->href = trim($item['href']);
-				$this->workflow_index = trim($item['workflow_index']);
+				$this->workflow_index = $item['workflow_index'];
+				$this->order = $item['order'];
 			} else {
 				$this->item_id = -1;
 			}
@@ -69,18 +71,19 @@ class Item {
 
 		if (isset($item)) {
 			if (gettype($item) == 'array') {
-				$this->item_id = trim($item['id']);
+				$this->item_id = $item['id'];
 				$this->project_id = $projectId;
 				$this->project_slug = trim($item['project_slug']);
 				$this->project_type = trim($item['project_type']);
-				$this->project_public = trim($item['project_public']);
+				$this->project_public = $item['project_public'];
 				$this->project_owner = trim($item['project_owner']);
 				$this->title = trim($item['title']);
 				$this->transcript = trim($item['transcript']);
 				$this->status = trim($item['status']);
 				$this->type = trim($item['type']);
 				$this->href = trim($item['href']);
-				$this->workflow_index = trim($item['workflow_index']);
+				$this->workflow_index = $item['workflow_index'];
+				$this->order = $item['order'];
 			} else {
 				$this->item_id = -1;
 			}
@@ -97,7 +100,7 @@ class Item {
 
 	public function save() {
 		if ($this->item_id) {
-			return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index);
+			return $this->db->saveExistingItem($this->item_id, $this->title, $this->project_id, $this->transcript, $this->status, $this->type, $this->href, $this->workflow_index, $this->order);
 		} else {
 			// Create a new item
 			$this->item_id = $this->db->addItem($this->title, $this->project_id, $this->transcript, $this->type, $this->href);
