@@ -670,13 +670,13 @@ class DbMySQL implements DbInterface {
 		}
 
 		// Get the reviews 
-		$results = $this->query("SELECT * FROM queues WHERE item_id = ? AND queue_name LIKE 'user.review:%' ORDER BY id ASC;", array($itemId));
+		$results = $this->query("SELECT *, DATE_FORMAT(date_added, '%e %b %Y') AS date_assigned_formatted, DATE_FORMAT(date_removed, '%e %b %Y') AS date_completed_formatted FROM queues WHERE item_id = ? AND queue_name LIKE 'user.review:%' ORDER BY id ASC;", array($itemId));
 
 		foreach ($results as $row) {
 			array_push($response['reviews'], array(
-					"user" => substr($row['queue_name'], strpos($row['queue_name'], ':')),
-					"date_assigned" => $row['date_assigned'],
-					"date_completed" => $row['date_completed'],
+					"user" => substr($row['queue_name'], strpos($row['queue_name'], ':') + 1),
+					"date_assigned" => $row['date_assigned_formatted'],
+					"date_completed" => $row['date_completed_formatted'],
 				)
 			);
 		}

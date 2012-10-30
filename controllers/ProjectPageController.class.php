@@ -393,7 +393,7 @@ class ProjectPageController {
 							$text = $proofTranscripts[0]['transcript'];
 						}
 					} else {
-						$text = $item->transcript;
+						$text = $item['transcript'];
 					}
 
 					array_push($finalTranscripts, $text);
