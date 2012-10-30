@@ -11,17 +11,14 @@ class TranscriptController {
 		$type = $params['type'];
 		$transcript = $params['transcript'];
 
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
+		$user = User::getAuthenticatedUser();
 
 		// Make sure user has access (member of project, item is in queue)
 		// TODO: Finish
 
 		// Update it if it exists; add it if it doesn't
 		$transcriptObj = $user->loadTranscript($item, $type);
+
 		if ($transcriptObj) {
 			$user->updateTranscript($item, $status, $transcript->getText(), $type);
 		} else {

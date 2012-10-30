@@ -119,9 +119,10 @@ var Unbindery = function() {
 		var itemId = $("#item_id").val();
 		var projectSlug = $("#project_slug").val();
 		var username = $("#username").html();
-		var reviewUsername = $("#review_username").html();
 		var transcript = $("#transcript").val();
 		var projectOwner = $("#project_owner").val();
+		var proofUser = $("#proof_user").val();
+		var proofType = $("#proof_type").val();
 
 		var projectType = 'system';
 		if (projectOwner != '') projectType = 'user';
@@ -130,9 +131,7 @@ var Unbindery = function() {
 		if (isDraft) status = 'draft';
 		if (isReview) status = 'reviewed';
 
-		var type = (isReview) ? 'review' : 'proof';
-
-		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, review: isReview, reviewUsername: reviewUsername, transcript: transcript, status: status, type: type },
+		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, proofType: proofType, proofUser: proofUser, transcript: transcript, status: status },
 			function(data) {
 				if (data.statuscode == "success") {
 					if (getAnother) {

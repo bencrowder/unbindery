@@ -131,7 +131,6 @@ class ItemPageController {
 				$options = array(
 					'user' => $user->getResponse(),
 					'item' => $item,
-					'transcript_type' => $proofType,
 					'more_to_proof' => $moreToProof,
 					'already_finished' => $alreadyFinished,
 					'editor_options' => $editorOptions,
@@ -182,96 +181,115 @@ class ItemPageController {
 		switch ($params['method']) {
 			// POST: Post transcript for item
 			case 'POST':
-				$transcriptType = Utils::POST('type');			// proof, review
+				$proofType = Utils::POST('proofType');
+				$proofUser = Utils::POST('proofUser');
+				$transcriptText = Utils::POST('transcript');
+				$transcriptStatus = Utils::POST('status');		// draft, completed, reviewed
 
-				// Make sure they have access to the project
-				if (!$user->isMember($projectSlug, $owner)) {
-					$code = "not-a-member";
-					// TODO: fail gracefully here, redirect to dashboard with error
-					error_log("You're not a member of that project. Sorry.");
-					return;
+				// Make sure they have access to the item
+				if ($proofType == 'edit' || $proofUser != '') {
+					// For editing an item or a specific proof/review, user must be project admin or site admin
+					$roles = $user->getRolesForProject($projectSlug);
+					$isProjectAdmin = (in_array("admin", $roles));
+					$isSiteAdmin = ($user->role == 'admin');
+
+					if (!$isProjectAdmin && !$isSiteAdmin) {
+						Utils::redirectToDashboard("", "You don't have rights to edit that item. Sorry.");
+						return;
+					}
+				} else { 
+					// User has to be a member of the project
+					if (!$user->isMember($projectSlug, $owner)) {
+						Utils::redirectToDashboard("", "You're not a member of that project. Sorry.");
+						return;
+					}
 				}
 
+				// If we're looking at an existing proof/review, load it for that user
+				// Otherwise load it for the existing user
+				$username = ($proofUser != '') ? $proofUser : $user->username;
+
 				// Load the item
-				$itemObj = new Item($itemId, $projectSlug, $user->username, $transcriptType);
+				$itemObj = new Item($itemId, $projectSlug, $username, $proofType);
 
 				// Make sure item exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
-					// TODO: fail gracefully here
-					error_log("Item doesn't exist.");
+					Utils::redirectToDashboard("", "Item doesn't exist.");
 					return;
 				}
 
 				// Make sure the user has this item in their queue
 				// TODO: Finish
 
-				// Get the transcript text
-				$transcriptText = Utils::POST('transcript');
-				$transcriptStatus = Utils::POST('status');		// draft, completed, reviewed
-
-				// Save transcript to database
-				$transcript = new Transcript();
-				$transcript->load(array('item' => $itemObj, 'type' => $transcriptType));
-				$transcript->setText($transcriptText);
-				$transcript->save(array('item' => $itemObj, 'status' => $transcriptStatus, 'type' => $transcriptType));
-
-				if ($transcriptStatus == 'completed' || $transcriptStatus == 'reviewed') {
-					$scoring = Settings::getProtected('scoring');
-
-					// Notifications
-					if ($transcriptStatus == 'reviewed') {
-						// Bump user's score up if they haven't already reviewed this page
-						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['review'], 'review');
-
-						// Notify project owner that review is complete
-
-						// Training mode
-						if ($user->status == 'training') {
-							// Clear the user for proofing
-							$user->setStatus('clear');
-
-							// Notify user of clearance
-
-							// Notify admin of clearance
-						}
-					} else {
-						// Bump user's score up if they haven't already proofed this page
-						$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['proof'], 'proof');
-
-						if ($user->status == 'training') {
-							// Notify project owner with link to review for clearance
-						}
-					}
-
-					// Remove from user's queue
-					$userQueue = new Queue("user.$transcriptType:{$user->username}");
-					$userQueue->remove($itemObj);
-					$userQueue->save();
-
-					// Increase item's workflow index
-					// TODO: Make sure this works properly
-					if ($transcriptStatus != 'draft') {
-						$itemObj->workflow_index += 1;
-					}
-
-					// And save it
+				if ($proofType == 'edit') {
+					// Set the transcript and save the item
+					$itemObj->transcript = $transcriptText;
 					$itemObj->save();
+				} else {
+					// Save transcript to database
+					$transcript = new Transcript();
+					$transcript->load(array('item' => $itemObj, 'type' => $proofType));
+					$transcript->setText($transcriptText);
+					$transcript->save(array('item' => $itemObj, 'status' => $transcriptStatus, 'type' => $proofType));
 
-					// Load the project
-					$project = new Project($itemObj->project_slug);
+					if ($proofUser == '' || $transcriptStatus == 'completed' || $transcriptStatus == 'reviewed') {
+						$scoring = Settings::getProtected('scoring');
 
-					// Get next workflow step
-					$workflow = new Workflow($project->workflow);
-					$workflow->setIndex($itemObj->workflow_index);
+						// Notifications
+						if ($transcriptStatus == 'reviewed') {
+							// Bump user's score up if they haven't already reviewed this page
+							$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['review'], 'review');
 
-					$workflowQueue = $workflow->getWorkflow();
+							// Notify project owner that review is complete
 
-					if ($itemObj->workflow_index < count($workflowQueue)) {
-						// Process next step
-						$workflow->next($itemObj);
-					} else {
-						// The item is complete
-						$itemObj->setStatus("completed");
+							// Training mode
+							if ($user->status == 'training') {
+								// Clear the user for proofing
+								$user->setStatus('clear');
+
+								// Notify user of clearance
+
+								// Notify admin of clearance
+							}
+						} else {
+							// Bump user's score up if they haven't already proofed this page
+							$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['proof'], 'proof');
+
+							if ($user->status == 'training') {
+								// Notify project owner with link to review for clearance
+							}
+						}
+
+						// Remove from user's queue
+						$userQueue = new Queue("user.$proofType:{$user->username}");
+						$userQueue->remove($itemObj);
+						$userQueue->save();
+
+						// Increase item's workflow index
+						// TODO: Make sure this works properly
+						if ($transcriptStatus != 'draft') {
+							$itemObj->workflow_index += 1;
+						}
+
+						// And save it
+						$itemObj->save();
+
+						// Load the project
+						$project = new Project($itemObj->project_slug);
+
+						// Get next workflow step
+						$workflow = new Workflow($project->workflow);
+						$workflow->setIndex($itemObj->workflow_index);
+
+						$workflowQueue = $workflow->getWorkflow();
+
+						if ($itemObj->workflow_index < count($workflowQueue)) {
+							// Process next step
+							$workflow->next($itemObj);
+						} else {
+							// The item is complete
+							$itemObj->setStatus("completed");
+						}
 					}
 				}
 
