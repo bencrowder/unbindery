@@ -15,7 +15,7 @@ class Project {
 	private $status;
 	private $guidelines;
 	private $thumbnails;
-	private $workflow;
+	private $workflow = "@proofer, @proofer, @reviewer";	// Default
 	private $whitelist;
 	private $fields;
 	private $downloadTemplate;
