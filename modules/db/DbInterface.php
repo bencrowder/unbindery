@@ -26,12 +26,4 @@ interface DbInterface {
 	// Loads a user
 	// Returns: name, email, status, admin
 	public function loadUser($username);
-
-	// Loads a user's assignments
-	// Returns: item_id, item_title, project_id, project_title, project_slug, date_assigned, deadline, days_left
-	public function getUserAssignments($username);
-
-	// Loads a user's projects
-	// Returns: project_id, title, slug, author, num_proofs, role, completed, total, percentage, proof_percentage, available_pages
-	public function getUserProjects($username);
 }

@@ -175,34 +175,6 @@ class DbMySQL implements DbInterface {
 		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme, $user->prefs));
 	}
 
-	// TODO: Rewrite
-	// Returns: item_id, item_title, project_id, project_title, project_slug, date_assigned, deadline, days_left
-	public function getUserAssignments($username) {
-		$items = $this->query("SELECT item_id, items.title AS item_title, assignments.project_id, projects.title AS project_title, projects.slug AS project_slug, DATE_FORMAT(date_assigned, '%e %b %Y') AS date_assigned, DATE_FORMAT(deadline, '%e %b %Y') AS deadline, DATEDIFF(deadline, NOW()) AS days_left FROM assignments JOIN items ON assignments.item_id = items.id JOIN projects ON assignments.project_id = projects.id WHERE username = ? AND assignments.date_completed IS NULL ORDER BY deadline ASC;", array($username));
-		return $items;
-	}
-
-	// TODO: Rewrite
-	// Returns: project_id, title, slug, author, num_proofs, role, completed, total, percentage, proof_percentage, available_pages
-	public function getUserProjects($username) {
-		$projects = $this->query("SELECT project_id, projects.title, projects.slug, projects.author, projects.num_proofs, role, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id AND status != 'available' AND status != 'assigned') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = membership.project_id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available' AND status != 'assigned') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT count(items.id) FROM items LEFT JOIN assignments ON assignments.item_id = items.id AND assignments.username = ? WHERE items.status = 'available' AND items.project_id = projects.id AND assignments.username IS NULL) AS available_pages FROM membership JOIN projects ON membership.project_id = projects.id WHERE username = ? AND projects.status = 'active' ORDER BY percentage DESC;", array($username, $username));
-		return $projects;
-	}
-
-	// TODO: rewrite
-	// Returns: boolean
-	public function isAssigned($username, $item_id, $project_slug) {
-		$result = $this->query("SELECT assignments.id FROM assignments JOIN projects ON assignments.project_id = projects.id WHERE username = ? AND assignments.item_id = ? AND projects.slug = ?", array($username, $item_id, $project_slug));
-
-		if (count($result) > 0) {
-			$retval = true;
-		} else {
-			$retval = false;
-		}
-
-		return $retval;
-	}
-
 	// Returns: boolean
 	public function isMember($username, $projectSlug, $owner = '') {
 		$query = "SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?";
@@ -258,25 +230,6 @@ class DbMySQL implements DbInterface {
 		}
 	}
 
-	// TODO: Rewrite
-	// Returns: status
-	public function assignItemToUser($username, $item_id, $project_id, $deadline_length) {
-		$query = "INSERT INTO assignments (username, item_id, project_id, date_assigned, deadline) VALUES (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL $deadline_length DAY))";
-
-		return $this->execute($query, array($username, $item_id, $project_id));
-	}
-
-	// TODO: Rewrite
-	// Returns: integer
-	public function getItemAssignmentsCount($item_id) {
-		$query = "SELECT COUNT(*) AS itemcount FROM assignments WHERE assignments.item_id = ?";
-		$results = $this->query($query, array($item_id));
-		$result = $results[0];
-		$itemcount = $result["itemcount"];
-
-		return $itemcount;
-	}
-
 	// Returns: none
 	public function setItemStatus($itemId, $projectId, $status) {
 		$sql = "UPDATE items SET status = ? WHERE id = ? AND project_id = ?";
@@ -293,15 +246,6 @@ class DbMySQL implements DbInterface {
 	public function setUserStatus($username, $status) {
 		$sql = "UPDATE users SET status = ? WHERE username = ?";
 		return $this->execute($sql, array($status, $username));
-	}
-
-	// TODO: Rewrite
-	// Returns: array of assignment IDs
-	public function userHasUnfinishedAssignment($username) {
-		$query = "SELECT assignments.id FROM assignments WHERE username = ? AND date_completed IS NOT NULL";
-		$results = $this->query($query, array($username));
-
-		return (count($results) > 0) ? true : false;
 	}
 
 	// Returns: boolean
@@ -479,18 +423,6 @@ class DbMySQL implements DbInterface {
 		return $this->execute($sql, array($projectId, $itemId, $username, $transcript, $status, $type));
 	}
 
-	// TODO: Rewrite
-	// Returns: none
-	public function updateAssignmentReviewDate($item_id, $project_id, $username) {
-		$sql = "UPDATE assignments ";
-		$sql .= "SET date_reviewed = NOW() ";
-		$sql .= "WHERE username = ? ";
-		$sql .= "AND item_id = ? ";
-		$sql .= "AND project_id = ?;";
-
-		return $this->execute($sql, array($username, $item_id, $project_id));
-	}
-
 	// Returns: none
 	public function updateUserScoreForItem($username, $itemId, $projectId, $score, $queueType) {
 		$sql = "UPDATE users, queues SET score = score + ? ";
@@ -501,34 +433,6 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND date_removed IS NULL;";
 
 		return $this->execute($sql, array($score, $username, "user.$queueType:$username", $itemId, $projectId));
-	}
-
-	// TODO: Rewrite
-	// Returns: none
-	public function completeAssignment($username, $item_id, $project_id) {
-		$sql = "UPDATE assignments SET date_completed = NOW() ";
-		$sql .= "WHERE username = ? ";
-		$sql .= "AND item_id = ? ";
-		$sql .= "AND project_id = ?;";
-
-		return $this->execute($sql, array($username, $item_id, $project_id));
-	}
-
-	// TODO: Rewrite
-	// Returns: transcript_count
-	public function getItemProofCount($item_id, $project_id) {
-		$query = "SELECT COUNT(id) as proofcount FROM assignments ";
-		$query .= "WHERE item_id = ? ";
-		$query .= "AND project_id = ? ";
-		$query .= "AND date_completed IS NOT NULL";
-
-		$results = $this->query($query, array($item_id, $project_id));
-
-		if (count($results) > 0) {
-			return intval($results[0]['proofcount']);
-		} else {
-			return -1;
-		}
 	}
 
 	// Returns: project array
@@ -592,18 +496,6 @@ class DbMySQL implements DbInterface {
 		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
 		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate));
-	}
-
-	// TODO: Rewrite
-	public function loadProjectStatus($project_slug) {
-		$query = "SELECT (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') AS completed, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) AS total, (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id AND status != 'available') / (SELECT COUNT(*) FROM items WHERE items.project_id = projects.id) * 100 AS percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) / (projects.num_proofs * (SELECT COUNT(*) FROM items where items.project_id = projects.id)) * 100 AS proof_percentage, (SELECT COUNT(*) FROM assignments WHERE assignments.project_id = projects.id AND assignments.date_completed IS NOT NULL) AS proofed FROM projects WHERE slug = ?;";
-		$results = $this->query($query, array($project_slug));
-
-		if (count($results) > 0) {
-			return $results[0];
-		} else {
-			return false;
-		}
 	}
 
 	// Returns: boolean
@@ -726,12 +618,6 @@ class DbMySQL implements DbInterface {
 	// Returns: array of items
 	public function getBasicItems($projectId) {
 		return $this->query("SELECT id, title, status FROM items WHERE project_id = ? ORDER BY items.id ASC;", array($projectId));
-	}
-
-	// TODO: Rewrite
-	// Returns: array of assignments
-	public function getBasicAssignments($projectId) {
-		return $this->query("SELECT item_id, username, date_completed FROM assignments WHERE project_id = ? ORDER BY item_id ASC;", array($projectId));
 	}
 
 	// Returns: array of projects available to user
@@ -936,20 +822,6 @@ class DbMySQL implements DbInterface {
 		return $this->query($query, $params);
 	}
 
-	// TODO: Rewrite
-	// Returns: array of projects
-	public function getCompletedProjects() {
-		$query = "SELECT projects.title, projects.author, projects.slug, ";
-		$query .= "(SELECT date_assigned FROM assignments WHERE project_id=projects.id ORDER BY date_assigned limit 1) AS date_started, ";
-		$query .= "(SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1) AS date_comp, ";
-		$query .= "DATE_FORMAT((SELECT date_completed FROM assignments WHERE project_id=projects.id ORDER BY date_completed DESC limit 1), '%e %b %Y') AS date_completed ";
-		$query .= "FROM projects ";
-		$query .= "WHERE projects.status = 'completed' OR projects.status = 'posted' ";
-		$query .= "ORDER BY date_comp DESC";
-
-		return $this->query($query, array());
-	}
-
 	// Returns: array of users (username, score)
 	public function getTopUsers() {
 		return $this->query("SELECT username, score FROM users WHERE score > 0 ORDER BY score DESC LIMIT 10;", array());
@@ -959,12 +831,6 @@ class DbMySQL implements DbInterface {
 	public function setUserScore($username, $score) {
 		$sql = "UPDATE users SET score = score - ? WHERE username = ?;";
 		return $this->execute($sql, array($username, $score));
-	}
-
-	// TODO: Rewrite
-	// Returns: username, item_id, project_id, date_assigned, deadline
-	public function getCurrentAssignments() {
-		return $this->query("SELECT username, item_id, project_id, date_assigned, deadline FROM assignments WHERE date_completed IS NULL ORDER BY project_id, date_assigned DESC", array());
 	}
 
 	// Returns: item_id, project_id, date_added
