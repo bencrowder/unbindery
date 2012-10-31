@@ -149,17 +149,6 @@ class ItemPageController {
 
 
 	// --------------------------------------------------
-	// Item media handler
-	// URL: /projects/PROJECT/items/ITEM/media
-	// Methods: 
-
-	static public function media($params) {
-		echo "Item media (" . $params['method'] . "): ";
-		print_r($params['args']);
-	}
-
-
-	// --------------------------------------------------
 	// Item transcript handler
 	// URL: /projects/PROJECT/items/ITEM/transcript OR /users/USER/projects/PROJECT/items/ITEM/transcript
 	// Methods: 

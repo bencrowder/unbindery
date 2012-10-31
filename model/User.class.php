@@ -262,6 +262,7 @@ class User {
 			'email' => $this->email,
 			'status' => $this->status,
 			'score' => $this->score,
+			'hash' => $this->hash,
 			'signup_date' => $this->signup_date,
 			'last_login' => $this->last_login,
 			'role' => $this->role,
@@ -288,25 +289,5 @@ class User {
 		$auth->forceAuthentication();
 
 		return new User($auth->getUsername());
-	}
-
-	public function getTemplateReady() {
-		$userArray = array(
-			"username" => $this->username,
-			"password" => $this->password,
-			"name" => $this->name,
-			"email" => $this->email,
-			"status" => $this->status,
-			"score" => $this->score,
-			"hash" => $this->hash,
-			"signup_date" => $this->signup_date,
-			"last_login" => $this->last_login,
-			"role" => $this->role,
-			"theme" => $this->theme,
-			"prefs" => $this->prefs,
-			"in_db" => $this->in_db,
-		);
-
-		return $userArray;
 	}
 }

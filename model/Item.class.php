@@ -204,7 +204,7 @@ class Item {
 		return $this->db->deleteItemFromDatabase($this->item_id);
 	}
 
-	public function getTemplateReady() {
+	public function getResponse() {
 		$userArray = array(
 			"item_id" => $this->item_id,
 			"project_id" => $this->project_id,

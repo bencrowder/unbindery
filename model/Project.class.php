@@ -329,7 +329,7 @@ class Project {
 		return $str;
 	}
 
-	public function getTemplateReady() {
+	public function getResponse() {
 		$projectArray = array(
 			"project_id" => $this->project_id,
 			"title" => $this->title,
@@ -349,6 +349,14 @@ class Project {
 			"url" => $this->url,
 			"admin_url" => $this->admin_url,
 		);
+
+		if (property_exists($project, "dateStarted")) $projectArray("date_started") = $project->dateStarted;
+		if (property_exists($project, "dateCompleted")) $projectArray("date_completed") = $project->dateCompleted;
+		if (property_exists($project, "daysSpent")) $projectArray("days_spent") = $project->daysSpent;
+		if (property_exists($project, "numItems")) $projectArray("num_items") = $project->numItems;
+		if (property_exists($project, "itemsCompleted")) $projectArray("items_completed") = $project->itemsCompleted;
+		if (property_exists($project, "numProofers")) $projectArray("num_proofers") = $project->numProofers;
+		if (property_exists($project, "numReviewers")) $projectArray("num_reviewers") = $project->numReviewers;
 
 		return $projectArray;
 	}

@@ -215,32 +215,15 @@ class ProjectPageController {
 
 		// TODO: make sure current user has access to see this project
 
+		$projectArray = $project->getResponse();
+		$projectArray['percent_complete'] = $percentComplete;
+
 		switch ($params['method']) {
 			case 'GET':
 				$response = array(
 					'page_title' => $project->title,
 					'user' => $user->getResponse($projectSlug),
-					'project' => array(
-						'id' => $project->project_id,
-						'slug' => $project->slug,
-						'title' => $project->title,
-						'owner' => $project->owner,
-						'type' => $project->type,
-						'public' => $project->public,
-						'language' => $project->language,
-						'status' => $project->status,
-						'guidelines' => $project->guidelines,
-						'description' => $project->description,
-						'thumbnails' => $project->thumbnails,
-						'date_started' => $project->dateStarted,
-						'date_completed' => $project->dateCompleted,
-						'days_spent' => $project->daysSpent,
-						'num_items' => $project->numItems,
-						'items_completed' => $project->itemsCompleted,
-						'percent_complete' => $percentComplete,
-						'num_proofers' => $project->numProofers,
-						'num_reviewers' => $project->numReviewers,
-					),
+					'project' => $projectArray,
 					'proofers' => $project->getProoferStats('proof'),
 					'reviewers' => $project->getProoferStats('review'),
 				);
@@ -486,29 +469,17 @@ class ProjectPageController {
 
 		$project->getItems();
 
+		$projectArray = $project->getResponse();
+		$projectArray['items'] = $project->items;
+		$projectArray['url'] = "$appUrl/$projectUrl";
+
 		switch ($params['method']) {
 			// GET: Get new project page
 			case 'GET':
 				$response = array(
 					'page_title' => 'Project Admin',
 					'user' => $user->getResponse(),
-					'project' => array(
-						'title' => $project->title,
-						'id' => $project->project_id,
-						'slug' => $project->slug,
-						'type' => $project->type,
-						'public' => $project->public,
-						'language' => $project->language,
-						'description' => $project->description,
-						'owner' => $project->owner,
-						'status' => $project->status,
-						'thumbnails' => $project->thumbnails,
-						'workflow' => $project->workflow,
-						'whitelist' => $project->whitelist,
-						'download_template' => $project->downloadTemplate,
-						'url' => "$appUrl/$projectUrl",
-						'items' => $project->items,
-					),
+					'project' => $projectArray,
 					'css' => array(
 						'uploadify.css'
 					),
