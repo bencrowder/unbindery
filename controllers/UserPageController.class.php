@@ -79,14 +79,14 @@ class UserPageController {
 		$proofQueue = new Queue("user.proof:{$user->username}");
 		$proofing['items'] = array();
 		foreach ($proofQueue->getItems() as $item) {
-			array_push($proofing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
+			array_push($proofing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id, 'type' => $item->type));
 		}
 
 		// Load the user's reviewing queue
 		$reviewQueue = new Queue("user.review:{$user->username}");
 		$reviewing['items'] = array();
 		foreach ($reviewQueue->getItems() as $item) {
-			array_push($reviewing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id));
+			array_push($reviewing['items'], array('title' => $item->title, 'status' => $item->status, 'project_slug' => $item->project_slug, 'project_type' => $item->project_type, 'project_owner' => $item->project_owner, 'item_id' => $item->item_id, 'type' => $item->type));
 		}
 
 		// Add extra info (edit link and slug) to each item

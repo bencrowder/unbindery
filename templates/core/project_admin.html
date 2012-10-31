@@ -105,7 +105,7 @@
 
 				<ul class="items">
 					{% for item in project.items %}
-					<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit">{{ item.title }}</a> <span class="status">{{ item.status }}</span>
+					<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit">{{ item.title }}</a> <span class="status">{{ item.type }} &bull; {{ item.status }}</span>
 						{% for proof in item.proofs %}
 						<p class="transcript">Proofed by <a href="{{ project.url }}/items/{{ item.id }}/proof/{{ proof.user }}">{{ proof.user }}</a> ({{ proof.date_completed }})</p>
 						{% endfor %}
