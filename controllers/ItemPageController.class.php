@@ -96,10 +96,13 @@ class ItemPageController {
 				$item = array();
 				$item['id'] = $itemId;
 				$item['title'] = $itemObj->title;
+
+				/*
 				$item['project_slug'] = $projectSlug;
 				$item['project_owner'] = $owner;
 				$item['project_type'] = $itemObj->project_type;
 				$item['project_public'] = $project->public;
+				 */
 
 				// If the user has a transcript for this item, load it instead
 				if ($itemObj->userTranscript && trim($itemObj->userTranscript) != '') {
@@ -131,6 +134,7 @@ class ItemPageController {
 				$options = array(
 					'user' => $user->getResponse(),
 					'item' => $item,
+					'project' => $project->getResponse(),
 					'more_to_proof' => $moreToProof,
 					'already_finished' => $alreadyFinished,
 					'editor_options' => $editorOptions,

@@ -2,7 +2,7 @@
 	<div id="controls" class="container">
 		<ul id="controls_left">
 		<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
-		<li><a href="{{ app_url }}/projects/{{ item.project_slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+		<li><a href="{{ app_url }}/projects/{{ project.slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
 		</ul>
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
@@ -17,9 +17,9 @@
 	</div>
 
 	<input type="hidden" name="item_id" id="item_id" value="{{ item.id }}" />
-	<input type="hidden" name="project_slug" id="project_slug" value="{{ item.project_slug }}" />
-	<input type="hidden" name="project_owner" id="project_owner" value="{{ item.project_owner }}" />
-	<input type="hidden" name="project_type" id="project_type" value="{{ item.project_type }}" />
+	<input type="hidden" name="project_slug" id="project_slug" value="{{ project.slug }}" />
+	<input type="hidden" name="project_owner" id="project_owner" value="{{ project.owner }}" />
+	<input type="hidden" name="project_type" id="project_type" value="{{ project.type }}" />
 	<input type="hidden" name="proof_type" id="proof_type" value="{{ proof_type }}" />
 	<input type="hidden" name="proof_user" id="proof_user" value="{{ proof_user }}" />
 </div>
