@@ -97,13 +97,6 @@ class ItemPageController {
 				$item['id'] = $itemId;
 				$item['title'] = $itemObj->title;
 
-				/*
-				$item['project_slug'] = $projectSlug;
-				$item['project_owner'] = $owner;
-				$item['project_type'] = $itemObj->project_type;
-				$item['project_public'] = $project->public;
-				 */
-
 				// If the user has a transcript for this item, load it instead
 				if ($itemObj->userTranscript && trim($itemObj->userTranscript) != '') {
 					$transcript = trim($itemObj->userTranscript);
@@ -129,9 +122,14 @@ class ItemPageController {
 				// Get any editor-specific config settings
 				$editors = Settings::getProtected('editors');
 				$editorOptions = (array_key_exists($templateType, $editors)) ? $editors[$templateType] : array();
+
+				$pageTitle = ucfirst($proofType) . " " . $item['title'];
+				if ($proofUser) $pageTitle .= " ($proofUser)";
+				$pageTitle .= " | " . $project->title;
 				
 				// Display the template
 				$options = array(
+					'page_title' => $pageTitle,
 					'user' => $user->getResponse(),
 					'item' => $item,
 					'project' => $project->getResponse(),

@@ -47,8 +47,11 @@ class ProjectPageController {
 					}
 				}
 
+				$pageTitle = 'Projects';
+				if ($owner) $pageTitle .= " owned by $owner";
+
 				$response = array(
-					'page_title' => 'Projects',
+					'page_title' => $pageTitle,
 					'user' => $user->getResponse(),
 					'user_projects' => $userProjects,
 					'available_projects' => $availableProjects,

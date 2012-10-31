@@ -31,6 +31,7 @@ class SystemPageController {
 
 				// Redirect back to index with message
 				$options = array(
+					'page_title' => 'Confirmation',
 					'user' => array(
 						'loggedin' => false
 						),
@@ -43,6 +44,7 @@ class SystemPageController {
 				$auth->redirectToLogin();
 			} else {
 				$options = array(
+					'page_title' => 'Login',
 					'user' => array(
 						'loggedin' => false
 						),
