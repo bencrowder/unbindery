@@ -216,7 +216,7 @@ class Item {
 			"transcript" => $this->transcript,
 			"userTranscript" => $this->userTranscript,
 			"status" => $this->status,
-			"type" = $this->type,
+			"type" => $this->type,
 			"href" => $this->href,
 			"workflow_index" => $this->workflow_index,
 			"order" => $this->order,

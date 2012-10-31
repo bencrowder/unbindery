@@ -350,13 +350,13 @@ class Project {
 			"admin_url" => $this->admin_url,
 		);
 
-		if (property_exists($project, "dateStarted")) $projectArray("date_started") = $project->dateStarted;
-		if (property_exists($project, "dateCompleted")) $projectArray("date_completed") = $project->dateCompleted;
-		if (property_exists($project, "daysSpent")) $projectArray("days_spent") = $project->daysSpent;
-		if (property_exists($project, "numItems")) $projectArray("num_items") = $project->numItems;
-		if (property_exists($project, "itemsCompleted")) $projectArray("items_completed") = $project->itemsCompleted;
-		if (property_exists($project, "numProofers")) $projectArray("num_proofers") = $project->numProofers;
-		if (property_exists($project, "numReviewers")) $projectArray("num_reviewers") = $project->numReviewers;
+		if (property_exists($this, "dateStarted")) $projectArray["date_started"] = $this->dateStarted;
+		if (property_exists($this, "dateCompleted")) $projectArray["date_completed"] = $this->dateCompleted;
+		if (property_exists($this, "daysSpent")) $projectArray["days_spent"] = $this->daysSpent;
+		if (property_exists($this, "numItems")) $projectArray["num_items"] = $this->numItems;
+		if (property_exists($this, "itemsCompleted")) $projectArray["items_completed"] = $this->itemsCompleted;
+		if (property_exists($this, "numProofers")) $projectArray["num_proofers"] = $this->numProofers;
+		if (property_exists($this, "numReviewers")) $projectArray["num_reviewers"] = $this->numReviewers;
 
 		return $projectArray;
 	}
