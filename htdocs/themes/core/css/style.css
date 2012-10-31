@@ -53,8 +53,8 @@ nav ul li .username						{ font-weight: bold; }
 
 #controls_container.review				{ background: url(../images/review_bg.png) repeat-x; }
 
-#controls_container ul li a				{ display: inline-block; }
-#controls_container ul li span			{ display: inline-block; }
+#controls_container ul li a				{ display: inline-block; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+#controls_container ul li span			{ display: inline-block; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
 
 ul#controls_left						{ float: left; list-style: none; padding: 0; margin: 0; }
 ul#controls_left li						{ display: inline-block; margin-right: 5px; }
