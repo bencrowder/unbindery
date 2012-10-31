@@ -203,4 +203,25 @@ class Item {
 	public function deleteFromDatabase() {
 		return $this->db->deleteItemFromDatabase($this->item_id);
 	}
+
+	public function getTemplateReady() {
+		$userArray = array(
+			"item_id" => $this->item_id,
+			"project_id" => $this->project_id,
+			"project_slug" => $this->project_slug,
+			"project_type" => $this->project_type,
+			"project_public" => $this->project_public,
+			"project_owner" => $this->project_owner,
+			"title" => $this->title,
+			"transcript" => $this->transcript,
+			"userTranscript" => $this->userTranscript,
+			"status" => $this->status,
+			"type" = $this->type,
+			"href" => $this->href,
+			"workflow_index" => $this->workflow_index,
+			"order" => $this->order,
+		);
+
+		return $userArray;
+	}
 }

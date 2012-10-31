@@ -328,4 +328,28 @@ class Project {
 
 		return $str;
 	}
+
+	public function getTemplateReady() {
+		$projectArray = array(
+			"project_id" => $this->project_id,
+			"title" => $this->title,
+			"type" => $this->type,
+			"public" => $this->public,
+			"slug" => $this->slug,
+			"language" => $this->language,
+			"description" => $this->description,
+			"owner" => $this->owner,
+			"status" => $this->status,
+			"guidelines" => $this->guidelines,
+			"thumbnails" => $this->thumbnails,
+			"workflow" => $this->workflow,
+			"whitelist" => $this->whitelist,
+			"fields" => $this->fields,
+			"downloadTemplate" => $this->downloadTemplate,
+			"url" => $this->url,
+			"admin_url" => $this->admin_url,
+		);
+
+		return $projectArray;
+	}
 }
