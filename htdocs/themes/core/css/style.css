@@ -410,3 +410,20 @@ p.small									{ font-size: .95em; color: #999; }
 /* --------------------------------------------------- */
 
 #main.add section.items					{ overflow: hidden; margin-top: 1.5em; padding-top: 1.5em; border-top: dotted 1px #999; }
+
+
+/* Character pad */
+/* --------------------------------------------------- */
+
+#characterpad							{ position: fixed; left: 25%; right: 25%; bottom: 0; z-index: 500; display: none; }
+
+#characterpad div						{ background: #ddd; display: inline-block; padding: 2px 10px; margin: 0px auto; color: #999; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; -webkit-user-select: none; -moz-user-select: none; user-select: none; cursor: pointer; line-height: 1em; }
+#characterpad div span					{ background: #bbb; width: 1em; height: 1em; line-height: 1em; -moz-border-radius: 3px; border-radius: 3px; display: inline-block; }
+#characterpad div span + span			{ margin-left: 3px; }
+
+#characterpad div:hover					{ background: #ccc; }
+#characterpad div:hover span			{ background: #436797; }
+
+#characterpad ul						{ margin: 0 0 15px 0; padding: 15px; list-style: none; background: #333; -moz-border-radius: 5px; border-radius: 5px; }
+#characterpad ul li						{ display: inline-block; padding: 21px 28px; background: #444; -moz-border-radius: 3px; border-radius: 3px; font-size: 24px; line-height: 24px; color: #fff; margin-right: 5px; -webkit-user-select: none; -moz-user-select: none; user-select: none; cursor: pointer; text-shadow: 0px 0px 5px #000; box-shadow: 0 0 5px #111; }
+#characterpad ul li:hover				{ background: #436797; }

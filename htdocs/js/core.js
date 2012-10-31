@@ -79,6 +79,12 @@ var Unbindery = function() {
 		$(id).hide();
 	};
 
+	this.insertText = function(text) {
+		// Insert the character into the text box
+		var textbox = $("textarea#transcript");
+		textbox.append(text);
+	};
+
 	this.getNewItem = function(projectSlug, projectOwner, projectType, actionType) {
 		// Get the username
 		var username = $("#username").html();
@@ -418,6 +424,24 @@ $(document).ready(function() {
 
 		unbindery.deleteItem(itemId);
 		
+		return false;
+	});
+
+
+	/* Character pad display */
+	/* -------------------------------------------------- */
+
+	$("#controls #characters").on("click", function() {
+		$("#characterpad").toggle();
+		
+		return false;
+	});
+
+	$("#characterpad li").on("click", function() {
+		var character = $(this).html();
+
+		unbindery.insertText(character);
+
 		return false;
 	});
 });

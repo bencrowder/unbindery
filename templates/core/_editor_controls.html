@@ -1,8 +1,9 @@
 <div id="controls_container" class="controls {{ proof_type }}{% if proof_user != '' %} existing{% endif %}">
 	<div id="controls" class="container">
 		<ul id="controls_left">
-		<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
-		<li><a href="{{ app_url }}/projects/{{ project.slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+			<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
+			<li><a href="{{ app_url }}/projects/{{ project.slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
+			<li><span id="characters" class="button">Characters</span></li>
 		</ul>
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
@@ -22,4 +23,8 @@
 	<input type="hidden" name="project_type" id="project_type" value="{{ project.type }}" />
 	<input type="hidden" name="proof_type" id="proof_type" value="{{ proof_type }}" />
 	<input type="hidden" name="proof_user" id="proof_user" value="{{ proof_user }}" />
+</div>
+
+<div id="characterpad">
+	<ul><li>á</li><li>ü</li><li>ก</li><li>ƒ</li><li>ö</li><li>é</li><li>è</li><li>ø</li></ul>
 </div>
