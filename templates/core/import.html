@@ -1,0 +1,46 @@
+{% extends '_base.html' %}
+
+{% block controls %}
+<div id="controls_container" class="controls">
+	<div id="controls" class="container">
+		<ul id="controls_left">
+			<li><a href="{{ project.url }}/admin" class="button">Back to Project Admin</a></li>
+		</ul>
+
+		<ul id="controls_right">
+			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
+			<li><span id="action-import-transcript" class="button">Import Transcript</span></li>
+		</ul>
+	</div>
+</div>{% endblock %}
+
+{% block main %}
+	<div id="main" class="container import">
+		<h2>Import Transcript</h2>
+
+		<div class="content">
+			<label>Template</label>
+			<textarea id="import-template"></textarea>
+
+			<label>Transcript</label>
+			<textarea id="import-transcript"></textarea>
+
+			<h3 id="preview-header">Preview</h3>
+			<div id="import-preview"></div>
+
+			<input id="project_owner" name="project_owner" type="hidden" value="{{ project.owner }}" />
+			<input id="project_slug" name="project_slug" type="hidden" value="{{ project.slug }}" />
+			<input id="project_type" name="project_type" type="hidden" value="{{ project.type }}" />
+		</div>
+
+		<div class="sidebar">
+			<h3>Selected Items</h3>
+			<ul class="items">
+				{% for item in project.items %}
+				<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit">{{ item.title }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock %}

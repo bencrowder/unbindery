@@ -54,6 +54,14 @@ var Unbindery = function() {
 				}
 
 				break;
+
+			case 'split-transcript':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug + '/transcript/split';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/transcript/split';
+				}
+				break;
 		}
 
 		switch (method) {
@@ -236,6 +244,33 @@ var Unbindery = function() {
 			}
 		);
 	};
+
+	this.updateImportPreview = function() {
+		var template = $("#import-template").val();
+		var transcript = $("#import-transcript").val().trim();
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+		var projectOwner = $("#project_owner").val();
+
+		if (template == '' || transcript == '') return;
+		console.log("update", template, transcript);
+
+		this.callAPI('split-transcript', 'POST', { template: template, transcript: transcript, projectType: projectType, projectOwner: projectOwner, projectSlug: projectSlug },
+			function(data) {
+				console.log(data);
+				if (data.status == 'success') {
+					$("#preview-header").html("Preview (" + data.transcripts.length + " items)");
+					
+					var html = '';
+					for (i=0; i<data.transcripts.length; i++) {
+						html += "<p><label>Item:</label> " + data.transcripts[i] + "</p>";
+					}
+					$("#import-preview").html(html);
+				}
+			}
+		);
+	};
+
 }
 
 function load_items_for_editing(event, data) {
@@ -443,5 +478,17 @@ $(document).ready(function() {
 		unbindery.insertText(character);
 
 		return false;
+	});
+
+
+	/* Transcript import page */
+	/* -------------------------------------------------- */
+
+	$(".import #import-template").on("change", function() {
+		unbindery.updateImportPreview();
+	});
+
+	$(".import #import-transcript").on("change", function() {
+		unbindery.updateImportPreview();
 	});
 });

@@ -441,6 +441,28 @@ class ProjectPageController {
 
 
 	// --------------------------------------------------
+	// Split transcript handler
+	// URL: /projects/[PROJECT]/transcript/split OR /users/[USER]/projects/[PROJECT]/transcript/split
+	// Methods: POST = send in transcript and template, get split array in return
+
+	// TODO: should this move somewhere else? It's not project-specific...
+	static public function splitTranscript($params) {
+		switch ($params['method']) {
+			// POST: split transcript
+			case 'POST':
+				$template = Utils::POST("template");
+				$transcript = Utils::POST("transcript");
+
+				$splitTranscript = TranscriptController::splitTranscript($transcript, $template);
+
+				echo json_encode(array('status' => 'success', 'transcripts' => $splitTranscript));
+
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
 	// Project admin handler
 	// URL: /projects/[PROJECT]/admin OR /users/[USER]/projects/[PROJECT]/admin
 	// Methods: GET = show admin page
@@ -542,6 +564,67 @@ class ProjectPageController {
 			// POST: Upload file handler
 			case 'POST':
 				Media::moveUploadedFilesToTempDir($projectSlug);
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
+	// Project import transcript handler
+	// URL: /projects/[PROJECT]/import OR /users/[USER]/projects/[PROJECT]/import
+	// Methods: GET = show transcript import page
+	//          POST = save imported transcript
+
+	static public function import($params) {
+		$appUrl = Settings::getProtected('app_url');
+		$themeRoot = Settings::getProtected('theme_root');
+
+		$projectType = self::getProjectType($params['args']);
+		$format = self::getFormat($params['args'], 1, 3);
+		$projectSlug = ($projectType == 'system') ? $params['args'][0] : $params['args'][2];
+
+		$user = User::getAuthenticatedUser();
+
+		// TODO: Verify clearance
+
+		// Load the project
+		$project = new Project($projectSlug);
+
+		if ($project->title == '') {
+			Utils::redirectToDashboard('', 'Error loading project.');
+		}
+
+		if ($project->type == 'system') {
+			$projectUrl = "projects/" . $project->slug;
+		} else if ($project->type == 'user') {
+			$projectUrl = "users/" . $project->owner . "/projects/" . $project->slug;
+		}
+
+		$project->getItems();
+
+		$projectArray = $project->getResponse();
+		$projectArray['items'] = $project->items;
+		$projectArray['url'] = "$appUrl/$projectUrl";
+
+		switch ($params['method']) {
+			// GET: Get transcript import page
+			case 'GET':
+				$response = array(
+					'page_title' => 'Import Transcript',
+					'user' => $user->getResponse(),
+					'project' => $projectArray,
+				);
+
+				switch ($format) {
+					case 'json':
+						echo json_encode(array('status' => 'success', 'response' => $response));
+						break;
+
+					case 'html':
+						Template::render('import', $response);
+						break;
+				}
+
 				break;
 		}
 	}

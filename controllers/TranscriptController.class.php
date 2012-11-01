@@ -131,6 +131,18 @@ class TranscriptController {
 
 		return $template;
 	}
+
+
+	// --------------------------------------------------
+	// Transcript splitting helper function
+
+	static public function splitTranscript($transcript, $template) {
+		$matches = array();
+
+		preg_match_all("/$template/u", $transcript, $matches);
+
+		return $matches['text'];
+	}
 }
 
 ?>

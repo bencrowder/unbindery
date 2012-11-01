@@ -415,7 +415,7 @@ p.small									{ font-size: .95em; color: #999; }
 /* Character pad */
 /* --------------------------------------------------- */
 
-#characterpad							{ position: fixed; left: 25%; right: 25%; bottom: 0; z-index: 500; display: none; }
+#characterpad							{ position: fixed; left: 15px; right: 15px; bottom: 0; z-index: 500; display: none; }
 
 #characterpad div						{ background: #ddd; display: inline-block; padding: 2px 10px; margin: 0px auto; color: #999; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0; -webkit-user-select: none; -moz-user-select: none; user-select: none; cursor: pointer; line-height: 1em; }
 #characterpad div span					{ background: #bbb; width: 1em; height: 1em; line-height: 1em; -moz-border-radius: 3px; border-radius: 3px; display: inline-block; }
@@ -427,3 +427,21 @@ p.small									{ font-size: .95em; color: #999; }
 #characterpad ul						{ margin: 0 0 15px 0; padding: 15px; list-style: none; background: #333; -moz-border-radius: 5px; border-radius: 5px; }
 #characterpad ul li						{ display: inline-block; padding: 21px 28px; background: #444; -moz-border-radius: 3px; border-radius: 3px; font-size: 24px; line-height: 24px; color: #fff; margin-right: 5px; -webkit-user-select: none; -moz-user-select: none; user-select: none; cursor: pointer; text-shadow: 0px 0px 5px #000; box-shadow: 0 0 5px #111; }
 #characterpad ul li:hover				{ background: #436797; }
+
+
+/* Import transcript */
+/* --------------------------------------------------- */
+
+.sidebar ul.items li					{ border-bottom: none; }
+.sidebar ul.items li > a				{ width: auto; }
+
+.import textarea						{ width: 100%; font-size: 1em; padding: 3px; margin-top: 5px; margin-bottom: 1em; }
+.import textarea:focus					{ outline: none; }
+.import .content h3						{ margin-top: 1em; }
+
+.import textarea#import-template		{ height: 35px; }
+.import textarea#import-transcript		{ height: 145px; }
+
+#import-preview							{ background: #eee; -moz-border-radius: 3px; border-radius: 3px; padding: 15px; }
+#import-preview p						{ margin: 0; }
+#import-preview p + p					{ margin-top: .5em; }

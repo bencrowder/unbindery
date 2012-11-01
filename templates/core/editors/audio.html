@@ -4,7 +4,7 @@
 
 {% block main %}
 	<div id="main" class="container">
-		<h2>{% if proof_type == 'edit' %}Edit {% endif %}{{ project.title }}: {{ item.title }}{% if proof_user %} (@{{ proof_user }}){% endif %}</h2>
+		<h2>{% if proof_type == 'edit' %}Edit {% endif %}{{ item.title }} / {{ project.title }}{% if proof_user %} (@{{ proof_user }}){% endif %}</h2>
 
 		<section id="audio_container">
 			<audio id="audio" src="{{ app_url }}/media/{{ item.href }}" controls="true"></audio>

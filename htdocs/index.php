@@ -169,10 +169,12 @@ $routes = array(
 	'#^/(users)/([^/]+)/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
 
 	// User projects
-	'#^/(users)/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
+	'#^/(users)/([^/]+)/projects/([^/]+)/transcript/split\.?([^/]+)?/?#'	=> 'ProjectPageController::splitTranscript',
 	'#^/(users)/([^/]+)/projects/([^/]+)/transcript\.?([^/]+)?/?#'	=> 'ProjectPageController::transcript',
+	'#^/(users)/([^/]+)/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
 	'#^/(users)/([^/]+)/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
 	'#^/(users)/([^/]+)/projects/([^/]+)/upload\.?([^/]+)?/?#'		=> 'ProjectPageController::upload',
+	'#^/(users)/([^/]+)/projects/([^/]+)/import\.?([^/]+)?/?#'		=> 'ProjectPageController::import',
 	'#^/(users)/([^/]+)/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
 	'#^/(users)/([^/]+)/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
 	'#^/(users)/([^/]+)/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
@@ -194,13 +196,15 @@ $routes = array(
 	'#^/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
 
 	// Project pages
-	'#^/projects/([^/]+)/membership\.?([^/]+)?/?#'	=> 'ProjectPageController::membership',
-	'#^/projects/([^/]+)/transcript\.?([^/]+)?/?#'	=> 'ProjectPageController::transcript',
-	'#^/projects/([^/]+)/admin\.?([^/]+)?/?#'		=> 'ProjectPageController::admin',
-	'#^/projects/([^/]+)/upload\.?([^/]+)?/?#'		=> 'ProjectPageController::upload',
-	'#^/projects/new-project\.?([^/]+)?/?#'			=> 'ProjectPageController::newProject',
-	'#^/projects/([^/.]+)\.?([^/]+)?/?#'			=> 'ProjectPageController::projectPage',
-	'#^/projects\.?([^/]+)?/?#'						=> 'ProjectPageController::projects',
+	'#^/projects/([^/]+)/transcript/split\.?([^/]+)?/?#'	=> 'ProjectPageController::splitTranscript',
+	'#^/projects/([^/]+)/transcript\.?([^/]+)?/?#'			=> 'ProjectPageController::transcript',
+	'#^/projects/([^/]+)/membership\.?([^/]+)?/?#'			=> 'ProjectPageController::membership',
+	'#^/projects/([^/]+)/admin\.?([^/]+)?/?#'				=> 'ProjectPageController::admin',
+	'#^/projects/([^/]+)/upload\.?([^/]+)?/?#'				=> 'ProjectPageController::upload',
+	'#^/projects/([^/]+)/import\.?([^/]+)?/?#'				=> 'ProjectPageController::import',
+	'#^/projects/new-project\.?([^/]+)?/?#'					=> 'ProjectPageController::newProject',
+	'#^/projects/([^/.]+)\.?([^/]+)?/?#'					=> 'ProjectPageController::projectPage',
+	'#^/projects\.?([^/]+)?/?#'								=> 'ProjectPageController::projects',
 
 	// Admin pages
 	'#^/admin\.?([^/]+)?/?$#'						=> 'AdminPageController::adminHandler',
