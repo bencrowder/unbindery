@@ -70,6 +70,10 @@ var Unbindery = function() {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/import';
 				}
 				break;
+
+			case 'save-settings':
+				url = '/users/' + data.username + '/settings';
+				break;
 		}
 
 		switch (method) {
@@ -302,15 +306,6 @@ var Unbindery = function() {
 		if ($("#import-preview p").length != $(".sidebar ul.items li").length) {
 			return false;
 		}
-		/*
-			html = "<div class='error'>";
-			html += "Number of items doesn't match up."; // TODO: get from translations
-			html += "</div>";
-
-			$(html).prependTo("#main.import .sidebar");
-			return false;
-		}
-		*/
 
 		// Create array of item IDs
 		items = [];
@@ -334,6 +329,36 @@ var Unbindery = function() {
 			}
 		);
 	};
+
+	this.saveSettings = function() {
+		unbindery.showSpinner();
+
+		var username = $("#username").html();
+		var name = $("#user_name").val().trim();
+		var email = $("#user_email").val().trim();
+
+		var prefs = {
+			'sidebyside': ($("#sidebyside").attr("checked")) ? 1 : 0,
+			'theme': $("#theme").find("option:selected").val()
+		};
+
+		// Loop through notifications and add
+		prefs.notifications = {};
+		$(".notifications input[type=checkbox]").each(function() {
+			prefs.notifications[$(this).attr("name")] = ($(this).attr("checked")) ? 1 : 0;
+		});
+
+		unbindery.callAPI('save-settings', 'POST', { username: username, name: name, email: email, prefs: prefs },
+			function(data) {
+				if (data.statuscode == "success") {
+					unbindery.hideSpinner();
+				} else {
+					unbindery.redirectToDashboard("", "Error saving user settings. Try again.");
+				}
+			}
+		);
+	};
+
 }
 
 function load_items_for_editing(event, data) {
@@ -434,11 +459,6 @@ $(document).ready(function() {
 	$("#action-finish-continue").click(function(e) {
 		isReview = ($("#transcript_type").val() == 'review') ? true : false;
 		unbindery.saveTranscript(false, isReview, true);		// no draft, review depends, do get another one
-		return false;
-	});
-
-	$("#action-save-item").click(function(e) {
-		save_page();
 		return false;
 	});
 
@@ -581,5 +601,13 @@ $(document).ready(function() {
 		}
 
 		return false;
+	});
+
+
+	/* User settings page */
+	/* -------------------------------------------------- */
+
+	$("#action-save-settings").click(function() {
+		unbindery.saveSettings();
 	});
 });

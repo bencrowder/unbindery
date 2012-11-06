@@ -44,15 +44,84 @@ class UserPageController {
 	// User settings handler
 	// URL: /users/[USERNAME]/settings
 	// Methods: GET = get user settings
+	//          POST = save user settings
 
 	static public function userSettings($params) {
+		$format = $params['args'][1] != '' ? $params['args'][1] : 'html';
+
 		$user = self::authenticate();
 
-		$options = array(
-			'user' => $user->getResponse(),
-		);
+		switch ($params['method']) {
+			// GET: Get user settings
+			case 'GET':
+				$externalLogin = Settings::getProtected('external_login');
+				$notifications = Settings::getProtected('notifications');
 
-		Template::render('settings', $options);
+				$userNotifications = array();
+				$adminNotifications = array();
+
+				foreach ($notifications as $key => $note) {
+					if (in_array('@user', $note['targets'])) {
+						// User notification
+						if (!property_exists($user->prefs->notifications, $key)) {
+							$user->prefs->notifications->$key = false;
+						}
+						array_push($userNotifications, array('id' => $key, 'name' => $note['name'], 'selected' => $user->prefs->notifications->$key));
+					} else if (in_array('@admin', $note['targets']) && $user->role == 'admin') {
+						// Admin notification
+						if (!property_exists($user->prefs->notifications, $key)) {
+							$user->prefs->notifications->$key = false;
+						}
+						array_push($adminNotifications, array('id' => $key, 'name' => $note['name'], 'selected' => $user->prefs->notifications->$key));
+					}
+				}
+
+				$response = array(
+					'user' => $user->getResponse(),
+					'externalLogin' => $externalLogin,
+					'userNotifications' => $userNotifications,
+					'adminNotifications' => $adminNotifications,
+				);
+
+				switch ($format) {
+					case 'json':
+						echo json_encode($response);
+						break;
+
+					case 'html':
+						Template::render('settings', $response);
+						break;
+				}
+				break;
+
+			// POST: Save user settings
+			case 'POST':
+				$username = Utils::POST('username');
+				$name = Utils::POST('name');
+				$email = Utils::POST('email');
+				$prefs = Utils::POST('prefs');
+
+				$user = new User($username);
+				if ($name != '') $user->name = $name;
+				if ($email != '') $user->email = $email;
+				$user->prefs = json_encode($prefs);
+
+				$retcode = $user->save();
+
+				if ($retcode) {
+					$status = 'success';
+				} else {
+					$status = 'error';
+				}
+
+				$response = array(
+					'statuscode' => $status
+				);
+
+				echo json_encode($response);
+
+				break;
+		}
 	}
 
 

@@ -1,32 +1,55 @@
 {% extends '_base.html' %}
 
+{% block controls %}
+<div id="controls_container" class="controls">
+	<div id="controls" class="container">
+		<ul id="controls_right">
+			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
+			<li><span id="action-save-settings" href="" class="button">Save Settings</span></li>
+		</ul>
+	</div>
+</div>{% endblock %}
+
 {% block main %}
 	<div id="main" class="container">
 		<h2>Settings</h2>
 
-		<form id="user_settings" action="{{ app_url }}/settings/save" method="post">
-			<h3>Basic Information</h3>
+		<form id="user_settings">
+			<div class="content">
+				<h3>Basic Information</h3>
 
-			<label>Name</label>
-			<input type="text" id="user_name" name="user_name" value="{{ user.name }}" />
+				<label>Name</label>
+				<input type="text" id="user_name" name="user_name" value="{{ user.name }}" />
 
-			<label>Email address</label>
-			<input type="text" id="user_email" name="user_email" value="{{ user.email }}" />
+				<label>Email address</label>
+				<input type="text" id="user_email" name="user_email" value="{{ user.email }}" />
 
-			<h3>Change Password</h3>
+				<section class="notifications">
+					<h3>Notifications</h3>
+					{% if userNotifications|length > 0 %}
+						<h4>User notifications</h4>
+					{% for note in userNotifications %}
+						<div class="checkgroup"><input type="checkbox" id="{{ note.id }}" name="{{ note.id }}"{% if note.selected %} checked{% endif %}/><label>{{ note.name }}</label></div>
+					{% endfor %}
+					{% endif %}
 
-			<label>Old password</label>
-			<input type="password" id="user_oldpassword" name="user_oldpassword" />
-			
-			<label>New password</label>
-			<input type="password" id="user_newpassword1" name="user_newpassword1" />
+					{% if adminNotifications|length > 0 %}
+						<h4>Admin notifications</h4>
+					{% for note in adminNotifications %}
+						<div class="checkgroup"><input type="checkbox" id="{{ note.id }}" name="{{ note.id }}"{% if note.selected %} checked{% endif %}/><label>{{ note.name }}</label></div>
+					{% endfor %}
+					{% endif %}
+				</section>
+			</div>
 
-			<label>New password (again, for good measure)</label>
-			<input type="password" id="user_newpassword2" name="user_newpassword2" />
+			<div class="sidebar">
+				<h3>Theme</h3>
+				<select id="theme" name="theme">
+					<option value="core"{% if user.prefs.theme == 'core' or user.prefs.theme == '' %} selected{% endif %}>Core</option>
+				</select>
 
-			<input type="submit" value="Save Changes" class="button" />
-
-			<input type="hidden" name="username" id="username" value="{{ username }}" />
+				<div class="checkgroup"><input type="checkbox" name="sidebyside" id="sidebyside"{% if user.prefs.sidebyside %} checked{% endif %}/> <label>Side-by-side</label></div>
+			</div>
 		</form>
 	</div>
 {% endblock %}

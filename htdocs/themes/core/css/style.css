@@ -78,6 +78,7 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 
 #main									{ padding: 3em 0 1em; margin-bottom: 75px; }
 #main h2								{ font-size: 21px; color: #aaa; margin: 0; letter-spacing: -0.03em; }
+#main h3								{ font-size: 1.2em; margin-bottom: .5em; margin-top: 1em; }
 
 .content								{ width: 60%; margin-right: 10%; float: left; margin-top: 20px; }
 .sidebar								{ width: 30%; float: left; margin-top: 20px; }
@@ -260,6 +261,11 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #user_settings input[type="password"]	{ width: 240px; }
 #user_settings input[type="submit"]		{ display: block; margin-top: 15px; }
 
+#user_settings div.checkgroup			{ overflow: hidden; }
+#user_settings div.checkgroup input[type=checkbox]	{ float: left; }
+
+#user_settings select					{ margin-bottom: 1.5em; }
+
 
 /* Project details page */
 /* --------------------------------------------------- */
@@ -378,7 +384,6 @@ ul.items li p.transcript a:hover		{ text-decoration: underline; }
 #main.add form							{ overflow: hidden; }
 
 #main.add section						{ margin-bottom: 2em; }
-#main.add section h3					{ font-size: 1.2em; }
 
 #main.add label,
 	#main.add select,

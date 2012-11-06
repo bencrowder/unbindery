@@ -13,7 +13,6 @@ class User {
 	private $signup_date;
 	private $last_login;
 	private $role;
-	private $theme;
 	private $prefs;
 
 	private $in_db;			// Whether we have a db entry yet
@@ -51,7 +50,6 @@ class User {
 			$this->signup_date = $user["signup_date"];
 			$this->last_login = $user["last_login"];
 			$this->hash = $user["hash"];
-			$this->theme = $user["theme"];
 			$this->prefs = json_decode($user["prefs"]);
 			$this->in_db = true;
 		}
@@ -62,11 +60,13 @@ class User {
 
 	public function save() {
 		if ($this->in_db) {
-			$this->db->saveUser($this);
+			$status = $this->db->saveUser($this);
 		} else {
-			$this->db->createUser($this);
+			$status = $this->db->createUser($this);
 			$this->in_db = true;
 		}
+
+		return $status;
 	}
 
 	public function getAssignments() {
@@ -267,7 +267,6 @@ class User {
 			'last_login' => $this->last_login,
 			'role' => $this->role,
 			'prefs' => $this->prefs,
-			'theme' => $this->theme,
 			'proofed' => $this->proofed,
 			'proofed_past_week' => $this->proofed_past_week
 		);

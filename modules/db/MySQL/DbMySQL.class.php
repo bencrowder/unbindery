@@ -163,16 +163,16 @@ class DbMySQL implements DbInterface {
 
 	// Returns: ?
 	public function saveUser($user) {
-		$sql = "UPDATE users SET username = ?, password = ?, name = ?, email = ?, score = ?, status = ?, hash = ?,  signup_date = ?, last_login = ?, role = ?, theme = ?, prefs = ? WHERE username = ?";
+		$sql = "UPDATE users SET username = ?, password = ?, name = ?, email = ?, score = ?, status = ?, hash = ?,  signup_date = ?, last_login = ?, role = ?, prefs = ? WHERE username = ?";
 
-		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme, $user->prefs, $user->username));
+		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->prefs, $user->username));
 	}
 
 	// Returns: ?
 	public function createUser($user) {
-		$sql = "INSERT INTO users (username, password, name, email, score, status, hash, signup_date, last_login, role, theme, prefs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		$sql = "INSERT INTO users (username, password, name, email, score, status, hash, signup_date, last_login, role, prefs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->theme, $user->prefs));
+		return $this->execute($sql, array($user->username, $user->password, $user->name, $user->email, $user->score, $user->status, $user->hash, $user->signup_date, $user->last_login, $user->role, $user->prefs));
 	}
 
 	// Returns: boolean
@@ -891,7 +891,6 @@ CREATE TABLE `users` (
   `signup_date` date default NULL,
   `last_login` datetime default NULL,
   `role` varchar(255) default NULL,
-  `theme` varchar(255) default NULL,
   `prefs` varchar(4000) default NULL,
   PRIMARY KEY  (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
