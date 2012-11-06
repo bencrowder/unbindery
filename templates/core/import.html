@@ -19,7 +19,7 @@
 		<h2>Import Transcript</h2>
 
 		<div class="content">
-			<label>Template</label>
+			<label>Template (regex to split transcript)</label>
 			<textarea id="import-template"></textarea>
 
 			<label>Transcript</label>
@@ -34,10 +34,10 @@
 		</div>
 
 		<div class="sidebar">
-			<h3>Selected Items</h3>
+			<h3>Selected Items ({{ project.items|length }} items)</h3>
 			<ul class="items">
 				{% for item in project.items %}
-				<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit">{{ item.title }}</a>
+				<li data-id="{{ item.id }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit" target="_blank">{{ item.title }}</a>
 				</li>
 				{% endfor %}
 			</ul>

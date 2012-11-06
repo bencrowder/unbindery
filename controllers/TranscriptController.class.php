@@ -139,7 +139,7 @@ class TranscriptController {
 	static public function splitTranscript($transcript, $template) {
 		$matches = array();
 
-		preg_match_all("/$template/u", $transcript, $matches);
+		preg_match_all("/$template/us", $transcript, $matches);
 
 		return $matches['text'];
 	}

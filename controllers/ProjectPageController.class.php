@@ -453,9 +453,9 @@ class ProjectPageController {
 				$template = Utils::POST("template");
 				$transcript = Utils::POST("transcript");
 
-				$splitTranscript = TranscriptController::splitTranscript($transcript, $template);
+				$splitTranscripts = TranscriptController::splitTranscript($transcript, $template);
 
-				echo json_encode(array('status' => 'success', 'transcripts' => $splitTranscript));
+				echo json_encode(array('status' => 'success', 'transcripts' => $splitTranscripts));
 
 				break;
 		}
@@ -624,6 +624,38 @@ class ProjectPageController {
 						Template::render('import', $response);
 						break;
 				}
+
+				break;
+
+			// POST: Update transcripts for items
+			case 'POST':
+				$template = Utils::POST('template');
+				$transcript = Utils::POST('transcript');
+				$items = Utils::POST('items');
+				$projectSlug = Utils::POST('projectSlug');
+
+				$status = 'success';
+
+				// Split the transcript
+				$splitTranscripts = TranscriptController::splitTranscript($transcript, $template);
+
+				// Make sure the number of items still matches, otherwise return error
+				if (count($splitTranscripts) != count($items)) {
+					$status = 'error';
+				}
+
+				// Update each item's transcript
+				for ($i=0; $i<count($items); $i++) {
+					$item = new Item($items[$i], $projectSlug);
+					$item->transcript = $splitTranscripts[$i];
+
+					if (!$item->save()) {
+						$status = 'error';
+						break;
+					}
+				}
+
+				echo json_encode(array('status' => $status));
 
 				break;
 		}

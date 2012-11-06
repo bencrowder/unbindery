@@ -62,6 +62,14 @@ var Unbindery = function() {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/transcript/split';
 				}
 				break;
+
+			case 'import-transcript':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug + '/import';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/import';
+				}
+				break;
 		}
 
 		switch (method) {
@@ -253,24 +261,79 @@ var Unbindery = function() {
 		var projectOwner = $("#project_owner").val();
 
 		if (template == '' || transcript == '') return;
-		console.log("update", template, transcript);
 
 		this.callAPI('split-transcript', 'POST', { template: template, transcript: transcript, projectType: projectType, projectOwner: projectOwner, projectSlug: projectSlug },
 			function(data) {
-				console.log(data);
 				if (data.status == 'success') {
 					$("#preview-header").html("Preview (" + data.transcripts.length + " items)");
 					
 					var html = '';
 					for (i=0; i<data.transcripts.length; i++) {
-						html += "<p><label>Item:</label> " + data.transcripts[i] + "</p>";
+						html += "<p><label>";
+						html += $(".sidebar .items li:nth-child(" + (i + 1) + ")").find("a:not(.delete)").html();
+						html += ":</label> " + data.transcripts[i] + "</p>";
 					}
 					$("#import-preview").html(html);
+
+					// Make sure the # of items matches
+					if ($("#import-preview p").length != $(".sidebar ul.items li").length) {
+						html = "<div class='error'>";
+						html += "Number of items doesn't match up."; // TODO: get from translations
+						html += "</div>";
+
+						$(html).prependTo("#main.import .sidebar");
+						return false;
+					}
 				}
 			}
 		);
 	};
 
+	this.importTranscript = function() {
+		var template = $("#import-template").val();
+		var transcript = $("#import-transcript").val().trim();
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+		var projectOwner = $("#project_owner").val();
+
+		if (template == '' || transcript == '') return;
+
+		// Make sure the # of items matches
+		if ($("#import-preview p").length != $(".sidebar ul.items li").length) {
+			return false;
+		}
+		/*
+			html = "<div class='error'>";
+			html += "Number of items doesn't match up."; // TODO: get from translations
+			html += "</div>";
+
+			$(html).prependTo("#main.import .sidebar");
+			return false;
+		}
+		*/
+
+		// Create array of item IDs
+		items = [];
+		$(".sidebar ul.items li").each(function() {
+			items.push($(this).attr("data-id"));
+		});
+
+		this.callAPI('import-transcript', 'POST', { template: template, transcript: transcript, projectType: projectType, projectOwner: projectOwner, projectSlug: projectSlug, items: items },
+			function(data) {
+				console.log("back", data);
+				if (data.status == 'success') {
+					// Redirect to project admin page
+					if (projectType == 'system') {
+						var locStr = app_url + '/projects/' + projectSlug + '/admin';
+					} else {
+						var locStr = app_url + '/users/' + projectOwner + '/projects/' + projectSlug + '/admin';
+					}
+
+					window.location.href = locStr;
+				}
+			}
+		);
+	};
 }
 
 function load_items_for_editing(event, data) {
@@ -454,7 +517,7 @@ $(document).ready(function() {
 	/* Item deletion (project admin page) */
 	/* -------------------------------------------------- */
 
-	$("ul.items").on("click", "a.delete", function() {
+	$("#main.add ul.items").on("click", "a.delete", function() {
 		var itemId = $(this).parents("li:first").attr("data-id");
 
 		unbindery.deleteItem(itemId);
@@ -490,5 +553,33 @@ $(document).ready(function() {
 
 	$(".import #import-transcript").on("change", function() {
 		unbindery.updateImportPreview();
+	});
+
+	$("#action-import-transcript").on("click", function() {
+		console.log("clicked");
+		unbindery.importTranscript();
+		return false;
+	});
+
+	$("#main.import .sidebar ul.items").on("click", "li .itemcontrols a.delete", function() {
+		var parentList = $(this).parents("ul:first");
+
+		$(this).parents("li:first").remove();
+
+		parentList.siblings("h3").html("Selected Items (" + parentList.find("li").length + " items)");
+
+		console.log($("#import-preview p").length, $(".sidebar ul.items li").length);
+		// Make sure the # of items matches
+		if ($("#import-preview p").length != $(".sidebar ul.items li").length) {
+			html = "<div class='error'>";
+			html += "Number of items doesn't match up."; // TODO: get from translations
+			html += "</div>";
+
+			$(html).prependTo("#main.import .sidebar");
+		} else {
+			$(".sidebar div.error").remove();
+		}
+
+		return false;
 	});
 });
