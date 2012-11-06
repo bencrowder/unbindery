@@ -19,6 +19,7 @@ class Project {
 	private $whitelist;
 	private $fields;
 	private $downloadTemplate;
+	private $characters;
 
 	private $url;
 	private $admin_url;
@@ -58,6 +59,7 @@ class Project {
 			$this->whitelist = trim($project['whitelist']);
 			$this->fields = trim($project['fields']);
 			$this->downloadTemplate = trim($project['download_template']);
+			$this->characters = trim($project['characters']);
 			$this->dateStarted = trim($project['datestarted']);
 			$this->dateCompleted = trim($project['datecompleted']);
 			$this->daysSpent = trim($project['days_spent']);
@@ -71,6 +73,13 @@ class Project {
 			   	$this->whitelist = explode("][", trim($this->whitelist, "[]"));
 			} else {
 				$this->whitelist = array();
+			}
+
+			// Put the character list into an array
+			if (trim($this->characters) != '') {
+				$this->characters = explode("", $this->characters);
+			} else {
+				$this->characters = array();
 			}
 		}
 	}
@@ -86,17 +95,24 @@ class Project {
 			$whitelist = '';
 		}
 
-		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate);
+		// Turn the character list from a newline-delimited list to a string
+		if ($this->characters && $this->characters != '') {
+			$characters = join('', $this->characters);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate);
+			$characters = '';
+		}
+
+		if ($this->project_id) {
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $characters);
+		} else {
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $characters);
 		}
 
 		return $status;
 	}
 
 	// TODO: are we even using this function anywhere? save() does the same thing
-	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $thumbnails, $workflow, $whitelist, $fields, $downloadTemplate) {
+	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $thumbnails, $workflow, $whitelist, $fields, $downloadTemplate, $characters) {
 		$this->title = $title;
 		$this->type = $type;
 		$this->public = $public;
@@ -111,9 +127,10 @@ class Project {
 		$this->whitelist = $whitelist;
 		$this->fields = $fields;
 		$this->downloadTemplate = $downloadTemplate;
+		$this->characters = $characters;
 
 		if ($title != "" && $slug != "") {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $characters);
 
 			if ($status) {
 				return "success";
@@ -323,6 +340,7 @@ class Project {
 		$str .= " | [whitelist={$this->whitelist}]";
 		$str .= " | [fields={$this->fields}]";
 		$str .= " | [downloadTemplate={$this->downloadTemplate}]";
+		$str .= " | [characters={$this->characters}]";
 		$str .= " | [url={$this->url}]";
 		$str .= " | [admin_url={$this->admin_url}]";
 
@@ -346,6 +364,7 @@ class Project {
 			"whitelist" => $this->whitelist,
 			"fields" => $this->fields,
 			"downloadTemplate" => $this->downloadTemplate,
+			"characters" => $this->characters,
 			"url" => $this->url,
 			"admin_url" => $this->admin_url,
 		);

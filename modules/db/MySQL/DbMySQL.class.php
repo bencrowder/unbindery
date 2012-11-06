@@ -469,7 +469,7 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate) {
+	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
 		$sql .= "type = ?, ";
@@ -484,18 +484,19 @@ class DbMySQL implements DbInterface {
 		$sql .= "language = ?, ";
 		$sql .= "thumbnails = ?, ";
 		$sql .= "fields = ?, ";
-		$sql .= "download_template = ? ";
+		$sql .= "download_template = ?, ";
+		$sql .= "characters = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $project_id));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters, $project_id));
 	}
 
-	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate) {
+	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, download_template, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, download_template, characters, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters));
 	}
 
 	// Returns: boolean
@@ -960,6 +961,7 @@ CREATE TABLE `projects` (
   `date_completed` date default NULL,
   `fields` varchar(4000) default NULL,
   `download_template` varchar(2000) default NULL,
+  `characters` varchar(1000) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
