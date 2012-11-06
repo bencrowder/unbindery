@@ -77,7 +77,7 @@ class Project {
 
 			// Put the character list into an array
 			if (trim($this->characters) != '') {
-				$this->characters = explode("", $this->characters);
+				$this->characters = explode(" ", $this->characters);
 			} else {
 				$this->characters = array();
 			}
@@ -95,17 +95,10 @@ class Project {
 			$whitelist = '';
 		}
 
-		// Turn the character list from a newline-delimited list to a string
-		if ($this->characters && $this->characters != '') {
-			$characters = join('', $this->characters);
-		} else {
-			$characters = '';
-		}
-
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $characters);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $this->characters);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $characters);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $this->characters);
 		}
 
 		return $status;

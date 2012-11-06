@@ -26,5 +26,5 @@
 </div>
 
 <div id="characterpad">
-	<ul><li>á</li><li>ü</li><li>ก</li><li>ƒ</li><li>ö</li><li>é</li><li>è</li><li>ø</li><li>á</li><li>ü</li><li>ก</li><li>ƒ</li><li>ö</li><li>é</li><li>è</li><li>ø</li></ul>
+	<ul>{% for char in project.characters %}<li>{{ char }}</li>{% endfor %}</ul>
 </div>

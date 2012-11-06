@@ -96,6 +96,7 @@ class ProjectPageController {
 				$project->whitelist = Utils::POST('project_whitelist');
 				$project->guidelines = Utils::POST('project_guidelines');
 				$project->owner = Utils::POST('project_owner');
+				$project->characters = Utils::POST('project_characters');
 				$project->status = 'pending';
 
 				// Import the system download template
@@ -257,6 +258,7 @@ class ProjectPageController {
 				$project->owner = Utils::POST('projectOwner');
 				$project->status = Utils::POST('projectStatus');
 				$project->downloadTemplate = Utils::POST('projectDownloadTemplate');
+				$project->characters = Utils::POST('projectCharacters');
 
 				// Save the changes to the database
 				$status = $project->save();

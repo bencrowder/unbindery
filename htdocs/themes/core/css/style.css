@@ -429,8 +429,8 @@ p.small									{ font-size: .95em; color: #999; }
 #characterpad div:hover					{ background: #ccc; }
 #characterpad div:hover span			{ background: #436797; }
 
-#characterpad ul						{ margin: 0 0 15px 0; padding: 15px; list-style: none; background: #333; -moz-border-radius: 5px; border-radius: 5px; }
-#characterpad ul li						{ display: inline-block; padding: 21px 28px; background: #444; -moz-border-radius: 3px; border-radius: 3px; font-size: 24px; line-height: 24px; color: #fff; margin-right: 5px; -webkit-user-select: none; -moz-user-select: none; user-select: none; cursor: pointer; text-shadow: 0px 0px 5px #000; box-shadow: 0 0 5px #111; }
+#characterpad ul						{ margin: 0 0 10px 0; padding: 15px; list-style: none; background: #333; -moz-border-radius: 5px; border-radius: 5px; }
+#characterpad ul li						{ display: inline-block; padding: 21px 28px; background: #444; -moz-border-radius: 3px; border-radius: 3px; font-size: 24px; line-height: 24px; color: #fff; margin-right: 5px; margin-bottom: 5px; -webkit-user-select: none; -moz-user-select: none; user-select: none; cursor: pointer; text-shadow: 0px 0px 5px #000; box-shadow: 0 0 5px #111; }
 #characterpad ul li:hover				{ background: #436797; }
 
 

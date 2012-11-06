@@ -201,10 +201,11 @@ var Unbindery = function() {
 		var projectWhitelist = ($("#project_whitelist").length > 0) ? $("#project_whitelist").val().trim() : '';
 		var projectWorkflow = $("#project_workflow").val().trim();
 		var projectDownloadTemplate = $("#project_download_template").val().trim();
+		var projectCharacters = $("#project_characters").val().trim();
 		
 		// TODO: add fields
 
-		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate },
+		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate, projectCharacters: projectCharacters },
 			function(data) {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
