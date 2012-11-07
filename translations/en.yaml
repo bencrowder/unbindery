@@ -11,7 +11,7 @@ nav.logout: 'Logout'
 nav.admin: 'Admin'
 nav.login: 'Login'
 nav.signup: 'Sign Up'
-nav.logged_in_as: 'Logged in as'
+nav.logged_in_as: 'Logged in as <span id="username" class="username">{{ username }}</span>'
 
 # Footer
 footer.text: '<a href="http://bencrowder.net/coding/unbindery/">Unbindery</a> is written by <a href="http://bencrowder.net/">Ben Crowder</a>.'
@@ -25,21 +25,21 @@ dashboard.get_new_item: 'Get new item'
 dashboard.score: 'Score'
 dashboard.proofed: 'proofed'
 dashboard.reviewed: 'reviewed'
-dashboard.items_left_to_proof: 'item(s) left to proof'
-dashboard.items_left_to_review: 'item(s) left to review'
+dashboard.items_left_to_proof: '{{ items }} item(s) left to proof'
+dashboard.items_left_to_review: '{{ items }} item(s) left to review'
 dashboard.proofed_past_week: 'Proofed This Past Week'
 dashboard.recent_history: 'Recent History'
 dashboard.current_projects: 'Current Projects'
 dashboard.no_current_projects: 'No current projects.'
 dashboard.top_proofers: 'Top Proofers'
-dashboard.welcome: 'Welcome.'
-dashboard.join_project: 'Join a project'
-dashboard.get_started: ' to get started proofing.'
+dashboard.welcome: 'Welcome. <a href="{{ url }}">Join a project</a> to get started proofing.'
 dashboard.proof: 'Proof'
 dashboard.review: 'Review'
 dashboard.due: 'Due'
 dashboard.project: 'Project:'
 dashboard.no_history: 'Nothing so far -- you must be new here. :)'
+
+dashboard.itemtype: 'Type: {{ type }}'
 
 # Create account
 signup.confirmation_email: "Thanks for signing up! Here's the confirmation link to activate your account:"
@@ -58,3 +58,14 @@ role.insufficient: "Sorry, you have insufficient clearance to do that."
 
 # Admin dashboard
 admin.dashboard.title: 'Admin Dashboard'
+
+# Projects page
+projects.title: 'Projects'
+projects.title_owned_by: 'Projects owned by {{ owner }}'
+projects.your_projects: 'Your Projects'
+projects.available_projects: 'Available Projects'
+projects.completed_projects: 'Completed Projects'
+projects.project.owner: 'Owner: {{ owner }}'
+projects.project.items: 'Items: {{ items }}'
+projects.project.percentage: '{{ percentage }}%'
+projects.project.completed: 'Completed {{ date }}'

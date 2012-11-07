@@ -22,9 +22,9 @@ class I18n {
 	// Translate
 	// --------------------------------------------------
 
-	public function translate($key) {
+	public function translate($key, $vars = array()) {
 		if (isset($this->translations[$key])) {
-			return $this->translations[$key];
+			return self::replaceVariables($this->translations[$key], $vars);
 		} else {
 			// TODO: throw error
 			return '[MISSING TRANSLATION]';
@@ -35,8 +35,27 @@ class I18n {
 	// Translate shortcut
 	// --------------------------------------------------
 
-	public function t($key) {
-		return $this->translate($key);
+	public function t($key, $vars = array()) {
+		return $this->translate($key, $vars);
+	}
+
+
+	// --------------------------------------------------
+	// Variable substitution helper function
+
+	static public function replaceVariables($string, $vars) {
+		// Go through the template and swap out variables
+
+		$matches = array();
+		preg_match_all("/{{ (.+?) }}/", $string, $matches);
+
+		foreach ($matches[1] as $match) {
+			if (array_key_exists($match, $vars)) {
+				$string = preg_replace("/{{ $match }}/", $vars[$match], $string);
+			}
+		}
+
+		return $string;
 	}
 }
 

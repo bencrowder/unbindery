@@ -8,7 +8,7 @@
 			<h3>{{ i18n.t('dashboard.proofing_queue') }}</h3>
 			<ul class="action_list proof">
 				{% if proofing.blankslate %}
-				<li class="blankslate">{{ i18n.t('dashboard.welcome') }} <a href="{{ app_url }}/projects">{{ i18n.t('dashboard.join_project') }}</a> {{ i18n.t('dashboard.get_started') }}</li>
+				<li class="blankslate">{{ i18n.t('dashboard.welcome', { 'url': app_url ~ '/projects' })|raw }}</li>
 				{% endif %}
 
 				{% for item in proofing.items %}
@@ -66,8 +66,8 @@
 						</div>
 
 						<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
-						{% if project.available_to_proof > 0 %}<div class="sub">{{ project.available_to_proof }} {{ i18n.t('dashboard.items_left_to_proof') }}</div>{% endif %}
-						{% if project.available_to_review > 0 %}<div class="sub">{{ project.available_to_review }} {{ i18n.t('dashboard.items_left_to_review') }}</div>{% endif %}
+						{% if project.available_to_proof > 0 %}<div class="sub">{{ i18n.t('dashboard.items_left_to_proof', { 'items': project.available_to_proof }) }}</div>{% endif %}
+						{% if project.available_to_review > 0 %}<div class="sub">{{ i18n.t('dashboard.items_left_to_review', { 'items': project.available_to_review }) }}</div>{% endif %}
 					</li>
 					{% endfor %}
 				</ul>
