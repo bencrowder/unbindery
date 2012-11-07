@@ -92,8 +92,8 @@ methods['{{ method.name }}'] = '{{ method.value }}';
 		{% endblock %}
 
 		{% block messages %}
-		{% if message %}<div id="message" class="container sys_message">{{ message }}</div>{% endif %}
-		{% if error %}<div id="error" class="container sys_message">{{ error }}</div>{% endif %}
+		{% if message %}<div id="message" class="container sys_message">{{ i18n.t(message) }}</div>{% endif %}
+		{% if error %}<div id="error" class="container sys_message">{{ i18n.t(error) }}</div>{% endif %}
 		{% endblock %}
 
 		{% block main %}{% endblock %}

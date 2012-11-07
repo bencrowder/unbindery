@@ -470,6 +470,7 @@ class ProjectPageController {
 	// Methods: GET = show admin page
 
 	static public function admin($params) {
+		$i18n = Settings::getProtected('i18n');
 		$appUrl = Settings::getProtected('app_url');
 		$themeRoot = Settings::getProtected('theme_root');
 
@@ -485,7 +486,7 @@ class ProjectPageController {
 		$project = new Project($projectSlug);
 
 		if ($project->title == '') {
-			Utils::redirectToDashboard('', 'Error loading project.');
+			Utils::redirectToDashboard('', $i18n->t("error.loading_project"));
 		}
 
 		if ($project->type == 'system') {

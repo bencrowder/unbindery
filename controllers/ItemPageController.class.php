@@ -7,6 +7,8 @@ class ItemPageController {
 	// Optional username at end for proof|review to view existing proof/review
 
 	static public function itemProof($params) {
+		$i18n = Settings::getProtected('i18n');
+
 		$format = self::getFormat($params['args'], 0, 2);
 		$projectType = self::getProjectType($params['args']);
 
@@ -38,13 +40,13 @@ class ItemPageController {
 					$isSiteAdmin = ($user->role == 'admin');
 
 					if (!$isProjectAdmin && !$isSiteAdmin) {
-						Utils::redirectToDashboard("", "You don't have rights to edit that item. Sorry.");
+						Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights"));
 						return;
 					}
 				} else { 
 					// User has to be a member of the project
 					if (!$user->isMember($projectSlug)) {
-						Utils::redirectToDashboard("", "You're not a member of that project. Sorry.");
+						Utils::redirectToDashboard("", $i18n->t("error.not_a_member"));
 						return;
 					}
 				}
@@ -58,7 +60,7 @@ class ItemPageController {
 
 				// Make sure it exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
-					Utils::redirectToDashboard("", "Item doesn't exist.");
+					Utils::redirectToDashboard("", $i18n->t("error.nonexistent_item"));
 					return;
 				}
 
@@ -78,7 +80,7 @@ class ItemPageController {
 					$userQueue = new Queue("user.$proofType:{$user->username}", false, array('include-removed' => true));
 					$userQueueItems = $userQueue->getItems();
 					if (!in_array($itemObj, $userQueueItems)) {
-						Utils::redirectToDashboard("", "You don't have that item in your queue.");
+						Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights"));
 						return;
 					}
 
@@ -185,13 +187,13 @@ class ItemPageController {
 					$isSiteAdmin = ($user->role == 'admin');
 
 					if (!$isProjectAdmin && !$isSiteAdmin) {
-						Utils::redirectToDashboard("", "You don't have rights to edit that item. Sorry.");
+						Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights"));
 						return;
 					}
 				} else { 
 					// User has to be a member of the project
 					if (!$user->isMember($projectSlug, $owner)) {
-						Utils::redirectToDashboard("", "You're not a member of that project. Sorry.");
+						Utils::redirectToDashboard("", $i18n->t("error.not_a_member"));
 						return;
 					}
 				}
@@ -205,7 +207,7 @@ class ItemPageController {
 
 				// Make sure item exists (if it fails, it'll return a boolean)
 				if ($itemObj->item_id == -1) {
-					Utils::redirectToDashboard("", "Item doesn't exist.");
+					Utils::redirectToDashboard("", $i18n->t("error.nonexistent_item"));
 					return;
 				}
 
@@ -343,7 +345,7 @@ class ItemPageController {
 				// TODO: check to see if user is project owner as well
 
 				if (!$isProjectAdmin && !$isSiteAdmin) {
-					Utils::redirectToDashboard("", "You don't have rights to delete that item. Sorry.");
+					Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights_to_delete"));
 					return;
 				}
 
@@ -362,7 +364,7 @@ class ItemPageController {
 				// Delete from database
 				if (!$item->deleteFromDatabase()) {
 					$status = 'error';
-					$message = 'Error deleting item from database';
+					$message = 'errors.deleting_item';
 				}
 
 				echo json_encode(array('status' => $status, 'message' => $message));
