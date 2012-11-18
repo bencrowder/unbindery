@@ -598,7 +598,9 @@ $(document).ready(function() {
 	$("#main.add ul.items").on("click", "a.delete", function() {
 		var itemId = $(this).parents("li:first").attr("data-id");
 
-		unbindery.deleteItem(itemId);
+		if (confirm("Are you sure you want to delete that item?")) {
+			unbindery.deleteItem(itemId);
+		}
 		
 		return false;
 	});
@@ -687,7 +689,9 @@ $(document).ready(function() {
 	$("#main.dashboard ul.items.users").on("click", "li .itemcontrols a.delete", function() {
 		var username = $(this).parents("li:first").find("b").html();
 
-		unbindery.deleteUser(username);
+		if (confirm("Are you sure you want to delete that user?")) {
+			unbindery.deleteUser(username);
+		}
 
 		return false;
 	});
