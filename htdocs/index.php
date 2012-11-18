@@ -207,7 +207,7 @@ $routes = array(
 	'#^/projects\.?([^/]+)?/?#'								=> 'ProjectPageController::projects',
 
 	// Admin pages
-	'#^/admin\.?([^/]+)?/?$#'						=> 'AdminPageController::adminHandler',
+	'#^/admin\.?([^/]+)?/?$#'								=> 'AdminPageController::adminHandler',
 );
 
 $router = new Router('SystemPageController::fileNotFoundHandler');

@@ -361,7 +361,11 @@ ul.items li p.transcript				{ margin-left: 15px; font-size: .9em; margin-bottom:
 ul.items li p.transcript a				{ color: #345678; font-weight: bold; text-decoration: none; }
 ul.items li p.transcript a:hover		{ text-decoration: underline; }
 
-.newproject a							{ display: block; margin-bottom: .5em; }
+.new-project							{ margin-bottom: 2em; }
+.new-project a							{ display: block; margin-bottom: .5em; }
+
+.sidebar .new-members ul				{ font-size: .9em; }
+.sidebar .new-members li				{ border-bottom-color: #ddd; }
 
 
 /* Project Details */

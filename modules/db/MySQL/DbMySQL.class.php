@@ -875,7 +875,7 @@ class DbMySQL implements DbInterface {
 		return $this->query($query, array($userProofString, $userReviewString, $username));
 	}
 
-	// Returns: ?
+	// Returns: array of users
 	public function getAdminProjectsLatestWork($username, $limit = false) {
 		$query = "SELECT DISTINCT queues.queue_name, queues.item_id, DATE_FORMAT(queues.date_removed, '%e %b %Y') AS date_completed, projects.slug AS project_slug ";
 		$query .= "FROM queues ";
@@ -885,6 +885,18 @@ class DbMySQL implements DbInterface {
 		$query .= "AND ((roles.username = ? AND roles.role = 'admin') OR (projects.owner = ?)) ";
 		$query .= "AND queue_name LIKE 'user.%' ";
 		$query .= "ORDER BY date_removed DESC ";
+		if ($limit != false) $query .= "LIMIT $limit ";
+
+		return $this->query($query, array($username, $username));
+	}
+
+	// Returns: array of users
+	public function getNewestProjectMembers($username, $limit = false) {
+		$query = "SELECT roles.username, projects.slug, roles.role ";
+		$query .= "FROM roles ";
+		$query .= "JOIN projects ON projects.id = roles.project_id ";
+		$query .= "WHERE (projects.id IN (SELECT project_id FROM roles WHERE username = ? AND role = 'admin') OR (projects.owner = ?)) ";
+		$query .= "ORDER BY roles.id DESC ";
 		if ($limit != false) $query .= "LIMIT $limit ";
 
 		return $this->query($query, array($username, $username));

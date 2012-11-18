@@ -1,7 +1,8 @@
 <?php
 
 class AdminPageController {
-	static public function adminHandler($args) {
+	static public function adminHandler($params) {
+		$format = self::getFormat($params['args'], 0, 2);
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
@@ -41,14 +42,46 @@ class AdminPageController {
 				)
 			);
 		}
+
+		$newestMembers = $db->getNewestProjectMembers($user->username, 5);
 	
-		$options = array(
+		$response = array(
 			'page_title' => 'Admin Dashboard',
 			'user' => $user->getResponse(),
 			'latest_work' => $latestWork,
+			'newest_members' => $newestMembers,
 		);
 
-		Template::render('admin_dashboard', $options);
+		switch ($format) {
+			case 'json':
+				echo json_encode($response);
+				break;
+			case 'html':
+				Template::render('admin_dashboard', $response);
+				break;
+		}
+	}
+
+
+	// --------------------------------------------------
+	// Helper function to parse project page type
+
+	static public function getProjectType($args) {
+		if ($args[0] == 'users') {
+			return 'user';
+		} else {
+			return 'system';
+		}
+	}
+
+
+	// --------------------------------------------------
+	// Helper function to parse return format type
+
+	static public function getFormat($args, $systemIndex, $userIndex) {
+		$projectType = self::getProjectType($args);
+		$formatIndex = ($projectType == 'system') ? $systemIndex : $userIndex;
+		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }
 
