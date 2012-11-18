@@ -345,6 +345,9 @@ ul.items li								{ padding: 10px 5px; border-top: solid 1px #ddd; }
 ul.items li > a							{ margin: 0; margin-right: 15px; font-weight: bold; color: #345678; display: inline-block; text-decoration: none; width: 400px; }
 ul.items li > a:hover					{ text-decoration: underline; }
 
+ul.items.latest-work li > a				{ width: auto; margin-right: 0; }
+ul.items.latest-work li .metadata		{ font-size: .9em; color: #999; }
+
 ul.items li .status						{ display: inline-block; font-size: .9em; }
 ul.items li.completed .status			{ color: #999; }
 ul.items li.available .status			{ color: #090; }

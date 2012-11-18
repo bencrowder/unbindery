@@ -875,6 +875,21 @@ class DbMySQL implements DbInterface {
 		return $this->query($query, array($userProofString, $userReviewString, $username));
 	}
 
+	// Returns: ?
+	public function getAdminProjectsLatestWork($username, $limit = false) {
+		$query = "SELECT DISTINCT queues.queue_name, queues.item_id, DATE_FORMAT(queues.date_removed, '%e %b %Y') AS date_completed, projects.slug AS project_slug ";
+		$query .= "FROM queues ";
+		$query .= "JOIN roles ON roles.project_id = queues.project_id ";
+		$query .= "JOIN projects ON projects.id = queues.project_id ";
+		$query .= "WHERE date_removed IS NOT NULL ";
+		$query .= "AND ((roles.username = ? AND roles.role = 'admin') OR (projects.owner = ?)) ";
+		$query .= "AND queue_name LIKE 'user.%' ";
+		$query .= "ORDER BY date_removed DESC ";
+		if ($limit != false) $query .= "LIMIT $limit ";
+
+		return $this->query($query, array($username, $username));
+	}
+
 	// Installation script
 	public function install() {
 		$sql = <<<SQL

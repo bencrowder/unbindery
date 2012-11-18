@@ -5,7 +5,13 @@
 		<h2>{{ i18n.t('admin.dashboard.title') }}</h2>
 
 		<div class="content">
-			Projects and users lists coming here soon.
+			<h3>Latest Work in Your Projects</h3>
+			<ul class="items latest-work">
+				{% for entry in latest_work %}
+				<li>{{ entry.username }} <a href="{{ entry.transcript_url }}">{{ entry.type }}ed</a> <a href="{{ entry.edit_url }}">{{ entry.item.title }}</a>
+				<div class="metadata">Project: {{ entry.project.title }} &bull; Date: {{ entry.date_completed }}</div>
+				{% endfor %}
+			</ul>
 		</div>
 
 		<div class="sidebar">
