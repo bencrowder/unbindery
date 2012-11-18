@@ -586,7 +586,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: array of proofers
 	public function getProoferStats($projectId, $type = 'proof') {
-		$query = "SELECT users.username, ";
+		$query = "SELECT DISTINCT users.username, ";
 		$query .= "(";
 		$query .=     "SELECT COUNT(DISTINCT item_id) ";
 		$query .=     "FROM queues ";
