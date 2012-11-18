@@ -52,7 +52,10 @@ var Unbindery = function() {
 				} else {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/items/' + data.itemId + '/delete';
 				}
+				break;
 
+			case 'delete-user':
+				url = '/users/' + data.username;
 				break;
 
 			case 'split-transcript':
@@ -83,6 +86,16 @@ var Unbindery = function() {
 
 			case 'GET':
 				$.get(app_url + url, data, callback, 'json');
+				break;
+
+			case 'DELETE':
+				$.ajax({
+					url: app_url + url,
+					type: 'DELETE',
+					dataType: 'json',
+					success: callback,
+					error: callback
+				});
 				break;
 		}
 	};
@@ -253,6 +266,16 @@ var Unbindery = function() {
 			function(data) {
 				if (data.status == 'success') {
 					$("ul.items li[data-id=" + itemId + "]").remove();
+				}
+			}
+		);
+	};
+
+	this.deleteUser = function(username) {
+		this.callAPI('delete-user', 'DELETE', { username: username },
+			function(data) {
+				if (data.status == 'success') {
+					$("ul.items.users li[data-username=" + username + "]").remove();
 				}
 			}
 		);
@@ -610,5 +633,17 @@ $(document).ready(function() {
 
 	$("#action-save-settings").click(function() {
 		unbindery.saveSettings();
+	});
+
+
+	/* Admin dashboard */
+	/* -------------------------------------------------- */
+
+	$("#main.dashboard ul.items.users").on("click", "li .itemcontrols a.delete", function() {
+		var username = $(this).parents("li:first").find("b").html();
+
+		unbindery.deleteUser(username);
+
+		return false;
 	});
 });

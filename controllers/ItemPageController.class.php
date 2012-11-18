@@ -9,8 +9,8 @@ class ItemPageController {
 	static public function itemProof($params) {
 		$i18n = Settings::getProtected('i18n');
 
-		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 2);
+		$projectType = Utils::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -158,8 +158,8 @@ class ItemPageController {
 	// Methods: 
 
 	static public function transcript($params) {
-		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 2);
+		$projectType = Utils::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -320,8 +320,8 @@ class ItemPageController {
 	// Methods: 
 
 	static public function deleteItem($params) {
-		$format = self::getFormat($params['args'], 2, 4);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 2, 4);
+		$projectType = Utils::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -380,8 +380,8 @@ class ItemPageController {
 	// Methods: POST = get next available item
 
 	static public function getNewItem($params) {
-		$format = self::getFormat($params['args'], 0, 2);
-		$projectPage = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 2);
+		$projectPage = Utils::getProjectType($params['args']);
 		$projectSlugIndex = ($projectPage == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
@@ -424,8 +424,8 @@ class ItemPageController {
 	// Methods: POST
 
 	static public function items($params) {
-		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 2);
+		$projectType = Utils::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -488,28 +488,6 @@ class ItemPageController {
 
 				break;
 		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to parse a project page type
-
-	static public function getProjectType($args) {
-		if ($args[0] == 'users') {
-			return 'user';
-		} else {
-			return 'system';
-		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to parse the return format type based on the URL
-
-	static public function getFormat($args, $systemIndex, $userIndex) {
-		$projectPage = self::getProjectType($args);
-		$formatIndex = ($projectPage == 'system') ? $systemIndex : $userIndex;
-		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }
 

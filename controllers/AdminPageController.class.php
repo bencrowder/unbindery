@@ -2,7 +2,7 @@
 
 class AdminPageController {
 	static public function adminHandler($params) {
-		$format = self::getFormat($params['args'], 0, 2);
+		$format = Utils::getFormat($params['args'], 0, 2);
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');
 
@@ -44,12 +44,30 @@ class AdminPageController {
 		}
 
 		$newestMembers = $db->getNewestProjectMembers($user->username, 5);
+
+		// Only get list of users if they're a site admin
+		$users = array();
+		if ($user->role == 'admin') {
+			$usernameList = $db->getUsers();
+
+			foreach ($usernameList as $username) {
+				$tempUser = new User($username['username']);
+				$tempUserArray = $tempUser->getResponse();
+
+				// Get list of projects they're working on
+				$projects = $db->getUserProjectsWithStats($username['username']);
+				$tempUserArray['projects'] = $projects;
+
+				array_push($users, $tempUserArray);
+			}
+		}
 	
 		$response = array(
 			'page_title' => 'Admin Dashboard',
 			'user' => $user->getResponse(),
 			'latest_work' => $latestWork,
 			'newest_members' => $newestMembers,
+			'users' => $users,
 		);
 
 		switch ($format) {
@@ -60,28 +78,6 @@ class AdminPageController {
 				Template::render('admin_dashboard', $response);
 				break;
 		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to parse project page type
-
-	static public function getProjectType($args) {
-		if ($args[0] == 'users') {
-			return 'user';
-		} else {
-			return 'system';
-		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to parse return format type
-
-	static public function getFormat($args, $systemIndex, $userIndex) {
-		$projectType = self::getProjectType($args);
-		$formatIndex = ($projectType == 'system') ? $systemIndex : $userIndex;
-		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }
 

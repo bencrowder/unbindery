@@ -35,8 +35,32 @@ class UserPageController {
 	//          DELETE = delete user
 
 	static public function userPage($params) {
-		echo "User page (" . $params['method'] . "): ";
-		print_r($params['args']);
+		$db = Settings::getProtected('db');
+		$user = User::getAuthenticatedUser();
+
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$username = (Utils::getProjectType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
+
+		switch ($params['method']) {
+			// DELETE: Delete user
+			case 'DELETE':
+				$status = 'error';
+				$message = '';
+
+				// Make sure the user is a site admin
+				if ($user->role != 'admin') {
+					$message = 'insufficient-rights';
+				} else {
+					if ($db->deleteUser($username)) {
+						$status = 'success';
+					} else {
+						$message = 'unable-to-delete-user';
+					}
+				}
+
+				echo json_encode(array('status' => $status, 'message' => $message));
+				break;
+		}
 	}
 
 
@@ -49,7 +73,7 @@ class UserPageController {
 	static public function userSettings($params) {
 		$format = $params['args'][1] != '' ? $params['args'][1] : 'html';
 
-		$user = self::authenticate();
+		$user = User::getAuthenticatedUser();
 
 		switch ($params['method']) {
 			// GET: Get user settings
@@ -272,20 +296,6 @@ class UserPageController {
 				Template::render('dashboard', $response);
 				break;
 		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to check authentication
-
-	static public function authenticate() {
-		$auth = Settings::getProtected('auth');
-		$auth->forceAuthentication();
-
-		$username = $auth->getUsername();
-		$user = new User($username);
-
-		return $user;
 	}
 }
 

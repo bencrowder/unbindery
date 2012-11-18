@@ -9,8 +9,8 @@ class ProjectPageController {
 	//          POST = create new project
 
 	static public function projects($params) {
-		$format = self::getFormat($params['args'], 0, 2);
-		$pageType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 2);
+		$pageType = Utils::getProjectType($params['args']);
 
 		$user = User::getAuthenticatedUser();
 
@@ -164,8 +164,8 @@ class ProjectPageController {
 
 	static public function newProject($params) {
 		// Parse parameters
-		$format = self::getFormat($params['args'], 0, 1);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 1);
+		$projectType = Utils::getProjectType($params['args']);
 
 		// Authenticate
 		$user = User::getAuthenticatedUser();
@@ -202,8 +202,8 @@ class ProjectPageController {
 	//          DELETE = delete project
 
 	static public function projectPage($params) {
-		$format = self::getFormat($params['args'], 1, 3);
-		$projectSlug = (self::getProjectType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$projectSlug = (Utils::getProjectType($params['args']) == 'system') ? $params['args'][0] : $params['args'][2];
 
 		$project = new Project($projectSlug);
 
@@ -308,8 +308,8 @@ class ProjectPageController {
 
 	static public function membership($params) {
 		// Parse parameters
-		$format = self::getFormat($params['args'], 1, 3);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$projectType = Utils::getProjectType($params['args']);
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
@@ -351,8 +351,8 @@ class ProjectPageController {
 		$db = Settings::getProtected('db');
 
 		// Parse parameters
-		$format = self::getFormat($params['args'], 1, 3);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$projectType = Utils::getProjectType($params['args']);
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
 
@@ -474,8 +474,8 @@ class ProjectPageController {
 		$appUrl = Settings::getProtected('app_url');
 		$themeRoot = Settings::getProtected('theme_root');
 
-		$projectType = self::getProjectType($params['args']);
-		$format = self::getFormat($params['args'], 1, 3);
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$projectType = Utils::getProjectType($params['args']);
 		$projectSlug = ($projectType == 'system') ? $params['args'][0] : $params['args'][2];
 
 		$user = User::getAuthenticatedUser();
@@ -557,8 +557,8 @@ class ProjectPageController {
 	// Methods: POST
 
 	static public function upload($params) {
-		$format = self::getFormat($params['args'], 0, 2);
-		$projectType = self::getProjectType($params['args']);
+		$format = Utils::getFormat($params['args'], 0, 2);
+		$projectType = Utils::getProjectType($params['args']);
 
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
@@ -582,8 +582,8 @@ class ProjectPageController {
 		$appUrl = Settings::getProtected('app_url');
 		$themeRoot = Settings::getProtected('theme_root');
 
-		$projectType = self::getProjectType($params['args']);
-		$format = self::getFormat($params['args'], 1, 3);
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$projectType = Utils::getProjectType($params['args']);
 		$projectSlug = ($projectType == 'system') ? $params['args'][0] : $params['args'][2];
 
 		$user = User::getAuthenticatedUser();
@@ -662,28 +662,6 @@ class ProjectPageController {
 
 				break;
 		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to parse project page type
-
-	static public function getProjectType($args) {
-		if ($args[0] == 'users') {
-			return 'user';
-		} else {
-			return 'system';
-		}
-	}
-
-
-	// --------------------------------------------------
-	// Helper function to parse return format type
-
-	static public function getFormat($args, $systemIndex, $userIndex) {
-		$projectType = self::getProjectType($args);
-		$formatIndex = ($projectType == 'system') ? $systemIndex : $userIndex;
-		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
 	}
 }
 

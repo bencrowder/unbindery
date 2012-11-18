@@ -50,8 +50,7 @@ nav ul li .username						{ font-weight: bold; }
 .controls								{ background: #222; padding: 7px 0 8px; border-bottom: solid 1px #999; }
 .controls.edit							{ background: #8fa2ac; }
 .controls.existing						{ background: #aca28f; }
-
-#controls_container.review				{ background: url(../images/review_bg.png) repeat-x; }
+.controls.review						{ background: #615354; }
 
 #controls_container ul li a				{ display: inline-block; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
 #controls_container ul li span			{ display: inline-block; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
@@ -360,6 +359,9 @@ ul.items li .itemcontrols a				{ text-decoration: none; }
 ul.items li p.transcript				{ margin-left: 15px; font-size: .9em; margin-bottom: 0; margin-top: 3px; color: #999; }
 ul.items li p.transcript a				{ color: #345678; font-weight: bold; text-decoration: none; }
 ul.items li p.transcript a:hover		{ text-decoration: underline; }
+
+ul.items.users li ul					{ list-style: none; padding-left: 15px; margin-top: 5px; font-size: .9em; }
+ul.items.users li ul li					{ padding: 2px 0; border: none; }
 
 .new-project							{ margin-bottom: 2em; }
 .new-project a							{ display: block; margin-bottom: .5em; }

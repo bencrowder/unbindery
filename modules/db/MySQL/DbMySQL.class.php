@@ -176,6 +176,13 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
+	public function deleteUser($username) {
+		$sql = "DELETE FROM users WHERE username = ?;";
+
+		return $this->execute($sql, array($username));
+	}
+
+	// Returns: boolean
 	public function isMember($username, $projectSlug, $owner = '') {
 		$query = "SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?";
 		$args = array($username, $projectSlug);
@@ -900,6 +907,33 @@ class DbMySQL implements DbInterface {
 		if ($limit != false) $query .= "LIMIT $limit ";
 
 		return $this->query($query, array($username, $username));
+	}
+
+	// Returns: array of users
+	public function getUsers($limit = false) {
+		$query = "SELECT username ";
+		$query .= "FROM users ";
+		$query .= "ORDER BY signup_date DESC ";
+		if ($limit != false) $query .= "LIMIT $limit ";
+
+		return $this->query($query, array());
+	}
+
+	// Returns: array of users
+	public function getUserProjectsWithStats($username) {
+		$query = "SELECT DISTINCT slug, title, ";
+		$query .= "(SELECT COUNT(DISTINCT item_id) FROM queues WHERE queue_name = CONCAT('user.proof:', ?) AND date_removed IS NOT NULL AND queues.project_id = projects.id) AS items_proofed, ";
+		$query .= "(SELECT COUNT(DISTINCT item_id) FROM queues WHERE queue_name = CONCAT('user.review:', ?) AND date_removed IS NOT NULL AND queues.project_id = projects.id) AS items_reviewed, ";
+		$query .= "CASE (projects.owner = ?) ";
+		$query .=     "WHEN 1 THEN CONCAT('owner', IFNULL(CONCAT(', ', GROUP_CONCAT(DISTINCT roles.role ORDER BY roles.role SEPARATOR ', ')), '')) ";
+		$query .=     "WHEN 0 THEN GROUP_CONCAT(DISTINCT IFNULL(roles.role, '') ORDER BY roles.role SEPARATOR ', ') ";
+		$query .= "END AS role ";
+		$query .= "FROM projects ";
+		$query .= "LEFT JOIN roles ON roles.project_id = projects.id ";
+		$query .= "WHERE ((projects.owner = ?) or (roles.username = ?)) ";
+		$query .= "GROUP BY slug;";
+
+		return $this->query($query, array($username, $username, $username, $username, $username));
 	}
 
 	// Installation script

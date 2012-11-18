@@ -12,6 +12,21 @@
 				<div class="metadata">Project: {{ entry.project.title }} &bull; Date: {{ entry.date_completed }}</div>
 				{% endfor %}
 			</ul>
+
+			{% if user.role == 'admin' %}
+			<h3>User Management</h3>
+			<ul class="items users">
+			{% for user in users %}
+				<li data-username="{{ user.username }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ user.username }}</b> &bull; {{ user.role }} &bull; Signed up {{ user.signup_date }}
+					<ul class="projects">
+					{% for project in user.projects %}
+						<li>{{ project.title }}: {{ project.role }} (proofed {{ project.items_proofed }} items{% if 'reviewer' in project.role %}, reviewed {{ project.items_reviewed }} items{% endif %})</li>
+					{% endfor %}	
+					</ul>
+				</li>
+			{% endfor %}
+			</ul>
+			{% endif %}
 		</div>
 
 		<div class="sidebar">

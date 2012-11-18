@@ -25,6 +25,28 @@ class Utils {
 
 		header("Location: $app_url");
 	}
+
+
+	// --------------------------------------------------
+	// Helper function to parse project page type
+
+	static public function getProjectType($args) {
+		if ($args[0] == 'users') {
+			return 'user';
+		} else {
+			return 'system';
+		}
+	}
+
+
+	// --------------------------------------------------
+	// Helper function to parse return format type
+
+	static public function getFormat($args, $systemIndex, $userIndex) {
+		$projectType = self::getProjectType($args);
+		$formatIndex = ($projectType == 'system') ? $systemIndex : $userIndex;
+		return $args[$formatIndex] != '' ? $args[$formatIndex] : 'html';
+	}
 }
 
 ?>
