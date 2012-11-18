@@ -318,12 +318,21 @@ class ProjectPageController {
 		switch ($params['method']) {
 			// POST: join project
 			case 'POST':
+				if (Utils::POST('username') != '') {
+					$username = Utils::POST('username');
+					$userToAssign = new User($username);
+				} else {
+					$username = $user->username;
+					$userToAssign = $user;
+				}
+
 				// Load project
 				$project = new Project($projectSlug);
 
-				// If the project is public OR the user is on the whitelist, let them join
-				if ($project->public || $project->allowedToJoin($user->username)) {
-					$status = ($user->assignToProject($projectSlug)) ? 'success' : 'error';
+				// If the project is public OR the user is on the whitelist OR we're adding a specific user, let them join
+				// TODO: make the third clause secure somehow
+				if ($project->public || $project->allowedToJoin($username) || Utils::POST('username') != '') {
+					$status = ($userToAssign->assignToProject($projectSlug)) ? 'success' : 'error';
 				} else {
 					$status = 'access-denied';
 				}
@@ -333,6 +342,7 @@ class ProjectPageController {
 				break;
 
 			case 'DELETE':
+				// TODO: expand to allow removing other users
 				$status = ($user->removeFromProject($projectSlug)) ? 'success' : 'error';
 
 				echo json_encode(array('status' => $status));
@@ -473,6 +483,7 @@ class ProjectPageController {
 		$i18n = Settings::getProtected('i18n');
 		$appUrl = Settings::getProtected('app_url');
 		$themeRoot = Settings::getProtected('theme_root');
+		$db = Settings::getProtected('db');
 
 		$format = Utils::getFormat($params['args'], 1, 3);
 		$projectType = Utils::getProjectType($params['args']);
@@ -501,13 +512,16 @@ class ProjectPageController {
 		$projectArray['items'] = $project->items;
 		$projectArray['url'] = "$appUrl/$projectUrl";
 
+		$projectMembers = $db->getMembersForProject($project->slug);
+
 		switch ($params['method']) {
-			// GET: Get new project page
+			// GET: Get project admin page
 			case 'GET':
 				$response = array(
 					'page_title' => 'Project Admin',
 					'user' => $user->getResponse(),
 					'project' => $projectArray,
+					'members' => $projectMembers,
 					'css' => array(
 						'uploadify.css'
 					),

@@ -208,8 +208,14 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: roles (array of strings)
-	public function getRolesForProject($username, $project_slug) {
+	public function getRolesForProject($username, $projectSlug) {
 		$results = $this->query("SELECT role FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
+		return $results;
+	}
+
+	// Returns: users and roles for a project
+	public function getMembersForProject($projectSlug) {
+		$results = $this->query("SELECT username, GROUP_CONCAT(DISTINCT roles.role ORDER BY roles.role SEPARATOR ', ') AS roles FROM roles JOIN projects ON roles.project_id = projects.id WHERE projects.slug = ? GROUP BY username", array($projectSlug));
 		return $results;
 	}
 

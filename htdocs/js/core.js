@@ -77,6 +77,15 @@ var Unbindery = function() {
 			case 'save-settings':
 				url = '/users/' + data.username + '/settings';
 				break;
+
+			case 'add-user-to-project':
+			case 'remove-user-from-project':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug + '/membership';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/membership';
+				}
+				break;
 		}
 
 		switch (method) {
@@ -281,6 +290,32 @@ var Unbindery = function() {
 		);
 	};
 
+	this.addUserToProject = function(username, role) {
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+		var projectOwner = $("#project_owner").val();
+
+		this.callAPI('add-user-to-project', 'POST', { username: username, role: role, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
+			function(data) {
+				if (data.status == 'success') {
+					$("<li><span class='itemcontrols'><a href='' class='delete'>×</a></span><b>" + username + "</b>: " + role + "</li>").appendTo("ul.items.members");
+				}
+			}
+		);
+	}
+
+	this.removeUserFromProject = function(username) {
+		var projectSlug = $("#project_slug").val();
+		var projectType = $("#project_type").val();
+		var projectOwner = $("#project_owner").val();
+
+		this.callAPI('remove-user-from-project', 'DELETE', { username: username, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
+			function(data) {
+				console.log(data);
+			}
+		);
+	}
+
 	this.updateImportPreview = function() {
 		var template = $("#import-template").val();
 		var transcript = $("#import-transcript").val().trim();
@@ -339,7 +374,6 @@ var Unbindery = function() {
 
 		this.callAPI('import-transcript', 'POST', { template: template, transcript: transcript, projectType: projectType, projectOwner: projectOwner, projectSlug: projectSlug, items: items },
 			function(data) {
-				console.log("back", data);
 				if (data.status == 'success') {
 					// Redirect to project admin page
 					if (projectType == 'system') {
@@ -570,6 +604,19 @@ $(document).ready(function() {
 	});
 
 
+	/* Adding users to projects */
+	/* -------------------------------------------------- */
+
+	$("#main.add .addbox input[type=submit]").on("click", function() {
+		var username = $(".addbox input[type=text]").val().trim();
+		var role = $(".addbox select option:selected").val();
+
+		unbindery.addUserToProject(username, role);
+
+		return false;
+	});
+
+
 	/* Character pad display */
 	/* -------------------------------------------------- */
 
@@ -600,7 +647,6 @@ $(document).ready(function() {
 	});
 
 	$("#action-import-transcript").on("click", function() {
-		console.log("clicked");
 		unbindery.importTranscript();
 		return false;
 	});
@@ -612,7 +658,6 @@ $(document).ready(function() {
 
 		parentList.siblings("h3").html("Selected Items (" + parentList.find("li").length + " items)");
 
-		console.log($("#import-preview p").length, $(".sidebar ul.items li").length);
 		// Make sure the # of items matches
 		if ($("#import-preview p").length != $(".sidebar ul.items li").length) {
 			html = "<div class='error'>";

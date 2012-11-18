@@ -363,11 +363,19 @@ ul.items li p.transcript a:hover		{ text-decoration: underline; }
 ul.items.users li ul					{ list-style: none; padding-left: 15px; margin-top: 5px; font-size: .9em; }
 ul.items.users li ul li					{ padding: 2px 0; border: none; }
 
+ul.items.members li						{ padding: 5px; }
+
 .new-project							{ margin-bottom: 2em; }
 .new-project a							{ display: block; margin-bottom: .5em; }
 
 .sidebar .new-members ul				{ font-size: .9em; }
 .sidebar .new-members li				{ border-bottom-color: #ddd; }
+
+#main.add .addbox						{ margin-left: 15px; padding: 10px; background: #eee; }
+#main.add .addbox label					{ margin-top: 0; }
+#main.add .addbox input[type=text]		{ display: inline; font-size: 1em; width: 150px; }
+#main.add .addbox select				{ display: inline; }
+#main.add .addbox input[type=submit]	{ display: inline; padding: 2px 6px; margin-top: 0; }
 
 
 /* Project Details */

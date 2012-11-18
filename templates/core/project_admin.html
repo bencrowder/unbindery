@@ -51,6 +51,28 @@
 					</select>
 				</section>
 
+				<section>
+					<h3>Project Members</h3>
+
+					<ul class="items members">
+					{% for member in members %}
+					<li><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ member.username }}</b>: {{ member.roles }}</li>
+					{% endfor %}
+					</ul>
+
+					<div class="addbox">
+						<label>Add user:</label>
+						<input type="text" placeholder="Username" id="addmember-username" name="addmemberUsername" />
+						<select id="addmember-role" name="addmemberRole">
+							<option value="proofer">Proofer</option>
+							<option value="reviewer">Reviewer</option>
+							<option value="admin">Admin</option>
+						</select>
+
+						<input type="submit" class="button light" value="Add" />
+					</div>
+				</section>
+
 				<section class="hidden">
 					<h3>Proofing fields</h3>
 
