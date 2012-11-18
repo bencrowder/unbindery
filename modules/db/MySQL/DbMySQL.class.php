@@ -209,7 +209,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: roles (array of strings)
 	public function getRolesForProject($username, $projectSlug) {
-		$results = $this->query("SELECT role FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $project_slug));
+		$results = $this->query("SELECT role FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?", array($username, $projectSlug));
 		return $results;
 	}
 
