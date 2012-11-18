@@ -604,7 +604,8 @@ class DbMySQL implements DbInterface {
 		$query .=     "SELECT COUNT(DISTINCT item_id) ";
 		$query .=     "FROM queues ";
 		$query .=     "WHERE queue_name = CONCAT('user.$type:', users.username) ";
-		$query .=     "AND date_removed IS NOT NULL";
+		$query .=     "AND date_removed IS NOT NULL ";
+		$query .=     "AND queues.project_id = ?";
 		$query .= ") AS items, ";
 		$query .= "ROUND(";
 		$query .=     "(";
@@ -626,7 +627,7 @@ class DbMySQL implements DbInterface {
 		$query .= "AND queues.project_id = ? ";
 		$query .= "ORDER BY items DESC;";
 
-		return $this->query($query, array($projectId, $projectId)); //, "{$type}er"));
+		return $this->query($query, array($projectId, $projectId, $projectId));
 	}
 
 	// Returns: array of items
