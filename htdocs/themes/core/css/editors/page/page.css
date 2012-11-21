@@ -24,5 +24,5 @@ textarea#transcript:focus				{ outline: none; }
 
 .sidebyside #image_container			{ width: 48%; height: 600px; float: left; margin-right: 4%; }
 
-.sidebyside #transcript_container		{ width: 48%; height: 600px; float: left; margin: 1em 0 2em; }
+.sidebyside #transcript_container		{ width: 48%; float: left; margin: 1em 0 2em; }
 .sidebyside textarea#transcript			{ height: 600px; }
