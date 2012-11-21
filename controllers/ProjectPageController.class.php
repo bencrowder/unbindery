@@ -385,22 +385,64 @@ class ProjectPageController {
 					$reviewTranscripts = $db->loadItemTranscripts($item['project_id'], $item['id'], "review");
 
 					// If there are reviewed transcripts, get the diff of those
+					$fieldTranscripts = array();
 					if (count($reviewTranscripts) > 0) {
 						if (count($reviewTranscripts) > 1) {
 							$text = Transcript::diff($reviewTranscripts);
+							foreach ($reviewTranscripts as $transcript) {
+								$fieldTranscripts[] = $transcript['fields'];
+							}
 						} else {
 							$text = $reviewTranscripts[0]['transcript'];
+							$fieldTranscripts[] = $reviewTranscripts[0]['fields'];
 						}
 					} else if (count($proofTranscripts) > 0) {
 						// If there are proofed transcripts, get the diff of those
 						if (count($proofTranscripts) > 1) {
 							$text = Transcript::diff($proofTranscripts);
+							foreach ($proofTranscripts as $transcript) {
+								$fieldTranscripts[] = $transcript['fields'];
+							}
 						} else {
 							$text = $proofTranscripts[0]['transcript'];
+							$fieldTranscripts[] = $proofTranscripts[0]['fields'];
 						}
 					} else {
 						// Otherwise just get the item's original transcript
 						$text = $item['transcript'];
+					}
+
+					// Get the unique values for each of the item fields (if there are any)
+					$fields = array();
+					foreach ($fieldTranscripts as $transcript) {
+						// Convert from JSON string to object
+						$field = json_decode($transcript);
+
+						// Loop through the field transcript's properties
+						foreach ($field as $key => $value) {
+							// If the key isn't in the array, add it as an empty array
+							if (!array_key_exists($key, $fields)) {
+								$fields[$key] = array();
+							}
+
+							// If the value isn't in the array for that key, add it
+							if (!in_array($value, $fields[$key])) {
+								$fields[$key][] = $value;
+							}
+						}
+					}
+
+					// And serialize the fields to strings
+					$fieldStrings = array();
+					foreach ($fields as $field => $values) {
+						// If more than one, put in {a|b|c} format, otherwise just put the value
+						if (count($values) > 1) {
+							$str = "{" . join("|", $values) . "}";
+						} else {
+							$str = $values[0];
+						}
+
+						$fieldStrings[$field] = $str;
 					}
 
 					// Get the list of proofers/reviewers as comma-separated usernames
@@ -427,6 +469,7 @@ class ProjectPageController {
 							'item' => $item,
 							'proofers' => $proofers,
 							'reviewers' => $reviewers,
+							'fields' => $fieldStrings,
 						)
 					);
 				}

@@ -18,7 +18,7 @@ class Project {
 	private $workflow = "@proofer, @proofer, @reviewer";	// Default
 	private $whitelist;
 	private $fields;
-	private $downloadTemplate;
+	private $downloadTemplate = "<page item-id=\"{{ item.id }}\" proofers=\"{{ proofers }}\">\n\t{{ transcript }}\n</page>";
 	private $characters;
 
 	private $url;

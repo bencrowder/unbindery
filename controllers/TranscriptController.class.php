@@ -117,12 +117,17 @@ class TranscriptController {
 
 				case 'project':
 					$project = $vars['project'];
-					$replacement = $project[$tail];
+					$replacement = array_key_exists($tail, $project) ? $project[$tail] : '';
 					break;
 
 				case 'item':
 					$item = $vars['item'];
-					$replacement = $item[$tail];
+					$replacement = array_key_exists($tail, $item) ? $item[$tail] : '';
+					break;
+
+				case 'fields':
+					$fields = $vars['fields'];
+					$replacement = array_key_exists($tail, $fields) ? $fields[$tail] : '';
 					break;
 			}
 

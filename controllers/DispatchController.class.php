@@ -58,6 +58,7 @@ class DispatchController {
 		}			
 
 		if (isset($nextItem) && $nextItem->item_id != -1) {
+			// Concatenate proofed transcripts
 			if ($type == 'review') {
 				// Get proofed transcripts for the new item
 				$transcripts = $db->loadItemTranscripts($nextItem->project_id, $nextItem->item_id, 'proof');
@@ -69,9 +70,13 @@ class DispatchController {
 					$transcriptText = $transcripts[0]['transcript'];
 				}
 
+				// Only get the fields for the first transcript
+				$transcriptFields = $transcripts[0]['fields'];
+
 				// Create transcript and add to the database
 				$transcript = new Transcript();
 				$transcript->setText($transcriptText);
+				$transcript->setFields($transcriptFields);
 				$transcript->save(array('item' => $nextItem, 'status' => 'draft', 'type' => 'review'));
 			}
 

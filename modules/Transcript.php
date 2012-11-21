@@ -67,8 +67,8 @@ class Transcript {
 		}
 
 		// Load the text and fields
-		$this->text = $response['transcript'];
-		$this->fields = $response['fields'];
+		$this->text = array_key_exists('transcript', $response) ? $response['transcript'] : '';
+		$this->fields = array_key_exists('fields', $response) ? $response['fields'] : '';
 
 		// And trigger the load transcript event
 		self::$eventManager->trigger('load', 'transcript', array('transcript' => $this));
