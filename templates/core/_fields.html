@@ -1,0 +1,30 @@
+{% if fields|length > 0 %}
+<div id="fields_container">
+	{% for field in fields %}
+		<div class='field_group'>
+		{% if field.type == 'text' %}
+			<label for="fields_{{ field.id }}">{{ field.label }}</label>
+			<input type='text' id="fields_{{ field.id }}" name="fields_{{ field.id }}" data-id="{{ field.id }}" value="{{ item.fields[field.id] }}" />
+		{% elseif field.type == 'checkbox' %}
+			<label for="fields_{{ field.id }}">{{ field.label }}</label>
+			<input type='checkbox' id="fields_{{ field.id }}" name="fields_{{ field.id }}" data-id="{{ field.id }}" {% if item.fields[field.id] %}checked{% endif %}/>
+		{% elseif field.type == 'dropdown' %}
+			<label for="fields_{{ field.id }}">{{ field.label }}</label>
+			<select id="fields_{{ field.id }}" name="fields_{{ field.id }}" data-id="{{ field.id }}">
+			{% for value in field.values %}
+				<option{% if value == item.fields[field.id] %} selected{% endif %}>{{ value }}</option>
+			{% endfor %}
+			</select>
+		{% elseif field.type == 'radio' %}
+			<label for="fields_{{ field.id }}">{{ field.label }}</label>
+			{% set count = 1 %}
+			{% for value in field.values %}
+			<input type="radio" id="fields_{{ field.id }}_{{ count }}" name="fields_{{ field.id }}" value="{{ value }}" data-id="{{ field.id }}" {% if value == item.fields[field.id] %}checked{% endif %}/>
+			<label class="radio" for="fields_{{ field.id }}_{{ count }}">{{ value }}</label>
+			{% set count = count + 1 %}
+			{% endfor %}
+		{% endif %}
+		</div>
+	{% endfor %}
+</div>
+{% endif %}

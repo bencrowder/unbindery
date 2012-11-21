@@ -76,22 +76,16 @@
 				<section>
 					<h3>Custom Item Fields</h3>
 
-					<p>These are fields users can fill in while proofing items.</p>
+					<textarea id="project_fields" name="project_fields" class="fields">{{ project.fields }}</textarea>
 
-					<ul class="fields">
-						<li><a class="delete">×</a><label>Confidence</label> <input name="project_fields[]" type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
-					</ul>
-
-					<label>New field name</label>
-					<input id="new_field_name" name="new_field_name" type="text" />
-
-					<label>New field type</label>
-					<input id="new_field_type" name="new_field_type" type="text" />
-
-					<input id="project_fields" name="project_fields" type="hidden" value="" />
-					<input type="button" value="Add field" class="button light" />
-
-					<p class="small">Possible values: "text", "dropdown('option1', option2')"</p>
+					<div class="small">Fields users can fill in while proofing items. One per line. Examples:
+						<ul>
+							<li>Page Number: text</li>
+							<li>Has Margin Notes: checkbox</li>
+							<li>Confidence Level: dropdown - High | Medium | Low</li>
+							<li>Page Type: radio - Text | Image | Blank</li>
+						</ul>
+					</div>
 				</section>
 			</div>
 

@@ -20,9 +20,9 @@ class TranscriptController {
 		$transcriptObj = $user->loadTranscript($item, $type);
 
 		if ($transcriptObj) {
-			$user->updateTranscript($item, $status, $transcript->getText(), $type);
+			$user->updateTranscript($item, $status, $transcript->getText(), $transcript->getFields(), $type);
 		} else {
-			$user->addTranscript($item, $status, $transcript->getText(), $type);
+			$user->addTranscript($item, $status, $transcript->getText(), $transcript->getFields(), $type);
 		}
 
 		// Load the project

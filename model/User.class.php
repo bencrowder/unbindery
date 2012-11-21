@@ -226,12 +226,12 @@ class User {
 		$this->db->updateUserLastLogin($this->username);
 	}
 
-	public function addTranscript($item, $status, $transcript, $type) {
-		return $this->db->addItemTranscript($item->project_id, $item->item_id, $status, $transcript, $this->username, $type);
+	public function addTranscript($item, $status, $transcript, $fields, $type) {
+		return $this->db->addItemTranscript($item->project_id, $item->item_id, $status, $transcript, $fields, $this->username, $type);
 	}
 
-	public function updateTranscript($item, $status, $transcript, $type) {
-		return $this->db->updateItemTranscript($item->project_id, $item->item_id, $status, $transcript, $this->username, $type);
+	public function updateTranscript($item, $status, $transcript, $fields, $type) {
+		return $this->db->updateItemTranscript($item->project_id, $item->item_id, $status, $transcript, $fields, $this->username, $type);
 	}
 
 	public function loadTranscript($item, $type) {

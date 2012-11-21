@@ -19,7 +19,9 @@
 
 				<input type="hidden" name="editor_type" id="editor_type" value="page" />
 			</form>
+			{% include '_fields.html' %}
 		</section>
+
 		{% if user.prefs.sidebyside %}
 		</div>
 		{% endif %}

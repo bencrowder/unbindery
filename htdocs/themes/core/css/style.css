@@ -429,7 +429,9 @@ ul.items.members li						{ padding: 5px; }
 
 #main.add p.instructions				{ color: #999; line-height: 1.5em; }
 
-p.small									{ font-size: .95em; color: #999; }
+.small									{ font-size: .95em; color: #999; }
+
+#main.add div.small						{ margin-top: .5em; }
 
 
 /* Project items display */

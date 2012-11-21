@@ -370,7 +370,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: transcript
 	public function loadItemTranscript($projectId, $itemId, $username, $type) {
-		$query = "SELECT transcript FROM transcripts ";
+		$query = "SELECT transcript, fields FROM transcripts ";
 		$query .= "WHERE project_id = ? ";
 		$query .= "AND item_id = ? ";
 		$query .= "AND user = ? ";
@@ -378,12 +378,20 @@ class DbMySQL implements DbInterface {
 
 		$results = $this->query($query, array($projectId, $itemId, $username, $type));
 
-		return (count($results) > 0) ? trim($results[0]['transcript']) : '';
+		if (count($results) > 0) {
+			$response = array();
+			$response['transcript'] = trim($results[0]['transcript']);
+			$response['fields'] = trim($results[0]['fields']);
+		} else {
+			$response = '';
+		}
+
+		return $response;
 	}
 
-	// Returns: array of [transcript, user]
+	// Returns: array of [transcript, fields, user]
 	public function loadItemTranscripts($projectId, $itemId, $type) {
-		$query = "SELECT transcript, user FROM transcripts ";
+		$query = "SELECT transcript, fields, user FROM transcripts ";
 		$query .= "WHERE project_id = ? ";
 		$query .= "AND item_id = ? ";
 		$query .= "AND type = ? ";
@@ -417,8 +425,9 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
-	public function updateItemTranscript($projectId, $itemId, $status, $transcript, $username, $type) {
+	public function updateItemTranscript($projectId, $itemId, $status, $transcript, $fields, $username, $type) {
 		$sql = "UPDATE transcripts SET transcript = ?, ";
+		$sql .= "fields = ?, ";
 		$sql .= "date = NOW(), ";
 		$sql .= "status = ? ";
 		$sql .= "WHERE item_id = ? ";
@@ -426,14 +435,14 @@ class DbMySQL implements DbInterface {
 		$sql .= "AND type = ? ";
 		$sql .= "AND user = ?;";
 
-		return $this->execute($sql, array($transcript, $status, $itemId, $projectId, $type, $username));
+		return $this->execute($sql, array($transcript, $fields, $status, $itemId, $projectId, $type, $username));
 	}
 
 	// Returns: boolean
-	public function addItemTranscript($projectId, $itemId, $status, $transcript, $username, $type) {
-		$sql = "INSERT INTO transcripts (project_id, item_id, user, date, transcript, status, type) VALUES (?, ?, ?, NOW(), ?, ?, ?);";
+	public function addItemTranscript($projectId, $itemId, $status, $transcript, $fields, $username, $type) {
+		$sql = "INSERT INTO transcripts (project_id, item_id, user, date, transcript, fields, status, type) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?);";
 
-		return $this->execute($sql, array($projectId, $itemId, $username, $transcript, $status, $type));
+		return $this->execute($sql, array($projectId, $itemId, $username, $transcript, $fields, $status, $type));
 	}
 
 	// Returns: none

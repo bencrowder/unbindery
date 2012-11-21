@@ -100,13 +100,21 @@ class ItemPageController {
 				$item['title'] = $itemObj->title;
 
 				// If the user has a transcript for this item, load it instead
-				if ($itemObj->userTranscript && trim($itemObj->userTranscript) != '') {
-					$transcript = trim($itemObj->userTranscript);
+				if ($itemObj->userTranscript && trim($itemObj->userTranscript['transcript']) != '') {
+					$transcript = trim($itemObj->userTranscript['transcript']);
 				} else {
 					$transcript = trim($itemObj->transcript);
 				}
 
 				$item['transcript'] = stripslashes($transcript);
+
+				// Get fields, if any
+				if ($itemObj->userTranscript && trim($itemObj->userTranscript['fields']) != '') {
+					$itemFields = json_decode(trim($itemObj->userTranscript['fields']), true);
+				} else {
+					$itemFields = array();
+				}
+				$item['fields'] = $itemFields;
 
 				// Prepare the URL
 				$appUrl = Settings::getProtected('app_url');
@@ -120,6 +128,37 @@ class ItemPageController {
 
 				// Get template type
 				$templateType = $itemObj->type;
+
+				// Get project fields and parse out
+				$fieldsText = trim($project->fields);
+				$fieldsLines = explode("\n", $fieldsText);
+				$fields = array();
+				foreach ($fieldsLines as $line) {
+					$fieldLabel = '';
+					$fieldType = '';
+					$fieldValues = array();
+
+					// Split it by label and type/parameters
+					list($fieldLabel, $fieldSettings) = array_map('trim', explode(":", $line));
+					if (strpos($fieldSettings, ' - ') == FALSE) {
+						$fieldType = trim($fieldSettings);
+					} else {
+						list($fieldType, $fieldValueStr) = array_map('trim', explode(" - ", $fieldSettings));
+						$fieldValues = explode(" | ", $fieldValueStr);	
+					}
+
+					// Reformat the field ID
+					$fieldId = str_replace(" ", "_", strtolower($fieldLabel));
+
+					$field = array(
+						'id' => $fieldId,
+						'label' => $fieldLabel,
+						'type' => $fieldType,
+						'values' => $fieldValues
+					);
+
+					array_push($fields, $field);
+				}
 
 				// Get any editor-specific config settings
 				$editors = Settings::getProtected('editors');
@@ -141,6 +180,7 @@ class ItemPageController {
 					'editor_type' => $templateType,
 					'proof_user' => $proofUser,
 					'proof_type' => $proofType,
+					'fields' => $fields,
 					'css' => array("editors/$templateType/$templateType.css"),
 					'js' => array("editors/$templateType/$templateType.js"),
 				);
@@ -178,6 +218,7 @@ class ItemPageController {
 				$proofUser = Utils::POST('proofUser');
 				$transcriptText = Utils::POST('transcript');
 				$transcriptStatus = Utils::POST('status');		// draft, completed, reviewed
+				$fields = Utils::POST('fields');
 
 				// Make sure they have access to the item
 				if ($proofType == 'edit' || $proofUser != '') {
@@ -223,34 +264,24 @@ class ItemPageController {
 					$transcript = new Transcript();
 					$transcript->load(array('item' => $itemObj, 'type' => $proofType));
 					$transcript->setText($transcriptText);
+					$transcript->setFields($fields);
 					$transcript->save(array('item' => $itemObj, 'status' => $transcriptStatus, 'type' => $proofType));
 
-					if ($proofUser == '' || $transcriptStatus == 'completed' || $transcriptStatus == 'reviewed') {
+					// If we're looking at a user's proof or review, or if the transcript has already been
+					// completed/reviewed, then we don't want to update scoring and move the item through
+					// the workflow index
+					if ($proofUser == '' && $transcriptStatus != 'draft') {
 						$scoring = Settings::getProtected('scoring');
 
 						// Notifications
 						if ($transcriptStatus == 'reviewed') {
-							// Bump user's score up if they haven't already reviewed this page
+							// Bump user's score up if they haven't already reviewed this item 
 							$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['review'], 'review');
 
 							// Notify project owner that review is complete
-
-							// Training mode
-							if ($user->status == 'training') {
-								// Clear the user for proofing
-								$user->setStatus('clear');
-
-								// Notify user of clearance
-
-								// Notify admin of clearance
-							}
-						} else {
-							// Bump user's score up if they haven't already proofed this page
+						} else if ($transcriptStatus == 'completed') {
+							// Bump user's score up if they haven't already proofed this item
 							$user->updateScoreForItem($itemObj->item_id, $itemObj->project_id, $scoring['proof'], 'proof');
-
-							if ($user->status == 'training') {
-								// Notify project owner with link to review for clearance
-							}
 						}
 
 						// Remove from user's queue
@@ -259,10 +290,7 @@ class ItemPageController {
 						$userQueue->save();
 
 						// Increase item's workflow index
-						// TODO: Make sure this works properly
-						if ($transcriptStatus != 'draft') {
-							$itemObj->workflow_index += 1;
-						}
+						$itemObj->workflow_index += 1;
 
 						// And save it
 						$itemObj->save();

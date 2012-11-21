@@ -188,7 +188,43 @@ var Unbindery = function() {
 		if (isDraft) status = 'draft';
 		if (isReview) status = 'reviewed';
 
-		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, proofType: proofType, proofUser: proofUser, transcript: transcript, status: status },
+		// Get any fields and serialize them
+		var fields = {};
+		$("#fields_container [id^='fields_']").each(function() {
+			// Get the type (text, dropdown, checkbox, radio)
+			var type = ($(this).prop("tagName") == "SELECT") ? "dropdown" : $(this).attr("type");
+
+			// And the ID, which we use as the key
+			var key = $(this).attr("data-id");
+
+			// Get the value
+			var value = '';
+			switch (type) {
+				case 'text':
+					value = $(this).val().trim();
+					break;
+				
+				case 'dropdown':
+					value = $(this).find("option:selected").val();
+					break;
+
+				case 'radio':
+					value = ($(this).attr('checked')) ? $(this).val() : '';
+					break;
+
+				case 'checkbox':
+					value = ($(this).attr('checked')) ? true : false;
+					break;
+			}
+			
+			// Special case for radio buttons
+			if (typeof fields[key] == 'undefined' || (fields[key] == '' && value != '')) {
+				fields[key] = value;
+			}
+		});
+		
+		// Save
+		unbindery.callAPI('save-transcript', 'POST', { itemId: itemId, projectSlug: projectSlug, projectOwner: projectOwner, projectType: projectType, username: username, draft: isDraft, proofType: proofType, proofUser: proofUser, transcript: transcript, fields: JSON.stringify(fields), status: status },
 			function(data) {
 				if (data.statuscode == "success") {
 					if (getAnother) {
@@ -224,10 +260,11 @@ var Unbindery = function() {
 		var projectWorkflow = $("#project_workflow").val().trim();
 		var projectDownloadTemplate = $("#project_download_template").val().trim();
 		var projectCharacters = $("#project_characters").val().trim();
+		var projectFields = $("#project_fields").val().trim();
 		
 		// TODO: add fields
 
-		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate, projectCharacters: projectCharacters },
+		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate, projectCharacters: projectCharacters, projectFields: projectFields },
 			function(data) {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();

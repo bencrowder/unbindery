@@ -6,6 +6,7 @@ class Transcript {
 	static private $functions = array();
 	static private $eventManager;
 	private $text;
+	private $fields;
 
 
 	// Set event manager
@@ -40,6 +41,22 @@ class Transcript {
 	}
 
 
+	// Get the fields
+	// --------------------------------------------------
+
+	public function getFields() {
+		return $this->fields;
+	}
+
+
+	// Set the text
+	// --------------------------------------------------
+
+	public function setFields($fields) {
+		$this->fields = $fields;
+	}
+
+
 	// Load function
 	// --------------------------------------------------
 
@@ -49,8 +66,9 @@ class Transcript {
 			$response = call_user_func(self::$functions['load'], $params);
 		}
 
-		// Load the text
-		$this->text = $response;
+		// Load the text and fields
+		$this->text = $response['transcript'];
+		$this->fields = $response['fields'];
 
 		// And trigger the load transcript event
 		self::$eventManager->trigger('load', 'transcript', array('transcript' => $this));
