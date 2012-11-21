@@ -1046,7 +1046,7 @@ CREATE TABLE `transcripts` (
   `transcript` text,
   `status` varchar(255) default NULL,
   `type` varchar(255) default NULL,
-  `fields` varchar(8000) default NULL,
+  `fields` text,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;

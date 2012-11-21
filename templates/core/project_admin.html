@@ -73,10 +73,10 @@
 					</div>
 				</section>
 
-				<section class="hidden">
-					<h3>Proofing fields</h3>
+				<section>
+					<h3>Custom Item Fields</h3>
 
-					<p>These are fields users will fill in while proofing items for this project.</p>
+					<p>These are fields users can fill in while proofing items.</p>
 
 					<ul class="fields">
 						<li><a class="delete">×</a><label>Confidence</label> <input name="project_fields[]" type="text" value="dropdown('Full', 'Some', 'Not much')" /></li>
@@ -109,21 +109,18 @@
 				<section>
 					<h3>Workflow</h3>
 
-					<label>Workflow string</label>
-					<input id="project_workflow" name="project_workflow" type="text" value="{{ project.workflow }}"/>
+					<input id="project_workflow" name="project_workflow" type="text" value="{{ project.workflow }}" placeholder="@proofer, @proofer, @reviewer" />
 				</section>
 
 				<section>
 					<h3>Characters</h3>
 
-					<label>Project Characters</label>	
 					<textarea id="project_characters" name="project_characters">{% for entry in project.characters %}{{ entry }} {% endfor %}</textarea>
 				</section>
 
 				<section>
-					<h3>Final Transcript</h3>
+					<h3>Download Template</h3>
 
-					<label>Download Template</label>	
 					<textarea id="project_download_template" name="project_download_template">{{ project.download_template }}</textarea>
 				</section>
 			</div>

@@ -325,6 +325,9 @@ body > footer a:hover					{ text-decoration: underline; }
 /* Admin */
 /* --------------------------------------------------- */
 
+#main.add h3							{ margin-top: 2.5em; }
+#main.add h3:first-child				{ margin-top: 0; }
+
 #main label								{ font-weight: bold; color: #3d7291; }
 #main input[type="text"], input[type="password"]	{ width: 250px; border: solid 1px #bbb; padding: 3px; font-weight: bold; font-size: 1.2em; -moz-border-radius: 3px; border-radius: 3px; }
 #main textarea							{ border: solid 1px #bbb; -moz-border-radius: 5px; border-radius: 5px; padding: 3px; }
@@ -363,6 +366,7 @@ ul.items li p.transcript a:hover		{ text-decoration: underline; }
 ul.items.users li ul					{ list-style: none; padding-left: 15px; margin-top: 5px; font-size: .9em; }
 ul.items.users li ul li					{ padding: 2px 0; border: none; }
 
+ul.items.members						{ border-bottom: solid 1px #ddd; }
 ul.items.members li						{ padding: 5px; }
 
 .new-project							{ margin-bottom: 2em; }
