@@ -67,38 +67,10 @@ uploaders:
     chunkoverlap: 2                     # two seconds
 
 notifications:
-  user_new:
-    name: 'New user'
-    targets: [ @admin ]
-    subject: "New user: {{username}}"
-    message: "A new user has joined: {{username}}"
-  user_save_transcript_draft:
-    name: 'Saved draft of transcript'
-    targets: [ @user ]
-    subject: "Saved draft: {{item}}"
-    message: "You successfully saved a draft of your transcript for item {{item}}."
-  user_save_transcript_completed:
-    name: 'Finished transcript'
-    targets: [ @user ]
-    subject: "Finished item: {{item}}"
-    message: "You successfully finished your transcript for item {{item}}."
-  user_save_transcript_reviewed:
-    name: 'Reviewed transcript'
-    targets: [ @user ]
-    subject: "Reviewed item: {{item}}"
-    message: "You successfully reviewed the transcript for item {{item}}."
-  admin_save_transcript_draft:
-    name: 'User saved draft of transcript'
-    targets: [ @projectadmin ]
-    subject: "Transcript saved ({{item}} by {{username}})"
-    message: "{{username}} saved draft of transcript for {{item}}."
-  admin_save_transcript_completed:
-    name: 'User finished transcript'
-    targets: [ @projectadmin ]
-    subject: "Finished: {{item}} by {{username}}"
-    message: "{{username}} finished transcript for {{item}}."
-  admin_save_transcript_reviewed:
-    name: 'User reviewed transcript'
-    targets: [ @projectadmin ]
-    subject: "Reviewed: {{item}} by {{username}}"
-    message: "{{username}} finished reviewing the transcript for {{item}}."
+  user_new: [ @admin ]
+  user_save_transcript_draft: [ @user ]
+  user_save_transcript_completed: [ @user ]
+  user_save_transcript_reviewed: [ @user ]
+  admin_save_transcript_draft: [ @projectadmin ]
+  admin_save_transcript_completed: [ @projectadmin ]
+  admin_save_transcript_reviewed: [ @projectadmin ]
