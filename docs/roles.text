@@ -1,5 +1,13 @@
 ## Unbindery roles
 
+### System roles
+
+* user: An ordinary user (proofer/reviewer)
+* creator: A user who can create new user projects
+* admin: A site admin (who can create new system projects)
+
+### Project roles
+
 * proofer: A user who proofs pages
 * reviewer: A user who reviews already-proofed pages
 * admin: A user who can administrate a project
