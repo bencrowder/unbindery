@@ -5,7 +5,7 @@ class SystemPageController {
 	// --------------------------------------------------
 	// Index handler
 	// URL: /
-	// Methods: 
+	// Methods: GET = get index or confirmation page
 
 	static public function indexHandler($args) {
 		$app_url = Settings::getProtected('app_url');
@@ -61,7 +61,7 @@ class SystemPageController {
 	// --------------------------------------------------
 	// Login handler
 	// URL: /login
-	// Methods: 
+	// Methods: GET = get login page
 
 	static public function loginHandler($args) {
 		$app_url = Settings::getProtected('app_url');
@@ -80,6 +80,12 @@ class SystemPageController {
 		}
 	}
 
+
+	// --------------------------------------------------
+	// Logout handler
+	// URL: /logout
+	// Methods: GET = logout
+
 	static public function logoutHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
@@ -87,7 +93,12 @@ class SystemPageController {
 		$auth->logout($app_url);
 	}
 
-	/* POST */
+
+	// --------------------------------------------------
+	// Signup handler
+	// URL: /signup
+	// Methods: POST = create new signup
+
 	static public function signupHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
@@ -110,12 +121,15 @@ class SystemPageController {
 			error_log("Login didn't work.");
 		}
 
-		// return "done" (so Ajax can replace the div)
-		//echo json_encode(array("statuscode" => "done", "username" => $user->username));
 		break;
 	}
 
-	/* POST */
+
+	// --------------------------------------------------
+	// Activate signup handler
+	// URL: /signup/activate
+	// Methods: POST = activate new signup
+
 	static public function activateHandler($args) {
 		$app_url = Settings::getProtected('app_url');
 		$i18n = new I18n(Settings::getProtected('language'));
@@ -134,25 +148,6 @@ class SystemPageController {
 		header("Location: $app_url");
 	}
 
-	static public function testPageHandler($args) {
-		$app_url = Settings::getProtected('app_url');
-		$auth = Settings::getProtected('auth');
-
-		if ($auth->authenticated()) {
-			$username = $auth->getUsername();
-
-			$user = new User($username);
-
-			// Redirect back to index with message
-			$options = array(
-				'user' => array(
-					'loggedin' => false
-					),
-			);
-
-			Template::render($args[0], $options);
-		}
-	}
 
 	// --------------------------------------------------
 	// Message handler
@@ -171,7 +166,8 @@ class SystemPageController {
 	// --------------------------------------------------
 	// Install handler
 	// URL: /install
-	// Methods: GET, POST
+	// Methods: GET = show install page
+    //          POST = run install script
 
 	static public function installHandler($params) {
 		// Load database
@@ -220,7 +216,10 @@ class SystemPageController {
 	}
 
 
+	// --------------------------------------------------
+	// 404 handler
+
 	static public function fileNotFoundHandler() {
-		echo "File not found.";
+		Template::render('404', array());
 	}
 }

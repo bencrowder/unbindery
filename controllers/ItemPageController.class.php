@@ -5,6 +5,8 @@ class ItemPageController {
 	// Item proof/review handler
 	// URL: /projects/PROJECT/items/ITEM/(proof|review|edit) OR /users/USER/projects/PROJECT/items/ITEM/proof/(proof|review|edit)
 	// Optional username at end for proof|review to view existing proof/review
+	// Methods: GET = get item proof page
+	// Format:  HTML
 
 	static public function itemProof($params) {
 		$i18n = Settings::getProtected('i18n');
@@ -192,7 +194,7 @@ class ItemPageController {
 	// --------------------------------------------------
 	// Item transcript handler
 	// URL: /projects/PROJECT/items/ITEM/transcript OR /users/USER/projects/PROJECT/items/ITEM/transcript
-	// Methods: 
+	// Methods: POST = post transcript for item
 
 	static public function transcript($params) {
 		$format = Utils::getFormat($params['args'], 0, 2);
@@ -316,20 +318,10 @@ class ItemPageController {
 
 
 	// --------------------------------------------------
-	// Item admin handler
-	// URL: /projects/PROJECT/items/ITEM/admin
-	// Methods: 
-
-	static public function admin($params) {
-		echo "Item admin (" . $params['method'] . "): ";
-		print_r($params['args']);
-	}
-
-
-	// --------------------------------------------------
 	// Item handler
 	// URL: /projects/PROJECT/items/ITEM
-	// Methods: 
+	// Methods: GET = get item info
+	//          POST = save item info
 
 	static public function item($params) {
 		// TODO: write
@@ -339,7 +331,7 @@ class ItemPageController {
 	// --------------------------------------------------
 	// Item delete handler
 	// URL: /projects/PROJECT/items/ITEM/delete
-	// Methods: 
+	// Methods: POST = delete item
 
 	static public function deleteItem($params) {
 		$format = Utils::getFormat($params['args'], 2, 4);
@@ -374,8 +366,12 @@ class ItemPageController {
 				Media::removeFileForItem($item);
 
 				// Delete from project proof queue
-				// TODO: remove from review queue as well?
 				$queue = new Queue("project.proof:{$project->slug}", false);
+				$queue->remove($item);
+				$queue->save();
+
+				// Delete from project review queue (if it's there)
+				$queue = new Queue("project.review:{$project->slug}", false);
 				$queue->remove($item);
 				$queue->save();
 
@@ -439,7 +435,8 @@ class ItemPageController {
 	// --------------------------------------------------
 	// Items handler
 	// URL: /projects/PROJECT/items or /users/USER/projects/PROJECT/items
-	// Methods: POST
+	// Methods: GET = get list of items for project
+	//          POST = send uploaded files through item type uploader
 
 	static public function items($params) {
 		$format = Utils::getFormat($params['args'], 0, 2);

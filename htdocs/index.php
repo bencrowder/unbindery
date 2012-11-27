@@ -152,7 +152,6 @@ $routes = array(
 	// User project item pages
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/get\.?([^/]+)?/?#'					=> 'ItemPageController::getNewItem',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/delete\.?([^/]+)?/?#'		=> 'ItemPageController::deleteItem',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/(proof|review)/([^/]+)/?#'	=> 'ItemPageController::itemProof',
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/(proof|review|edit)\.?([^/]+)?/?#'		=> 'ItemPageController::itemProof',
@@ -180,7 +179,6 @@ $routes = array(
 	'#^/projects/([^/]+)/items/get\.?([^/]+)?/?#'					=> 'ItemPageController::getNewItem',
 	'#^/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
 	'#^/projects/([^/]+)/items/([^/.]+)/delete\.?([^/]+)?/?#'		=> 'ItemPageController::deleteItem',
-	'#^/projects/([^/]+)/items/([^/.]+)/admin\.?([^/]+)?/?#'		=> 'ItemPageController::admin',
 	'#^/projects/([^/]+)/items/([^/.]+)/(proof|review)/([^/]+)/?#'	=> 'ItemPageController::itemProof',
 	'#^/projects/([^/]+)/items/([^/.]+)/(proof|review|edit)\.?([^/]+)?/?#'		=> 'ItemPageController::itemProof',
 	'#^/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'				=> 'ItemPageController::item',

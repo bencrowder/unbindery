@@ -1,34 +1,27 @@
 ## Unbindery URL schema
 
-### System handler
+### System pages (SystemPageController)
 
 * /
+	* GET = get index or confirmation page
 * /login
+	* GET = get login page
 * /logout
+	* GET = logout
 * /signup
 	* POST = create new signup
 * /signup/activate
-	* POST = activate
+	* POST = activate new signup
 * /messages
 	* POST = put message/error into session variable
+* /install
+	* GET = show install page
+	* POST = run install script
 
 
-### User handler
+### Projects (ProjectPageController)
 
-* /users
-	* GET = get list of users
-	* POST = create new user
-* /users/admin (?)
-* /users/[USERNAME]
-	* GET = get user info
-	* POST = save user info
-	* DELETE = delete user
-* /users/[USERNAME]/dashboard
-* /users/[USERNAME]/settings
-* /users/[USERNAME]/projects/[PROJECT] -- see below (same as /projects/[PROJECT])
-
-
-### Project handler
+Note that user projects follow the same schema but with /users/[USER] prepended.
 
 * /projects
 	* GET = get list of projects
@@ -38,31 +31,50 @@
 * /projects/[PROJECT]
 	* GET = get project info
 	* POST = save project info
-	* DELETE = delete project
-* /projects/[PROJECT]/guidelines (?)
-	* GET = list guidelines
+	* DELETE = delete project (not implemented)
 * /projects/[PROJECT]/membership
 	* POST = join project
 	* DELETE = leave project
 * /projects/[PROJECT]/transcript
-	* GET = get concatenated transcript for project
+	* GET = download concatenated transcript
+* /projects/[PROJECT]/transcript/split
+	* POST = split transcript based on regex template
 * /projects/[PROJECT]/admin
+	* GET = get project admin page
+* /projects/[PROJECT]/upload
+	* POST = move uploaded files to temp directory
+* /projects/[PROJECT]/import
+	* GET = transcript import page
+	* POST = save imported transcript
+
+
+### User handler
+
+* /users
+	* GET = get list of users (not implemented)
+	* POST = create new user (not implemented)
+* /users/admin
+	* GET = user management page for site admins (not implemented)
+* /users/[USERNAME]
+	* DELETE = delete user (not implemented)
+* /users/[USERNAME]/settings
+	* GET = get user settings
+	* POST = save user settings
+* /users/[USERNAME]/dashboard
+	* GET = get user dashboard
+* /users/[USERNAME]/projects/[PROJECT] -- same as /projects/[PROJECT]
 
 
 ### Item handler
 
 * /projects/[PROJECT]/items
-	* GET = get list of items for project
-	* POST = create new item
+	* GET = get list of items for project (not implemented)
+	* POST = send uploaded files through item type uploader
 * /projects/[PROJECT]/items/get
 	* GET = get new item
-* /projects/[PROJECT]/items/media
-	* POST = upload item media
-* /projects/[PROJECT]/items/transcripts
-	* POST = upload transcripts
-	* PUT = save transcripts
 * /projects/[PROJECT]/items/[ITEM]
-	* POST = save item info
+	* GET = get item info (not implemented)
+	* POST = save item info (not implemented)
 * /projects/[PROJECT]/items/[ITEM]/delete
 	* POST = delete item
 * /projects/[PROJECT]/items/[ITEM]/proof/[USERNAME]
@@ -75,7 +87,6 @@
 	* GET = load item page for reviewing
 * /projects/[PROJECT]/items/[ITEM]/edit
 	* GET = load item page for reviewing
-	* POST = save item info
 * /projects/[PROJECT]/items/[ITEM]/transcript
 	* POST = save transcript
 
@@ -83,6 +94,7 @@
 ### Admin handler
 
 * /admin
+	* GET = get admin page
 
 
 ### Web services

@@ -30,9 +30,7 @@ class UserPageController {
 	// --------------------------------------------------
 	// User page handler
 	// URL: /users/[USERNAME]
-	// Methods: GET = get user info
-	//          PUT = save user info
-	//          DELETE = delete user
+	// Methods: DELETE = delete user
 
 	static public function userPage($params) {
 		$db = Settings::getProtected('db');
@@ -288,12 +286,17 @@ class UserPageController {
 			'topusers' => $topusers,
 		);
 
-		switch ($format) {
-			case 'json':
-				echo json_encode($response);
-				break;
-			case 'html':
-				Template::render('dashboard', $response);
+		switch ($params['method']) {
+			// GET: Get user dashboard
+			case 'GET':
+				switch ($format) {
+					case 'json':
+						echo json_encode($response);
+						break;
+					case 'html':
+						Template::render('dashboard', $response);
+						break;
+				}
 				break;
 		}
 	}
