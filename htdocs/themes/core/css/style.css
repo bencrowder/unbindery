@@ -307,13 +307,6 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .guidelines a							{ color: #000; text-decoration: none; border-bottom: dotted 1px #666; }
 
 
-/* Thumbnails (project details page) */
-/* --------------------------------------------------- */
-
-ul.thumbnails							{ list-style: none; padding: 0; }
-ul.thumbnails li						{ border: solid 1px #ddd; display: inline-block; margin-right: 10px; }
-
-
 /* Footer */
 /* --------------------------------------------------- */
 

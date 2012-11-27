@@ -491,7 +491,7 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters) {
+	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
 		$sql .= "type = ?, ";
@@ -504,21 +504,20 @@ class DbMySQL implements DbInterface {
 		$sql .= "whitelist = ?, ";
 		$sql .= "guidelines = ?, ";
 		$sql .= "language = ?, ";
-		$sql .= "thumbnails = ?, ";
 		$sql .= "fields = ?, ";
 		$sql .= "download_template = ?, ";
 		$sql .= "characters = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters, $project_id));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters, $project_id));
 	}
 
-	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters) {
+	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, thumbnails, fields, download_template, characters, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, fields, download_template, characters, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $thumbnails, $fields, $downloadTemplate, $characters));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters));
 	}
 
 	// Returns: boolean
@@ -1033,7 +1032,6 @@ CREATE TABLE `projects` (
   `whitelist` varchar(2000) default NULL,
   `guidelines` text default NULL,
   `language` varchar(255) default NULL,
-  `thumbnails` varchar(400) default NULL,
   `date_started` date default NULL,
   `date_completed` date default NULL,
   `fields` varchar(4000) default NULL,

@@ -14,7 +14,6 @@ class Project {
 	private $owner;
 	private $status;
 	private $guidelines;
-	private $thumbnails;
 	private $workflow = "@proofer, @proofer, @reviewer";	// Default
 	private $whitelist;
 	private $fields;
@@ -54,7 +53,6 @@ class Project {
 			$this->owner = trim($project['owner']);
 			$this->status = trim($project['status']);
 			$this->guidelines = stripslashes(trim($project['guidelines']));
-			$this->thumbnails = trim($project['thumbnails']);
 			$this->workflow = trim($project['workflow']);
 			$this->whitelist = trim($project['whitelist']);
 			$this->fields = trim($project['fields']);
@@ -96,16 +94,16 @@ class Project {
 		}
 
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $this->characters);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $this->characters);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $this->characters);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $this->characters);
 		}
 
 		return $status;
 	}
 
 	// TODO: are we even using this function anywhere? save() does the same thing
-	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $thumbnails, $workflow, $whitelist, $fields, $downloadTemplate, $characters) {
+	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $workflow, $whitelist, $fields, $downloadTemplate, $characters) {
 		$this->title = $title;
 		$this->type = $type;
 		$this->public = $public;
@@ -115,7 +113,6 @@ class Project {
 		$this->owner = $owner;
 		$this->status = "pending";
 		$this->guidelines = $guidelines;
-		$this->thumbnails = $thumbnails;
 		$this->workflow = $workflow;
 		$this->whitelist = $whitelist;
 		$this->fields = $fields;
@@ -123,7 +120,7 @@ class Project {
 		$this->characters = $characters;
 
 		if ($title != "" && $slug != "") {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->thumbnails, $this->fields, $this->downloadTemplate, $characters);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $characters);
 
 			if ($status) {
 				return "success";
@@ -328,7 +325,6 @@ class Project {
 		$str .= " | [owner={$this->owner}]";
 		$str .= " | [status={$this->status}]";
 		$str .= " | [guidelines={$this->guidelines}]";
-		$str .= " | [thumbnails={$this->thumbnails}]";
 		$str .= " | [workflow={$this->workflow}]";
 		$str .= " | [whitelist={$this->whitelist}]";
 		$str .= " | [fields={$this->fields}]";
@@ -352,7 +348,6 @@ class Project {
 			"owner" => $this->owner,
 			"status" => $this->status,
 			"guidelines" => $this->guidelines,
-			"thumbnails" => $this->thumbnails,
 			"workflow" => $this->workflow,
 			"whitelist" => $this->whitelist,
 			"fields" => $this->fields,
