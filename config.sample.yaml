@@ -38,15 +38,6 @@ system_guidelines: |
     <h3>General</h3>
     <p>Fix typos.</p>
 
-roles:
-  'user:user': 10
-  'user:creator': 30
-  'user:admin': 50
-  'user:siteadmin': 100
-  'project:proofer': 1000
-  'project:reviewer': 2000
-  'project:admin': 5000
-
 private_key: 'hash together a private key and put it here'
 
 devkeys:

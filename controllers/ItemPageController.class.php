@@ -35,14 +35,11 @@ class ItemPageController {
 				// Make sure they have access to the item
 				if ($proofType == 'edit' || $proofUser != '') {
 					// For editing an item or a specific proof/review, user must be project admin or site admin
-					$roles = $user->getRolesForProject($projectSlug);
-					$isProjectAdmin = (in_array("admin", $roles));
-					$isSiteAdmin = ($user->role == 'admin');
-
-					if (!$isProjectAdmin && !$isSiteAdmin) {
-						Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights"));
-						return;
-					}
+					RoleController::forceClearance(
+						array('project.admin', 'project.owner', 'system.admin'),
+						$user,
+						array('project' => $project)
+					);
 				} else { 
 					// User has to be a member of the project
 					if (!$user->isMember($projectSlug)) {
@@ -223,14 +220,11 @@ class ItemPageController {
 				// Make sure they have access to the item
 				if ($proofType == 'edit' || $proofUser != '') {
 					// For editing an item or a specific proof/review, user must be project admin or site admin
-					$roles = $user->getRolesForProject($projectSlug);
-					$isProjectAdmin = (in_array("admin", $roles));
-					$isSiteAdmin = ($user->role == 'admin');
-
-					if (!$isProjectAdmin && !$isSiteAdmin) {
-						Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights"));
-						return;
-					}
+					RoleController::forceClearance(
+						array('project.admin', 'project.owner', 'system.admin'),
+						$user,
+						array('project' => $project)
+					);
 				} else { 
 					// User has to be a member of the project
 					if (!$user->isMember($projectSlug, $owner)) {
@@ -367,15 +361,11 @@ class ItemPageController {
 				$message = '';
 
 				// Make sure the user is project admin or site admin
-				$roles = $user->getRolesForProject($projectSlug);
-				$isProjectAdmin = (in_array("admin", $roles));
-				$isSiteAdmin = ($user->role == 'admin');
-				// TODO: check to see if user is project owner as well
-
-				if (!$isProjectAdmin && !$isSiteAdmin) {
-					Utils::redirectToDashboard("", $i18n->t("error.insufficient_rights_to_delete"));
-					return;
-				}
+				RoleController::forceClearance(
+					array('project.admin', 'project.owner', 'system.admin'),
+					$user,
+					array('project' => $project)
+				);
 
 				// Load item to make sure it exists
 				$item = new Item($itemId, $projectSlug);

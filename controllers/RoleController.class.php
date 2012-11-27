@@ -1,40 +1,55 @@
 <?php
 
 class RoleController {
-
 	// Simple verify (returns boolean)
 	// --------------------------------------------------
-	// Pass in role, user, and optional projectId
+	// Pass in roles array to check against, user, and optional project (in params array)
 
-	static public function verify($params) {
+	static public function verify($roles, $user, $params = array()) {
+		// If we don't have a user, we're not verified
+		if (!$user) return false;
+
 		$verified = false;
 
-		$role = $params['role'];
-		$user = $params['user'];
-		$projectId = (array_key_exists('project', $params)) ? $params['project'] : '';
+		// Get project
+		$project = (array_key_exists('project', $params)) ? $params['project'] : false;
 
-		// Get the list of roles (so we can compare)
-		$roles = Role::getRoles();
-
-		// Target role value
-		$targetValue = $roles[$role];
-
-		// Split on colon
-		$roleParts = explode(':', $role);
-
-		if ($roleParts[0] == "user") {
-			// If it's a user-level role, get user role field and get value
-			if (array_key_exists("user:" . $user->role, $roles)) {
-				$userValue = $roles["user:" . $user->role]; // TODO: get real value
-			}
-		} else if ($roleParts[0] == "project") {
-			// It's a project-level role
-			if (array_key_exists($projectId, $user->projectRoles) && array_key_exists($user->projectRoles[$projectId], $roles)) {
-				$userValue = $roles[$user->projectRoles[$projectId]]; // TODO: get real value
-			}
+		// Load user roles for project
+		if ($project) {
+			$projectRoles = $user->getRolesForProject($project->slug);
 		}
 
-		if ($userValue >= $targetValue) $verified = true;
+		foreach ($roles as $role) {
+			// Split on colon
+			$roleParts = explode('.', $role);
+
+			switch ($roleParts[0]) {
+				// system.user, system.creator, system.admin
+				case 'system':
+					if ($user->role == $roleParts[1]) {
+						$verified = true;
+					}
+
+					break;
+
+				// project.proofer, project.reviewer, project.admin, project.owner
+				case 'project':
+					if ($project != false) {
+						if (in_array($roleParts[1], $projectRoles)) {
+							$verified = true;
+						}
+
+						// Check owner separately
+						if ($roleParts[1] == 'owner') {
+							if ($project->owner == $user->username) {
+								$verified = true;
+							}
+						}
+					}
+
+					break;
+			}
+		}
 
 		return $verified;
 	}
@@ -42,14 +57,14 @@ class RoleController {
 
 	// Force clearance (and redirect if not cleared)
 	// --------------------------------------------------
-	// Pass in role, user, and optional projectId
+	// Pass in roles array, user, and optional project
 
-	static public function forceClearance($params) {
+	static public function forceClearance($roles, $user, $params = array(), $error = 'error.insufficient_rights') {
 		$app_url = Settings::getProtected('app_url');
 		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
-		if (!self::verify($params)) {
-			Utils::redirectToDashboard('', $i18n->t("role.insufficient"));
+		if (!self::verify($roles, $user, $params)) {
+			Utils::redirectToDashboard('', $i18n->t($error));
 
 			return false;
 		}

@@ -72,8 +72,7 @@ projects.project.completed: 'Completed {{ date }}'
 
 # Errors
 error.deleting_item: 'Error deleting item from database'
-error.insufficient_rights: "You don't have rights to edit that item. Sorry."
-error.insufficient_rights_to_delete: "You don't have rights to delete that item. Sorry."
+error.insufficient_rights: "You don't have rights to do that. Sorry."
 error.not_a_member: "You're not a member of that project. Sorry."
 error.nonexistent_item: "Item doesn't exist."
 error.loading_project: "Error loading project."

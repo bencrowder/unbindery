@@ -174,8 +174,10 @@ class ProjectPageController {
 		$requiredRole = ($projectType == 'system') ? 'admin' : 'creator';
 
 		// Get the current user's role and make sure they can access this page
-		$roleManager = new Role();
-		$roleManager->forceClearance(array('role' => "user:$requiredRole", 'user' => $user));
+		RoleController::forceClearance(
+			array("system.$requiredRole"),
+			$user
+		);
 
 		// Output data
 		switch ($params['method']) {
@@ -365,16 +367,21 @@ class ProjectPageController {
 		$projectType = Utils::getProjectType($params['args']);
 		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
 		$projectSlug = $params['args'][$projectSlugIndex];
+		$project = new Project($projectSlug);
 
 		$user = User::getAuthenticatedUser();
 
-		// TODO: make sure user has access to download this
+		// Make sure the user has access to download this
+		RoleController::forceClearance(
+			array('project.admin', 'project.owner', 'system.admin'),
+			$user,
+			array('project' => $project)
+		);
 
 		switch ($params['method']) {
 			// GET: download project transcript
 			case 'GET':
 				// Load project
-				$project = new Project($projectSlug);
 				$project->getItems();
 
 				$finalText = "";
@@ -531,17 +538,19 @@ class ProjectPageController {
 		$format = Utils::getFormat($params['args'], 1, 3);
 		$projectType = Utils::getProjectType($params['args']);
 		$projectSlug = ($projectType == 'system') ? $params['args'][0] : $params['args'][2];
-
-		$user = User::getAuthenticatedUser();
-
-		// TODO: Verify clearance
-
-		// Load the project
 		$project = new Project($projectSlug);
 
 		if ($project->title == '') {
 			Utils::redirectToDashboard('', $i18n->t("error.loading_project"));
 		}
+
+		$user = User::getAuthenticatedUser();
+
+		RoleController::forceClearance(
+			array('project.admin', 'project.owner', 'system.admin'),
+			$user,
+			array('project' => $project)
+		);
 
 		if ($project->type == 'system') {
 			$projectUrl = "projects/" . $project->slug;
@@ -645,7 +654,11 @@ class ProjectPageController {
 
 		$user = User::getAuthenticatedUser();
 
-		// TODO: Verify clearance
+		RoleController::forceClearance(
+			array('project.admin', 'project.owner', 'system.admin'),
+			$user,
+			array('project' => $project)
+		);
 
 		// Load the project
 		$project = new Project($projectSlug);
