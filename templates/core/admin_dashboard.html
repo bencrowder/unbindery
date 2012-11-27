@@ -5,19 +5,19 @@
 		<h2>{{ i18n.t('admin.dashboard.title') }}</h2>
 
 		<div class="content">
-			<h3>Latest Work in Your Projects</h3>
+			<h3>{{ i18n.t('admin.dashboard.latest_work') }}</h3>
 			<ul class="items latest-work">
 				{% for entry in latest_work %}
-				<li>{{ entry.username }} <a href="{{ entry.transcript_url }}">{{ entry.type }}ed</a> <a href="{{ entry.edit_url }}">{{ entry.item.title }}</a>
-				<div class="metadata">Project: {{ entry.project.title }} &bull; Date: {{ entry.date_completed }}</div>
+				<li>{{ entry.username }} <a href="{{ entry.transcript_url }}">{{ i18n.t('admin.dashboard.latest.verb', { "type": entry.type }) }}</a> <a href="{{ entry.edit_url }}">{{ entry.item.title }}</a>
+				<div class="metadata">{{ i18n.t('admin.dashboard.latest.project', { "title": entry.project.title }) }} &bull; {{ i18n.t('admin.dashboard.latest.date', { "date": entry.date_completed }) }}</div>
 				{% endfor %}
 			</ul>
 
 			{% if user.role == 'admin' %}
-			<h3>User Management</h3>
+			<h3>{{ i18n.t('admin.dashboard.user_management') }}</h3>
 			<ul class="items users">
 			{% for user in users %}
-				<li data-username="{{ user.username }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ user.username }}</b> &bull; {{ user.role }} &bull; Signed up {{ user.signup_date }}
+			<li data-username="{{ user.username }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ user.username }}</b> &bull; {{ user.role }} &bull; {{ i18n.t('admin.dashboard.users.signed_up', { "date": user.signup_date }) }}
 					<ul class="projects">
 					{% for project in user.projects %}
 						<li>{{ project.title }}: {{ project.role }} (proofed {{ project.items_proofed }} items{% if 'reviewer' in project.role %}, reviewed {{ project.items_reviewed }} items{% endif %})</li>
@@ -32,18 +32,18 @@
 		<div class="sidebar">
 			<div class="new-project">
 				{% if user.role == 'creator' %}
-				<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">Create new project</a>
+					<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">{{ i18n.t('admin.dashboard.create_new_project') }}</a>
 				{% elseif user.role == 'admin' %}
-					<a href="{{ app_url }}/projects/new-project" class="button">Create new system project</a>
-					<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">Create new user project</a>
+					<a href="{{ app_url }}/projects/new-project" class="button">{{ i18n.t('admin.dashboard.create_new_system_project') }}</a>
+					<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">{{ i18n.t('admin.dashboard.create_new_user_project') }}</a>
 				{% endif %}
 			</div>
 
 			<div class="new-members">
-				<h3>Newest Members of Your Projects</h3>
+				<h3>{{ i18n.t('admin.dashboard.newest_members') }}</h3>
 				<ul>
 					{% for member in newest_members %}
-					<li>{{ member.username }} became {{ member.role }} in {{ member.slug }}</li>
+					<li>{{ i18n.t('admin.dashboard.member_roles', { "username": member.username, "role": member.role, "slug": member.slug }) }}</li>
 					{% endfor %}
 				</ul>
 			</div>

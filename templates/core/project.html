@@ -2,53 +2,43 @@
 
 {% block main %}
 	<div id="main" class="container">
-		{% if user.is_owner %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">Edit project &rarr;</a></div>{% endif %}
+		{% if user.is_owner %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">{{ i18n.t('project.edit_link') }}</a></div>{% endif %}
 
-		<h2>{% if project.type == 'user' %}User {% endif %}Project Details</h2>
+		<h2>{% if project.type == 'user' %}{{ i18n.t('project.user_project_details') }}{% else %}{{ i18n.t('project.system_project_details') }}{% endif %}</h2>
 
 		<div class="content proj_details">
-			<div class="project_title">{{ project.title }}{% if not project.public %} (private){% endif %}</div>
+			<div class="project_title">{{ project.title }}{% if not project.public %}{{ i18n.t('project.private') }}{% endif %}</div>
 
 			<ul class="metadata">
-				<li><label>Owner:</label> <div>{{ project.owner }}{% if user.is_owner %} (you){% endif %}</div></li>
-				{% if project.num_items %}<li><label># Items:</label> <div>{{ project.num_items }}</div></li>{% endif %}
-				{% if project.num_proofers %}<li><label># Proofers:</label> <div>{{ project.num_proofers }}</div></li>{% endif %}
-				{% if project.num_reviewers %}<li><label># Reviewers:</label> <div>{{ project.num_reviewers }}</div></li>{% endif %}
+				<li><label>{{ i18n.t('project.owner') }}</label> <div>{{ project.owner }}{% if user.is_owner %}{{ i18n.t('project.owner.you') }}{% endif %}</div></li>
+				{% if project.num_items %}<li><label>{{ i18n.t('project.num_items') }}</label> <div>{{ project.num_items }}</div></li>{% endif %}
+				{% if project.num_proofers %}<li><label>{{ i18n.t('project.num_proofers') }}</label> <div>{{ project.num_proofers }}</div></li>{% endif %}
+				{% if project.num_reviewers %}<li><label>{{ i18n.t('project.num_reviewers') }}</label> <div>{{ project.num_reviewers }}</div></li>{% endif %}
 
-				{% if project.description %}<li><label>Description:</label> <div>{{ project.description }}</div></li>{% endif %}
-				{% if project.language %}<li><label>Language:</label> <div>{{ project.language }}</div></li>{% endif %}
+				{% if project.description %}<li><label>{{ i18n.t('project.description') }}</label> <div>{{ project.description }}</div></li>{% endif %}
+				{% if project.language %}<li><label>{{ i18n.t('project.language') }}</label> <div>{{ project.language }}</div></li>{% endif %}
 
-				{% if project.date_started %}<li><label>Started:</label> <div>{{ project.date_started }}</div></li>{% endif %}
-				{% if project.date_completed and project.days_spent %}<li><label>Completed:</label> <div>{{ project.date_completed }} ({{ project.days_spent }} days)</div></li>{% endif %}
-				{% if project.date_posted %}<li><label>Posted:</label> <div>{{ project.date_posted }}</div></li>{% endif %}
-				{% if project.thumbnails %}<li>
-					<label>Preview:</label>
-					<div>
-						<ul class="thumbnails">
-							{% for thumbnail in project.thumbnails %}
-							<li><img src="{{ app_url }}/media/{{ project.slug }}/thumbnails/{{ thumbnail }}" /></li>
-							{% endfor %}
-						</ul>
-					</div>
-				</li>{% endif %}
+				{% if project.date_started %}<li><label>{{ i18n.t('project.started') }}</label> <div>{{ project.date_started }}</div></li>{% endif %}
+				{% if project.date_completed and project.days_spent %}<li><label>{{ i18n.t('project.completed') }}</label> <div>{{ i18n.t('project.completed_date', { "date": project.date_completed, "num_days": project.days_spent }) }}</li>{% endif %}
+				{% if project.date_posted %}<li><label>{{ i18n.t('project.posted') }}</label> <div>{{ project.date_posted }}</div></li>{% endif %}
 			</ul>
 
-			{% if project.guidelines %}<div class="guidelines"><h2>Guidelines</h2> <div>{{ project.guidelines|raw }}</div></div>{% endif %}
+			{% if project.guidelines %}<div class="guidelines"><h2>{{ i18n.t('project.guidelines') }}</h2> <div>{{ project.guidelines|raw }}</div></div>{% endif %}
 		</div>
 
 		<div class="sidebar proj_details">
-			<div class="membership"><a class="{% if user.is_member %}leave{% else %}join button{% endif %}" href="{{ app_url }}/projects/{{ project.slug }}/membership">{% if user.is_member %}Leave this project{% else %}Join this project{% endif %}</a></div>
+			<div class="membership"><a class="{% if user.is_member %}leave{% else %}join button{% endif %}" href="{{ app_url }}/projects/{{ project.slug }}/membership">{% if user.is_member %}{{ i18n.t('project.leave') }}{% else %}{{ i18n.t('project.join') }}{% endif %}</a></div>
 
 			<div class="progress_bar big">
 				<div class="capsule">
 					<div class="percent" style="width: {{ project.percent_complete * 2 }}px;"></div>
 				</div> 
-				<p>Completed: {{ project.percent_complete }}% ({{ project.items_completed }}/{{ project.num_items }})</p>
+				<p>{{ i18n.t('project.percent_complete', { "percent_complete": project.percent_complete, "items_completed": project.items_completed, "num_items": project.num_items }) }}</p>
 			</div>
 
 			{% if proofers|length > 0 %}
 				<div class="volunteers">
-					<h3>Proofers on This Project</h3>
+					<h3>{{ i18n.t('project.proofers_on_this_project') }}</h3>
 					<ul class="proofers">
 					{% for proofer in proofers %}
 						<li>
@@ -56,7 +46,7 @@
 								<div class="capsule">
 									<div class="percent" style="width: {{ proofer.percentage }}px;"></div>
 								</div> 
-								<p>{{ proofer.percentage }}% ({{ proofer.items }} items)</p>
+								<p>{{ i18n.t('project.user_percentage', { "percentage": proofer.percentage, "num_items": proofer.items }) }}</p>
 							</div>
 							<div class="username">{{ proofer.username }}</div>
 						</li>
@@ -67,7 +57,7 @@
 
 			{% if reviewers|length > 0 %}
 				<div class="volunteers">
-					<h3>Reviewers on This Project</h3>
+					<h3>{{ i18n.t('project.reviewers_on_this_project') }}</h3>
 					<ul class="reviewers">
 					{% for reviewer in reviewers %}
 						<li>
@@ -75,7 +65,7 @@
 								<div class="capsule">
 									<div class="percent" style="width: {{ reviewer.percentage }}px;"></div>
 								</div> 
-								<p>{{ reviewer.percentage }}% ({{ reviewer.items }} items)</p>
+								<p>{{ i18n.t('project.user_percentage', { "percentage": reviewer.percentage, "num_items": reviewer.items }) }}</p>
 							</div>
 							<div class="username">{{ reviewer.username }}</div>
 						</li>

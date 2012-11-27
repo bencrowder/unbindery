@@ -4,20 +4,20 @@
 <div id="controls_container" class="controls">
 	<div id="controls" class="container">
 		<ul id="controls_left">
-			<li><a class="button" href="{{ project.url }}/transcript">Download Transcript</a></li>
-			<li><a class="button" href="{{ project.url }}/import">Import Transcript</a></li>
+			<li><a class="button" href="{{ project.url }}/transcript">{{ i18n.t('admin.project.download_transcript') }}</a></li>
+			<li><a class="button" href="{{ project.url }}/import">{{ i18n.t('admin.project.import_transcript') }}</a></li>
 		</ul>
 
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
-			<li><span id="action-save-project" href="" class="button">Save Project</span></li>
+			<li><span id="action-save-project" href="" class="button">{{ i18n.t('admin.project.save_project') }}</span></li>
 		</ul>
 	</div>
 </div>{% endblock %}
 
 {% block main %}
 	<div id="main" class="container add">
-		<h2>Project Admin</h2>
+		<h2>{{ i18n.t('admin.project.title') }}</h2>
 
 		<form id="project_admin_form" name="project_admin_form" action="{{ project.url }}" method="POST">
 			<input id="project_owner" name="project_owner" type="hidden" value="{{ project.owner }}" />
@@ -26,33 +26,33 @@
 
 			<div class="content">
 				<section>
-					<h3>Basic Information</h3>
+					<h3>{{ i18n.t('admin.project.basic_information') }}</h3>
 
-					<label>Title</label>
+					<label>{{ i18n.t('admin.project.title') }}</label>
 					<input id="project_name" name="project_name" type="text" value="{{ project.title }}" />
 
-					<label>Visibility</label>
+					<label>{{ i18n.t('admin.project.visibility') }}</label>
 					<select id="project_public" name="project_public">
-						<option{% if project.public %} selected{% endif %} value="public">Public</option>
-						<option{% if not project.public %} selected{% endif %} value="private">Private</option>
+						<option{% if project.public %} selected{% endif %} value="public">{{ i18n.t('admin.project.visibility.public') }}</option>
+						<option{% if not project.public %} selected{% endif %} value="private">{{ i18n.t('admin.project.visibility.private') }}</option>
 					</select>
 
-					<label>Description</label>
+					<label>{{ i18n.t('admin.project.description') }}</label>
 					<textarea id="project_desc" name="project_desc">{{ project.description }}</textarea>
 
-					<label>Language</label>
+					<label>{{ i18n.t('admin.project.language') }}</label>
 					<input id="project_lang" name="project_lang" type="text" value="{{ project.language }}" />
 
-					<label>Status</label>
+					<label>{{ i18n.t('admin.project.status') }}</label>
 					<select id="project_status" name="project_status">
-						<option{% if project.status == 'pending' %} selected{% endif %} value="pending">Pending</option>
-						<option{% if project.status == 'active' %} selected{% endif %} value="active">Active</option>
-						<option{% if project.status == 'completed' %} selected{% endif %} value="completed">Completed</option>
+						<option{% if project.status == 'pending' %} selected{% endif %} value="pending">{{ i18n.t('admin.project.status.pending') }}</option>
+						<option{% if project.status == 'active' %} selected{% endif %} value="active">{{ i18n.t('admin.project.status.active') }}</option>
+						<option{% if project.status == 'completed' %} selected{% endif %} value="completed">{{ i18n.t('admin.project.status.completed') }}</option>
 					</select>
 				</section>
 
 				<section>
-					<h3>Project Members</h3>
+					<h3>{{ i18n.t('admin.project.members') }}</h3>
 
 					<ul class="items members">
 					{% for member in members %}
@@ -61,59 +61,52 @@
 					</ul>
 
 					<div class="addbox">
-						<label>Add user:</label>
-						<input type="text" placeholder="Username" id="addmember-username" name="addmemberUsername" />
+						<label>{{ i18n.t('project.members.add_user') }}</label>
+						<input type="text" placeholder="{{ i18n.t('admin.project.members.username') }}" id="addmember-username" name="addmemberUsername" />
 						<select id="addmember-role" name="addmemberRole">
-							<option value="proofer">Proofer</option>
-							<option value="reviewer">Reviewer</option>
-							<option value="admin">Admin</option>
+							<option value="proofer">{{ i18n.t('admin.project.roles.proofer') }}</option>
+							<option value="reviewer">{{ i18n.t('admin.project.roles.reviewer') }}</option>
+							<option value="admin">{{ i18n.t('admin.project.roles.admin') }}</option>
 						</select>
 
-						<input type="submit" class="button light" value="Add" />
+						<input type="submit" class="button light" value="{{ i18n.t('admin.project.members.add') }}" />
 					</div>
 				</section>
 
 				<section>
-					<h3>Custom Item Fields</h3>
+					<h3>{{ i18n.t('admin.project.custom_item_fields') }}</h3>
 
 					<textarea id="project_fields" name="project_fields" class="fields">{{ project.fields }}</textarea>
 
-					<div class="small">Fields users can fill in while proofing items. One per line. Examples:
-						<ul>
-							<li>Page Number: text</li>
-							<li>Has Margin Notes: checkbox</li>
-							<li>Confidence Level: dropdown - High | Medium | Low</li>
-							<li>Page Type: radio - Text | Image | Blank</li>
-						</ul>
-					</div>
+					<div class="small">{{ i18n.t('admin.project.fields_instructions') }}</div>
 				</section>
 			</div>
 
 			<div class="sidebar">
 				{% if not project.public %}
 				<section>
-					<h3>Whitelist (if applicable)</h3>
+					<h3>{{ i18n.t('admin.project.whitelist') }}</h3>
 
-					<label>One username per line.</label>
+					<label>{{ i18n.t('admin.project.whitelist.one_username_per_line') }}</label>
 					<textarea id="project_whitelist" name="project_whitelist">{% for entry in project.whitelist %}{{ entry }}
 {% endfor %}</textarea>
 				</section>
 				{% endif %}
 
 				<section>
-					<h3>Workflow</h3>
+					<h3>{{ i18n.t('admin.project.workflow') }}</h3>
 
 					<input id="project_workflow" name="project_workflow" type="text" value="{{ project.workflow }}" placeholder="@proofer, @proofer, @reviewer" />
 				</section>
 
 				<section>
-					<h3>Characters</h3>
+					<h3>{{ i18n.t('admin.project.characters') }}</h3>
 
 					<textarea id="project_characters" name="project_characters">{% for entry in project.characters %}{{ entry }} {% endfor %}</textarea>
 				</section>
 
 				<section>
-					<h3>Download Template</h3>
+					<h3>{{ i18n.t('admin.project.download_template') }}</h3>
 
 					<textarea id="project_download_template" name="project_download_template">{{ project.downloadTemplate }}</textarea>
 				</section>
@@ -122,16 +115,16 @@
 
 		<section class="items">
 			<div class="content">
-				<h3>Items</h3>
+				<h3>{{ i18n.t('admin.project.items') }}</h3>
 
 				<ul class="items">
 					{% for item in project.items %}
 					<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit">{{ item.title }}</a> <span class="status">{{ item.type }} &bull; {{ item.status }}</span>
 						{% for proof in item.proofs %}
-						<p class="transcript">Proofed by <a href="{{ project.url }}/items/{{ item.id }}/proof/{{ proof.user }}">{{ proof.user }}</a> ({{ proof.date_completed }})</p>
+						<p class="transcript">{{ i18n.t('admin.project.item.proofed_by', { "url": project.url ~ "/items/" ~ item.id ~ "/proof/" ~ proof.user, "user": proof.user, "date_completed": proof.date_completed) }}</p>
 						{% endfor %}
 						{% for review in item.reviews %}
-						<p class="transcript">Reviewed by <a href="{{ project.url }}/items/{{ item.id }}/review/{{ review.user }}">{{ review.user }}</a> ({{ review.date_completed }})</p>
+						<p class="transcript">{{ i18n.t('admin.project.item.reviewed_by', { "url": project.url ~ "/items/" ~ item.id ~ "/review/" ~ review.user, "user": review.user, "date_completed": review.date_completed) }}</p>
 						{% endfor %}
 					</li>
 					{% endfor %}

@@ -82,19 +82,19 @@ class UserPageController {
 				$userNotifications = array();
 				$adminNotifications = array();
 
-				foreach ($notifications as $key => $note) {
-					if (in_array('@user', $note['targets'])) {
+				foreach ($notifications as $key => $targets) {
+					if (in_array('@user', $targets)) {
 						// User notification
 						if (!property_exists($user->prefs->notifications, $key)) {
 							$user->prefs->notifications->$key = false;
 						}
-						array_push($userNotifications, array('id' => $key, 'name' => $note['name'], 'selected' => $user->prefs->notifications->$key));
-					} else if (in_array('@admin', $note['targets']) && $user->role == 'admin') {
+						array_push($userNotifications, array('id' => $key, 'selected' => $user->prefs->notifications->$key));
+					} else if (in_array('@admin', $targets) && $user->role == 'admin') {
 						// Admin notification
 						if (!property_exists($user->prefs->notifications, $key)) {
 							$user->prefs->notifications->$key = false;
 						}
-						array_push($adminNotifications, array('id' => $key, 'name' => $note['name'], 'selected' => $user->prefs->notifications->$key));
+						array_push($adminNotifications, array('id' => $key, 'selected' => $user->prefs->notifications->$key));
 					}
 				}
 

@@ -12,36 +12,34 @@
 		<h2>Login</h2>
 
 		<form id="login_form" action="{{ app_url }}/login" method="post" accept-charset="utf-8">
-			<label>Username:</label>
+			<label>{{ i18n.t('login.username') }}</label>
 			<input type="text" id="username" name="username" autofocus />
 
-			<label>Password:</label>
+			<label>{{ i18n.t('login.password') }}</label>
 			<input type="password" id="password" name="password" />
 
-			<input type="submit" value="Log In" class="button light" />
+			<input type="submit" value="{{ i18n.t('login.login') }}" class="button light" />
 
-			{% if allow_signup %}<span id="signup">Sign up</span>{% endif %}
+			{% if allow_signup %}<span id="signup">{{ i18n.t('login.signup') }}</span>{% endif %}
 		</form>
 
 		{% if allow_signup %}
 		<form id="signup_form" style="display: none" action="{{ app_url }}/signup" method="post" accept-charset="utf-8">
-			<label>Email:</label>
+			<label>{{ i18n.t('signup.email') }}</label>
 			<input type="text" id="email_signup" name="email_signup" />
 
-			<label>Username:</label>
+			<label>{{ i18n.t('signup.username') }}</label>
 			<input type="text" id="username_signup" name="username_signup" />
 
-			<label>Password:</label>
+			<label>{{ i18n.t('signup.password') }}</label>
 			<input type="password" id="password_signup" name="password_signup" />
 
-			<input type="submit" value="Sign Up" class="button light" />
+			<input type="submit" value="{{ i18n.t('signup.signup') }}" class="button light" />
 
-			<span id="login">Log in</span>
+			<span id="login">{{ i18n.t('signup.login') }}</span>
 		</form>
 
-		<div id="thankyou" style="display: none">
-			We just sent you a confirmation link to your email address.
-		</div>
+		<div id="thankyou" style="display: none">{{ i18n.t('signup_conf_link_sent') }}</div>
 		{% endif %}
 	</div>
 </div>

@@ -4,36 +4,36 @@
 
 {% block main %}
 	<div id="main" class="container add">
-		<h2>New {% if project.type == 'user' %} User{% elseif project.type == 'system' %} System{% endif %} Project</h2>
+		<h2>{% if project.type == 'user' %}{{ i18n.t('admin.new_project.new_user_project') }}{% elseif project.type == 'system' %}{{ i18n.t('admin.new_project.new_system_project') }}{% endif %}</h2>
 
 		<form id="new_project_form" name="new_project_form" action="{{ app_url }}/projects" method="POST">
 			<input id="project_owner" name="project_owner" type="hidden" value="{{ username }}" />
 
 			<div class="content">
 				<section>
-					<label>Title</label>
+					<label>{{ i18n.t('admin.new_project.title') }}</label>
 					<input id="project_name" name="project_name" type="text" placeholder="Project title" />
 
-					<label>Visibility</label>
+					<label>{{ i18n.t('admin.new_project.visibility') }}</label>
 					<select id="project_public" name="project_public">
-						<option value="public">Public</option>
-						<option value="private">Private</option>
+						<option value="public">{{ i18n.t('admin.new_project.visibility.public') }}</option>
+						<option value="private">{{ i18n.t('admin.new_project.visibility.private') }}</option>
 					</select>
 
-					<label>Description</label>
+					<label>{{ i18n.t('admin.new_project.description') }}</label>
 					<textarea id="project_desc" name="project_desc"></textarea>
 
-					<label>Language</label>
+					<label>{{ i18n.t('admin.new_project.language') }}</label>
 					<input id="project_lang" name="project_lang" type="text" value="English" />
 
 					<input type="hidden" name="project_type" value="{{ project.type }}" />
 
-					<input type="submit" value="Create Project" class="button" />
+					<input type="submit" value="{{ i18n.t('admin.new_project.create_project') }}" class="button" />
 				</section>
 			</div>
 
 			<div class="sidebar">
-				<p class="instructions">Enter the basic information for your project. On the next page you'll be able to add more metadata and upload items.</p>
+				<p class="instructions">{{ i18n.t('admin.new_project.instructions') }}</p>
 			</div>
 		</form>
 	</div>

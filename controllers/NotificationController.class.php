@@ -14,7 +14,7 @@ class NotificationController {
 		$emailSubject = Settings::getProtected('email_subject');
 
 		// Go through each target for this notification
-		foreach ($notify['targets'] as $target) {
+		foreach ($notify as $target) {
 			if ($target[0] == '@') {
 				// User class
 				switch ($target) {
@@ -73,7 +73,7 @@ class NotificationController {
 		$str = $message;
 		foreach ($params as $key=>$value) {
 			if (gettype($value) == 'string') {
-				$str = preg_replace("/{{" . $key . "}}/", $value, $str);
+				$str = preg_replace("/[[" . $key . "]]/", $value, $str);
 			}
 		}
 
@@ -101,11 +101,13 @@ class NotificationController {
 	// Send a notification
 
 	static public function sendNotification($to, $notify, $params) {
-		$subject = self::replaceVariables($notify['subject'], $params);
+		$i18n = new I18n(Settings::getProtected('language'));
+
+		$subject = self::replaceVariables($i18n->t("$notify.subject"), $params);
 		$email_subject = Settings::getProtected('email_subject');
 		if ($email_subject) $subject = "$email_subject $subject";
 		
-		$message = self::replaceVariables($notify['message'], $params);
+		$message = self::replaceVariables($i18n->t("$notify.message"), $params);
 
 		Mail::sendMessage($to, $subject, $message);
 	}

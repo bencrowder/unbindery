@@ -1,18 +1,18 @@
 <div id="controls_container" class="controls {{ proof_type }}{% if proof_user != '' %} existing{% endif %}">
 	<div id="controls" class="container">
 		<ul id="controls_left">
-			<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">Back</a></li>
-			<li><a href="{{ app_url }}/projects/{{ project.slug }}/guidelines" class="button" target="_blank">Project Guidelines</a></li>
-			<li><span id="characters" class="button">Characters</span></li>
+			<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">{{ i18n.t('controls.back') }}</a></li>
+			<li><a href="{{ app_url }}/projects/{{ project.slug }}#guidelines" class="button" target="_blank">{{ i18n.t('controls.guidelines') }}</a></li>
+			<li><span id="characters" class="button">{{ i18n.t('controls.characters') }}</span></li>
 		</ul>
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
 			{% if already_finished or proof_type == 'edit' or proof_user != '' %}
-			<li><span id="action-save-changes" class="button">Save Changes</span></li>
+			<li><span id="action-save-changes" class="button">{{ i18n.t('controls.save_changes') }}</span></li>
 			{% else %}
-			<li><span id="action-save-draft" class="button">Save as Draft</span></li>
-			<li><span id="action-finish" class="button">Finish</span></li>
-			{% if more_to_proof %}<li><span id="action-finish-continue" class="button">Finish &amp; Continue</span></li>{% endif %}
+			<li><span id="action-save-draft" class="button">{{ i18n.t('controls.save_as_draft') }}</span></li>
+			<li><span id="action-finish" class="button">{{ i18n.t('controls.finish') }}</span></li>
+			{% if more_to_proof %}<li><span id="action-finish-continue" class="button">{{ i18n.t('controls.finish_continue') }}</span></li>{% endif %}
 			{% endif %}
 		</ul>
 	</div>

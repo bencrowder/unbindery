@@ -654,14 +654,14 @@ class ProjectPageController {
 
 		$user = User::getAuthenticatedUser();
 
+		// Load the project
+		$project = new Project($projectSlug);
+
 		RoleController::forceClearance(
 			array('project.admin', 'project.owner', 'system.admin'),
 			$user,
 			array('project' => $project)
 		);
-
-		// Load the project
-		$project = new Project($projectSlug);
 
 		if ($project->title == '') {
 			Utils::redirectToDashboard('', 'Error loading project.');

@@ -5,50 +5,50 @@
 	<div id="controls" class="container">
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
-			<li><span id="action-save-settings" href="" class="button">Save Settings</span></li>
+			<li><span id="action-save-settings" href="" class="button">{{ i18n.t('settings.save_settings') }}</span></li>
 		</ul>
 	</div>
 </div>{% endblock %}
 
 {% block main %}
 	<div id="main" class="container">
-		<h2>Settings</h2>
+		<h2>{{ i18n.t('settings.title') }}</h2>
 
 		<form id="user_settings">
 			<div class="content">
-				<h3>Basic Information</h3>
+				<h3>{{ i18n.t('settings.basic_information') }}</h3>
 
-				<label>Name</label>
+				<label>{{ i18n.t('settings.name') }}</label>
 				<input type="text" id="user_name" name="user_name" value="{{ user.name }}" />
 
-				<label>Email address</label>
+				<label>{{ i18n.t('settings.email') }}</label>
 				<input type="text" id="user_email" name="user_email" value="{{ user.email }}" />
 
 				<section class="notifications">
-					<h3>Notifications</h3>
+					<h3>{{ i18n.t('settings.notifications') }}</h3>
 					{% if userNotifications|length > 0 %}
-						<h4>User notifications</h4>
+						<h4>{{ i18n.t('settings.user_notifications') }}</h4>
 					{% for note in userNotifications %}
-						<div class="checkgroup"><input type="checkbox" id="{{ note.id }}" name="{{ note.id }}"{% if note.selected %} checked{% endif %}/><label>{{ note.name }}</label></div>
+						<div class="checkgroup"><input type="checkbox" id="{{ note.id }}" name="{{ note.id }}"{% if note.selected %} checked{% endif %}/><label>{{ i18n.t("notifications." ~ note.id) }}</label></div>
 					{% endfor %}
 					{% endif %}
 
 					{% if adminNotifications|length > 0 %}
 						<h4>Admin notifications</h4>
 					{% for note in adminNotifications %}
-						<div class="checkgroup"><input type="checkbox" id="{{ note.id }}" name="{{ note.id }}"{% if note.selected %} checked{% endif %}/><label>{{ note.name }}</label></div>
+						<div class="checkgroup"><input type="checkbox" id="{{ note.id }}" name="{{ note.id }}"{% if note.selected %} checked{% endif %}/><label>{{ i18n.t("notifications." ~ note.id) }}</label></div>
 					{% endfor %}
 					{% endif %}
 				</section>
 			</div>
 
 			<div class="sidebar">
-				<h3>Theme</h3>
+				<h3>{{ i18n.t('settings.theme') }}</h3>
 				<select id="theme" name="theme">
-					<option value="core"{% if user.prefs.theme == 'core' or user.prefs.theme == '' %} selected{% endif %}>Core</option>
+					<option value="core"{% if user.prefs.theme == 'core' or user.prefs.theme == '' %} selected{% endif %}>{{ i18n.t('themes.core') }}</option>
 				</select>
 
-				<div class="checkgroup"><input type="checkbox" name="sidebyside" id="sidebyside"{% if user.prefs.sidebyside %} checked{% endif %}/> <label>Side-by-side</label></div>
+				<div class="checkgroup"><input type="checkbox" name="sidebyside" id="sidebyside"{% if user.prefs.sidebyside %} checked{% endif %}/> <label>{{ i18n.t('settings.side_by_side') }}</label></div>
 			</div>
 		</form>
 	</div>

@@ -8,36 +8,36 @@
 <div class="container">
 	<div id="install_box" class="box">
 		{% if status != 'failed' %}
-		<h2>Unbindery Installation Instructions</h2>
+		<h2>{{ i18n.t('install.title') }}</h2>
 
 		<ol>
-			<li>Create a database and user in MySQL.</li>
-			<li>Copy <code>config.sample.yaml</code> to <code>config.yaml</code> and edit it.</li>
-			<li>Create the directory <code>htdocs/media</code> and give Apache write rights to it.</li>
-			<li>Set Apache to point to <code>htdocs</code> for the site&rsquo;s DocumentRoot.</li>
-			<li>Fill out the initial admin username{% if not external_login %}/password{% endif %} and click the Install button:</li>
+			<li>{{ i18n.t('install.step1')|raw }}</li>
+			<li>{{ i18n.t('install.step2')|raw }}</li>
+			<li>{{ i18n.t('install.step3')|raw }}</li>
+			<li>{{ i18n.t('install.step4')|raw }}</li>
+			<li>{% if external_login %}{{ i18n.t('install.step5_external')|raw }}{% else %}{{ i18n.t('install.step5')|raw }}{% endif %}</li>
 		</ol>
 
 		<form id="install_form" action="{{ app_url }}/install" method="post" accept-charset="utf-8">
-			<label>Admin Username:</label>
+			<label>{{ i18n.t('install.admin_username') }}</label>
 			<input type="text" id="username" name="username" autocomplete="off" />
 
 			{% if not external_login %}
-			<label>Admin Password:</label>
+			<label>{{ i18n.t('install.admin_password') }}</label>
 			<input type="password" id="password" name="password" autocomplete="off" />
 			{% endif %}
 
-			<div id='error'>Fields need to be filled out.</div>
+			<div id='error'>{{ i18n.t('install.error') }}</div>
 
-			<input type="submit" value="Install Unbindery" class="button" />
+			<input type="submit" value="{{ i18n.t('install.install_unbindery') }}" class="button" />
 		</form>
 		{% else %}
-		<h2>Installation Failed</h2>
+		<h2>{{ i18n.t('install.failed') }}</h2>
 
 		<ol>
-			<li>Make sure the database is set up correctly.</li>
-			<li>Make sure <code>config.yaml</code> is set up correctly.</li>
-			<li>Reload this page and try again.</li>
+			<li>{{ i18n.t('install.failed.step1') }}</li>
+			<li>{{ i18n.t('install.failed.step2') }}</li>
+			<li>{{ i18n.t('install.failed.step3') }}</li>
 		</ol>
 		{% endif %}
 	</div>

@@ -4,12 +4,12 @@
 <div id="controls_container" class="controls">
 	<div id="controls" class="container">
 		<ul id="controls_left">
-			<li><a href="{{ project.url }}/admin" class="button">Back to Project Admin</a></li>
+			<li><a href="{{ project.url }}/admin" class="button">{{ i18n.t('admin.import.back_to_project_admin') }}</a></li>
 		</ul>
 
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
-			<li><span id="action-import-transcript" class="button">Import Transcript</span></li>
+			<li><span id="action-import-transcript" class="button">{{ i18n.t('admin.import.import_transcript') }}</span></li>
 		</ul>
 	</div>
 </div>{% endblock %}
@@ -19,13 +19,13 @@
 		<h2>Import Transcript</h2>
 
 		<div class="content">
-			<label>Template (regex to split transcript)</label>
-			<textarea id="import-template"></textarea>
+			<label>{{ i18n.t('admin.import.template') }}</label>
+			<textarea id="import-template">&lt;page.*?&gt;(?P&lt;text&gt;.*?)&lt;\/page&gt;</textarea>
 
-			<label>Transcript</label>
+			<label>{{ i18n.t('admin.import.transcript') }}</label>
 			<textarea id="import-transcript"></textarea>
 
-			<h3 id="preview-header">Preview</h3>
+			<h3 id="preview-header">{{ i18n.t('admin.import.preview') }}</h3>
 			<div id="import-preview"></div>
 
 			<input id="project_owner" name="project_owner" type="hidden" value="{{ project.owner }}" />
@@ -34,7 +34,7 @@
 		</div>
 
 		<div class="sidebar">
-			<h3>Selected Items ({{ project.items|length }} items)</h3>
+			<h3>{{ i18n.t('admin.import.selected_items', { "num_items": project.items|length }) }}</h3>
 			<ul class="items">
 				{% for item in project.items %}
 				<li data-id="{{ item.id }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit" target="_blank">{{ item.title }}</a>

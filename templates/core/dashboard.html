@@ -16,7 +16,7 @@
 					<div class="right_button"><a href="{{ item.editlink }}" class="button light">{{ i18n.t('dashboard.proof') }}</a></div>
 					<div class="title"><a href="{{ item.editlink }}">{{ item.title }}</a></div>
 
-					<div class="sub">{{ projects[item.project_slug].title }} &bull; Type: {{ item.type }}</div>
+					<div class="sub">{{ projects[item.project_slug].title }} &bull; {{ i18n.t('dashboard.item_type', { "type": item.type }) }}</div>
 				</li>
 				{% endfor %}
 
