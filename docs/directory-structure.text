@@ -2,13 +2,16 @@
 
 * /controllers -- app-specific code (most of which is called by Router in index.php)
 * /docs -- documentation
-* /helpers -- helper classes (Mail, Media, Settings, Template)
-* /include -- config.yaml 
-* /js -- Javascript for the frontend
+* /helpers -- helper classes (Mail, Media, Settings, Template, Utils)
+* /htdocs --
+	* /htdocs/js -- core Javascript for the frontend
+	* /htdocs/media -- directory for item media (images, audio, etc.), uploaded by project admins
+	* /htdocs/themes -- theme-specific CSS/JS
 * /lib -- external libraries
-* /media -- directory for item media (images, audio, etc.), uploaded by project admins
 * /model -- model classes (Project, Item, User)
 * /modules -- self-contained modules used by Unbindery
-* /scripts -- [temporary, soon to be removed]
-* /themes -- template HTML/CSS files
+	* /modules/auth -- authentication adapters (Alibaba)
+	* /modules/db -- database adapters (MySQL)
+	* /modules/uploaders -- item type uploaders (page, audio)
+* /templates -- Twig template files
 * /translations -- YAML files for localization
