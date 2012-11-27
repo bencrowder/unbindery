@@ -121,10 +121,10 @@
 					{% for item in project.items %}
 					<li data-id="{{ item.id }}" class="{{ item.status }} {{ item.type }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><a href="{{ project.url }}/items/{{ item.id }}/edit">{{ item.title }}</a> <span class="status">{{ item.type }} &bull; {{ item.status }}</span>
 						{% for proof in item.proofs %}
-						<p class="transcript">{{ i18n.t('admin.project.item.proofed_by', { "url": project.url ~ "/items/" ~ item.id ~ "/proof/" ~ proof.user, "user": proof.user, "date_completed": proof.date_completed) }}</p>
+						<p class="transcript">{{ i18n.t('admin.project.item.proofed_by', { "url": project.url ~ "/items/" ~ item.id ~ "/proof/" ~ proof.user, "user": proof.user, "date_completed": proof.date_completed }) }}</p>
 						{% endfor %}
 						{% for review in item.reviews %}
-						<p class="transcript">{{ i18n.t('admin.project.item.reviewed_by', { "url": project.url ~ "/items/" ~ item.id ~ "/review/" ~ review.user, "user": review.user, "date_completed": review.date_completed) }}</p>
+						<p class="transcript">{{ i18n.t('admin.project.item.reviewed_by', { "url": project.url ~ "/items/" ~ item.id ~ "/review/" ~ review.user, "user": review.user, "date_completed": review.date_completed }) }}</p>
 						{% endfor %}
 					</li>
 					{% endfor %}
