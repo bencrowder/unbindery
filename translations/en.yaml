@@ -76,3 +76,7 @@ error.insufficient_rights: "You don't have rights to do that. Sorry."
 error.not_a_member: "You're not a member of that project. Sorry."
 error.nonexistent_item: "Item doesn't exist."
 error.loading_project: "Error loading project."
+
+# 404 page
+error.file_not_found.title: "File Not Found"
+error.file_not_found.message: "Sorry, that file isn't there."

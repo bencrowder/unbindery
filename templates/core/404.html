@@ -2,10 +2,10 @@
 
 {% block main %}
 	<div id="main" class="container">
-		<h2>File Not Found</h2>
+		<h2>{{ i18n.t('error.file_not_found.title') }}</h2>
 
 		<div class="content">
-			<p>Sorry, that file isn't there.</p>
+			<p>{{ i18n.t('error.file_not_found.message') }}</p>
 		</div>
 	</div>
 {% endblock %}
