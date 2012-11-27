@@ -171,13 +171,18 @@ class ProjectPageController {
 		$user = User::getAuthenticatedUser();
 
 		// Creators can add user projects; admins can add both user and system projects
-		$requiredRole = ($projectType == 'system') ? 'admin' : 'creator';
+		switch ($projectType) {
+			case 'system':
+				$requiredRoles = array('system.admin');
+				break;
+			
+			case 'user':
+				$requiredRoles = array('system.creator', 'system.admin');
+				break;
+		}
 
 		// Get the current user's role and make sure they can access this page
-		RoleController::forceClearance(
-			array("system.$requiredRole"),
-			$user
-		);
+		RoleController::forceClearance($requiredRoles, $user);
 
 		// Output data
 		switch ($params['method']) {
