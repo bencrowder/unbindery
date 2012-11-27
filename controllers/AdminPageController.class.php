@@ -8,9 +8,11 @@ class AdminPageController {
 
 		$user = User::getAuthenticatedUser();
 
-		// Get the current user's role and make sure they're at least creator or admin
-		$roleManager = new Role();
-		$roleManager->forceClearance(array('role' => 'user:creator', 'user' => $user));
+		// Make sure the user is at least creator or admin
+		RoleController::forceClearance(
+			array('system.creator', 'system.admin'),
+			$user
+		);
 
 		// Get latest work for the user's projects
 		$latestWorkList = $db->getAdminProjectsLatestWork($user->username, 5);
