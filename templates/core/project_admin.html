@@ -61,7 +61,7 @@
 					</ul>
 
 					<div class="addbox">
-						<label>{{ i18n.t('project.members.add_user') }}</label>
+						<label>{{ i18n.t('admin.project.members.add_user') }}</label>
 						<input type="text" placeholder="{{ i18n.t('admin.project.members.username') }}" id="addmember-username" name="addmemberUsername" />
 						<select id="addmember-role" name="addmemberRole">
 							<option value="proofer">{{ i18n.t('admin.project.roles.proofer') }}</option>
@@ -78,7 +78,7 @@
 
 					<textarea id="project_fields" name="project_fields" class="fields">{{ project.fields }}</textarea>
 
-					<div class="small">{{ i18n.t('admin.project.fields_instructions') }}</div>
+					<div class="small">{{ i18n.t('admin.project.fields_instructions')|raw }}</div>
 				</section>
 			</div>
 
