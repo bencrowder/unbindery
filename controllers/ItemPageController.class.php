@@ -121,7 +121,7 @@ class ItemPageController {
 				if ($projectType == 'system') {
 					$projectUrl = "projects/$projectSlug";
 				} else if ($projectType == 'user') {
-					$projectUrl = "users/$owner/projects/$projectSlug";
+					$projectUrl = "users/$owner/$projectSlug";
 				}
 				$item['href'] = $projectUrl . "/" . $itemObj->href;
 
