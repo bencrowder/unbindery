@@ -299,6 +299,7 @@ var Unbindery = function() {
 					}
 
 					// Also remove the items from the queue
+					fileList = [];
 					$("#file_uploadQueue").html('');
 				}
 			}
