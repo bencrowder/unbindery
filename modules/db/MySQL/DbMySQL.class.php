@@ -183,9 +183,9 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: boolean
-	public function isMember($username, $projectSlug, $owner = '') {
-		$query = "SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ?";
-		$args = array($username, $projectSlug);
+	public function isMember($username, $projectSlug, $role, $owner = '') {
+		$query = "SELECT roles.id FROM roles JOIN projects ON roles.project_id = projects.id WHERE username = ? AND projects.slug = ? AND roles.role = ?";
+		$args = array($username, $projectSlug, $role);
 		if ($owner != '') {
 			$query .= " AND projects.owner = ?";
 			array_push($args, $owner);
@@ -215,7 +215,7 @@ class DbMySQL implements DbInterface {
 
 	// Returns: users and roles for a project
 	public function getMembersForProject($projectSlug) {
-		$results = $this->query("SELECT username, GROUP_CONCAT(DISTINCT roles.role ORDER BY roles.role SEPARATOR ', ') AS roles FROM roles JOIN projects ON roles.project_id = projects.id WHERE projects.slug = ? GROUP BY username", array($projectSlug));
+		$results = $this->query("SELECT username, role FROM roles JOIN projects ON roles.project_id = projects.id WHERE projects.slug = ? ORDER BY username, role", array($projectSlug));
 		return $results;
 	}
 
@@ -226,9 +226,9 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: status
-	public function removeUserFromProject($username, $project_id) {
-		$sql = "DELETE FROM roles WHERE project_id = ? AND username = ?";
-		return $this->execute($sql, array($project_id, $username));
+	public function removeUserFromProject($username, $project_id, $role) {
+		$sql = "DELETE FROM roles WHERE project_id = ? AND username = ? AND role = ?";
+		return $this->execute($sql, array($project_id, $username, $role));
 	}
 
 	// Returns: boolean

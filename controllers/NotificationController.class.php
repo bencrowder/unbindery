@@ -26,7 +26,7 @@ class NotificationController {
 						$user = $params['user'];
 
 						if (self::notificationIsEnabled($user, $notification)) {
-							self::sendNotification($user->email, $notify, $params);
+							self::sendNotification($user->email, $notification, $params);
 						}
 
 						break;
@@ -40,7 +40,7 @@ class NotificationController {
 
 						foreach ($admins as $user) {
 							if (self::notificationIsEnabled($user, $notification)) {
-								self::sendNotification($user->email, $notify, $params);
+								self::sendNotification($user->email, $notification, $params);
 							}
 						}
 
@@ -54,13 +54,13 @@ class NotificationController {
 						$user = $params['admin'];
 
 						if (self::notificationIsEnabled($user, $notification)) {
-							self::sendNotification($user->email, $notify, $params);
+							self::sendNotification($user->email, $notification, $params);
 						}
 
 						break;
 				}
 			} else {
-				self::sendNotification($target, $notify, $params);
+				self::sendNotification($target, $notification, $params);
 			}
 		}
 	}
@@ -100,14 +100,14 @@ class NotificationController {
 	// --------------------------------------------------
 	// Send a notification
 
-	static public function sendNotification($to, $notify, $params) {
+	static public function sendNotification($to, $notification, $params) {
 		$i18n = new I18n(Settings::getProtected('language'));
 
-		$subject = self::replaceVariables($i18n->t("$notify.subject"), $params);
+		$subject = self::replaceVariables($i18n->t("$notification.subject"), $params);
 		$email_subject = Settings::getProtected('email_subject');
 		if ($email_subject) $subject = "$email_subject $subject";
 		
-		$message = self::replaceVariables($i18n->t("$notify.message"), $params);
+		$message = self::replaceVariables($i18n->t("$notification.message"), $params);
 
 		Mail::sendMessage($to, $subject, $message);
 	}

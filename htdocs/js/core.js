@@ -343,21 +343,25 @@ var Unbindery = function() {
 		this.callAPI('add-user-to-project', 'POST', { username: username, role: role, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
 			function(data) {
 				if (data.status == 'success') {
-					$("<li data-username='" + username + "'><span class='itemcontrols'><a href='' class='delete'>×</a></span><b>" + username + "</b>: " + role + "</li>").appendTo("ul.items.members");
+					$("<li data-username='" + username + "' data-role='" + role + "'><span class='itemcontrols'><a href='' class='delete'>×</a></span><b>" + username + "</b>: " + role + "</li>").appendTo("ul.items.members");
+
+					// Clear out to defaults
+					$(".addbox input[type=text]").val('');
+					$(".addbox select").val("proofer");
 				}
 			}
 		);
 	}
 
-	this.removeUserFromProject = function(username) {
+	this.removeUserFromProject = function(username, role) {
 		var projectSlug = $("#project_slug").val();
 		var projectType = $("#project_type").val();
 		var projectOwner = $("#project_owner").val();
 
-		this.callAPI('remove-user-from-project', 'POST', { username: username, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
+		this.callAPI('remove-user-from-project', 'POST', { username: username, role: role, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
 			function(data) {
 				if (data.status == 'success') {
-					$("ul.items.members li[data-username='" + username + "']").remove();
+					$("ul.items.members li[data-username='" + username + "'][data-role='" + role + "']").remove();
 				}
 			}
 		);
@@ -632,9 +636,10 @@ $(document).ready(function() {
 
 	$("#main.add ul.items.members").on("click", "a.delete", function() {
 		var username = $(this).parents("li:first").attr("data-username");
+		var role = $(this).parents("li:first").attr("data-role");
 
 		if (confirm("Are you sure you want to remove that user from this project?")) {
-			unbindery.removeUserFromProject(username);
+			unbindery.removeUserFromProject(username, role);
 		}
 		
 		return false;

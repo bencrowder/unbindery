@@ -23,6 +23,7 @@ class ItemPageController {
 
 		$proofTypeIndex = ($projectType == 'system') ? 2 : 4;
 		$proofType = $params['args'][$proofTypeIndex];
+		$role = $proofType . "er";
 
 		$proofUserIndex = ($projectType == 'system') ? 3 : 5;
 		$proofUser = (array_key_exists($proofUserIndex, $params['args'])) ? $params['args'][$proofUserIndex] : '';
@@ -44,7 +45,7 @@ class ItemPageController {
 					);
 				} else { 
 					// User has to be a member of the project
-					if (!$user->isMember($projectSlug)) {
+					if (!$user->isMember($projectSlug, $role)) {
 						Utils::redirectToDashboard("", $i18n->t("error.not_a_member"));
 						return;
 					}
@@ -218,6 +219,7 @@ class ItemPageController {
 				$transcriptText = Utils::POST('transcript');
 				$transcriptStatus = Utils::POST('status');		// draft, completed, reviewed
 				$fields = Utils::POST('fields');
+				$role = $proofType . "er";
 
 				// Make sure they have access to the item
 				if ($proofType == 'edit' || $proofUser != '') {
@@ -229,7 +231,7 @@ class ItemPageController {
 					);
 				} else { 
 					// User has to be a member of the project
-					if (!$user->isMember($projectSlug, $owner)) {
+					if (!$user->isMember($projectSlug, $role, $owner)) {
 						Utils::redirectToDashboard("", $i18n->t("error.not_a_member"));
 						return;
 					}

@@ -49,7 +49,7 @@
 
 					<ul class="items members">
 					{% for member in members %}
-						<li data-username="{{ member.username }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ member.username }}</b>: {{ member.roles }}</li>
+						<li data-username="{{ member.username }}" data-role="{{ member.role }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ member.username }}</b>: {{ member.role }}</li>
 					{% endfor %}
 					</ul>
 

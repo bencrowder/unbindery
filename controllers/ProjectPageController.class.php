@@ -215,15 +215,18 @@ class ProjectPageController {
 
 		$user = User::getAuthenticatedUser();
 
-		$isMember = $user->isMember($projectSlug);
+		// Make sure the user has access to see this project
+		RoleController::forceClearance(
+			array('project.proofer', 'project.reviewer', 'project.admin', 'project.owner', 'system.admin'),
+			$user,
+			array('project' => $project)
+		);
 
 		if ($project->numItems > 0) {
 			$percentComplete = round($project->itemsCompleted / $project->numItems * 100, 0);
 		} else {
 			$percentComplete = 0;
 		}
-
-		// TODO: make sure current user has access to see this project
 
 		$projectArray = $project->getResponse();
 		$projectArray['percent_complete'] = $percentComplete;
@@ -325,9 +328,11 @@ class ProjectPageController {
 				if (Utils::POST('username') != '') {
 					$username = Utils::POST('username');
 					$userToAssign = new User($username);
+					$role = Utils::POST('role');
 				} else {
 					$username = $user->username;
 					$userToAssign = $user;
+					$role = 'proofer';
 				}
 
 				// Load project
@@ -336,7 +341,7 @@ class ProjectPageController {
 				// If the project is public OR we're adding a specific user, let them join
 				// TODO: make the second clause secure somehow
 				if ($project->public || (Utils::POST('username') != '' && $userToAssign)) {
-					$status = ($userToAssign->assignToProject($projectSlug)) ? 'success' : 'error';
+					$status = ($userToAssign->assignToProject($projectSlug, $role)) ? 'success' : 'error';
 				} else {
 					$status = 'access-denied';
 				}
@@ -368,13 +373,15 @@ class ProjectPageController {
 				if (Utils::POST('username') != '') {
 					$username = Utils::POST('username');
 					$userToRemove = new User($username);
+					$role = Utils::POST('role');
 				} else {
 					$username = $user->username;
 					$userToRemove = $user;
+					$role = 'proofer';
 				}
 
 				// TODO: make sure user has access to do this for someone else
-				$status = ($userToRemove->removeFromProject($projectSlug)) ? 'success' : 'error';
+				$status = ($userToRemove->removeFromProject($projectSlug, $role)) ? 'success' : 'error';
 
 				echo json_encode(array('status' => $status));
 

@@ -8,6 +8,7 @@ class DispatchController {
 		$username = $params['username'];
 		$projectSlug = $params['projectSlug'];
 		$type = $params['type'];
+		$role = $type . "er";
 
 		$success = false;
 		$errorCode = '';
@@ -26,13 +27,8 @@ class DispatchController {
 		// Load user
 		$user = new User($username);
 
-		// Is user still in training mode?
-		if ($user->status == 'training') {
-			$code = "not-cleared";
-		}
-
 		// Does this user belong to the project?
-		if (!$user->isMember($projectSlug)) {
+		if (!$user->isMember($projectSlug, $role)) {
 			$code = "not-a-member";
 		}
 
