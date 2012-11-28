@@ -85,6 +85,7 @@ projects.project.owner: 'Owner: {{ owner }}'
 projects.project.items: 'Items: {{ items }}'
 projects.project.percentage: '{{ percentage }}%'
 projects.project.completed: 'Completed {{ date }}'
+projects.no_projects: "No projects yet."
 
 # Errors
 error.deleting_item: 'Error deleting item from database'
