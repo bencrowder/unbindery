@@ -148,7 +148,7 @@ class User {
 		$username = $this->db->validateHash($hash);
 		if (!$username) return false;
 
-		$this->db->setUserStatus($username, 'training');
+		$this->db->setUserStatus($username, 'active');
 
 		return true;
 	}

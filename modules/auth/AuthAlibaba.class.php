@@ -37,7 +37,7 @@ class AuthAlibaba implements AuthInterface {
 		$app_url = Settings::getProtected('app_url');
 		$email_subject = Settings::getProtected('email_subject');
 		$admin_email = Settings::getProtected('admin_email');
-		$i18n = new I18n(Settings::getProtected('language'));
+		$i18n = new I18n("../../translations", Settings::getProtected('language'));
 
 		// Add username/email here if they're not already in Unbindery (unnecessary for Alibaba)
 		// Example:
@@ -51,10 +51,7 @@ class AuthAlibaba implements AuthInterface {
 		$user->save();
 
 		// Send confirmation link to user via email
-		$message = $i18n->t('signup.confirmation_email');
-		$message .= "\n";
-		$message .= "$app_url/signup/activate/{$user->hash}\n";
-		$message .= "\n";
+		$message = $i18n->t('signup.confirmation_email', array("url" => "$app_url/signup/activate/{$user->hash}"));
 
 		$status = Mail::sendMessage($user->email, "$email_subject " . $i18n->t('signup.confirmation_link'), $message);
 

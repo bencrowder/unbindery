@@ -13,7 +13,7 @@ signup.email: 'Email:'
 signup.signup: 'Sign Up'
 signup.login: 'Log in'
 
-signup.confirmation_email: "Thanks for signing up! Here's the confirmation link to activate your account:"
+signup.confirmation_email: "Thanks for signing up! Here's the confirmation link to activate your account:\n{{ url }}\n"
 signup.confirmation_link: "Confirmation link"
 signup.new_signup: "New signup"
 signup.new_user: "New user signed up:"

@@ -147,6 +147,10 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .content h3								{ margin: 3em 0 0; color: #5d92b1; padding: 0 0 3px 0; font-size: 1em; }
 .content h3:first-child					{ margin-top: 0; }
 
+div.blankslate							{ overflow: hidden; margin-bottom: 1em; }
+div.blankslate a.button					{ float: left; }
+div.blankslate a.button + a.button		{ margin-left: 5px; }
+
 ul.action_list							{ list-style: none; margin: 0; padding: 0; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; }
 ul.action_list li						{ border-bottom: solid 1px #ddd; padding: 6px; clear: both; overflow: hidden; }
 ul.action_list li:last-child			{ border-bottom: none; }

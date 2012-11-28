@@ -132,7 +132,7 @@ class SystemPageController {
 
 	static public function activateHandler($args) {
 		$app_url = Settings::getProtected('app_url');
-		$i18n = new I18n(Settings::getProtected('language'));
+		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
 		$hash = $args[0];
 

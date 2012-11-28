@@ -23,7 +23,7 @@ class Template {
 		$options['app_url'] = Settings::getProtected('app_url');
 		$options['google_analytics'] = Settings::getProtected('google_analytics');
 		$options['theme_root'] = $options['app_url'] . "/themes/$theme";
-		$options['i18n'] = new I18n("../translations");
+		$options['i18n'] = new I18n("../translations", Settings::getProtected('language'));
 
 		$options['message'] = Utils::SESSION('ub_message');
 		$options['error'] = Utils::SESSION('ub_error');

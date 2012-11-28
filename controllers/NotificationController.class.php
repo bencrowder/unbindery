@@ -101,7 +101,9 @@ class NotificationController {
 	// Send a notification
 
 	static public function sendNotification($to, $notification, $params) {
-		$i18n = new I18n(Settings::getProtected('language'));
+		$i18n = new I18n("../translations", Settings::getProtected('language'));
+
+		error_log("Sending $notification.subject / $notification.message");
 
 		$subject = self::replaceVariables($i18n->t("$notification.subject"), $params);
 		$email_subject = Settings::getProtected('email_subject');
