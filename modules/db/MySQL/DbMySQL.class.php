@@ -788,7 +788,7 @@ class DbMySQL implements DbInterface {
 		$query .= ") * 100 AS percentage ";
 
 		$query .= "FROM projects ";
-		$query .= "WHERE projects.status = 'active' ";
+		$query .= "WHERE projects.status != 'completed' ";
 
 		// Where user is owner
 		$query .= "AND (";
