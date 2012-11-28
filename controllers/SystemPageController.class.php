@@ -177,7 +177,7 @@ class SystemPageController {
 		// Make sure we haven't already installed
 		if ($installed) {
 			// Already installed
-			Utils::redirectToDashboard('Already installed.', '');
+			Utils::redirectToDashboard('error.already_installed', '');
 		} else {
 			// We haven't, so install
 			switch ($params['method']) {

@@ -58,7 +58,7 @@ dashboard.proof: 'Proof'
 dashboard.review: 'Review'
 dashboard.due: 'Due'
 dashboard.project: 'Project:'
-dashboard.no_history: 'Nothing so far -- you must be new here. :)'
+dashboard.no_history: 'Nothing so far—you must be new here. :)'
 dashboard.item_type: 'Type: {{ type }}'
 
 # Admin dashboard
@@ -93,6 +93,7 @@ error.insufficient_rights: "You don't have rights to do that. Sorry."
 error.not_a_member: "You're not a member of that project. Sorry."
 error.nonexistent_item: "Item doesn't exist."
 error.loading_project: "Error loading project."
+error.already_installed: "Already installed."
 
 # 404 page
 error.file_not_found.title: "File Not Found"
