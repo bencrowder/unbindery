@@ -197,7 +197,7 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #project_form #project_numproofs		{ width: 30px; }
 
 #file_uploadQueue						{ width: 100%; }
-.uploadifyQueueItem						{ width: 100%; font-family: "Lucida Grande", Helvetica, Arial, sans-serif !important; font-size: 11px !important; -moz-border-radius: 3px; border-radius: 3px; }
+.uploadifyQueueItem						{ width: 100% !important; font-family: "Lucida Grande", Helvetica, Arial, sans-serif !important; font-size: 11px !important; -moz-border-radius: 3px; border-radius: 3px; }
 .uploadifyQueueItem .percentage			{ font-weight: bold; }
 
 .uploadifyProgressBar					{ height: 10px !important; }
