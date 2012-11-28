@@ -3,7 +3,7 @@
 		<ul id="controls_left">
 			<li><a href="{{ app_url }}/users/{{ username }}/dashboard" class="button">{{ i18n.t('controls.back') }}</a></li>
 			<li><a href="{{ app_url }}/projects/{{ project.slug }}#guidelines" class="button" target="_blank">{{ i18n.t('controls.guidelines') }}</a></li>
-			<li><span id="characters" class="button">{{ i18n.t('controls.characters') }}</span></li>
+			{% if project.characters|length > 0 %}<li><span id="characters" class="button">{{ i18n.t('controls.characters') }}</span></li>{% endif %}
 		</ul>
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
@@ -25,6 +25,8 @@
 	<input type="hidden" name="proof_user" id="proof_user" value="{{ proof_user }}" />
 </div>
 
+{% if project.characters|length > 0 %}
 <div id="characterpad">
 	<ul>{% for char in project.characters %}<li>{{ char }}</li>{% endfor %}</ul>
 </div>
+{% endif %}
