@@ -1072,7 +1072,9 @@ CREATE TABLE `metadata` (
 SET character_set_client = @saved_cs_client;
 SQL;
 
-		return $this->execute_multi($sql);
+		$status = $this->execute_multi($sql);
+
+		return $status;
 	}
 
 	// Return true if installed
