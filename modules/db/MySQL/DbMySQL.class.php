@@ -702,9 +702,9 @@ class DbMySQL implements DbInterface {
 
 			$query .= "AND projects.public = 1 ";
 
-			$query .= ")";
+			$query .= ") ";
 
-			$params = array($owner, "%[$username]%");
+			$params = array($owner);
 		} else {
 
 			$query .= "AND (";
@@ -714,9 +714,9 @@ class DbMySQL implements DbInterface {
 			// Or the user is the owner
 			$query .=     "OR projects.owner = ? ";
 
-			$query .= ")";
+			$query .= ") ";
 
-			$params = array($username, "%[$username]%");
+			$params = array($username);
 		}
 
 		$query .= "ORDER BY percentage DESC, ";

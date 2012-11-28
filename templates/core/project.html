@@ -27,7 +27,7 @@
 		</div>
 
 		<div class="sidebar proj_details">
-			<div class="membership"><a class="{% if user.is_member %}leave{% else %}join button{% endif %}" href="{{ app_url }}/projects/{{ project.slug }}/membership">{% if user.is_member %}{{ i18n.t('project.leave') }}{% else %}{{ i18n.t('project.join') }}{% endif %}</a></div>
+			{% if project.public %}<div class="membership"><a class="{% if user.is_member %}leave{% else %}join button{% endif %}" href="{{ app_url }}/projects/{{ project.slug }}/membership">{% if user.is_member %}{{ i18n.t('project.leave') }}{% else %}{{ i18n.t('project.join') }}{% endif %}</a></div>{% endif %}
 
 			<div class="progress_bar big">
 				<div class="capsule">
