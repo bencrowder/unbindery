@@ -24,6 +24,7 @@
 			</ul>
 			{% endif %}
 
+			{% if available_projects|length > 0 %}
 			<h3 class="action_header projects">{{ i18n.t('projects.available_projects') }}</h3>
 			<ul class="action_list projects">
 				{% for project in available_projects %}
@@ -40,6 +41,7 @@
 				</li>
 				{% endfor %}
 			</ul>
+			{% endif %}
 		</div>
 
 		{% if completed_projects|length > 0 %}

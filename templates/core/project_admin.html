@@ -42,13 +42,6 @@
 
 					<label>{{ i18n.t('admin.project.language') }}</label>
 					<input id="project_lang" name="project_lang" type="text" value="{{ project.language }}" />
-
-					<label>{{ i18n.t('admin.project.status') }}</label>
-					<select id="project_status" name="project_status">
-						<option{% if project.status == 'pending' %} selected{% endif %} value="pending">{{ i18n.t('admin.project.status.pending') }}</option>
-						<option{% if project.status == 'active' %} selected{% endif %} value="active">{{ i18n.t('admin.project.status.active') }}</option>
-						<option{% if project.status == 'completed' %} selected{% endif %} value="completed">{{ i18n.t('admin.project.status.completed') }}</option>
-					</select>
 				</section>
 
 				<section>
@@ -83,6 +76,15 @@
 			</div>
 
 			<div class="sidebar">
+				<section>
+					<h3>{{ i18n.t('admin.project.status') }}</h3>
+					<select id="project_status" name="project_status">
+						<option{% if project.status == 'pending' %} selected{% endif %} value="pending">{{ i18n.t('admin.project.status.pending') }}</option>
+						<option{% if project.status == 'active' %} selected{% endif %} value="active">{{ i18n.t('admin.project.status.active') }}</option>
+						<option{% if project.status == 'completed' %} selected{% endif %} value="completed">{{ i18n.t('admin.project.status.completed') }}</option>
+					</select>
+				</section>
+
 				{% if not project.public %}
 				<section>
 					<h3>{{ i18n.t('admin.project.whitelist') }}</h3>
