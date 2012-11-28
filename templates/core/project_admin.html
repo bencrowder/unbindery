@@ -17,7 +17,7 @@
 
 {% block main %}
 	<div id="main" class="container add">
-		<h2>{{ i18n.t('admin.project.title') }}</h2>
+		<h2>{{ i18n.t('admin.project.project_admin') }}</h2>
 
 		<form id="project_admin_form" name="project_admin_form" action="{{ project.url }}" method="POST">
 			<input id="project_owner" name="project_owner" type="hidden" value="{{ project.owner }}" />

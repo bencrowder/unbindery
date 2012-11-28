@@ -169,7 +169,7 @@ project.reviewers_on_this_project: "Reviewers on This Project"
 project.user_percentage: "{{ percentage }}% ({{ num_items }} items)"
 
 # Admin project page
-admin.project.title: "Project Admin"
+admin.project.project_admin: "Project Admin"
 admin.project.download_transcript: "Download Transcript"
 admin.project.import_transcript: "Import Transcript"
 admin.project.save_project: "Save Project"
