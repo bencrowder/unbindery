@@ -602,6 +602,7 @@ class ProjectPageController {
 								},
 								'onAllComplete' : function(event, data) {
 									unbindery.addItemsToProject(fileList);
+									fileList = [];
 								}
 							});
 						});",
