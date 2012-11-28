@@ -31,7 +31,7 @@ class DispatchController {
 			$code = "not-cleared";
 		}
 
-		// Does this user belong to the project? If it's a private project, are they on the whitelist? (Or are they the owner?
+		// Does this user belong to the project?
 		if (!$user->isMember($projectSlug)) {
 			$code = "not-a-member";
 		}

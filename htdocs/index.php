@@ -161,6 +161,7 @@ $routes = array(
 	// User projects
 	'#^/(users)/([^/]+)/projects/([^/]+)/transcript/split(\.[^/]+)?/?#'	=> 'ProjectPageController::splitTranscript',
 	'#^/(users)/([^/]+)/projects/([^/]+)/transcript(\.[^/]+)?/?#'	=> 'ProjectPageController::transcript',
+	'#^/(users)/([^/]+)/projects/([^/]+)/membership/leave(\.[^/]+)?/?#'	=> 'ProjectPageController::membershipLeave',
 	'#^/(users)/([^/]+)/projects/([^/]+)/membership(\.[^/]+)?/?#'	=> 'ProjectPageController::membership',
 	'#^/(users)/([^/]+)/projects/([^/]+)/admin(\.[^/]+)?/?#'		=> 'ProjectPageController::admin',
 	'#^/(users)/([^/]+)/projects/([^/]+)/upload(\.[^/]+)?/?#'		=> 'ProjectPageController::upload',
@@ -187,6 +188,7 @@ $routes = array(
 	// Project pages
 	'#^/projects/([^/]+)/transcript/split(\.[^/]+)?/?#'		=> 'ProjectPageController::splitTranscript',
 	'#^/projects/([^/]+)/transcript(\.[^/]+)?/?#'			=> 'ProjectPageController::transcript',
+	'#^/projects/([^/]+)/membership/leave(\.[^/]+)?/?#'		=> 'ProjectPageController::membershipLeave',
 	'#^/projects/([^/]+)/membership(\.[^/]+)?/?#'			=> 'ProjectPageController::membership',
 	'#^/projects/([^/]+)/admin(\.[^/]+)?/?#'				=> 'ProjectPageController::admin',
 	'#^/projects/([^/]+)/upload(\.[^/]+)?/?#'				=> 'ProjectPageController::upload',

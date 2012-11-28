@@ -34,7 +34,8 @@ Note that user projects follow the same schema but with /users/[USER] prepended.
 	* DELETE = delete project (not implemented)
 * /projects/[PROJECT]/membership
 	* POST = join project
-	* DELETE = leave project
+* /projects/[PROJECT]/membership/leave
+	* POST = leave project
 * /projects/[PROJECT]/transcript
 	* GET = download concatenated transcript
 * /projects/[PROJECT]/transcript/split

@@ -79,11 +79,18 @@ var Unbindery = function() {
 				break;
 
 			case 'add-user-to-project':
-			case 'remove-user-from-project':
 				if (data.projectType == 'system') {
 					url = '/projects/' + data.projectSlug + '/membership';
 				} else {
 					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/membership';
+				}
+				break;
+
+			case 'remove-user-from-project':
+				if (data.projectType == 'system') {
+					url = '/projects/' + data.projectSlug + '/membership/leave';
+				} else {
+					url = '/users/' + data.projectOwner + '/projects/' + data.projectSlug + '/membership/leave';
 				}
 				break;
 		}
@@ -256,13 +263,12 @@ var Unbindery = function() {
 		var projectPublic = ($("#project_public").val() == 'public') ? true : false;
 		var projectDesc = $("#project_desc").val().trim();
 		var projectLang = $("#project_lang").val().trim();
-		var projectWhitelist = ($("#project_whitelist").length > 0) ? $("#project_whitelist").val().trim() : '';
 		var projectWorkflow = $("#project_workflow").val().trim();
 		var projectDownloadTemplate = $("#project_download_template").val().trim();
 		var projectCharacters = $("#project_characters").val().trim();
 		var projectFields = $("#project_fields").val().trim();
 		
-		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate, projectCharacters: projectCharacters, projectFields: projectFields },
+		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate, projectCharacters: projectCharacters, projectFields: projectFields },
 			function(data) {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
@@ -337,7 +343,7 @@ var Unbindery = function() {
 		this.callAPI('add-user-to-project', 'POST', { username: username, role: role, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
 			function(data) {
 				if (data.status == 'success') {
-					$("<li><span class='itemcontrols'><a href='' class='delete'>×</a></span><b>" + username + "</b>: " + role + "</li>").appendTo("ul.items.members");
+					$("<li data-username='" + username + "'><span class='itemcontrols'><a href='' class='delete'>×</a></span><b>" + username + "</b>: " + role + "</li>").appendTo("ul.items.members");
 				}
 			}
 		);
@@ -348,9 +354,11 @@ var Unbindery = function() {
 		var projectType = $("#project_type").val();
 		var projectOwner = $("#project_owner").val();
 
-		this.callAPI('remove-user-from-project', 'DELETE', { username: username, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
+		this.callAPI('remove-user-from-project', 'POST', { username: username, projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner },
 			function(data) {
-				console.log(data);
+				if (data.status == 'success') {
+					$("ul.items.members li[data-username='" + username + "']").remove();
+				}
 			}
 		);
 	}
@@ -495,46 +503,10 @@ $(document).ready(function() {
 		if ($(this).val() == "Public") {
 			// Change the action
 			$("form#new_project_form").attr("action", app_url + "/projects");
-
-			if ($("#step_4:visible").length != 0) {
-				$("#step_4").fadeOut(100);
-			}
 		} else if ($(this).val() == "Private") {
 			// Change the action
 			$("form#new_project_form").attr("action", app_url + "/users/" + username + "/projects");
-
-			if ($("#step_4:visible").length == 0) {
-				$("#step_4").fadeIn(100);
-			}
 		}
-	});
-
-	$("form#new_project_form #step_2 input[type=button]").on("click", function() {
-		newFieldName = $(this).siblings("#new_field_name").val().trim();
-		newFieldType = $(this).siblings("#new_field_type").val().trim();
-
-		if (newFieldName != '' && newFieldType != '') {
-			newFieldHTML = "<li><a class='delete'>x</a><label>";
-			newFieldHTML += newFieldName;
-			newFieldHTML += "</label><input type='text' value='";
-			newFieldHTML += newFieldType;
-			newFieldHTML += "' /></li>";
-
-			$(newFieldHTML).appendTo($(this).siblings("ul"));
-
-			$(this).siblings("#new_field_name").val('');	
-			$(this).siblings("#new_field_type").val('');	
-		}
-
-		return false;
-	});
-
-	$("form#new_project_form #step_2").on("click", "a.delete", function() {
-		$(this).parents("li:first").fadeOut(100, function() {
-			$(this).remove();
-		});
-
-		return false;
 	});
 
 	// Focus on the transcript textarea
@@ -602,18 +574,15 @@ $(document).ready(function() {
 	/* -------------------------------------------------- */
 
 	$('.proj_details .membership a').click(function() {
-		// Find out whether we're joining or leaving the project
-		var action = ($(this).hasClass('join')) ? 'POST' : 'DELETE';
+		// The URL to call
+		var url = ($(this).hasClass('join')) ? $(this).attr('href') : $(this).attr('href') + '/leave';
 
-		// And the URL to call (same for joining/leaving)
-		var url = $(this).attr('href');
-
-		var message = (action == 'POST') ? 'You are now a member of this project.' : 'You have left this project.';
+		var message = ($(this).hasClass('join')) ? 'You are now a member of this project.' : 'You have left this project.';
 
 		// call URL with appropriate method
 		$.ajax({
 			url: url,
-			type: action,
+			type: 'POST',
 			dataType: 'json',
 			success: function(data) {
 				$(".proj_details .membership a").slideUp(50, function() {
@@ -634,7 +603,7 @@ $(document).ready(function() {
 	/* Item deletion (project admin page) */
 	/* -------------------------------------------------- */
 
-	$("#main.add ul.items").on("click", "a.delete", function() {
+	$("#main.add section.items ul.items").on("click", "a.delete", function() {
 		var itemId = $(this).parents("li:first").attr("data-id");
 
 		if (confirm("Are you sure you want to delete that item?")) {
@@ -654,6 +623,20 @@ $(document).ready(function() {
 
 		unbindery.addUserToProject(username, role);
 
+		return false;
+	});
+
+
+	/* Removing users from projects */
+	/* -------------------------------------------------- */
+
+	$("#main.add ul.items.members").on("click", "a.delete", function() {
+		var username = $(this).parents("li:first").attr("data-username");
+
+		if (confirm("Are you sure you want to remove that user from this project?")) {
+			unbindery.removeUserFromProject(username);
+		}
+		
 		return false;
 	});
 

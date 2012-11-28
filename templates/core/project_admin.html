@@ -49,7 +49,7 @@
 
 					<ul class="items members">
 					{% for member in members %}
-					<li><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ member.username }}</b>: {{ member.roles }}</li>
+						<li data-username="{{ member.username }}"><span class="itemcontrols"><a href="" class="delete">×</a></span><b>{{ member.username }}</b>: {{ member.roles }}</li>
 					{% endfor %}
 					</ul>
 
@@ -84,16 +84,6 @@
 						<option{% if project.status == 'completed' %} selected{% endif %} value="completed">{{ i18n.t('admin.project.status.completed') }}</option>
 					</select>
 				</section>
-
-				{% if not project.public %}
-				<section>
-					<h3>{{ i18n.t('admin.project.whitelist') }}</h3>
-
-					<label>{{ i18n.t('admin.project.whitelist.one_username_per_line') }}</label>
-					<textarea id="project_whitelist" name="project_whitelist">{% for entry in project.whitelist %}{{ entry }}
-{% endfor %}</textarea>
-				</section>
-				{% endif %}
 
 				<section>
 					<h3>{{ i18n.t('admin.project.workflow') }}</h3>

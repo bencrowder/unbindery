@@ -93,7 +93,6 @@ class ProjectPageController {
 				$project->language = Utils::POST('project_lang');
 				$project->workflow = Utils::POST('project_workflow');
 				$project->fields = Utils::POST('project_fields');
-				$project->whitelist = Utils::POST('project_whitelist');
 				$project->guidelines = Utils::POST('project_guidelines');
 				$project->owner = Utils::POST('project_owner');
 				$project->characters = Utils::POST('project_characters');
@@ -260,7 +259,6 @@ class ProjectPageController {
 				$project->language = Utils::POST('projectLang');
 				$project->workflow = Utils::POST('projectWorkflow');
 				$project->fields = Utils::POST('projectFields');
-				$project->whitelist = Utils::POST('projectWhitelist');
 				$project->guidelines = Utils::POST('projectGuidelines');
 				$project->owner = Utils::POST('projectOwner');
 				$project->status = Utils::POST('projectStatus');
@@ -311,7 +309,6 @@ class ProjectPageController {
 	// Project membership handler
 	// URL: /projects/[PROJECT]/membership OR /users/[USER]/projects/[PROJECT]/membership
 	// Methods: POST = join project
-	//          DELETE = leave project
 
 	static public function membership($params) {
 		// Parse parameters
@@ -336,9 +333,9 @@ class ProjectPageController {
 				// Load project
 				$project = new Project($projectSlug);
 
-				// If the project is public OR the user is on the whitelist OR we're adding a specific user, let them join
-				// TODO: make the third clause secure somehow
-				if ($project->public || $project->allowedToJoin($username) || Utils::POST('username') != '') {
+				// If the project is public OR we're adding a specific user, let them join
+				// TODO: make the second clause secure somehow
+				if ($project->public || (Utils::POST('username') != '' && $userToAssign)) {
 					$status = ($userToAssign->assignToProject($projectSlug)) ? 'success' : 'error';
 				} else {
 					$status = 'access-denied';
@@ -347,10 +344,37 @@ class ProjectPageController {
 				echo json_encode(array('status' => $status));
 
 				break;
+		}
+	}
 
-			case 'DELETE':
-				// TODO: expand to allow removing other users
-				$status = ($user->removeFromProject($projectSlug)) ? 'success' : 'error';
+
+	// --------------------------------------------------
+	// Project membership leaving handler
+	// URL: /projects/[PROJECT]/membership/leave OR /users/[USER]/projects/[PROJECT]/membership/leave
+	// Methods: POST = leave project
+
+	static public function membershipLeave($params) {
+		// Parse parameters
+		$format = Utils::getFormat($params['args'], 1, 3);
+		$projectType = Utils::getProjectType($params['args']);
+		$projectSlugIndex = ($projectType == 'system') ? 0 : 2;
+		$projectSlug = $params['args'][$projectSlugIndex];
+
+		$user = User::getAuthenticatedUser();
+
+		switch ($params['method']) {
+			// POST: leave project
+			case 'POST':
+				if (Utils::POST('username') != '') {
+					$username = Utils::POST('username');
+					$userToRemove = new User($username);
+				} else {
+					$username = $user->username;
+					$userToRemove = $user;
+				}
+
+				// TODO: make sure user has access to do this for someone else
+				$status = ($userToRemove->removeFromProject($projectSlug)) ? 'success' : 'error';
 
 				echo json_encode(array('status' => $status));
 

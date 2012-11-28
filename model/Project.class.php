@@ -15,7 +15,6 @@ class Project {
 	private $status;
 	private $guidelines;
 	private $workflow = "@proofer, @proofer, @reviewer";	// Default
-	private $whitelist;
 	private $fields;
 	private $downloadTemplate = "<page item-id=\"{{ item.id }}\" proofers=\"{{ proofers }}\">\n\t{{ transcript }}\n</page>";
 	private $characters;
@@ -54,7 +53,6 @@ class Project {
 			$this->status = trim($project['status']);
 			$this->guidelines = stripslashes(trim($project['guidelines']));
 			$this->workflow = trim($project['workflow']);
-			$this->whitelist = trim($project['whitelist']);
 			$this->fields = trim($project['fields']);
 			$this->downloadTemplate = trim($project['download_template']);
 			$this->characters = trim($project['characters']);
@@ -65,13 +63,6 @@ class Project {
 			$this->itemsCompleted = trim($project['items_completed']);
 			$this->numProofers = trim($project['num_proofers']);
 			$this->numReviewers = trim($project['num_reviewers']);
-
-			// Put the whitelist into an array
-			if (trim($this->whitelist, "[]") != '') {
-			   	$this->whitelist = explode("][", trim($this->whitelist, "[]"));
-			} else {
-				$this->whitelist = array();
-			}
 
 			// Put the character list into an array
 			if (trim($this->characters) != '') {
@@ -85,25 +76,17 @@ class Project {
 	public function save() {
 		$status = false;
 
-		// Turn the whitelist from a newline-delimited list to something like
-		// this: [username][username]
-		if ($this->whitelist && $this->whitelist != '') {
-			$whitelist = "[" . join("][", explode("\n", $this->whitelist)) . "]";
-		} else {
-			$whitelist = '';
-		}
-
 		if ($this->project_id) {
-			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $this->characters);
+			$status = $this->db->saveProject($this->project_id, $this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $this->characters);
 		} else {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $whitelist, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $this->characters);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $this->characters);
 		}
 
 		return $status;
 	}
 
 	// TODO: are we even using this function anywhere? save() does the same thing
-	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $workflow, $whitelist, $fields, $downloadTemplate, $characters) {
+	public function create($title, $type, $public, $slug, $language, $description, $owner, $guidelines, $workflow, $fields, $downloadTemplate, $characters) {
 		$this->title = $title;
 		$this->type = $type;
 		$this->public = $public;
@@ -114,13 +97,12 @@ class Project {
 		$this->status = "pending";
 		$this->guidelines = $guidelines;
 		$this->workflow = $workflow;
-		$this->whitelist = $whitelist;
 		$this->fields = $fields;
 		$this->downloadTemplate = $downloadTemplate;
 		$this->characters = $characters;
 
 		if ($title != "" && $slug != "") {
-			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->whitelist, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $characters);
+			$status = $this->db->addProject($this->title, $this->type, $this->public, $this->slug, $this->description, $this->owner, $this->status, $this->workflow, $this->guidelines, $this->language, $this->fields, $this->downloadTemplate, $characters);
 
 			if ($status) {
 				return "success";
@@ -240,14 +222,6 @@ class Project {
 		return $items;
 	}
 
-	public function allowedToJoin($username) {
-		if (is_array($this->whitelist)) {
-			return in_array($username, $this->whitelist);
-		} else {
-			return false;
-		}
-	}
-
 	public function getJSON() {
 		return json_encode(array("project_id" => $this->project_id, "title" => $this->title, "type" => $this->type, "slug" => $this->slug, "language" => $this->language, "description" => $this->description, "owner" => $this->owner, "status" => $this->status));
 	}
@@ -326,7 +300,6 @@ class Project {
 		$str .= " | [status={$this->status}]";
 		$str .= " | [guidelines={$this->guidelines}]";
 		$str .= " | [workflow={$this->workflow}]";
-		$str .= " | [whitelist={$this->whitelist}]";
 		$str .= " | [fields={$this->fields}]";
 		$str .= " | [downloadTemplate={$this->downloadTemplate}]";
 		$str .= " | [characters={$this->characters}]";
@@ -349,7 +322,6 @@ class Project {
 			"status" => $this->status,
 			"guidelines" => $this->guidelines,
 			"workflow" => $this->workflow,
-			"whitelist" => $this->whitelist,
 			"fields" => $this->fields,
 			"downloadTemplate" => $this->downloadTemplate,
 			"characters" => $this->characters,

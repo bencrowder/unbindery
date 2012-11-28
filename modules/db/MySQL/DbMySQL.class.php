@@ -491,7 +491,7 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: none
-	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters) {
+	public function saveProject($project_id, $title, $type, $public, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $fields, $downloadTemplate, $characters) {
 		$sql = "UPDATE projects ";
 		$sql .= "SET title = ?, ";
 		$sql .= "type = ?, ";
@@ -501,7 +501,6 @@ class DbMySQL implements DbInterface {
 		$sql .= "owner = ?, ";
 		$sql .= "status = ?, ";
 		$sql .= "workflow = ?, ";
-		$sql .= "whitelist = ?, ";
 		$sql .= "guidelines = ?, ";
 		$sql .= "language = ?, ";
 		$sql .= "fields = ?, ";
@@ -509,15 +508,15 @@ class DbMySQL implements DbInterface {
 		$sql .= "characters = ? ";
 		$sql .= "WHERE id = ?;";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters, $project_id));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $fields, $downloadTemplate, $characters, $project_id));
 	}
 
-	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters) {
+	public function addProject($title, $type, $public, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $fields, $downloadTemplate, $characters) {
 		$sql = "INSERT INTO projects ";
-		$sql .= "(title, type, public, slug, description, owner, status, workflow, whitelist, guidelines, language, fields, download_template, characters, date_started) ";
-		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+		$sql .= "(title, type, public, slug, description, owner, status, workflow, guidelines, language, fields, download_template, characters, date_started) ";
+		$sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
-		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $whitelist, $guidelines, $language, $fields, $downloadTemplate, $characters));
+		return $this->execute($sql, array($title, $type, $public, $slug, $description, $owner, $status, $workflow, $guidelines, $language, $fields, $downloadTemplate, $characters));
 	}
 
 	// Returns: boolean
@@ -644,8 +643,8 @@ class DbMySQL implements DbInterface {
 	}
 
 	// Returns: array of projects available to user
-	// (project is public OR user is owner OR user is in whitelist)
-	// or, if $owner is specified, then (project is public OR user is in whitelist)
+	// (project is public OR user is owner)
+	// or, if $owner is specified, then (project is public OR)
 	public function getAvailableProjects($username, $owner) {
 		$query = "";
 
@@ -701,13 +700,7 @@ class DbMySQL implements DbInterface {
 		if ($owner) {
 			$query .= "AND projects.owner = ? ";
 
-			$query .= "AND (";
-
-			// Where the project is public
-			$query .=     "projects.public = 1 ";
-
-			// Or the user is in the whitelist
-			$query .=     "OR projects.whitelist LIKE ? ";
+			$query .= "AND projects.public = 1 ";
 
 			$query .= ")";
 
@@ -720,9 +713,6 @@ class DbMySQL implements DbInterface {
 
 			// Or the user is the owner
 			$query .=     "OR projects.owner = ? ";
-
-			// Or the user is in the whitelist
-			$query .=     "OR projects.whitelist LIKE ? ";
 
 			$query .= ")";
 
@@ -1029,7 +1019,6 @@ CREATE TABLE `projects` (
   `owner` varchar(255) default NULL,
   `status` varchar(255) default NULL,
   `workflow` varchar(2000) default NULL,
-  `whitelist` varchar(2000) default NULL,
   `guidelines` text default NULL,
   `language` varchar(255) default NULL,
   `date_started` date default NULL,
