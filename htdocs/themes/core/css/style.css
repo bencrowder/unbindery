@@ -196,9 +196,8 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #project_form #project_deadline			{ width: 30px; }
 #project_form #project_numproofs		{ width: 30px; }
 
-#uploadcol								{ width: 350px; float: left; margin-right: 50px; margin-top: 20px; }
-#file_uploadQueue						{ width: 350px; }
-.uploadifyQueueItem						{ width: 350px; font-family: "Lucida Grande", Helvetica, Arial, sans-serif !important; font-size: 11px !important; -moz-border-radius: 3px; border-radius: 3px; }
+#file_uploadQueue						{ width: 100%; }
+.uploadifyQueueItem						{ width: 100%; font-family: "Lucida Grande", Helvetica, Arial, sans-serif !important; font-size: 11px !important; -moz-border-radius: 3px; border-radius: 3px; }
 .uploadifyQueueItem .percentage			{ font-weight: bold; }
 
 .uploadifyProgressBar					{ height: 10px !important; }
