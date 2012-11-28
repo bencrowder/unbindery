@@ -262,8 +262,6 @@ var Unbindery = function() {
 		var projectCharacters = $("#project_characters").val().trim();
 		var projectFields = $("#project_fields").val().trim();
 		
-		// TODO: add fields
-
 		unbindery.callAPI('save-project', 'POST', { projectSlug: projectSlug, projectType: projectType, projectOwner: projectOwner, projectName: projectName, projectStatus: projectStatus, projectPublic: projectPublic, projectDesc: projectDesc, projectLang: projectLang, projectWhitelist: projectWhitelist, projectWorkflow: projectWorkflow, projectDownloadTemplate: projectDownloadTemplate, projectCharacters: projectCharacters, projectFields: projectFields },
 			function(data) {
 				if (data.statuscode == "success") {
@@ -285,7 +283,7 @@ var Unbindery = function() {
 				if (data.status == 'success') {
 					unbindery.hideSpinner('#uploadspinner');
 
-					// if success, add items to item list
+					// If success, add items to item list
 					for (item in data.items) {
 						item = data.items[item];
 
@@ -299,6 +297,9 @@ var Unbindery = function() {
 
 						$(html).appendTo($("section.items ul.items"));
 					}
+
+					// Also remove the items from the queue
+					$("#file_uploadQueue").html('');
 				}
 			}
 		);
