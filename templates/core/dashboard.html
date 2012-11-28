@@ -5,6 +5,19 @@
 		<h2>{{ i18n.t('dashboard.title') }}</h2>
 
 		<div class="content">
+			{% if proofing.blankslate and reviewing.items|length == 0 and reviewing.projects|length == 0 %}
+				{% if user.role == 'creator' %}
+					<div class="blankslate">
+						<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">{{ i18n.t('admin.dashboard.create_new_project') }}</a>
+					</div>
+				{% elseif user.role == 'admin' %}
+					<div class="blankslate">
+						<a href="{{ app_url }}/projects/new-project" class="button">{{ i18n.t('admin.dashboard.create_new_system_project') }}</a>
+						<a href="{{ app_url }}/users/{{ user.username }}/projects/new-project" class="button">{{ i18n.t('admin.dashboard.create_new_user_project') }}</a>
+					</div>
+				{% endif %}
+			{% endif %}
+
 			<h3>{{ i18n.t('dashboard.proofing_queue') }}</h3>
 			<ul class="action_list proof">
 				{% if proofing.blankslate %}
