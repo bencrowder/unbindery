@@ -152,25 +152,10 @@ var Unbindery = function() {
 				} else {
 					unbindery.hideSpinner();
 
-					switch (data.code) {
-						case "not-authenticated-as-correct-user":
-							unbindery.redirectToDashboard("", "You're not the user you say you are.");
-							break;
-						case "not-cleared":
-							unbindery.redirectToDashboard("", "Your first item has to be approved before you can proof more items. (Just this once, though.)");
-							break;	
-						case "not-a-member":
-							unbindery.redirectToDashboard("", "You're not a member of that project.");
-							break;
-						case "has-unfinished-item":
-							unbindery.redirectToDashboard("", "You already have an item for this project. Finish it and then you'll be able to get a new one.");
-						case "no-item-available":
-							unbindery.redirectToDashboard("", "There aren't any more items available to you for that project.");
-						default:
-							unbindery.redirectToDashboard("", "Error getting new item.");
-							break;
+					// Set up error code
+					errorCode = "error." + data.code.replace(/-/, "_"); 
 
-					}
+					unbindery.redirectToDashboard("", errorCode);
 				}
 			}
 		);
@@ -248,7 +233,7 @@ var Unbindery = function() {
 
 					unbindery.hideSpinner();
 				} else {
-					unbindery.redirectToDashboard("", "Error saving transcript. Try again.");
+					unbindery.redirectToDashboard("", "error.saving_transcript");
 				}
 			});
 	};
@@ -274,7 +259,7 @@ var Unbindery = function() {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
 				} else {
-					unbindery.redirectToDashboard("", "Error saving transcript. Try again.");
+					unbindery.redirectToDashboard("", "error.saving_transcript");
 				}
 			});
 	};

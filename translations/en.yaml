@@ -302,6 +302,12 @@ error.not_a_member: "You're not a member of that project. Sorry."
 error.nonexistent_item: "Item doesn't exist."
 error.loading_project: "Error loading project."
 error.already_installed: "Already installed."
+error.not_authenticated_as_correct_user: "You're not the user you say you are."
+error.not_cleared: "Your first item has to be approved before you can proof more items. (Just this once, though.)"
+error.not_a_member: "You're not a member of that project."
+error.has_unfinished_item: "You already have an item for this project. Finish it and then you'll be able to get a new one."
+error.no_item_available: "There aren't any more items available to you for that project."
+error.saving_transcript: "Error saving transcript. Please try again."
 
 
 # 404 page
