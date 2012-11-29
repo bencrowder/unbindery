@@ -7,7 +7,7 @@ class SystemPageController {
 	// URL: /
 	// Methods: GET = get index or confirmation page
 
-	static public function index($args) {
+	static public function index($params) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 		$externalLogin = Settings::getProtected('external_login');
@@ -63,7 +63,7 @@ class SystemPageController {
 	// URL: /login
 	// Methods: GET = get login page
 
-	static public function login($args) {
+	static public function login($params) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -86,7 +86,7 @@ class SystemPageController {
 	// URL: /logout
 	// Methods: GET = logout
 
-	static public function logout($args) {
+	static public function logout($params) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -99,7 +99,7 @@ class SystemPageController {
 	// URL: /signup
 	// Methods: POST = create new signup
 
-	static public function signup($args) {
+	static public function signup($params) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -130,11 +130,11 @@ class SystemPageController {
 	// URL: /signup/activate
 	// Methods: POST = activate new signup
 
-	static public function activate($args) {
+	static public function activate($params) {
 		$app_url = Settings::getProtected('app_url');
 		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
-		$hash = $args[0];
+		$hash = $params['args'][0];
 
 		$user = new User();
 		$status = $user->validateHash($hash);
