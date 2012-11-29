@@ -1,7 +1,7 @@
 <?php
 
 class AdminPageController {
-	static public function adminHandler($params) {
+	static public function admin($params) {
 		$format = Utils::getFormat($params['args'], 0, 2);
 		$app_url = Settings::getProtected('app_url');
 		$db = Settings::getProtected('db');

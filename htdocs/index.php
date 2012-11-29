@@ -140,14 +140,14 @@ Settings::setProtected('notify', $notify);
 // Create the routes we want to use
 $routes = array(
 	// System pages
-	'#^/?$#'									=> 'SystemPageController::indexHandler',
-	'#^/login/?$#'								=> 'SystemPageController::loginHandler',
-	'#^/logout/?$#'								=> 'SystemPageController::logoutHandler',
-	'#^/signup(\.[^/]+)?/?$#'					=> 'SystemPageController::signupHandler',
-	'#^/signup/activate/(.*)(\.[^/]+)?/?$#'		=> 'SystemPageController::activateHandler',
-	'#^/messages/?$#'							=> 'SystemPageController::messageHandler',
-	'#^/install/?$#'							=> 'SystemPageController::installHandler',
-	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
+	'#^/?$#'									=> 'SystemPageController::index',
+	'#^/login/?$#'								=> 'SystemPageController::login',
+	'#^/logout/?$#'								=> 'SystemPageController::logout',
+	'#^/signup(\.[^/]+)?/?$#'					=> 'SystemPageController::signup',
+	'#^/signup/activate/(.*)(\.[^/]+)?/?$#'		=> 'SystemPageController::activate',
+	'#^/messages/?$#'							=> 'SystemPageController::message',
+	'#^/install/?$#'							=> 'SystemPageController::install',
+	'#^/test/(.*)/?$#'							=> 'SystemPageController::test',
 
 	// User project item pages
 	'#^/(users)/([^/]+)/projects/([^/]+)/items/get(\.[^/]+)?/?#'					=> 'ItemPageController::getNewItem',
@@ -198,10 +198,10 @@ $routes = array(
 	'#^/projects(\.[^/]+)?/?#'								=> 'ProjectPageController::projects',
 
 	// Admin pages
-	'#^/admin(\.[^/]+)?/?$#'								=> 'AdminPageController::adminHandler',
+	'#^/admin(\.[^/]+)?/?$#'								=> 'AdminPageController::admin',
 );
 
-$router = new Router('SystemPageController::fileNotFoundHandler');
+$router = new Router('SystemPageController::fileNotFound');
 $router->route($routes);
 
 ?>

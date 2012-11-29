@@ -7,7 +7,7 @@ class SystemPageController {
 	// URL: /
 	// Methods: GET = get index or confirmation page
 
-	static public function indexHandler($args) {
+	static public function index($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 		$externalLogin = Settings::getProtected('external_login');
@@ -63,7 +63,7 @@ class SystemPageController {
 	// URL: /login
 	// Methods: GET = get login page
 
-	static public function loginHandler($args) {
+	static public function login($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -86,7 +86,7 @@ class SystemPageController {
 	// URL: /logout
 	// Methods: GET = logout
 
-	static public function logoutHandler($args) {
+	static public function logout($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -99,7 +99,7 @@ class SystemPageController {
 	// URL: /signup
 	// Methods: POST = create new signup
 
-	static public function signupHandler($args) {
+	static public function signup($args) {
 		$app_url = Settings::getProtected('app_url');
 		$auth = Settings::getProtected('auth');
 
@@ -130,7 +130,7 @@ class SystemPageController {
 	// URL: /signup/activate
 	// Methods: POST = activate new signup
 
-	static public function activateHandler($args) {
+	static public function activate($args) {
 		$app_url = Settings::getProtected('app_url');
 		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
@@ -154,7 +154,7 @@ class SystemPageController {
 	// URL: /messages
 	// Methods: POST
 
-	static public function messageHandler($args) {
+	static public function message($args) {
 		$message = Utils::POST('message');
 		$error = Utils::POST('error');
 
@@ -169,7 +169,7 @@ class SystemPageController {
 	// Methods: GET = show install page
     //          POST = run install script
 
-	static public function installHandler($params) {
+	static public function install($params) {
 		// Load database
 		$db = Settings::getProtected('db');		
 		$installed = $db->installed();
@@ -223,7 +223,7 @@ class SystemPageController {
 	// --------------------------------------------------
 	// 404 handler
 
-	static public function fileNotFoundHandler() {
+	static public function fileNotFound() {
 		Template::render('404', array());
 	}
 }
