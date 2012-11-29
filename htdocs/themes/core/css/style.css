@@ -175,6 +175,7 @@ ul.action_list .project .right_button	{ padding-top: 0; }
 ul.action_list .project .button			{ font-size: 1em; display: inline-block; }
 
 ul.action_list .project .owner			{ font-size: .9em; margin-top: 2px; }
+ul.action_list .project .owner a		{ color: #345678; text-decoration: none; }
 ul.action_list .project.private			{ background: #fdf7e8; }
 
 .sys_message							{ padding: 9px 12px 11px; border-radius: 5px; font-size: 1.2em; font-weight: bold; margin-top: 15px; margin-bottom: -1em; }
@@ -183,8 +184,7 @@ ul.action_list .project.private			{ background: #fdf7e8; }
 
 body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: #fff; padding: 15px; border: solid 2px #000; border-top: none; }
 
-#spinner								{ display: none; vertical-align: middle; }
-.spinner								{ display: none; vertical-align: middle; }
+#spinner, .spinner						{ display: none; vertical-align: middle; }
 
 #uploadspinner							{ float: right; }
 

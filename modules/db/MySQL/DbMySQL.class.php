@@ -737,6 +737,14 @@ class DbMySQL implements DbInterface {
 		$query .= "projects.type AS type, ";
 		$query .= "projects.public AS public, ";
 
+		// Whether the user is admin or not
+		$query .= "(SELECT COUNT(id) ";
+		$query .=     "FROM roles ";
+		$query .=     "WHERE username = ? ";
+		$query .=     "AND project_id = projects.id ";
+		$query .=     "AND role = 'admin'";
+		$query .= ") AS is_admin, ";
+
 		// Number of people volunteering on the project
 		$query .= "(SELECT COUNT(DISTINCT username) ";
 		$query .=     "FROM roles ";
@@ -795,7 +803,7 @@ class DbMySQL implements DbInterface {
 		$query .= "ORDER BY percentage DESC, ";
 		$query .=     "projects.date_started DESC;";
 
-		return $this->query($query, array($username, $username));
+		return $this->query($query, array($username, $username, $username));
 	}
 
 	// Returns: array of projects

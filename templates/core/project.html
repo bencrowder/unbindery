@@ -2,7 +2,7 @@
 
 {% block main %}
 	<div id="main" class="container">
-		{% if user.is_owner %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">{{ i18n.t('project.edit_link')|raw }}</a></div>{% endif %}
+		{% if user.is_owner or user.is_admin %}<div class="adminlink"><a href="{{ app_url }}/projects/{{ project.slug }}/admin">{{ i18n.t('project.edit_link')|raw }}</a></div>{% endif %}
 
 		<h2>{% if project.type == 'user' %}{{ i18n.t('project.user_project_details') }}{% else %}{{ i18n.t('project.system_project_details') }}{% endif %}</h2>
 

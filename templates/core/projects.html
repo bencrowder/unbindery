@@ -18,7 +18,7 @@
 					</div>
 
 					<div class="title"><a href="{{ project.link }}">{{ project.title }}</a></div>
-					<div class="owner">{{ i18n.t('projects.project.owner', { 'owner': project.owner }) }} &bull; {{ i18n.t('projects.project.items', { 'items': project.total_items }) }}</div>
+					<div class="owner">{{ i18n.t('projects.project.owner', { 'owner': project.owner }) }} &bull; {{ i18n.t('projects.project.items', { 'items': project.total_items }) }}{% if project.adminlink %} &bull; <a href="{{ app_url }}/projects/{{ project.slug }}/admin">{{ i18n.t('project.edit_link')|raw }}</a>{% endif %}</div>
 				</li>
 				{% else %}
 				<li class="project">{{ i18n.t('projects.no_projects') }}</li>

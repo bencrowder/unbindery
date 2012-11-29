@@ -207,6 +207,7 @@ class User {
 
 			$response['is_member'] = $this->isMember($projectSlug, 'proofer');
 			$response['is_owner'] = ($this->username == $project->owner);
+			$response['is_admin'] = $this->isMember($projectSlug, 'admin');
 			$response['project_roles'] = join('|', $this->getRolesForProject($projectSlug));
 		}
 

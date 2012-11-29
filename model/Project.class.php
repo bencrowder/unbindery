@@ -263,6 +263,10 @@ class Project {
 				$project["link"] = "$app_url/users/{$project["owner"]}/projects/{$project["slug"]}";
 			}
 
+			if ($project["is_admin"] || $project["owner"] == $username) {
+				$project["adminlink"] = $project["link"] . "/admin";
+			}
+
 			$project["percentage"] = round($project["percentage"], 0);
 		}
 
