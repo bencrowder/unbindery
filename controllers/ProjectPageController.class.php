@@ -77,13 +77,6 @@ class ProjectPageController {
 			// - type (public/private)
 			// - owner (string)
 			case 'POST':
-				// Verify the POST elements
-				// See what type it is (public or private)
-				// Verify that the user is who they say they are
-					// How are we going to do this?
-				// Verify that the user can actually create the project
-				// Verify that there isn't already a project with the same name/slug in that scope
-
 				// Create the project
 				$project = new Project();
 				$project->title = Utils::POST('project_name');
@@ -260,7 +253,7 @@ class ProjectPageController {
 
 				$project->title = Utils::POST('projectName');
 				$project->type = Utils::POST('projectType');
-				$project->public = Utils::POST('projectPublic');
+				$project->public = (Utils::POST('projectPublic') == 'public') ? true : false;
 				$project->description = Utils::POST('projectDesc');
 				$project->language = Utils::POST('projectLang');
 				$project->workflow = Utils::POST('projectWorkflow');
