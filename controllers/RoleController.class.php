@@ -1,6 +1,7 @@
 <?php
 
 class RoleController {
+
 	// Simple verify (returns boolean)
 	// --------------------------------------------------
 	// Pass in roles array to check against, user, and optional project (in params array)

@@ -1,6 +1,13 @@
 <?php
 
 class AdminPageController {
+
+	// --------------------------------------------------
+	// Admin dashboard handler
+	// URL: /admin
+	// Methods: GET = get admin page
+	// Format:  HTML
+
 	static public function admin($params) {
 		$format = Utils::getFormat($params['args'], 0, 2);
 		$app_url = Settings::getProtected('app_url');

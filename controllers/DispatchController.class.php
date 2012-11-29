@@ -1,6 +1,7 @@
 <?php
 
 class DispatchController {
+
 	// --------------------------------------------------
 	// Get next available item handler
 
