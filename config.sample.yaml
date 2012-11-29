@@ -53,7 +53,8 @@ editors:
   page:
     css: # [custompage.css]             # array of CSS to include for this editor type
   audio:
-    js: # [customaudio.js]              # ditto
+    css: [me/mediaelementplayer.min.css]
+    js: [me/mediaelement-and-player.min.js]
 # xml:
 #   css: # [xml.css]                    # custom editor type
 

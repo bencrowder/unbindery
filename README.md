@@ -7,7 +7,7 @@ A web app for crowdsourcing transcription, written in PHP and JavaScript.
 * Twig (1.9.2 included)
 * sfYaml (included)
 * uploadify (included)
-* MediaElement.js (included)
+* MediaElement.js (2.10.0 included)
 * ffmpeg (for audio transcription)
 
 ### Installation
