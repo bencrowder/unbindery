@@ -130,7 +130,6 @@ class SystemPageController {
 
 	static public function activate($params) {
 		$app_url = Settings::getProtected('app_url');
-		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
 		$hash = $params['args'][0];
 
@@ -138,9 +137,9 @@ class SystemPageController {
 		$status = $user->validateHash($hash);
 
 		if ($status) {
-			$_SESSION['ub_message'] = $i18n->t("signup.activated");
+			$_SESSION['ub_message'] = "signup.activated";
 		} else {
-			$_SESSION['ub_message'] = $i18n->t("signup.invalid_code");
+			$_SESSION['ub_message'] = "signup.invalid_code";
 		}
 
 		header("Location: $app_url");
