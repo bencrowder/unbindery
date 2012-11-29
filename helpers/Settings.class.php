@@ -39,6 +39,11 @@ abstract class Settings
 	public static function loadFromYAML() {
 		require_once '../lib/sfyaml/sfYaml.php';
 
+		if (!file_exists("../config.yaml")) {
+			echo "config.yaml doesn't exist. Exiting now.";
+			die(-1);
+		}
+
 		$array = sfYaml::load("../config.yaml");
 
 		foreach ($array as $key => $value) {
