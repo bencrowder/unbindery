@@ -190,8 +190,8 @@ class SystemPageController {
 				case 'POST':
 					// And install
 					if ($db->install()) {
-						// Sleep three seconds to make sure the tables are all created
-						sleep(3);
+						// Sleep two seconds to make sure the tables are all created
+						sleep(2);
 
 						// Add admin user
 						$user = new User();
