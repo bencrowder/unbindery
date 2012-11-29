@@ -462,8 +462,9 @@ var Unbindery = function() {
 			function(data) {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
+					unbindery.redirectToDashboard("settings.saved", "");
 				} else {
-					unbindery.redirectToDashboard("", "Error saving user settings. Try again.");
+					unbindery.redirectToDashboard("", "settings.error");
 				}
 			}
 		);

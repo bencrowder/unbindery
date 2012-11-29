@@ -33,6 +33,8 @@ settings.notifications: "Notifications"
 settings.user_notifications: "User notifications"
 settings.theme: "Theme"
 settings.side_by_side: "Side-by-side"
+settings.saved: "Settings saved."
+settings.error: "Error saving settings. Please try again."
 
 
 # Themes
