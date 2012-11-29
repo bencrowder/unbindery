@@ -23,7 +23,7 @@
 				{% if project.date_posted %}<li><label>{{ i18n.t('project.posted') }}</label> <div>{{ project.date_posted }}</div></li>{% endif %}
 			</ul>
 
-			{% if project.guidelines %}<div class="guidelines"><h2>{{ i18n.t('project.guidelines') }}</h2> <div>{{ project.guidelines|raw }}</div></div>{% endif %}
+			{% if system_guidelines or project.guidelines %}<div class="guidelines"><h2>{{ i18n.t('project.guidelines') }}</h2> <div>{% if system_guidelines %}{{ system_guidelines|raw }}{% endif %}{% if project.guidelines %}{{ project.guidelines|raw }}{% endif %}</div></div>{% endif %}
 		</div>
 
 		<div class="sidebar proj_details">

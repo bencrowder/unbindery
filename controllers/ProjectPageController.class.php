@@ -227,6 +227,8 @@ class ProjectPageController {
 		$projectArray = $project->getResponse();
 		$projectArray['percent_complete'] = $percentComplete;
 
+		$systemGuidelines = Settings::getProtected('system_guidelines');
+
 		switch ($params['method']) {
 			case 'GET':
 				$response = array(
@@ -235,6 +237,7 @@ class ProjectPageController {
 					'project' => $projectArray,
 					'proofers' => $project->getProoferStats('proof'),
 					'reviewers' => $project->getProoferStats('review'),
+					'system_guidelines' => $systemGuidelines,
 				);
 
 				switch ($format) {
