@@ -37,7 +37,7 @@ class AuthAlibaba implements AuthInterface {
 		$app_url = Settings::getProtected('app_url');
 		$email_subject = Settings::getProtected('email_subject');
 		$admin_email = Settings::getProtected('admin_email');
-		$i18n = new I18n("../../translations", Settings::getProtected('language'));
+		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
 		// Add username/email here if they're not already in Unbindery (unnecessary for Alibaba)
 		// Example:
