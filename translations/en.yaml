@@ -1,12 +1,77 @@
+###############################################################################
+#
 # English translations
+# 
+###############################################################################
+
+
+# Installation
+# --------------------------------------------------
+
+install.title: "Unbindery Installation"
+install.intro: "Fill out the initial admin username/password and click the Install button:"
+install.intro_external: "Fill out the initial admin username and click the Install button:"
+install.admin_username: "Admin Username:"
+install.admin_password: "Admin Password:"
+install.error: "Fields need to be filled out."
+install.install_unbindery: "Install Unbindery"
+install.failed: "Installation Failed"
+install.failed.step1: "Make sure the database is set up correctly."
+install.failed.step2: "Make sure <code>config.yaml</code> is set up correctly."
+install.failed.step3: "Reload this page and try again."
+
+
+# Settings
+# --------------------------------------------------
+
+settings.title: "Settings"
+settings.save_settings: "Save Settings"
+settings.basic_information: "Basic Information"
+settings.name: "Name"
+settings.email: "Email address"
+settings.notifications: "Notifications"
+settings.user_notifications: "User notifications"
+settings.theme: "Theme"
+settings.side_by_side: "Side-by-side"
+
+
+# Themes
+# --------------------------------------------------
+
+themes.core: "Core"
+
+
+# Nav
+# --------------------------------------------------
+
+nav.dashboard: 'Dashboard'
+nav.projects: 'Projects'
+nav.settings: 'Settings'
+nav.logout: 'Logout'
+nav.admin: 'Admin'
+nav.login: 'Login'
+nav.signup: 'Sign Up'
+nav.logged_in_as: 'Logged in as <span id="username" class="username">{{ username }}</span>'
+
+
+# Footer
+# --------------------------------------------------
+
+footer.text: '<a href="http://bencrowder.net/coding/unbindery/">Unbindery</a> is written by <a href="http://bencrowder.net/">Ben Crowder</a>.'
+
 
 # Login
+# --------------------------------------------------
+
 login.username: 'Username:'
 login.password: 'Password:'
 login.login: 'Login'
 login.signup: 'Sign up'
 
-# Create account
+
+# Signup
+# --------------------------------------------------
+
 signup.username: 'Username:'
 signup.password: 'Password:'
 signup.email: 'Email:'
@@ -24,20 +89,10 @@ signup.conf_link_sent: "We just sent a confirmation link to your email address."
 signup.activated: "Activation successful. Welcome."
 signup.invalid_code: "Invalid confirmation code."
 
-# Nav
-nav.dashboard: 'Dashboard'
-nav.projects: 'Projects'
-nav.settings: 'Settings'
-nav.logout: 'Logout'
-nav.admin: 'Admin'
-nav.login: 'Login'
-nav.signup: 'Sign Up'
-nav.logged_in_as: 'Logged in as <span id="username" class="username">{{ username }}</span>'
-
-# Footer
-footer.text: '<a href="http://bencrowder.net/coding/unbindery/">Unbindery</a> is written by <a href="http://bencrowder.net/">Ben Crowder</a>.'
 
 # Dashboard
+# --------------------------------------------------
+
 dashboard.title: 'Dashboard'
 dashboard.proofing_queue: 'Proofing Queue'
 dashboard.reviewing_queue: 'Reviewing Queue'
@@ -61,21 +116,10 @@ dashboard.project: 'Project:'
 dashboard.no_history: 'Nothing so far—you must be new here. :)'
 dashboard.item_type: 'Type: {{ type }}'
 
-# Admin dashboard
-admin.dashboard.title: 'Admin Dashboard'
-admin.dashboard.latest_work: "Latest Work in Your Projects"
-admin.dashboard.latest.verb: "{{ type }}ed"
-admin.dashboard.latest.project: "Project: {{ title }}"
-admin.dashboard.latest.date: "Date: {{ date }}"
-admin.dashboard.user_management: "User Management"
-admin.dashboard.users.signed_up: "Signed up {{ date }}"
-admin.dashboard.create_new_project: "Create new project"
-admin.dashboard.create_new_system_project: "Create new system project"
-admin.dashboard.create_new_user_project: "Create new user project"
-admin.dashboard.newest_members: "Newest Members of Your Projects"
-admin.dashboard.member_roles: "{{ username }} became {{ role }} in {{ slug }}"
 
 # Projects page
+# --------------------------------------------------
+
 projects.title: 'Projects'
 projects.title_owned_by: 'Projects owned by {{ owner }}'
 projects.your_projects: 'Your Projects'
@@ -87,61 +131,10 @@ projects.project.percentage: '{{ percentage }}%'
 projects.project.completed: 'Completed {{ date }}'
 projects.no_projects: "No projects yet."
 
-# Errors
-error.deleting_item: 'Error deleting item from database'
-error.insufficient_rights: "You don't have rights to do that. Sorry."
-error.not_a_member: "You're not a member of that project. Sorry."
-error.nonexistent_item: "Item doesn't exist."
-error.loading_project: "Error loading project."
-error.already_installed: "Already installed."
 
-# 404 page
-error.file_not_found.title: "File Not Found"
-error.file_not_found.message: "Sorry, that file isn't there."
+# Project detail page
+# --------------------------------------------------
 
-# Editor controls
-controls.back: "Back"
-controls.guidelines: "Project Guidelines"
-controls.characters: "Characters"
-controls.save_changes: "Save Changes"
-controls.save_as_draft: "Save as Draft"
-controls.finish: "Finish"
-controls.finish_continue: "Finish & Continue"
-
-# Import page
-admin.import.back_to_project_admin: "Back to Project Admin"
-admin.import.import_transcript: "Import Transcript"
-admin.import.template: "Template (regex to split transcript)"
-admin.import.transcript: "Transcript"
-admin.import.preview: "Preview"
-admin.import.selected_items: "Selected Items ({{ num_items }} items)"
-
-# Installation
-install.title: "Unbindery Installation"
-install.intro: "Fill out the initial admin username/password and click the Install button:"
-install.intro_external: "Fill out the initial admin username and click the Install button:"
-install.admin_username: "Admin Username:"
-install.admin_password: "Admin Password:"
-install.error: "Fields need to be filled out."
-install.install_unbindery: "Install Unbindery"
-install.failed: "Installation Failed"
-install.failed.step1: "Make sure the database is set up correctly."
-install.failed.step2: "Make sure <code>config.yaml</code> is set up correctly."
-install.failed.step3: "Reload this page and try again."
-
-# Admin new project page
-admin.new_project.new_user_project: "New User Project"
-admin.new_project.new_system_project: "New System Project"
-admin.new_project.title: "Title"
-admin.new_project.visibility: "Visibility"
-admin.new_project.visibility.public: "Public"
-admin.new_project.visibility.private: "Private"
-admin.new_project.description: "Description"
-admin.new_project.language: "Language"
-admin.new_project.create_project: "Create Project"
-admin.new_project.instructions: "Enter the basic information for your project. On the next page you'll be        able to add more metadata and upload items."
-
-# Project page
 project.edit_link: "Edit project &rarr;"
 project.user_project_details: "User Project Details"
 project.system_project_details: "Project Details"
@@ -166,7 +159,54 @@ project.proofers_on_this_project: "Proofers on This Project"
 project.reviewers_on_this_project: "Reviewers on This Project"
 project.user_percentage: "{{ percentage }}% ({{ num_items }} items)"
 
+
+# Editor controls
+# --------------------------------------------------
+
+controls.back: "Back"
+controls.guidelines: "Project Guidelines"
+controls.characters: "Characters"
+controls.save_changes: "Save Changes"
+controls.save_as_draft: "Save as Draft"
+controls.finish: "Finish"
+controls.finish_continue: "Finish & Continue"
+
+
+# Admin dashboard
+# --------------------------------------------------
+
+admin.dashboard.title: 'Admin Dashboard'
+admin.dashboard.latest_work: "Latest Work in Your Projects"
+admin.dashboard.latest.verb: "{{ type }}ed"
+admin.dashboard.latest.project: "Project: {{ title }}"
+admin.dashboard.latest.date: "Date: {{ date }}"
+admin.dashboard.user_management: "User Management"
+admin.dashboard.users.signed_up: "Signed up {{ date }}"
+admin.dashboard.create_new_project: "Create new project"
+admin.dashboard.create_new_system_project: "Create new system project"
+admin.dashboard.create_new_user_project: "Create new user project"
+admin.dashboard.newest_members: "Newest Members of Your Projects"
+admin.dashboard.member_roles: "{{ username }} became {{ role }} in {{ slug }}"
+
+
+# Admin new project page
+# --------------------------------------------------
+
+admin.new_project.new_user_project: "New User Project"
+admin.new_project.new_system_project: "New System Project"
+admin.new_project.title: "Title"
+admin.new_project.visibility: "Visibility"
+admin.new_project.visibility.public: "Public"
+admin.new_project.visibility.private: "Private"
+admin.new_project.description: "Description"
+admin.new_project.language: "Language"
+admin.new_project.create_project: "Create Project"
+admin.new_project.instructions: "Enter the basic information for your project. On the next page you'll be        able to add more metadata and upload items."
+
+
 # Admin project page
+# --------------------------------------------------
+
 admin.project.project_admin: "Project Admin"
 admin.project.download_transcript: "Download Transcript"
 admin.project.import_transcript: "Import Transcript"
@@ -198,21 +238,21 @@ admin.project.items: "Items"
 admin.project.item.proofed_by: "Proofed by <a href='{{ url }}'>{{ user }}</a> ({{ date_completed }})"
 admin.project.item.reviewed_by: "Reviewed by <a href='{{ url }}'>{{ user }}</a> ({{ date_completed }})"
 
-# Settings
-settings.title: "Settings"
-settings.save_settings: "Save Settings"
-settings.basic_information: "Basic Information"
-settings.name: "Name"
-settings.email: "Email address"
-settings.notifications: "Notifications"
-settings.user_notifications: "User notifications"
-settings.theme: "Theme"
-settings.side_by_side: "Side-by-side"
 
-# Themes
-themes.core: "Core"
+# Admin import transcript page
+# --------------------------------------------------
+
+admin.import.back_to_project_admin: "Back to Project Admin"
+admin.import.import_transcript: "Import Transcript"
+admin.import.template: "Template (regex to split transcript)"
+admin.import.transcript: "Transcript"
+admin.import.preview: "Preview"
+admin.import.selected_items: "Selected Items ({{ num_items }} items)"
+
 
 # Notifications
+# --------------------------------------------------
+
 notifications.user_new: 'New user'
 notifications.user_new.subject: "New user: [[username]]"
 notifications.user_new.message: "A new user has joined: [[username]]"
@@ -248,3 +288,21 @@ notifications.admin_new_project.message: "[[owner]] has created a new [[type]] p
 notifications.admin_save_project: 'Project saved'
 notifications.admin_save_project.subject: "Project saved: [[title]]"
 notifications.admin_save_project.message: "[[username]] has saved the project [[title]] ([[slug]])"
+
+
+# Errors
+# --------------------------------------------------
+
+error.deleting_item: 'Error deleting item from database'
+error.insufficient_rights: "You don't have rights to do that. Sorry."
+error.not_a_member: "You're not a member of that project. Sorry."
+error.nonexistent_item: "Item doesn't exist."
+error.loading_project: "Error loading project."
+error.already_installed: "Already installed."
+
+
+# 404 page
+# --------------------------------------------------
+
+error.file_not_found.title: "File Not Found"
+error.file_not_found.message: "Sorry, that file isn't there."
