@@ -238,9 +238,7 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #install .container						{ width: 850px; margin: 70px auto; }
 
 #install_box h2							{ color: #7291a3; }
-#install_box ol							{ color: #fff; padding-left: 30px; }
-#install_box ol li						{ padding: 8px 0; font-size: 1.8em; border-top: solid 1px rgba(0, 0, 0, 0.2); font-family: Georgia, "Lucida Grande", Helvetica, Arial, sans-serif; line-height: 1.3em; }
-#install_box ol li code					{ color: #99b67f; }
+#install_box p							{ color: #fff; padding: 8px 0; font-size: 1.8em; font-family: Georgia, "Lucida Grande", Helvetica, Arial, sans-serif; line-height: 1.3em; }
 
 #install_box form						{ margin: .75em auto; width: 450px; font-size: 1.8em; }
 #install_box form label					{ font-family: "Lucida Grande", Helvetica, Arial, sans-serif; text-transform: none; font-size: .7em; color: #5e96b1; }
