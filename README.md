@@ -14,12 +14,13 @@ A web app for crowdsourcing transcription, written in PHP and JavaScript.
 
 1. Create a database and user in MySQL.
 2. Copy `config.sample.yaml` to `config.yaml` and edit it.
-3. Create the directory `htdocs/media` and give Apache write rights to it.
-4. Set Apache to point to `htdocs` for the site's `DocumentRoot`.
-5. In your `php.ini`, set `upload_max_filesize` to something big enough (`128M`, etc.).
-6. In your `php.ini`, set `post_max_filesize` to something big enough (`128M`, etc.).
-7. In your `php.ini`, set `max_file_uploads` to something big enough (`200`, etc.).
-8. Go to `/install` in your browser.
+3. If you want to transcribe audio, install ffmpeg and set the path to it in `config.yaml`.
+4. Create the directory `htdocs/media` and give your web server (Apache, nginx, etc.) write rights to it.
+5. Set your web server to point to `htdocs` for the site's document root.
+6. In your `php.ini`, set `upload_max_filesize` to something big enough (`128M`, etc.).
+7. In your `php.ini`, set `post_max_filesize` to something big enough (`128M`, etc.).
+8. In your `php.ini`, set `max_file_uploads` to something big enough (`200`, etc.).
+9. Go to `/install` in your browser.
 
 ### Customization
 
