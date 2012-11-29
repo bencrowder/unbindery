@@ -130,34 +130,36 @@ class ItemPageController {
 				$templateType = $itemObj->type;
 
 				// Get project fields and parse out
-				$fieldsText = trim($project->fields);
-				$fieldsLines = explode("\n", $fieldsText);
 				$fields = array();
-				foreach ($fieldsLines as $line) {
-					$fieldLabel = '';
-					$fieldType = '';
-					$fieldValues = array();
+				$fieldsText = trim($project->fields);
+				if ($fieldsText != '') {
+					$fieldsLines = explode("\n", $fieldsText);
+					foreach ($fieldsLines as $line) {
+						$fieldLabel = '';
+						$fieldType = '';
+						$fieldValues = array();
 
-					// Split it by label and type/parameters
-					list($fieldLabel, $fieldSettings) = array_map('trim', explode(":", $line));
-					if (strpos($fieldSettings, ' - ') == FALSE) {
-						$fieldType = trim($fieldSettings);
-					} else {
-						list($fieldType, $fieldValueStr) = array_map('trim', explode(" - ", $fieldSettings));
-						$fieldValues = explode(" | ", $fieldValueStr);	
+						// Split it by label and type/parameters
+						list($fieldLabel, $fieldSettings) = array_map('trim', explode(":", $line));
+						if (strpos($fieldSettings, ' - ') == FALSE) {
+							$fieldType = trim($fieldSettings);
+						} else {
+							list($fieldType, $fieldValueStr) = array_map('trim', explode(" - ", $fieldSettings));
+							$fieldValues = explode(" | ", $fieldValueStr);	
+						}
+
+						// Reformat the field ID
+						$fieldId = str_replace(" ", "_", strtolower($fieldLabel));
+
+						$field = array(
+							'id' => $fieldId,
+							'label' => $fieldLabel,
+							'type' => $fieldType,
+							'values' => $fieldValues
+						);
+
+						array_push($fields, $field);
 					}
-
-					// Reformat the field ID
-					$fieldId = str_replace(" ", "_", strtolower($fieldLabel));
-
-					$field = array(
-						'id' => $fieldId,
-						'label' => $fieldLabel,
-						'type' => $fieldType,
-						'values' => $fieldValues
-					);
-
-					array_push($fields, $field);
 				}
 
 				// Get any editor-specific config settings
