@@ -143,20 +143,20 @@ $routes = array(
 	'#^/?$#'									=> 'SystemPageController::indexHandler',
 	'#^/login/?$#'								=> 'SystemPageController::loginHandler',
 	'#^/logout/?$#'								=> 'SystemPageController::logoutHandler',
-	'#^/signup\.?([^/]+)?/?$#'					=> 'SystemPageController::signupHandler',
-	'#^/signup/activate/(.*)/\.?([^/]+)?/?$#'	=> 'SystemPageController::activateHandler',
+	'#^/signup(\.[^/]+)?/?$#'					=> 'SystemPageController::signupHandler',
+	'#^/signup/activate/(.*)(\.([^/]+)?/?$#'	=> 'SystemPageController::activateHandler',
 	'#^/messages/?$#'							=> 'SystemPageController::messageHandler',
 	'#^/install/?$#'							=> 'SystemPageController::installHandler',
 	'#^/test/(.*)/?$#'							=> 'SystemPageController::testPageHandler',
 
 	// User project item pages
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/get\.?([^/]+)?/?#'					=> 'ItemPageController::getNewItem',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript\.?([^/]+)?/?#'	=> 'ItemPageController::transcript',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/delete\.?([^/]+)?/?#'		=> 'ItemPageController::deleteItem',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/(proof|review)/([^/]+)/?#'	=> 'ItemPageController::itemProof',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/(proof|review|edit)\.?([^/]+)?/?#'		=> 'ItemPageController::itemProof',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)\.?([^/]+)?/?#'				=> 'ItemPageController::item',
-	'#^/(users)/([^/]+)/projects/([^/]+)/items\.?([^/]+)?/?#'						=> 'ItemPageController::items',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/get(\.[^/]+)?/?#'					=> 'ItemPageController::getNewItem',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/transcript(\.[^/]+)?/?#'	=> 'ItemPageController::transcript',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/delete(\.[^/]+)?/?#'		=> 'ItemPageController::deleteItem',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/(proof|review)(\.[^/]+)?/?#'	=> 'ItemPageController::itemProof',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)/(proof|review|edit)(\.[^/]+)?/?#'		=> 'ItemPageController::itemProof',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items/([^/.]+)(\.[^/]+)?/?#'				=> 'ItemPageController::item',
+	'#^/(users)/([^/]+)/projects/([^/]+)/items(\.[^/]+)?/?#'						=> 'ItemPageController::items',
 
 	// User projects
 	'#^/(users)/([^/]+)/projects/([^/]+)/transcript/split(\.[^/]+)?/?#'	=> 'ProjectPageController::splitTranscript',
@@ -171,10 +171,10 @@ $routes = array(
 	'#^/(users)/([^/]+)/projects(\.[^/]+)?/?#'						=> 'ProjectPageController::projects',
 
 	// User pages
-	'#^/users/([^/]+)/dashboard\.?([^/]+)?/?#'	=> 'UserPageController::userDashboard',
-	'#^/users/([^/]+)/settings\.?([^/]+)?/?#'	=> 'UserPageController::userSettings',
-	'#^/users/([^/.]+)\.?([^/]+)?/?#'			=> 'UserPageController::userPage',
-	'#^/users\.?([^/]+)?/?#'					=> 'UserPageController::users',
+	'#^/users/([^/]+)/dashboard(\.[^/]+)?/?#'	=> 'UserPageController::userDashboard',
+	'#^/users/([^/]+)/settings(\.[^/]+)?/?#'	=> 'UserPageController::userSettings',
+	'#^/users/([^/.]+)(\.[^/]+)?/?#'			=> 'UserPageController::userPage',
+	'#^/users(\.[^/]+)?/?#'					=> 'UserPageController::users',
 
 	// Item pages
 	'#^/projects/([^/]+)/items/get(\.[^/]+)?/?#'							=> 'ItemPageController::getNewItem',
