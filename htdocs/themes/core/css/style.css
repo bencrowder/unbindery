@@ -5,7 +5,6 @@
 
 body									{ margin: 0; padding: 0; font-family: "Lucida Grande", Helvetica, Arial, sans-serif; font-size: 12px; }
 body#index, body#install				{ background: #22435f url(../images/indexbg.jpg) 50% 0 no-repeat; }
-body.dark								{ background: #111; color: #fff; }
 
 .container								{ max-width: 950px; width: 92%; margin: 0px auto; overflow: hidden; clear: both; }
 
@@ -31,6 +30,14 @@ nav ul									{ list-style: none; margin: 0; }
 nav ul li								{ display: inline; margin-left: 15px; color: #5d92b1; font-size: 11px; }
 nav ul li a								{ color: #fff; font-weight: bold; text-decoration: none; }
 nav ul li .username						{ font-weight: bold; }
+
+
+/* Footer */
+/* --------------------------------------------------- */
+
+body > footer							{ border-top: dotted 1px #ccc; padding: 8px 0; font-size: .9em; color: #bbb; margin-bottom: 100px; }
+body > footer a							{ color: #aaa; font-weight: bold; text-decoration: none; }
+body > footer a:hover					{ text-decoration: underline; }
 
 
 /* Scoreboard */
@@ -67,13 +74,9 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .button.light							{ background: #ddd; background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#ccc)); background: -moz-linear-gradient(white, #ccc); color: #000; border: solid 1px #999; text-shadow: 0 1px #fff; }
 .button.light:hover						{ background: #fff; cursor: pointer; }
 
-.smallbutton							{ padding: 1px 3px; font-size: .9em; }
-
 
 /* Main page area */
 /* --------------------------------------------------- */
-
-#page									{ }
 
 #main									{ padding: 3em 0 1em; margin-bottom: 75px; }
 #main h2								{ font-size: 21px; color: #aaa; margin: 0; letter-spacing: -0.03em; }
@@ -109,6 +112,9 @@ ul#controls_right li					{ display: inline-block; margin-left: 5px; }
 .big .percent							{ height: 20px; }
 .big .percent_proofs					{ height: 20px; }
 
+
+/* Groups */
+/* --------------------------------------------------- */
 
 .group + .group							{ margin-top: 2em; }
 .group:last-child						{ margin-right: 0; }
@@ -164,10 +170,6 @@ ul.action_list li.blankslate a			{ color: #000; text-decoration: none; border-bo
 
 ul.action_list.projects .percentage		{ margin-top: 3px; }
 
-.sub									{ margin-top: 4px; font-size: .9em; color: #666; }
-
-.item .sub								{ margin-bottom: 4px; }
-
 ul.action_list .project					{ background: #f5f5f5; padding: 5px 5px 5px 7px; }
 ul.action_list .project .title			{ font-size: 1.1em; }
 ul.action_list .project .title a		{ color: #345678; }
@@ -178,6 +180,9 @@ ul.action_list .project .owner			{ font-size: .9em; margin-top: 2px; }
 ul.action_list .project .owner a		{ color: #345678; text-decoration: none; }
 ul.action_list .project.private			{ background: #fdf7e8; }
 
+.sub									{ margin-top: 4px; font-size: .9em; color: #666; }
+.item .sub								{ margin-bottom: 4px; }
+
 .sys_message							{ padding: 9px 12px 11px; border-radius: 5px; font-size: 1.2em; font-weight: bold; margin-top: 15px; margin-bottom: -1em; }
 #message								{ background: #444; color: #fff; }
 #error									{ background: #ffd7d7; color: #600; }
@@ -187,6 +192,10 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #spinner, .spinner						{ display: none; vertical-align: middle; }
 
 #uploadspinner							{ float: right; }
+
+
+/* Project form */
+/* --------------------------------------------------- */
 
 #project_form							{ padding-top: 5px; }
 #project_form label						{ display: block; font-weight: bold; margin-top: 18px; margin-bottom: 2px; }
@@ -200,6 +209,10 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #project_form #project_deadline			{ width: 30px; }
 #project_form #project_numproofs		{ width: 30px; }
 
+
+/* Uploading */
+/* --------------------------------------------------- */
+
 #file_uploadQueue						{ width: 100%; }
 .uploadifyQueueItem						{ width: 100% !important; font-family: "Lucida Grande", Helvetica, Arial, sans-serif !important; font-size: 11px !important; -moz-border-radius: 3px; border-radius: 3px; }
 .uploadifyQueueItem .percentage			{ font-weight: bold; }
@@ -212,11 +225,10 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 #save_items textarea					{ font-size: 1em; width: 400px; height: 100px; margin-bottom: 2em; }
 
 
-/* Index page */
+/* Index/login/signup page */
 /* --------------------------------------------------- */
 
 #index .container						{ width: 300px; margin: 100px auto; }
-#logo_box								{ }
 
 .box									{ background: rgba(0, 0, 0, 0.3); padding: 25px 30px; -moz-border-radius: 10px; border-radius: 10px; }
 .box h2									{ margin: 0; margin-bottom: 10px; font-size: 14px; color: #fff; }
@@ -293,6 +305,19 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 .adminlink a							{ text-decoration: none; font-size: .9em; color: #ad9a77; }
 .adminlink a:hover						{ text-decoration: underline; }
 
+.proj_details .volunteers				{ overflow: hidden; clear: both; margin-top: 1em; }
+
+.proj_details .progress_bar.big			{ float: none; }
+
+.volunteers ul li						{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
+.volunteers ul li .username				{ font-size: 11px; }
+.volunteers ul li .progress_bar p		{ margin: 0; }
+
+.sidebar ul.projects li a				{ font-size: 11px; color: #000; text-decoration: none; border-bottom: dotted 1px #666; font-weight: bold; }
+
+.sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
+.content h4								{ color: #5d92b1; }
+
 
 /* Project Guidelines */
 /* --------------------------------------------------- */
@@ -306,14 +331,6 @@ body#index #message						{ width: 400px; background: rgba(0, 0, 0, 0.3); color: 
 	.guidelines code					{ background: #eee; padding: 5px; font-family: Monaco, Courier, monospace; -moz-border-radius: 3px; border-radius: 3px; }
 .guidelines pre							{ margin-left: 35px; }
 .guidelines a							{ color: #000; text-decoration: none; border-bottom: dotted 1px #666; }
-
-
-/* Footer */
-/* --------------------------------------------------- */
-
-body > footer							{ border-top: dotted 1px #ccc; padding: 8px 0; font-size: .9em; color: #bbb; margin-bottom: 100px; }
-body > footer a							{ color: #aaa; font-weight: bold; text-decoration: none; }
-body > footer a:hover					{ text-decoration: underline; }
 
 
 /* Admin */
@@ -374,23 +391,6 @@ ul.items.members li						{ padding: 5px; }
 #main.add .addbox input[type=text]		{ display: inline; font-size: 1em; width: 150px; }
 #main.add .addbox select				{ display: inline; }
 #main.add .addbox input[type=submit]	{ display: inline; padding: 2px 6px; margin-top: 0; }
-
-
-/* Project Details */
-/* --------------------------------------------------- */
-
-.proj_details .volunteers				{ overflow: hidden; clear: both; margin-top: 1em; }
-
-.proj_details .progress_bar.big			{ float: none; }
-
-.volunteers ul li						{ clear: both; overflow: hidden; border-bottom: solid 1px #ccc; }
-.volunteers ul li .username				{ font-size: 11px; }
-.volunteers ul li .progress_bar p		{ margin: 0; }
-
-.sidebar ul.projects li a						{ font-size: 11px; color: #000; text-decoration: none; border-bottom: dotted 1px #666; font-weight: bold; }
-
-.sidebar h3								{ margin: 0; font-size: 12px; color: #5d92b1; }
-.content h4								{ color: #5d92b1; }
 
 
 /* New project */
