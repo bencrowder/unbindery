@@ -119,6 +119,9 @@ class ProjectPageController {
 							$project->admin_url = "users/" . $project->owner . "/projects/" . $project->slug . "/admin";
 							break;
 					}
+
+					$notify = Settings::getProtected('notify');
+					$notify->trigger("admin_new_project", array('user' => $user, 'title' => $project->title, 'slug' => $project->slug, 'owner' => $project->owner, 'type' => $project->type));
 				}
 
 				$response = array(
@@ -285,6 +288,9 @@ class ProjectPageController {
 				}
 
 				$statusCode = ($status) ? 'success' : 'error';
+
+				$notify = Settings::getProtected('notify');
+				$notify->trigger("admin_save_project", array('user' => $user, 'username' => $user->username, 'title' => $project->title, 'slug' => $project->slug));
 
 				$response = array(
 					"statuscode" => $statusCode,

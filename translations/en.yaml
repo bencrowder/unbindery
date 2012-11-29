@@ -244,3 +244,11 @@ notifications.admin_save_transcript_completed.message: "[[username]] finished tr
 notifications.admin_save_transcript_reviewed: 'User reviewed transcript'
 notifications.admin_save_transcript_reviewed.subject: "Reviewed: [[item]] by [[username]]"
 notifications.admin_save_transcript_reviewed.message: "[[username]] finished reviewing the transcript for [[item]]."
+
+notifications.admin_new_project: 'New project'
+notifications.admin_new_project.subject: "New project: [[title]]"
+notifications.admin_new_project.message: "[[owner]] has created a new [[type]] project, [[title]] ([[slug]])"
+
+notifications.admin_save_project: 'Project saved'
+notifications.admin_save_project.subject: "Project saved: [[title]]"
+notifications.admin_save_project.message: "[[username]] has saved the project [[title]] ([[slug]])"
