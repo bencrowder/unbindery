@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$("#transcript").focus();
 
-	player = new MediaElementPlayer('#audio');
+	player = new MediaElementPlayer('#audio', { 'enableKeyboard': false });
 
 	// Play/pause toggle
 	$("#transcript").bind("keydown", "shift+space", function() {
@@ -10,6 +10,8 @@ $(document).ready(function() {
 		} else {
 			player.media.pause();
 		}
+
+		$("#audio").blur();
 
 		return false;
 	});
