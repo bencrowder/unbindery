@@ -258,8 +258,9 @@ var Unbindery = function() {
 			function(data) {
 				if (data.statuscode == "success") {
 					unbindery.hideSpinner();
+					unbindery.redirectToDashboard("admin.project.saved", "");
 				} else {
-					unbindery.redirectToDashboard("", "error.saving_transcript");
+					unbindery.redirectToDashboard("", "error.saving_project");
 				}
 			});
 	};

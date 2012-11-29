@@ -240,6 +240,7 @@ admin.project.download_template: "Download Template"
 admin.project.items: "Items"
 admin.project.item.proofed_by: "Proofed by <a href='{{ url }}'>{{ user }}</a> ({{ date_completed }})"
 admin.project.item.reviewed_by: "Reviewed by <a href='{{ url }}'>{{ user }}</a> ({{ date_completed }})"
+admin.project.saved: "Saved project."
 
 
 # Admin import transcript page
@@ -308,6 +309,7 @@ error.not_a_member: "You're not a member of that project."
 error.has_unfinished_item: "You already have an item for this project. Finish it and then you'll be able to get a new one."
 error.no_item_available: "There aren't any more items available to you for that project."
 error.saving_transcript: "Error saving transcript. Please try again."
+error.saving_project: "Error saving project. Please try again."
 
 
 # 404 page
