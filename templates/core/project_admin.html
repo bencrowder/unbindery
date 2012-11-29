@@ -11,6 +11,7 @@
 		<ul id="controls_right">
 			<li><img src="{{ theme_root }}/images/spinner-dark.gif" id="spinner" /></li>
 			<li><span id="action-save-project" href="" class="button">{{ i18n.t('admin.project.save_project') }}</span></li>
+			{% if project.status == 'pending' %}<li><span id="action-save-project-and-activate" href="" class="button">{{ i18n.t('admin.project.save_and_activate') }}</span></li>{% endif %}
 		</ul>
 	</div>
 </div>{% endblock %}

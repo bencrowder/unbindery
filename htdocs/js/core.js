@@ -31,6 +31,7 @@ var Unbindery = function() {
 				break;
 
 			case 'save-project':
+			case 'save-project-and-activate':
 				if (data.projectType == 'system') {
 					url = '/projects/' + data.projectSlug;
 				} else {
@@ -524,6 +525,14 @@ $(document).ready(function() {
 
 	// Project admin form
 	$("#action-save-project").click(function(e) {
+		unbindery.saveProject();
+	});
+
+	$("#action-save-project-and-activate").click(function(e) {
+		// Set to active first
+		$("#project_status").val("active");
+
+		// And now save the project as usual
 		unbindery.saveProject();
 	});
 
