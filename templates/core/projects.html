@@ -9,7 +9,7 @@
 			<h3 class="action_header projects">{{ i18n.t('projects.your_projects') }}</h3>
 			<ul class="action_list projects">
 				{% for project in user_projects %}
-				<li class="project{% if project.public == 0 %} private{% endif%}">
+				<li class="project{% if not project.public %} private{% endif%}">
 					<div class="progress_bar">
 						<div class="capsule">
 							<div class="percent" style="width: {{ project.percentage }}px;"></div>
@@ -30,7 +30,7 @@
 			<h3 class="action_header projects">{{ i18n.t('projects.available_projects') }}</h3>
 			<ul class="action_list projects">
 				{% for project in available_projects %}
-				<li class="project{% if project.public == 0 %} private{% endif%}">
+				<li class="project{% if not project.public %} private{% endif%}">
 					<div class="progress_bar">
 						<div class="capsule">
 							<div class="percent" style="width: {{ project.percentage }}px;"></div>

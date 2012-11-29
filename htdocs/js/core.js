@@ -260,7 +260,7 @@ var Unbindery = function() {
 		var projectOwner = $("#project_owner").val().trim();
 		var projectName = $("#project_name").val().trim();
 		var projectStatus = $("#project_status").val().trim();
-		var projectPublic = ($("#project_public").val() == 'public') ? true : false;
+		var projectPublic = ($("#project_public").val() == 'public') ? 1 : 0;
 		var projectDesc = $("#project_desc").val().trim();
 		var projectLang = $("#project_lang").val().trim();
 		var projectWorkflow = $("#project_workflow").val().trim();
@@ -499,19 +499,6 @@ function load_items_for_editing(event, data) {
 
 $(document).ready(function() {
 	unbindery = new Unbindery();
-
-	/* New Project page */
-	/* -------------------------------------------------- */
-	
-	$("form#new_project_form select#project_type").on("change", function() {
-		if ($(this).val() == "Public") {
-			// Change the action
-			$("form#new_project_form").attr("action", app_url + "/projects");
-		} else if ($(this).val() == "Private") {
-			// Change the action
-			$("form#new_project_form").attr("action", app_url + "/users/" + username + "/projects");
-		}
-	});
 
 	// Focus on the transcript textarea
 	$("textarea#transcript").focus();
