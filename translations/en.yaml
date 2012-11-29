@@ -21,7 +21,7 @@ signup.new_user: "New user signed up:"
 signup.thanks: "Thanks for signing up!"
 signup.conf_link_sent: "We just sent a confirmation link to your email address."
 
-signup.activated: "Welcome to Unbindery."
+signup.activated: "Activation successful. Welcome."
 signup.invalid_code: "Invalid confirmation code."
 
 # Nav
