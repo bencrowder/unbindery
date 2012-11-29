@@ -15,6 +15,8 @@ class I18n {
 
 			// Load the YAML file
 			$this->translations = sfYaml::load($filename);
+		} else {
+			error_log("Failed to load $transdir/$locale.yaml");
 		}
 	}
 

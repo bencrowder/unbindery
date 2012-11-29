@@ -120,8 +120,6 @@ class SystemPageController {
 		} else {
 			error_log("Login didn't work.");
 		}
-
-		break;
 	}
 
 
@@ -132,7 +130,7 @@ class SystemPageController {
 
 	static public function activate($params) {
 		$app_url = Settings::getProtected('app_url');
-		$i18n = new I18n("translations", Settings::getProtected('language'));
+		$i18n = new I18n("../translations", Settings::getProtected('language'));
 
 		$hash = $params['args'][0];
 
