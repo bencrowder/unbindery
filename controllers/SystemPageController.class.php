@@ -203,6 +203,7 @@ class SystemPageController {
 						}
 						$user->role = "admin";
 						$user->status = "active";
+						$user->hash = "adminadminadmin";	// doesn't really matter since we don't need to confirm
 						$user->in_db = false;
 						$user->save();
 
