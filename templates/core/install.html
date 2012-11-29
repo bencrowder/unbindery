@@ -10,13 +10,7 @@
 		{% if status != 'failed' %}
 		<h2>{{ i18n.t('install.title') }}</h2>
 
-		<ol>
-			<li>{{ i18n.t('install.step1')|raw }}</li>
-			<li>{{ i18n.t('install.step2')|raw }}</li>
-			<li>{{ i18n.t('install.step3')|raw }}</li>
-			<li>{{ i18n.t('install.step4')|raw }}</li>
-			<li>{% if external_login %}{{ i18n.t('install.step5_external')|raw }}{% else %}{{ i18n.t('install.step5')|raw }}{% endif %}</li>
-		</ol>
+		<p>{% if external_login %}{{ i18n.t('install.intro_external')|raw }}{% else %}{{ i18n.t('install.intro')|raw }}{% endif %}</p>
 
 		<form id="install_form" action="{{ app_url }}/install" method="post" accept-charset="utf-8">
 			<label>{{ i18n.t('install.admin_username') }}</label>
