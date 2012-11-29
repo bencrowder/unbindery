@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	// Focus on the transcript textarea
+	$("#transcript").focus();
+
 	ubHighlightHeight = $("#image_container .highlight").height();
 	ubImageWidth = $("#image_container img").width();
 

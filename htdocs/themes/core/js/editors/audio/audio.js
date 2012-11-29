@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	// Focus on the transcript textarea
 	$("#transcript").focus();
 
 	player = new MediaElementPlayer('#audio', { 'enableKeyboard': false });

@@ -2,6 +2,10 @@
 /* -------------------------------------------------- */
 
 var Unbindery = function() {
+
+	// Redirect to dashboard (with optional message or error)
+	// --------------------------------------------------
+
 	this.redirectToDashboard = function(message, error) {
 		var locStr = app_url + "/users/" + username + "/dashboard";
 
@@ -10,6 +14,10 @@ var Unbindery = function() {
 			window.location.href = locStr;
 		});
 	};
+
+
+	// Call the API
+	// --------------------------------------------------
 
 	this.callAPI = function(call, method, data, callback) {
 		// Prepare the URL
@@ -117,6 +125,10 @@ var Unbindery = function() {
 		}
 	};
 
+
+	// Show/hide the spinner
+	// --------------------------------------------------
+
 	this.showSpinner = function(id) {
 		if (typeof id === 'undefined') id = '#spinner';
 
@@ -129,11 +141,19 @@ var Unbindery = function() {
 		$(id).hide();
 	};
 
+
+	// Insert a character from the character pad
+	// --------------------------------------------------
+
 	this.insertText = function(text) {
 		// Insert the character into the text box
 		var textbox = $("textarea#transcript");
 		textbox.append(text);
 	};
+
+
+	// Get a new item
+	// --------------------------------------------------
 
 	this.getNewItem = function(projectSlug, projectOwner, projectType, actionType) {
 		// Get the username
@@ -162,6 +182,10 @@ var Unbindery = function() {
 
 		return false;
 	};
+
+
+	// Save transcript
+	// --------------------------------------------------
 
 	this.saveTranscript = function(isDraft, isReview, getAnother) {
 		unbindery.showSpinner();
@@ -238,6 +262,10 @@ var Unbindery = function() {
 			});
 	};
 
+
+	// Save project
+	// --------------------------------------------------
+
 	this.saveProject = function() {
 		unbindery.showSpinner();
 
@@ -264,6 +292,10 @@ var Unbindery = function() {
 				}
 			});
 	};
+
+
+	// Add items to a project after they've been uploaded
+	// --------------------------------------------------
 
 	this.addItemsToProject = function(fileList) {
 		var projectSlug = $("#project_slug").val();
@@ -299,6 +331,10 @@ var Unbindery = function() {
 		);
 	};
 
+
+	// Delete an item
+	// --------------------------------------------------
+
 	this.deleteItem = function(itemId) {
 		var projectSlug = $("#project_slug").val();
 		var projectType = $("#project_type").val();
@@ -312,6 +348,10 @@ var Unbindery = function() {
 		);
 	};
 
+
+	// Delete a user
+	// --------------------------------------------------
+
 	this.deleteUser = function(username) {
 		this.callAPI('delete-user', 'DELETE', { username: username },
 			function(data) {
@@ -321,6 +361,10 @@ var Unbindery = function() {
 			}
 		);
 	};
+
+
+	// Add a user/role to a project
+	// --------------------------------------------------
 
 	this.addUserToProject = function(username, role) {
 		var projectSlug = $("#project_slug").val();
@@ -340,6 +384,10 @@ var Unbindery = function() {
 		);
 	}
 
+
+	// Remove a user/role from a project
+	// --------------------------------------------------
+
 	this.removeUserFromProject = function(username, role) {
 		var projectSlug = $("#project_slug").val();
 		var projectType = $("#project_type").val();
@@ -353,6 +401,10 @@ var Unbindery = function() {
 			}
 		);
 	}
+
+
+	// Update the import preview (project admin page)
+	// --------------------------------------------------
 
 	this.updateImportPreview = function() {
 		var template = $("#import-template").val();
@@ -390,6 +442,10 @@ var Unbindery = function() {
 		);
 	};
 
+
+	// Import a transcript
+	// --------------------------------------------------
+
 	this.importTranscript = function() {
 		var template = $("#import-template").val();
 		var transcript = $("#import-transcript").val().trim();
@@ -426,6 +482,10 @@ var Unbindery = function() {
 		);
 	};
 
+
+	// Save a user's settings
+	// --------------------------------------------------
+
 	this.saveSettings = function() {
 		unbindery.showSpinner();
 
@@ -458,40 +518,13 @@ var Unbindery = function() {
 
 }
 
-function load_items_for_editing(event, data) {
-	var pages = [];
-	var project_slug = $("#project_slug").val();
-
-	pages = '';
-	$("#file_uploadQueue .fileName").each(function() {
-		var filename = $(this).html();
-		// strip up to the space
-		filename = filename.substr(0, filename.indexOf(' '));
-
-		pages += filename + '|';
-	});
-
-	// add them to the database
-	unbindery.callAPI("add_pages", 'POST', { project_slug: project_slug, pages: pages },
-		function(data) {
-			if (data.statuscode == "success") {
-				// load the first page into edit mode
-				var firstpage = data.page_ids[0];
-				window.location.href = app_url + '/admin/new_page/' + project_slug + '/' + firstpage;
-			} else {
-				console.log("error!");
-			}
-		}
-	);
-}
 
 $(document).ready(function() {
 	unbindery = new Unbindery();
 
-	// Focus on the transcript textarea
-	$("textarea#transcript").focus();
-
 	// Click handlers for the buttons
+	// --------------------------------------------------
+
 	$("#action-save-draft").click(function() {
 		isReview = ($("#transcript_type").val() == 'review') ? true : false;
 		unbindery.saveTranscript(true, isReview, false);		// yes draft, review depends, don't get another
@@ -510,7 +543,6 @@ $(document).ready(function() {
 		return false;
 	});
 
-	// Project admin form
 	$("#action-save-project").click(function(e) {
 		unbindery.saveProject();
 	});
@@ -523,7 +555,10 @@ $(document).ready(function() {
 		unbindery.saveProject();
 	});
 
-	// Set up click handler for getting a new item
+
+	// Click handler for getting a new item
+	// --------------------------------------------------
+	
 	$(".getnewitem").click(function(e) {
 		// Hide the button (so we don't click it again)
 		$(this).hide();
@@ -541,8 +576,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Install page */
-	/* -------------------------------------------------- */
+	// Install page
+	// --------------------------------------------------
 
 	$("#install_form input[type=submit]").click(function() {
 		if ($(this).siblings("#username").val().trim() == '') {
@@ -557,8 +592,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Project page (joining/leaving) */
-	/* -------------------------------------------------- */
+	// Project page (joining/leaving)
+	// --------------------------------------------------
 
 	$('.proj_details .membership a').click(function() {
 		// The URL to call
@@ -587,8 +622,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Item deletion (project admin page) */
-	/* -------------------------------------------------- */
+	// Item deletion (project admin page)
+	// --------------------------------------------------
 
 	$("#main.add section.items ul.items").on("click", "a.delete", function() {
 		var itemId = $(this).parents("li:first").attr("data-id");
@@ -601,8 +636,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Adding users to projects */
-	/* -------------------------------------------------- */
+	// Adding users to projects (project admin page)
+	// --------------------------------------------------
 
 	$("#main.add .addbox input[type=submit]").on("click", function() {
 		var username = $(".addbox input[type=text]").val().trim();
@@ -614,8 +649,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Removing users from projects */
-	/* -------------------------------------------------- */
+	// Removing users from projects (project admin page)
+	// --------------------------------------------------
 
 	$("#main.add ul.items.members").on("click", "a.delete", function() {
 		var username = $(this).parents("li:first").attr("data-username");
@@ -629,8 +664,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Character pad display */
-	/* -------------------------------------------------- */
+	// Character pad
+	// --------------------------------------------------
 
 	$("#controls #characters").on("click", function() {
 		$("#characterpad").toggle();
@@ -647,8 +682,8 @@ $(document).ready(function() {
 	});
 
 
-	/* Transcript import page */
-	/* -------------------------------------------------- */
+	// Import transcript page
+	// --------------------------------------------------
 
 	$(".import #import-template").on("change", function() {
 		unbindery.updateImportPreview();
@@ -685,16 +720,16 @@ $(document).ready(function() {
 	});
 
 
-	/* User settings page */
-	/* -------------------------------------------------- */
+	// User settings page
+	// --------------------------------------------------
 
 	$("#action-save-settings").click(function() {
 		unbindery.saveSettings();
 	});
 
 
-	/* Admin dashboard */
-	/* -------------------------------------------------- */
+	// Deleting users (admin dashboard)
+	// --------------------------------------------------
 
 	$("#main.dashboard ul.items.users").on("click", "li .itemcontrols a.delete", function() {
 		var username = $(this).parents("li:first").find("b").html();
