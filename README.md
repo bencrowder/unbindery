@@ -1,6 +1,6 @@
 ## Unbindery
 
-A web app for crowdsourcing transcription, written in PHP and JavaScript.
+A web app for crowdsourcing transcription, written in PHP and JavaScript. Licensed under the MIT license.
 
 
 ### Dependencies
